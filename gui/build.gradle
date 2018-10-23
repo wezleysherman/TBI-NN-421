@@ -1,0 +1,32 @@
+//https://guides.gradle.org/creating-new-gradle-builds/
+
+import org.apache.tools.ant.filters.FixCrLfFilter
+import org.apache.tools.ant.filters.ReplaceTokens
+
+def versionFile = 'src/App.java'
+def versionFileName = 'App.java'
+def tempDir = 'tmp'
+
+compileJava.doFirst {
+  ant.buildnumber();
+    copy {
+        from(versionFile)
+        into(tempDir)
+    }
+}
+
+compileJava.doLast {
+    copy {
+        from(tempDir + '/' + versionFileName)
+        into(file(versionFile).parent)
+    }
+    delete(tempDir)
+}
+
+mainClassName = 'App'
+
+compileJava.options.encoding = 'UTF-8'
+
+task wrapper (type: Wrapper) {
+	gradleVersion = '4.10.2'
+}
