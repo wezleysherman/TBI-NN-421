@@ -19,10 +19,30 @@ def test_cnn_creator():
 	cnn_partial_cnn = bsscs.create_partial_cnn(input=input_placeholder, filters=64, kernel_size=[3, 3], cnn_strides=2)
 	cnn_partial_pooling = bsscs.create_partial_pooling(input=input_placeholder, pool_size=[2, 2], pooling_strides=2)
 
-	cnn_full_network = bsscs.create_convolution_network(input=input_placeholder, cnn_kernels=[[2, 2], [4, 4]], cnn_filters=[64, 128], pooling_filters=[[2, 2], [2, 2]])
+	cnn_block_full_shape = bsscs.create_cnn_block(input_shape=[None, 256, 256, 1], filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
+	cnn_partial_cnn_shape = bsscs.create_partial_cnn(input_shape=[None, 256, 256, 1], filters=64, kernel_size=[3, 3], cnn_strides=2)
+	cnn_partial_pooling_shape = bsscs.create_partial_pooling(input_shape=[None, 256, 256, 1], pool_size=[2, 2], pooling_strides=2)
+
+	cnn_full_network = bsscs.create_convolution_network(input_shape=[None, 512, 512, 1], cnn_kernels=[[2, 2], [4, 4]], cnn_filters=[64, 128], pooling_filters=[[2, 2], [2, 2]])
 	print('cnn full block: ' + str(cnn_block_full))
 	print('cnn partial cnn: ' + str(cnn_partial_cnn))
 	print('cnn partial pooling: ' + str(cnn_partial_pooling))
+	print('cnn full block with shape: ' + str(cnn_block_full_shape))
+	print('cnn partial cnn with shape: ' + str(cnn_partial_cnn_shape))
+	print('cnn partial pooling with shape: ' + str(cnn_partial_pooling_shape))
 	print('full cnn network: ' + str(cnn_full_network))
+
+def test_cnn_vis():
+	bsscs = BSSCS_CNN()
+	cnn_full_network = bsscs.create_convolution_network(input_shape=[None, 512, 512, 1], cnn_kernels=[[2, 2], [4, 4]], cnn_filters=[64, 128], pooling_filters=[[2, 2], [2, 2]])
+
+	print('full cnn network: ' + str(cnn_full_network))
+
+	dicom_file = DICOMImporter.open_dicom_file('test_dicom/test_dicom.dcm')
+	dicom_pixel_arr = DICOMImporter.get_dicom_pixel_array(dicom_file)
+ 	
+ 	# images for UI will use this method
+	conv_output = bsscs.get_convolutional_filters(dicom_pixel_arr, cnn_full_network)
+	print(conv_output)
 
 test_cnn_creator()
