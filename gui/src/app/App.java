@@ -18,7 +18,7 @@ public class App extends Application {
 		
 		StackPane root = new StackPane();
 		Scene scene = new Scene(root, 960, 540);
-		Scene landingScene = new LandingScene().initializeScene(scene);
+		Scene landingScene = new LandingScene().initializeScene(stage);
 		
 		stage.setTitle("TBI");
 	    stage.setScene(landingScene);
