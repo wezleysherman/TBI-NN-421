@@ -1,4 +1,4 @@
-package app;
+package ui;
 
 import java.util.ArrayList;
 
@@ -42,8 +42,6 @@ public class LandingScene {
 			}
 			
 		});
-		//Label Styling
-		
 		
 		//Drop Down Setup/Styling
 		items.add("Select Previous Patient");
