@@ -8,3 +8,5 @@ __pycache__/
 .class
 /.gradle/
 /gui/.gradle/
+/.metadata/
+.metadata/
