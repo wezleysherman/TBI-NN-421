@@ -32,6 +32,11 @@ public class ScanVisualizerScene {
 		//Analyze button Setup/Styling
 		viewBtn.setText("Select File");
 		
+		fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
+                new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
+            );
+		
 		viewBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent e) {
