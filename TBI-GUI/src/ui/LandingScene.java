@@ -20,6 +20,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 public class LandingScene {
+	
+	public static boolean debug = true; //Manually change this value
 		
 	public static Scene initializeScene(Stage stage) {
 		BorderPane layout = new BorderPane();
@@ -28,19 +30,27 @@ public class LandingScene {
 		Button newPatBtn = new Button();
 		ComboBox<String> prevDrp = new ComboBox<>();
 		ArrayList<String> items = new ArrayList<>();
+		Button viewScanBtn = new Button();
 		
 		//Button Setup/Styling
 		newPatBtn.setText("Start New Patient");
-		
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				BorderPane root = new BorderPane();
 				Scene scene = PatientInfoEntryScene.initializeScene(stage);
 				stage.setScene(scene);
 			}
-			
+		});
+		
+		viewScanBtn.setText("View Scan <DEBUG>");
+		viewScanBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				BorderPane root = new BorderPane();
+				Scene scene = ScanVisualizerScene.initializeScene(stage);
+				stage.setScene(scene);
+			}
 		});
 		
 		//Drop Down Setup/Styling
@@ -60,9 +70,12 @@ public class LandingScene {
 		GridPane.setConstraints(newPatBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(orLabel, 0, 4, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(prevDrp, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-		
 		grid.getChildren().addAll(newPatBtn, orLabel, prevDrp);
-		
+		if (debug) {
+			GridPane.setConstraints(viewScanBtn, 0, 6, 1, 1, HPos.CENTER, VPos.CENTER);
+			grid.getChildren().addAll(viewScanBtn);
+		}
+			
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100/11);
 		grid.getRowConstraints().add(rowCon);
