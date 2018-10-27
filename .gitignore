@@ -10,3 +10,4 @@ __pycache__/
 /gui/.gradle/
 /.metadata/
 .metadata/
+.recommenders/

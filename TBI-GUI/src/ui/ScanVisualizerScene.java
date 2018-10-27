@@ -28,9 +28,11 @@ public class ScanVisualizerScene {
 		GridPane mainGrid;
 		FileChooser fileChooser = new FileChooser();
 		Button viewBtn = new Button();
+		Button likelyTraumaBtn = new Button();
 		
 		//Analyze button Setup/Styling
 		viewBtn.setText("Select File");
+		likelyTraumaBtn.setText("View Likely Trauma Areas");
 		
 		fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
@@ -46,15 +48,28 @@ public class ScanVisualizerScene {
                 }
             }
         });
+		
+		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				BorderPane root = new BorderPane();
+					//TODO
+				Scene scene = LikelyTraumaAreasScene.initializeScene(stage/*, file*/);
+				stage.setScene(scene);
+			}
+		});
 				
 		//Construct Grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		contentGrid.setVgap(15);
 		contentGrid.setHgap(10);
 		
+		// Button Positions on UI
 		GridPane.setConstraints(viewBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(likelyTraumaBtn, 0, 20, 1, 1, HPos.CENTER, VPos.CENTER);
 		
-		contentGrid.getChildren().addAll(viewBtn);
+		// add buttons to UI
+		contentGrid.getChildren().addAll(viewBtn, likelyTraumaBtn);
 		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100/11);
