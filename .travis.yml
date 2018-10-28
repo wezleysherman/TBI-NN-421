@@ -13,4 +13,4 @@ matrix:
       - pip install tensorflow
     before_script: cd BSSCSFramework
     script:
-      - dicom_test_cases.py
+      - python3 dicom_test_cases.py
