@@ -1,3 +1,4 @@
 language: java
+before_script: cd TBI-GUI
 script:
-  - ./TBI-GUI/gradle test
+  - gradle test
