@@ -1,13 +1,14 @@
 from DICOMImporter import DICOMImporter
 from BSSCS_CNN import BSSCS_CNN
+from BSSCS_IMG_PROCESSING import BSSCS_IMG_PROCESSING
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 def test_dicom_importer():
 	print(DICOMImporter.open_dicom_file('test_dicom/test_dicom.dcm'))
 	print(DICOMImporter.open_dicom_from_folder('test_dicom'))
 	dicom_file = DICOMImporter.open_dicom_file('test_dicom/test_dicom.dcm')
-	#print(DICOMImporter.get_dicom_pixel_array(dicom_file))
-
+	print(DICOMImporter.get_dicom_pixel_array(dicom_file))
 	dicom_files_arr = DICOMImporter.open_dicom_from_folder('test_dicom')
 	anon_dicoms = DICOMImporter.deidentify_dicom_images(dicom_files_arr)
 	print(anon_dicoms)
@@ -45,4 +46,11 @@ def test_cnn_vis():
 	conv_output = bsscs.get_convolutional_filters(dicom_pixel_arr, cnn_full_network)
 	print(conv_output)
 
-test_cnn_creator()
+def test_img_proc():
+	dicom_file = DICOMImporter.open_dicom_file('test_dicom/test_dicom.dcm')
+	dicom_file_pixel = DICOMImporter.get_dicom_pixel_array(dicom_file)
+	contrasted_img = BSSCS_IMG_PROCESSING.contrast_image([dicom_file_pixel], 2)
+	plt.imshow(contrasted_img[0])
+	plt.show()
+
+test_img_proc()
