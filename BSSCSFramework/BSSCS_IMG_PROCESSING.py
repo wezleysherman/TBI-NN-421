@@ -7,7 +7,7 @@
 import tensorflow as tf
 import numpy as np
 from PIL import ImageEnhance, Image
-import matplotlib.pyplot as plt
+
 class BSSCS_IMG_PROCESSING:
 	def contrast_image(pixel_arrs, contrast_val):
 		''' Perform contrast adjustment on image.
