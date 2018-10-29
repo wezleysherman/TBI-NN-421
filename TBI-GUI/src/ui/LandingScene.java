@@ -31,6 +31,7 @@ public class LandingScene {
 		ComboBox<String> prevDrp = new ComboBox<>();
 		ArrayList<String> items = new ArrayList<>();
 		Button viewScanBtn = new Button();
+		Button viewCNNBtn = new Button();
 		
 		//Button Setup/Styling
 		newPatBtn.setText("Start New Patient");
@@ -49,6 +50,16 @@ public class LandingScene {
 			public void handle(ActionEvent arg0) {
 				BorderPane root = new BorderPane();
 				Scene scene = ScanVisualizerScene.initializeScene(stage);
+				stage.setScene(scene);
+			}
+		});
+		
+		viewCNNBtn.setText("View CNN Vis <DEBUG>");
+		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				BorderPane root = new BorderPane();
+				Scene scene = CNNVisualizationScene.initializeScene(stage);
 				stage.setScene(scene);
 			}
 		});
@@ -73,7 +84,8 @@ public class LandingScene {
 		grid.getChildren().addAll(newPatBtn, orLabel, prevDrp);
 		if (debug) {
 			GridPane.setConstraints(viewScanBtn, 0, 6, 1, 1, HPos.CENTER, VPos.CENTER);
-			grid.getChildren().addAll(viewScanBtn);
+			GridPane.setConstraints(viewCNNBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+			grid.getChildren().addAll(viewScanBtn, viewCNNBtn);
 		}
 			
 		RowConstraints rowCon = new RowConstraints();
@@ -86,8 +98,10 @@ public class LandingScene {
 		//Add Grid and layout to scene
 		layout.setCenter(grid);
 		
-		Scene landingScene = new Scene(layout, 960, 540);
+		double x = stage.getWidth();
+		double y = stage.getHeight();
+		Scene scene = new Scene(layout, x, y);
 		
-		return landingScene;
+		return scene;
 	}
 }
