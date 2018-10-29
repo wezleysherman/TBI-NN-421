@@ -11,7 +11,7 @@ matrix:
       - pip install pydicom
       - pip install numpy
       - pip install tensorflow
-      - pip install pil
+      - pip install pillow
     before_script: cd BSSCSFramework
     script:
       - python3 dicom_test_cases.py
