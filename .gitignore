@@ -8,3 +8,9 @@ __pycache__/
 .class
 /.gradle/
 /gui/.gradle/
+/TBI-GUI/.gradle/
+/.metadata/
+.metadata/
+.recommenders/
+.gradle
+

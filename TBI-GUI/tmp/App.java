@@ -22,8 +22,6 @@ public class App extends Application {
 		
 		stage.setTitle("TBI");
 	    stage.setScene(landingScene);
-	    stage.setWidth(960);
-	    stage.setHeight(540);
 
 	    stage.show();
 	}
