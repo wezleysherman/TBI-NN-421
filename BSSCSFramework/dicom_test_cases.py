@@ -49,8 +49,10 @@ def test_img_proc():
 	dicom_file = DICOMImporter.open_dicom_file('test_dicom/test_dicom.dcm')
 	dicom_file_pixel = DICOMImporter.get_dicom_pixel_array(dicom_file)
 	contrasted_img = BSSCS_IMG_PROCESSING.contrast_image([dicom_file_pixel], 2)
+	scaled_img = BSSCS_IMG_PROCESSING.scale_image([dicom_file_pixel], 0.5)
 
-test_img_proc()
 test_cnn_vis()
 test_cnn_creator()
 test_dicom_importer()
+test_img_proc()
+
