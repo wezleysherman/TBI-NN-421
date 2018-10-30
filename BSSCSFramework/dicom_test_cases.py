@@ -50,6 +50,7 @@ def test_img_proc():
 	dicom_file_pixel = DICOMImporter.get_dicom_pixel_array(dicom_file)
 	contrasted_img = BSSCS_IMG_PROCESSING.contrast_image([dicom_file_pixel], 2)
 	scaled_img = BSSCS_IMG_PROCESSING.scale_image([dicom_file_pixel], 0.5)
+	cropped_img = BSSCS_IMG_PROCESSING.crop_image([dicom_file_pixel], 100)
 
 test_cnn_vis()
 test_cnn_creator()

@@ -47,6 +47,21 @@ class BSSCS_IMG_PROCESSING:
 			return_arr.append(img)
 		return return_arr
 
-	def crop_image(pixel_arrs, crop_vector):
+	def crop_image(pixel_arrs, crop_pixels):
+		''' Perform cropping on image.
+
+			Input:
+				- pixel_arrs: an array of pixel arrays for the image we are adjusting
+				- crop_pixels: the number of pixels we want to crop off each edge
+			Output:
+				- Array of pixel arrays with crop operation performed to it.
+		'''
 		return_arr = []
+		for arr in pixel_arrs:
+			img_width, img_height = arr.shape
+			img_width = math.floor(img_width - crop_pixels)
+			img_height = math.floor(img_height - crop_pixels)
+			img = Image.fromarray(arr.astype('uint8')).convert('RGB')
+			img = img.crop((crop_pixels, crop_pixels, img_width, img_height))
+			return_arr.append(img)
 		return return_arr
