@@ -52,7 +52,6 @@ public class PatientInfoEntryScene {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
 				Scene scene = LandingScene.initializeScene(stage);
 				stage.setScene(scene);
 			}

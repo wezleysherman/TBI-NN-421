@@ -28,6 +28,7 @@ public class LandingScene {
 		GridPane grid = new GridPane();
 		Label orLabel = new Label("or");
 		Button newPatBtn = new Button();
+		Button prevPatient = new Button();
 		ComboBox<String> prevDrp = new ComboBox<>();
 		ArrayList<String> items = new ArrayList<>();
 		Button viewScanBtn = new Button();
@@ -58,10 +59,22 @@ public class LandingScene {
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
 				Scene scene = CNNVisualizationScene.initializeScene(stage);
 				stage.setScene(scene);
 			}
+		});
+		
+		//Previous Patient Button Setup
+		prevPatient.setText("Find Previous Patient");
+		prevPatient.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				Scene scene = PreviousPatientScene.initializeScene(stage);
+				stage.setScene(scene);
+				
+			}
+			
 		});
 		
 		//Drop Down Setup/Styling
@@ -80,8 +93,8 @@ public class LandingScene {
 		
 		GridPane.setConstraints(newPatBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(orLabel, 0, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(prevDrp, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-		grid.getChildren().addAll(newPatBtn, orLabel, prevDrp);
+		GridPane.setConstraints(prevPatient, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
+		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient);
 		if (debug) {
 			GridPane.setConstraints(viewScanBtn, 0, 6, 1, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(viewCNNBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
