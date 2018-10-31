@@ -63,7 +63,6 @@ public class LandingScene {
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				// TODO Auto-generated method stub
 				newPatBtn.setStyle(BUTTON_ENTERED);
 			}
 			
@@ -71,7 +70,6 @@ public class LandingScene {
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				// TODO Auto-generated method stub
 				newPatBtn.setStyle(BUTTON_DEFAULT);
 			}
 			
@@ -79,7 +77,6 @@ public class LandingScene {
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				// TODO Auto-generated method stub
 				newPatBtn.setStyle(BUTTON_PRESSED);
 			}
 			
