@@ -2,8 +2,6 @@ package ui;
 
 import java.util.ArrayList;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -11,8 +9,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -22,14 +20,27 @@ import javafx.stage.Stage;
 public class LandingScene {
 	
 	public static boolean debug = true; //Manually change this value
-		
+	private final static String BACKGROUND_COLOR = "-fx-background-color: #455357";
+	private final static String BUTTON_DEFAULT = " -fx-background-color: #cfd8dc;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_ENTERED = " -fx-background-color: #b1babe;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_PRESSED = " -fx-background-color: #c5ced2;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+
+			
 	public static Scene initializeScene(Stage stage) {
 		BorderPane layout = new BorderPane();
 		GridPane grid = new GridPane();
 		Label orLabel = new Label("or");
 		Button newPatBtn = new Button();
-		ComboBox<String> prevDrp = new ComboBox<>();
-		ArrayList<String> items = new ArrayList<>();
+		Button prevPatient = new Button();
 		Button algoVisBtn = new Button();
 		Button viewScanBtn = new Button();
 		Button viewCNNBtn = new Button();
@@ -39,10 +50,31 @@ public class LandingScene {
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
 				Scene scene = PatientInfoEntryScene.initializeScene(stage);
 				stage.setScene(scene);
 			}
+		});
+		newPatBtn.setStyle(BUTTON_DEFAULT);
+		newPatBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				newPatBtn.setStyle(BUTTON_ENTERED);
+			}
+			
+		});
+		newPatBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				newPatBtn.setStyle(BUTTON_DEFAULT);
+			}
+			
+		});
+		newPatBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				newPatBtn.setStyle(BUTTON_PRESSED);
+			}
+			
 		});
 		
 		algoVisBtn.setText("Algorithm Visualizer");
@@ -70,20 +102,23 @@ public class LandingScene {
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
 				Scene scene = CNNVisualizationScene.initializeScene(stage);
 				stage.setScene(scene);
 			}
 		});
 		
-		//Drop Down Setup/Styling
-		items.add("Select Previous Patient");
-		items.add("This is how to add patients");
-		items.add("Fun with code");		
-		ObservableList<String> dropList = FXCollections.observableArrayList(items);
+		//Previous Patient Button Setup
+		prevPatient.setText("Find Previous Patient");
+		prevPatient.setOnAction(new EventHandler<ActionEvent>() {
 
-		prevDrp.setItems(dropList);
-		prevDrp.getSelectionModel().select(0);
+			@Override
+			public void handle(ActionEvent arg0) {
+				Scene scene = PreviousPatientScene.initializeScene(stage);
+				stage.setScene(scene);
+				
+			}
+			
+		});
 		
 		//Construct Grid
 		grid.setPadding(new Insets(10, 10, 10, 10));
@@ -92,9 +127,9 @@ public class LandingScene {
 		
 		GridPane.setConstraints(newPatBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(orLabel, 0, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(prevDrp, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(prevPatient, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
+		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient);
 		GridPane.setConstraints(algoVisBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
-		grid.getChildren().addAll(newPatBtn, orLabel, prevDrp, algoVisBtn);
 		if (debug) {
 			GridPane.setConstraints(viewScanBtn, 0, 8, 1, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(viewCNNBtn, 0,9, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -109,6 +144,7 @@ public class LandingScene {
 		grid.getColumnConstraints().add(columnCon);
 		
 		//Add Grid and layout to scene
+		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(grid);
 		
 		double x = stage.getWidth();
