@@ -81,7 +81,6 @@ public class PreviousPatientScene {
 		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
 		GridPane.setConstraints(innerLayout, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
-		
 		mainGrid.getChildren().add(innerLayout);
 		
 		innerLayout.setCenter(contentGrid);
