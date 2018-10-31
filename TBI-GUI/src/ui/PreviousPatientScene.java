@@ -22,15 +22,16 @@ import javafx.stage.Stage;
 public class PreviousPatientScene {
 	public static Scene initializeScene(Stage stage) {
 		BorderPane layout = new BorderPane();
+		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
-		TableView<Patient> patientTable = new <Patient>TableView();
+		TableView patientTable = new TableView();
 		Button retrieve = new Button();
 		ObservableList<Patient> patientList = FXCollections.observableArrayList(
 				new Patient("John", "Doe", "FilePath", new Date(), "notes"),
 				new Patient("Jane", "Doe", "AnotherFilePath", new Date(), "More notes than last time"));
 		
-		//Analyze button Setup/Styling
+		//Retrieve button Setup/Styling
 		retrieve.setText("Retrieve");
 		
 		retrieve.setOnAction(new EventHandler<ActionEvent>() {
@@ -64,11 +65,8 @@ public class PreviousPatientScene {
 		patientTable.getColumns().addAll(firstNameCol, lastNameCol, fileCol, dateCol, notesCol);
 				
 		patientTable.setItems(patientList);
+		
 		//Construct Grid		
-		GridPane.setConstraints(patientTable, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		
-		contentGrid.getChildren().add(patientTable);
-		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100);
 		contentGrid.getRowConstraints().add(rowCon);
@@ -76,14 +74,19 @@ public class PreviousPatientScene {
 		columnCon.setPercentWidth(100);
 		contentGrid.getColumnConstraints().add(columnCon);
 		
+		GridPane.setConstraints(patientTable, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		contentGrid.getChildren().addAll(patientTable);
+		
 		//Merge Vertical Side Menu and Content
 		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
-		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(innerLayout, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
-		mainGrid.getChildren().add(contentGrid);
 		
+		mainGrid.getChildren().add(innerLayout);
+		
+		innerLayout.setCenter(contentGrid);
+		innerLayout.setBottom(retrieve);
 		layout.setCenter(mainGrid);
-		layout.setRight(retrieve);
 		
 		double x = stage.getWidth();
 		double y = stage.getHeight();

@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class PatientInfoEntryScene {
+	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
 	
 	public static Scene initializeScene(Stage stage) {
 		BorderPane layout = new BorderPane();
@@ -44,6 +45,8 @@ public class PatientInfoEntryScene {
 		
 		notesField.setMaxSize(200, 10);
 		notesField.setPromptText("Notes");
+		
+		datePicker.setPromptText("Select Date of Scan");
 		
 		//Analyze button Setup/Styling
 		analyze.setText("Analyze");
@@ -116,6 +119,7 @@ public class PatientInfoEntryScene {
 
 		mainGrid.getChildren().add(contentGrid);
 		
+		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(mainGrid);
 		
 		double x = stage.getWidth();

@@ -13,16 +13,32 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 public class LandingScene {
 	
 	public static boolean debug = true; //Manually change this value
-		
+	private final static String BACKGROUND_COLOR = "-fx-background-color: #455357";
+	private final static String BUTTON_DEFAULT = " -fx-background-color: #cfd8dc;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_ENTERED = " -fx-background-color: #b1babe;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_PRESSED = " -fx-background-color: #c5ced2;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+
+			
 	public static Scene initializeScene(Stage stage) {
 		BorderPane layout = new BorderPane();
 		GridPane grid = new GridPane();
@@ -39,10 +55,34 @@ public class LandingScene {
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
 				Scene scene = PatientInfoEntryScene.initializeScene(stage);
 				stage.setScene(scene);
 			}
+		});
+		newPatBtn.setStyle(BUTTON_DEFAULT);
+		newPatBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				newPatBtn.setStyle(BUTTON_ENTERED);
+			}
+			
+		});
+		newPatBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				newPatBtn.setStyle(BUTTON_DEFAULT);
+			}
+			
+		});
+		newPatBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				newPatBtn.setStyle(BUTTON_PRESSED);
+			}
+			
 		});
 		
 		viewScanBtn.setText("View Scan <DEBUG>");
@@ -109,6 +149,7 @@ public class LandingScene {
 		grid.getColumnConstraints().add(columnCon);
 		
 		//Add Grid and layout to scene
+		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(grid);
 		
 		double x = stage.getWidth();
