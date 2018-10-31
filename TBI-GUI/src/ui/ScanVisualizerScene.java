@@ -86,8 +86,8 @@ public class ScanVisualizerScene {
 		
 		layout.setCenter(mainGrid);
 		
-		Scene landingScene = new Scene(layout, 960, 540);
+		Scene scene = new Scene(layout, stage.getWidth(), stage.getHeight());
 		
-		return landingScene;
+		return scene;
 	}
 }

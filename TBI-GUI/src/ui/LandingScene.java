@@ -2,8 +2,6 @@ package ui;
 
 import java.util.ArrayList;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -11,13 +9,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
@@ -45,8 +41,7 @@ public class LandingScene {
 		Label orLabel = new Label("or");
 		Button newPatBtn = new Button();
 		Button prevPatient = new Button();
-		ComboBox<String> prevDrp = new ComboBox<>();
-		ArrayList<String> items = new ArrayList<>();
+		Button algoVisBtn = new Button();
 		Button viewScanBtn = new Button();
 		Button viewCNNBtn = new Button();
 		
@@ -82,6 +77,17 @@ public class LandingScene {
 			
 		});
 		
+		algoVisBtn.setText("Algorithm Visualizer");
+		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				BorderPane root = new BorderPane();
+				Scene scene = AlgorithmVisualizerScene.initializeScene(stage);
+				stage.setScene(scene);
+			}
+		});
+		
+		
 		viewScanBtn.setText("View Scan <DEBUG>");
 		viewScanBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -114,15 +120,6 @@ public class LandingScene {
 			
 		});
 		
-		//Drop Down Setup/Styling
-		items.add("Select Previous Patient");
-		items.add("This is how to add patients");
-		items.add("Fun with code");		
-		ObservableList<String> dropList = FXCollections.observableArrayList(items);
-
-		prevDrp.setItems(dropList);
-		prevDrp.getSelectionModel().select(0);
-		
 		//Construct Grid
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setVgap(15);
@@ -132,9 +129,10 @@ public class LandingScene {
 		GridPane.setConstraints(orLabel, 0, 4, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(prevPatient, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient);
+		GridPane.setConstraints(algoVisBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
 		if (debug) {
-			GridPane.setConstraints(viewScanBtn, 0, 6, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(viewCNNBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(viewScanBtn, 0, 8, 1, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(viewCNNBtn, 0,9, 1, 1, HPos.CENTER, VPos.CENTER);
 			grid.getChildren().addAll(viewScanBtn, viewCNNBtn);
 		}
 			
