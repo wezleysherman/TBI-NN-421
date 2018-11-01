@@ -24,8 +24,8 @@ public class AlgorithmVisualizerScene {
 	//Dummy Data //TODO import data from the algorithm and update test class with same values
 	public static int[] fileNum = new int[]{100, 200, 300, 400, 500, 600, 700, 800};
 	public static double[] percentages = new double[]{10.5, 15.6, 20.5, 35.6, 48.9, 68.3, 80.1, 92.3};
-	
-	public static Scene initializeScene(Stage stage) {
+
+	public static Scene initializeScene(Stage stage, StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -61,7 +61,7 @@ public class AlgorithmVisualizerScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);

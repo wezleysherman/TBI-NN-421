@@ -5,6 +5,7 @@ import ui.AlgorithmVisualizerScene;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import ui.StateManager;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -26,8 +27,9 @@ public class AlgorithmVisualizerTests {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-						new App().start(new Stage());
-						AlgorithmVisualizerScene.initializeScene(App.globalStage);
+						Stage stage = new Stage();
+						new App().start(stage);
+						AlgorithmVisualizerScene.initializeScene(stage, new StateManager(stage));
 					}
 				});
 			}

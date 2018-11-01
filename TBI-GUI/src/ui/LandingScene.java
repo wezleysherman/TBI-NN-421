@@ -35,7 +35,7 @@ public class LandingScene {
 			"    -fx-text-fill: black;";
 
 			
-	public static Scene initializeScene(Stage stage) {
+	public static Scene initializeScene(Stage stage, StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane grid = new GridPane();
 		Label orLabel = new Label("or");
@@ -50,8 +50,8 @@ public class LandingScene {
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				Scene scene = PatientInfoEntryScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("newPat");
 			}
 		});
 		newPatBtn.setStyle(BUTTON_DEFAULT);
@@ -82,7 +82,7 @@ public class LandingScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				BorderPane root = new BorderPane();
-				Scene scene = AlgorithmVisualizerScene.initializeScene(stage);
+				Scene scene = AlgorithmVisualizerScene.initializeScene(stage, manager);
 				stage.setScene(scene);
 			}
 		});
@@ -92,9 +92,8 @@ public class LandingScene {
 		viewScanBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
-				Scene scene = ScanVisualizerScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("viewScan");
 			}
 		});
 		
@@ -102,8 +101,8 @@ public class LandingScene {
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				Scene scene = CNNVisualizationScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("viewCNN");
 			}
 		});
 		
@@ -113,8 +112,8 @@ public class LandingScene {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				Scene scene = PreviousPatientScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("prevPat");
 				
 			}
 			

@@ -4,10 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -18,7 +16,7 @@ public class VerticalSideMenu {
 	
 	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
 	
-	public static GridPane newPatientInfoBar(Stage stage) {
+	public static GridPane newPatientInfoBar(Stage stage, StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
 		Button backBtn = new Button();
@@ -31,9 +29,7 @@ public class VerticalSideMenu {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
-				Scene scene = LandingScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.paintScene(manager.sceneStack.pop());
 			}
 			
 		});
