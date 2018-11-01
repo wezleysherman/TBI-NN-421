@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  */
 public class AlgorithmVisualizerScene {
 	
-	public static Scene initializeScene(Stage stage) {
+	public static Scene initializeScene(Stage stage, StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -59,7 +59,7 @@ public class AlgorithmVisualizerScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);

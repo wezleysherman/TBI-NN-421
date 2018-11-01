@@ -16,16 +16,7 @@ public class App extends Application {
 	@Override
 	public void start(Stage stage) {
 		
-		StackPane root = new StackPane();
-		Scene scene = new Scene(root, 960, 540);
-		Scene landingScene = new LandingScene().initializeScene(stage);
-		
-		stage.setTitle("TBI");
-	    stage.setScene(landingScene);
-	    stage.setWidth(960);
-	    stage.setHeight(540);
-
-	    stage.show();
+		StateManager manager = new StateManager(stage);
 	}
 	
 	public static void main(String[] args) {
