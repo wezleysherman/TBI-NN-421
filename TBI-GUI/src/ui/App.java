@@ -12,10 +12,13 @@ import javafx.scene.Scene;
  * https://docs.oracle.com/javase/8/javafx/get-started-tutorial/hello_world.htm
  */
 public class App extends Application {
-
+	
+	public static Stage globalStage = null;
+	
 	@Override
 	public void start(Stage stage) {
-		
+		globalStage = stage;
+
 		StateManager manager = new StateManager(stage);
 	}
 	
