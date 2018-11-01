@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class PatientInfoEntryScene {
 	
-	public static Scene initializeScene(Stage stage) {
+	public static Scene initializeScene(Stage stage, StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -40,15 +40,16 @@ public class PatientInfoEntryScene {
 		notesField.setPromptText("Notes");
 		
 		//Analyze button Setup/Styling
+		//TODO: Button function (right now just sends back to landing)
 		analyze.setText("Analyze");
 		
 		analyze.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
-				Scene scene = LandingScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				// TODO: change key from landing to new page key when page is created
+				manager.paintScene("landing");
 			}
 			
 		});
@@ -74,7 +75,7 @@ public class PatientInfoEntryScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);

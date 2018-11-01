@@ -23,7 +23,7 @@ public class LandingScene {
 	
 	public static boolean debug = true; //Manually change this value
 		
-	public static Scene initializeScene(Stage stage) {
+	public static Scene initializeScene(Stage stage, StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane grid = new GridPane();
 		Label orLabel = new Label("or");
@@ -37,9 +37,8 @@ public class LandingScene {
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
-				Scene scene = PatientInfoEntryScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("newPat");
 			}
 		});
 		
@@ -47,9 +46,8 @@ public class LandingScene {
 		viewScanBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
-				Scene scene = ScanVisualizerScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("viewScan");
 			}
 		});
 		

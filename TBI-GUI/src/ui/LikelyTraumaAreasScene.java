@@ -12,7 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -22,7 +21,7 @@ import javafx.stage.Stage;
  */
 public class LikelyTraumaAreasScene {
 		//TODO
-	public static Scene initializeScene(Stage stage/*, File in*/) {
+	public static Scene initializeScene(Stage stage, StateManager manager/*, File in*/) {
 		
 		// declaration of UI elements
 		BorderPane layout = new BorderPane();
@@ -43,7 +42,7 @@ public class LikelyTraumaAreasScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		// adding side menu and content to the main scene
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		
 		mainGrid.getChildren().add(contentGrid);

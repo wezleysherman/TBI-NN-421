@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  */
 public class ScanVisualizerScene {
 	
-	public static Scene initializeScene(Stage stage) {
+	public static Scene initializeScene(Stage stage, StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -52,10 +52,8 @@ public class ScanVisualizerScene {
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
-				BorderPane root = new BorderPane();
-					//TODO
-				Scene scene = LikelyTraumaAreasScene.initializeScene(stage/*, file*/);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("likelyTrauma");
 			}
 		});
 				
@@ -79,7 +77,7 @@ public class ScanVisualizerScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);
