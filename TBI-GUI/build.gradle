@@ -2,6 +2,7 @@
 //https://guides.gradle.org/creating-new-gradle-builds/
 //https://github.com/ser316asu/ser316-cottbus-Spring18/blob/master/build.gradle
 //https://stackoverflow.com/questions/24924932/gradle-could-not-find-or-load-main-class
+//https://docs.gradle.org/current/userguide/java_testing.html
 
 apply plugin: 'application'
 apply plugin: 'java'
@@ -31,6 +32,11 @@ compileJava.doLast {
 
 sourceSets.main.java.srcDirs = ['src']
 
+test {
+	useJUnit()
+	maxHeapSize = '1G'
+}
+
 mainClassName = 'ui.App'
 
 compileJava.options.encoding = 'UTF-8'
@@ -43,6 +49,7 @@ repositories {
 dependencies {
 	compile 'com.io7m.xom:xom:1.2.+'
 	compile 'net.sourceforge.nekohtml:nekohtml:1.9.+'
+	compile 'junit:junit:4.12'
 }
 
 task wrapper (type: Wrapper) {

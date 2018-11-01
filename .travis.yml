@@ -1,0 +1,17 @@
+matrix:
+  include:
+  - language: java
+    before_script: cd TBI-GUI
+    script:
+      - gradle test
+  - language: python
+    python:
+      - '3.6'
+    install:
+      - pip install pydicom
+      - pip install numpy
+      - pip install tensorflow
+      - pip install pillow
+    before_script: cd BSSCSFramework
+    script:
+      - python3 dicom_test_cases.py
