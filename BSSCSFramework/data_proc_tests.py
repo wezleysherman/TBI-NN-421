@@ -4,6 +4,7 @@
 '''
 from DICOMImporter import DICOMImporter
 from BSSCS_IMG_PROCESSING import BSSCS_IMG_PROCESSING
+import numpy as np
 import unittest
 
 class DataProcessingTests(unittest.TestCase):
@@ -25,8 +26,20 @@ class DataProcessingTests(unittest.TestCase):
 		return
 
 	def test_scale_adjust(self):
+		scale_factor = 0.1
 		dicom_file = DICOMImporter.open_dicom_file('test_dicom/test_dicom.dcm')
-
+		dicom_pixel_arr = DICOMImporter.get_dicom_pixel_array(dicom_file)
+		o_width, o_height = dicom_pixel_arr.shape
+		scaled_dicom = BSSCS_IMG_PROCESSING.scale_image([dicom_pixel_arr], scale_factor)
+		n_width, n_height = scaled_dicom[0].size
+		self.assertNotEqual(o_width, n_width)
+		self.assertNotEqual(o_height, n_height)
+		self.assertTrue((o_width-2) == (n_width / scale_factor))
+		self.assertTrue((o_height-2) == (n_height / scale_factor))
+		scaled_dicom = BSSCS_IMG_PROCESSING.scale_image([dicom_pixel_arr], 10)
+		n_width, n_height = scaled_dicom[0].size
+		self.assertTrue(o_width < n_width)
+		self.assertTrue(o_height < n_height)
 		return
 
 	def test_crop_adjust(self):

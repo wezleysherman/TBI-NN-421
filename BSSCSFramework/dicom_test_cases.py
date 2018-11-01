@@ -1,6 +1,12 @@
+''' Authors: Wezley Sherman
+	BSSCS Test cases for the human developer
+	Allows us to visualize what is going on in the network
+	Not to be used for unit testing
+'''
 from DICOMImporter import DICOMImporter
 from BSSCS_CNN import BSSCS_CNN
 from BSSCS_IMG_PROCESSING import BSSCS_IMG_PROCESSING
+import numpy as np
 import tensorflow as tf
 
 def test_dicom_importer():
@@ -50,6 +56,7 @@ def test_img_proc():
 	dicom_file_pixel = DICOMImporter.get_dicom_pixel_array(dicom_file)
 	contrasted_img = BSSCS_IMG_PROCESSING.contrast_image([dicom_file_pixel], 2)
 	scaled_img = BSSCS_IMG_PROCESSING.scale_image([dicom_file_pixel], 0.5)
+	print(scaled_img[0].size)
 	cropped_img = BSSCS_IMG_PROCESSING.crop_image([dicom_file_pixel], 100)
 
 test_cnn_vis()
