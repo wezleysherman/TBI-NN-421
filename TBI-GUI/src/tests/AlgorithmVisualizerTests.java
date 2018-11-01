@@ -39,10 +39,6 @@ public class AlgorithmVisualizerTests {
 		Thread.currentThread().interrupt(); //kill thread
 		
 		//TODO change to the actual values from the algorithm when we have that
-		for (int i = 0; i < AlgorithmVisualizerScene.fileNum.length; ++i)
-			assertEquals(AlgorithmVisualizerScene.chart1.getData().get(0).getData().get(i).getXValue(), AlgorithmVisualizerScene.fileNum[i]);
-		for (int i = 0; i < AlgorithmVisualizerScene.percentages.length; ++i)
-			assertEquals(AlgorithmVisualizerScene.chart1.getData().get(0).getData().get(i).getYValue(), AlgorithmVisualizerScene.percentages[i]);
 		assert(AlgorithmVisualizerScene.chart1.getTitle().equals("Percent Accuracy Increase with More Files Analyzed"));
 		assert(AlgorithmVisualizerScene.chart1.getData().get(0).getName().equals("Specific Data Points"));
 	}
