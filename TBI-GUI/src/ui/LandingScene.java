@@ -128,8 +128,8 @@ public class LandingScene {
 		GridPane.setConstraints(newPatBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(orLabel, 0, 4, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(prevPatient, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient);
 		GridPane.setConstraints(algoVisBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient, algoVisBtn);
 		if (debug) {
 			GridPane.setConstraints(viewScanBtn, 0, 8, 1, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(viewCNNBtn, 0,9, 1, 1, HPos.CENTER, VPos.CENTER);
