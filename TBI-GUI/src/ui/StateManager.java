@@ -28,6 +28,8 @@ public class StateManager {
 		sceneStack = new Stack<String>();
 		stage = inStage;
 		stage.setTitle("TBI");
+		stage.setWidth(960);
+		stage.setHeight(540);
 		
 		this.paintScene(sceneID);
 		
