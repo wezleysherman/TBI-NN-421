@@ -14,4 +14,4 @@ matrix:
       - pip install pillow
     before_script: cd BSSCSFramework
     script:
-      - python3 dicom_test_cases.py
+      - python3 data_proc_tests.py
