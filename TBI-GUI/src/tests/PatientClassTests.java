@@ -4,7 +4,7 @@ import ui.Patient;
 
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 class PatientClassTests {
 
