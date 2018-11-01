@@ -6,26 +6,28 @@ import java.util.Date;
 
 import org.junit.Test;
 
-class PatientClassTests {
+import static org.junit.Assert.*;
+
+public class PatientClassTests {
 
 	@Test
-	void PatientTestInitGet() {
+	public void PatientTestInitGet() {
 		Date testDate = new Date();
 		Date testChangeDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60);
 
 		Patient patient = new Patient("John", "Doe", "FilePath", testDate, "Some notes");
-		assert(patient.getDate() == testDate);
-		assert(patient.getFirstName().equals("John"));
-		assert(patient.getLastName().equals("Doe"));
-		assert(patient.getFile().equals("FilePath"));
-		assert(patient.getNotes().equals("Some notes"));
+		assertEquals(patient.getDate(), testDate);
+		assertEquals(patient.getFirstName(), "John");
+		assertEquals(patient.getLastName(), "Doe");
+		assertEquals(patient.getFile(), "FilePath");
+		assertEquals(patient.getNotes(), "Some notes");
 		
-		assert(patient.getDate() != testChangeDate);
-		assert(!patient.getFile().equals("The wrong file path"));
+		assertNotEquals(patient.getDate(), testChangeDate);
+		assertNotEquals(patient.getFile(), "The wrong file path");
 	}
 	
 	@Test
-	void PatientTestSet() {
+	public void PatientTestSet() {
 		Date testDate = new Date();
 		Date testChangeDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60);
 		Patient patient = new Patient("John", "Doe", "FilePath", testDate, "Some notes");
@@ -36,16 +38,16 @@ class PatientClassTests {
 		patient.setLastName("McJane");
 		patient.setNotes("A whole lot of notes.");
 		
-		assert(patient.getDate() != testDate);
-		assert(!patient.getFirstName().equals("John"));
-		assert(!patient.getLastName().equals("Doe"));
-		assert(!patient.getFile().equals("FilePath"));
-		assert(!patient.getNotes().equals("Some notes"));
+		assertNotEquals(patient.getDate(), testDate);
+		assertNotEquals(patient.getFirstName(), "John");
+		assertNotEquals(patient.getLastName(), "Doe");
+		assertNotEquals(patient.getFile(), "FilePath");
+		assertNotEquals(patient.getNotes(), "Some notes");
 		
-		assert(patient.getDate() == testChangeDate);
-		assert(patient.getFirstName().equals("Jane"));
-		assert(patient.getLastName().equals("McJane"));
-		assert(patient.getFile().equals("newFilePath"));
-		assert(patient.getNotes().equals("A whole lot of notes."));
+		assertEquals(patient.getDate(), testChangeDate);
+		assertEquals(patient.getFirstName(), "Jane");
+		assertEquals(patient.getLastName(), "McJane");
+		assertEquals(patient.getFile(), "newFilePath");
+		assertEquals(patient.getNotes(), "A whole lot of notes.");
 	}
 }
