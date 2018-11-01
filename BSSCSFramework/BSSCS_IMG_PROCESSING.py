@@ -4,7 +4,6 @@
 # PIL Documentation:
 # https://pillow.readthedocs.io/en/3.0.x/reference/
 
-import tensorflow as tf
 import numpy as np
 from PIL import ImageEnhance, Image
 import math
