@@ -82,7 +82,7 @@ public class LandingScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				BorderPane root = new BorderPane();
-				Scene scene = AlgorithmVisualizerScene.initializeScene(stage);
+				Scene scene = AlgorithmVisualizerScene.initializeScene(stage, manager);
 				stage.setScene(scene);
 			}
 		});
@@ -101,8 +101,8 @@ public class LandingScene {
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				Scene scene = CNNVisualizationScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("viewCNN");
 			}
 		});
 		
@@ -112,8 +112,8 @@ public class LandingScene {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				Scene scene = PreviousPatientScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("prevPat");
 				
 			}
 			

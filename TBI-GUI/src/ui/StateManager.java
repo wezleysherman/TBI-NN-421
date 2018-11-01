@@ -48,6 +48,10 @@ public class StateManager {
 			scene = new ScanVisualizerScene().initializeScene(stage, this);
 		else if (sceneID.equals("likelyTrauma"))
 			scene = new LikelyTraumaAreasScene().initializeScene(stage, this);
+		else if (sceneID.equals("viewCNN"))
+			scene = new CNNVisualizationScene().initializeScene(stage, this);
+		else if (sceneID.equals("prevPat"))
+			scene = new PreviousPatientScene().initializeScene(stage, this);
 		
 		stage.setScene(scene);
 		

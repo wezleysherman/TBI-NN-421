@@ -20,7 +20,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 public class PreviousPatientScene {
-	public static Scene initializeScene(Stage stage) {
+	public static Scene initializeScene(Stage stage, StateManager manager) {
 		BorderPane layout = new BorderPane();
 		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -38,8 +38,9 @@ public class PreviousPatientScene {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				Scene scene = LandingScene.initializeScene(stage);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				// TODO: change key from landing to new page key when page is created
+				manager.paintScene("landing");
 			}
 			
 		});
@@ -78,7 +79,7 @@ public class PreviousPatientScene {
 		contentGrid.getChildren().addAll(patientTable);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
 		GridPane.setConstraints(innerLayout, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(innerLayout);
