@@ -1,7 +1,9 @@
 matrix:
   include:
   - language: java
-    before_script: cd TBI-GUI
+    before_script:
+      sudo apt-get install libgdcm2.8
+      cd TBI-GUI
     script:
       - gradle test
   - language: python
@@ -11,6 +13,10 @@ matrix:
       - pip install pydicom
       - pip install numpy
       - pip install tensorflow
+      - pip install retrying
+      - pip install dicom2nifti
+      - pip install nibabel
     before_script: cd BSSCSFramework
     script:
       - python3 dicom_test_cases.py
+      - python3 CTConverter/conversion_test_cases.py
