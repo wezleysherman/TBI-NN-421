@@ -10,13 +10,13 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
-import javafx.stage.Stage;
+import java.util.EmptyStackException;
 
 public class VerticalSideMenu {
 	
 	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
 	
-	public static GridPane newPatientInfoBar(Stage stage, StateManager manager) {
+	public static GridPane newPatientInfoBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
 		Button backBtn = new Button();
@@ -29,7 +29,16 @@ public class VerticalSideMenu {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.paintScene(manager.sceneStack.pop());
+				try {
+					manager.paintScene(manager.sceneStack.pop());
+				}
+				catch (EmptyStackException ex) {
+					manager.paintScene("landing");
+					/* if this message prints, the implementation of a previous page is probably missing a push operation.
+					 * this makes the code safe for master and general testing, but makes problems less obvious during development (watch for console messages)
+					 */
+					System.out.println(ex + " Something wrong with stack implementation, returning to landing page.");
+				}
 			}
 			
 		});

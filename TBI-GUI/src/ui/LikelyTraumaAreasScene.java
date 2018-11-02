@@ -1,18 +1,20 @@
 package ui;
 
-import java.io.File;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.stage.Stage;
+/* potential use for these with future functionality
+
+import java.io.File;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+*/
 
 /**
  * This page will allow for the user to view likely trauma areas within the selected CT scan image
@@ -20,8 +22,8 @@ import javafx.stage.Stage;
  *
  */
 public class LikelyTraumaAreasScene {
-		//TODO
-	public static Scene initializeScene(Stage stage, StateManager manager/*, File in*/) {
+		//TODO: File input from the viewScan page
+	public static Scene initializeScene(StateManager manager/*, File in*/) {
 		
 		// declaration of UI elements
 		BorderPane layout = new BorderPane();
@@ -42,7 +44,7 @@ public class LikelyTraumaAreasScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		// adding side menu and content to the main scene
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		
 		mainGrid.getChildren().add(contentGrid);

@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.stage.Stage;
 
 /**
  * This page will show graphs of the correctness of the algorithm
@@ -25,7 +24,7 @@ public class AlgorithmVisualizerScene {
 	public static int[] fileNum = new int[]{100, 200, 300, 400, 500, 600, 700, 800};
 	public static double[] percentages = new double[]{10.5, 15.6, 20.5, 35.6, 48.9, 68.3, 80.1, 92.3};
 
-	public static Scene initializeScene(Stage stage, StateManager manager) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -61,14 +60,14 @@ public class AlgorithmVisualizerScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);
 		
 		layout.setCenter(mainGrid);
 		
-		Scene scene = new Scene(layout, stage.getWidth(), stage.getHeight());
+		Scene scene = new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
 		
 		return scene;
 	}

@@ -1,7 +1,5 @@
 package ui;
 
-import java.util.ArrayList;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -15,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.stage.Stage;
 
 public class LandingScene {
 	
@@ -35,7 +32,7 @@ public class LandingScene {
 			"    -fx-text-fill: black;";
 
 			
-	public static Scene initializeScene(Stage stage, StateManager manager) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane grid = new GridPane();
 		Label orLabel = new Label("or");
@@ -81,9 +78,8 @@ public class LandingScene {
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				BorderPane root = new BorderPane();
-				Scene scene = AlgorithmVisualizerScene.initializeScene(stage, manager);
-				stage.setScene(scene);
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("algoVis");
 			}
 		});
 		
@@ -146,8 +142,8 @@ public class LandingScene {
 		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(grid);
 		
-		double x = stage.getWidth();
-		double y = stage.getHeight();
+		double x = manager.stage.getWidth();
+		double y = manager.stage.getHeight();
 		Scene scene = new Scene(layout, x, y);
 		
 		return scene;

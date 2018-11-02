@@ -29,7 +29,7 @@ public class AlgorithmVisualizerTests {
 					public void run() {
 						Stage stage = new Stage();
 						new App().start(stage);
-						AlgorithmVisualizerScene.initializeScene(stage, new StateManager(stage));
+						AlgorithmVisualizerScene.initializeScene(new StateManager(stage));
 					}
 				});
 			}
