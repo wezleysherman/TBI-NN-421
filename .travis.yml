@@ -10,6 +10,8 @@ matrix:
     python:
       - '3.6'
     install:
+      - sudo apt-get install libgdcm2.4
+      - sudo apt-get install libgdcm-tools
       - pip install pydicom
       - pip install numpy
       - pip install tensorflow
