@@ -10,13 +10,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
-import javafx.stage.Stage;
 
 public class VerticalSideMenu {
 	
 	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
 	
-	public static GridPane newPatientInfoBar(Stage stage, StateManager manager) {
+	public static GridPane newPatientInfoBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
 		Button backBtn = new Button();

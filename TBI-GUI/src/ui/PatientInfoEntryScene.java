@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -20,12 +19,11 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 public class PatientInfoEntryScene {
 	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
 	
-	public static Scene initializeScene(Stage stage, StateManager manager) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -95,7 +93,7 @@ public class PatientInfoEntryScene {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 				if(arg2) {
-					File file = fileChooser.showOpenDialog(stage);
+					File file = fileChooser.showOpenDialog(manager.stage);
 		            if (file != null) {
 		                //TODO
 		            }
@@ -106,17 +104,18 @@ public class PatientInfoEntryScene {
 		
 		//Set up date picker
 		datePicker.setMaxSize(198, 10);
-		datePicker.setOnAction(new EventHandler() {
+		datePicker.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(Event arg0) {
-				// TODO Auto-generated method stub
+			public void handle(ActionEvent arg0) {
+				//TODO: use date somewhere and remove suppression
+				@SuppressWarnings("unused")
 				LocalDate date = datePicker.getValue();
 			}
 		});
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);
@@ -124,8 +123,8 @@ public class PatientInfoEntryScene {
 		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(mainGrid);
 		
-		double x = stage.getWidth();
-		double y = stage.getHeight();
+		double x = manager.stage.getWidth();
+		double y = manager.stage.getHeight();
 		Scene scene = new Scene(layout, x, y);
 		
 		return scene;

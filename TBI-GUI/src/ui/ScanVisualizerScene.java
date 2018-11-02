@@ -13,7 +13,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 /**
  * This page will allow for the user to view a CT scan image
@@ -22,7 +21,7 @@ import javafx.stage.Stage;
  */
 public class ScanVisualizerScene {
 	
-	public static Scene initializeScene(Stage stage, StateManager manager) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -42,7 +41,7 @@ public class ScanVisualizerScene {
 		viewBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent e) {
-                File file = fileChooser.showOpenDialog(stage);
+                File file = fileChooser.showOpenDialog(manager.stage);
                 if (file != null) {
                     //TODO
                 }
@@ -77,14 +76,14 @@ public class ScanVisualizerScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);
 		
 		layout.setCenter(mainGrid);
 		
-		Scene scene = new Scene(layout, stage.getWidth(), stage.getHeight());
+		Scene scene = new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
 		
 		return scene;
 	}

@@ -2,8 +2,6 @@ package ui;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.scene.layout.StackPane;
-import javafx.scene.Scene;
 
 /**
  * The user interface starter
@@ -19,6 +17,8 @@ public class App extends Application {
 	public void start(Stage stage) {
 		globalStage = stage;
 
+		//TODO: consider making manager a global variable to avoid the need of passing it to every scene
+		@SuppressWarnings("unused") //TODO: look into the implications of fixing this warning (low severity)
 		StateManager manager = new StateManager(stage);
 	}
 	

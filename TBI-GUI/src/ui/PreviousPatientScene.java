@@ -17,10 +17,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.stage.Stage;
 
+// TODO: find a way to reduce the amount of warnings thrown by this page
 public class PreviousPatientScene {
-	public static Scene initializeScene(Stage stage, StateManager manager) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -79,7 +79,7 @@ public class PreviousPatientScene {
 		contentGrid.getChildren().addAll(patientTable);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(stage, manager);
+		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
 		GridPane.setConstraints(innerLayout, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(innerLayout);
@@ -88,8 +88,8 @@ public class PreviousPatientScene {
 		innerLayout.setBottom(retrieve);
 		layout.setCenter(mainGrid);
 		
-		double x = stage.getWidth();
-		double y = stage.getHeight();
+		double x = manager.stage.getWidth();
+		double y = manager.stage.getHeight();
 		Scene scene = new Scene(layout, x, y);
 		
 		return scene;

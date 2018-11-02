@@ -1,22 +1,16 @@
 package ui;
 
 import java.util.Stack;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 // TODO: find better way to implement state manager
+/**
+ * StateManager for the UI, controls painting scenes to the screen and setting the stage
+ * @author Canyon Schubert
+ *
+ */
 public class StateManager {
 	Stack<String> sceneStack;
 	Stage stage;
@@ -36,22 +30,28 @@ public class StateManager {
 		stage.show();
 	}
 	
-	public void paintScene(String newSceneID) {
-			
+	/**
+	 * Determines which scene to paint to the stage
+	 * @param newSceneID :is currently a distinct string indicating which scene will be displayed, it is different than sceneID for stack pushing purposes
+	 */
+	@SuppressWarnings("static-access")
+	public void paintScene(String newSceneID) {			
 		sceneID = newSceneID;
 	//TODO: Add key and scene when more scenes are added (keys are the names of corresponding buttons)	
 		if (sceneID.equals("landing"))
-			scene = new LandingScene().initializeScene(stage, this);
+			scene = new LandingScene().initializeScene(this);
 		else if (sceneID.equals("newPat"))
-			scene = new PatientInfoEntryScene().initializeScene(stage, this);
+			scene = new PatientInfoEntryScene().initializeScene(this);
 		else if (sceneID.equals("viewScan"))
-			scene = new ScanVisualizerScene().initializeScene(stage, this);
+			scene = new ScanVisualizerScene().initializeScene(this);
 		else if (sceneID.equals("likelyTrauma"))
-			scene = new LikelyTraumaAreasScene().initializeScene(stage, this);
+			scene = new LikelyTraumaAreasScene().initializeScene(this);
 		else if (sceneID.equals("viewCNN"))
-			scene = new CNNVisualizationScene().initializeScene(stage, this);
+			scene = new CNNVisualizationScene().initializeScene(this);
 		else if (sceneID.equals("prevPat"))
-			scene = new PreviousPatientScene().initializeScene(stage, this);
+			scene = new PreviousPatientScene().initializeScene(this);
+		else if (sceneID.equals("algoVis"))
+			scene = new AlgorithmVisualizerScene().initializeScene(this);
 		
 		stage.setScene(scene);
 		
