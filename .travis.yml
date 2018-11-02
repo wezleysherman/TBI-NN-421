@@ -18,7 +18,8 @@ matrix:
       - pip install retrying
       - pip install dicom2nifti
       - pip install nibabel
+      - pip install pillow
     before_script: cd BSSCSFramework
     script:
-      - python3 dicom_test_cases.py
+      - python3 data_proc_tests.py
       - python3 CTConverter/conversion_test_cases.py

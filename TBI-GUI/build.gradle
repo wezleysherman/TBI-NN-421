@@ -31,6 +31,13 @@ compileJava.doLast {
 }
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets {
+	test {
+		java {
+			srcDirs = ['src/tests']
+		}
+	}
+}
 
 test {
 	useJUnit()
@@ -49,7 +56,7 @@ repositories {
 dependencies {
 	compile 'com.io7m.xom:xom:1.2.+'
 	compile 'net.sourceforge.nekohtml:nekohtml:1.9.+'
-	testImplementation 'junit:junit:4.12'
+	compile 'junit:junit:4.12'
 }
 
 task wrapper (type: Wrapper) {
