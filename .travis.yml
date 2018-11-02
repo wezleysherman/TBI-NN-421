@@ -15,3 +15,4 @@ matrix:
     before_script: cd BSSCSFramework
     script:
       - python3 data_proc_tests.py
+      - python3 cnn_tests.py
