@@ -25,4 +25,5 @@ matrix:
       - cd BSSCSFramework
     script:
       - python3 data_proc_tests.py
-      #- python3 CTConverter/conversion_test_cases.py
+      - python3 cnn_tests.py
+
