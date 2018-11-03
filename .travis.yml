@@ -1,7 +1,8 @@
 matrix:
   include:
   - language: java
-    before_script: cd TBI-GUI
+    before_script:
+      cd TBI-GUI
     script:
       - gradle test
   - language: python
@@ -11,7 +12,17 @@ matrix:
       - pip install pydicom
       - pip install numpy
       - pip install tensorflow
+      - pip install retrying
+      - pip install dicom2nifti
+      - pip install nibabel
       - pip install pillow
-    before_script: cd BSSCSFramework
+      #- curl -sL https://github.com/malaterre/GDCM/archive/v2.8.8.tar.gz | tar xz
+      #- cd GDCM-2.8.8
+      #- mkdir gdcm-build
+      #- cmake .
+      #- make
+    before_script:
+      - cd BSSCSFramework
     script:
       - python3 data_proc_tests.py
+      #- python3 CTConverter/conversion_test_cases.py

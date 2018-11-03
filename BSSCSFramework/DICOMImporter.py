@@ -62,4 +62,3 @@ class DICOMImporter:
 			dicom.PatientAge = '0'
 			return_dicom.append(dicom)
 		return return_dicom
-
