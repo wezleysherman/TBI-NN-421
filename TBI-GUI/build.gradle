@@ -1,0 +1,64 @@
+//REFERENCES
+//https://guides.gradle.org/creating-new-gradle-builds/
+//https://github.com/ser316asu/ser316-cottbus-Spring18/blob/master/build.gradle
+//https://stackoverflow.com/questions/24924932/gradle-could-not-find-or-load-main-class
+//https://docs.gradle.org/current/userguide/java_testing.html
+
+apply plugin: 'application'
+apply plugin: 'java'
+
+import org.apache.tools.ant.filters.FixCrLfFilter
+import org.apache.tools.ant.filters.ReplaceTokens
+
+def versionFile = 'src/ui/App.java'
+def versionFileName = 'App.java'
+def tempDir = 'tmp'
+
+compileJava.doFirst {
+	ant.buildnumber();
+    copy {
+        from(versionFile)
+        into(tempDir)
+    }
+}
+
+compileJava.doLast {
+    copy {
+        from(tempDir + '/' + versionFileName)
+        into(file(versionFile).parent)
+    }
+    delete(tempDir)
+}
+
+sourceSets.main.java.srcDirs = ['src']
+sourceSets {
+	test {
+		java {
+			srcDirs = ['src/tests']
+		}
+	}
+}
+
+test {
+	useJUnit()
+	maxHeapSize = '1G'
+}
+
+mainClassName = 'ui.App'
+
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	compile 'com.io7m.xom:xom:1.2.+'
+	compile 'net.sourceforge.nekohtml:nekohtml:1.9.+'
+	compile 'junit:junit:4.12'
+}
+
+task wrapper (type: Wrapper) {
+	gradleVersion = '4.10.2'
+}
