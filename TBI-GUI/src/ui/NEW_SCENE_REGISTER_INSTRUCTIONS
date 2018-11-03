@@ -1,0 +1,26 @@
+Template / Directions for registering new pages with the StateManager:
+
+
+1. Create new UI page (needs to have an initializeScene method that has 'StateManager manager' as a parameter)
+
+2. In any eventHandlers directing to the new page, make the handle method contain these lines:
+
+		manager.sceneStack.push(manager.sceneID);
+		manager.paintScene("nameOfBtn");
+		
+	where "nameOfBtn" is replaced by the prefix of Btn for the button. (ex. algoVisBtn would be 'manager.paintScene("algoVis");')
+	Make sure the button is the same for all buttons directing to this page as this will be the key used to paint the scene.
+	
+3. Repeat step 2 for any eventHandlers within the class directing to other pages (using their respective keys). 
+	This will allow other scenes to painted from the new page.
+
+4. In StateManager.java's paintScene() method, add another else if statement under the others with these lines:
+
+		else if (sceneID.equals("nameOfBtn"))
+			scene = new fullNameOfNewPage().initializeScene(this);
+			
+	this will allow the scene to be painted to the stage. Use the same naming convention for nameOfBtn as step 2 and use the proper file name.
+	(ex. else if (sceneID.equals("algoVis")) scene = new AlgorithmVisualizerScene().initializeScene(this);
+	
+5. Test that your page/buttons now work properly. If they do not, uncomment the debugging tools at the bottom of StateManager.java and step through
+	the process of displaying and navigating your new page to find the problem, or contact Canyon and ask for help.

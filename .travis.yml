@@ -1,0 +1,29 @@
+matrix:
+  include:
+  - language: java
+    before_script:
+      cd TBI-GUI
+    script:
+      - gradle test
+  - language: python
+    python:
+      - '3.6'
+    install:
+      - pip install pydicom
+      - pip install numpy
+      - pip install tensorflow
+      - pip install retrying
+      - pip install dicom2nifti
+      - pip install nibabel
+      - pip install pillow
+      #- curl -sL https://github.com/malaterre/GDCM/archive/v2.8.8.tar.gz | tar xz
+      #- cd GDCM-2.8.8
+      #- mkdir gdcm-build
+      #- cmake .
+      #- make
+    before_script:
+      - cd BSSCSFramework
+    script:
+      - python3 data_proc_tests.py
+      - python3 cnn_tests.py
+
