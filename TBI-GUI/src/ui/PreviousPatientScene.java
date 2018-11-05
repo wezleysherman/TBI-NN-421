@@ -38,11 +38,11 @@ public class PreviousPatientScene {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
-				// TODO: change key from landing to new page key when page is created
-				manager.paintScene("landing");
+				if (patientTable.getSelectionModel().getSelectedItem() != null) {
+					manager.sceneStack.push(manager.sceneID);
+					manager.paintPatientScene("patInfo", (Patient)patientTable.getSelectionModel().getSelectedItem());
+				}
 			}
-			
 		});
 		
 		//Setup table

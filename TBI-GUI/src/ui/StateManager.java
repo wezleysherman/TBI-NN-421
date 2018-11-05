@@ -61,4 +61,18 @@ public class StateManager {
 		System.out.println(sceneStack.toString());
 		*/
 	}
+	
+	/**
+	 * Determines which scene to paint to the stage
+	 * @param newSceneID :is currently a distinct string indicating which scene will be displayed, it is different than sceneID for stack pushing purposes
+	 */
+	@SuppressWarnings("static-access")
+	public void paintPatientScene(String newSceneID, Patient patient) {			
+		sceneID = newSceneID;
+		if (sceneID.equals("patInfo"))
+			scene = new PatientInfoScene().initializeScene(this, patient);
+		
+		stage.setScene(scene);
+	}
+	
 }
