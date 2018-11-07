@@ -25,6 +25,7 @@ class BSSCS_AUTO_ENCODER:
 		self.steps = steps
 		self.batch_size = batch_size
 		self.activation = activation
+		self.layers = []
 
 	def create_layer(self, neurons, input=None):
 		''' Handles creating a single dense layer for the autoencoder
@@ -42,7 +43,13 @@ class BSSCS_AUTO_ENCODER:
 		return new_layer
 
 	def get_partial():
-		# To-Do: implement
+		''' Handles retreiving the middle layer of the autoencoder (most condensed representation)
+
+			Returns:
+				- Single tensor for the middle layer of the autoencoder
+		'''
+		
+		
 		return
 
 	def create_autoencoder(self, neurons, input=None):
@@ -63,4 +70,5 @@ class BSSCS_AUTO_ENCODER:
 			new_layer = self.create_layer(neurons=layer, input=input)
 			nodes.append(new_layer)
 			input = new_layer
+		self.layers = nodes
 		return	nodes
