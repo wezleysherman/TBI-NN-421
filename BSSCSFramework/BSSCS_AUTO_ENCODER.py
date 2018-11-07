@@ -27,9 +27,9 @@ class BSSCS_AUTO_ENCODER:
 		self.activation = activation
 
 	def create_layer(self, neurons, input=None):
+		''' Handles
 		'''
-		'''
-		if not input:
+		if input is None:
 			input = tf.placeholder(tf.float32, shape=[None, neurons])
 		new_layer = tf.layers.dense(inputs=input, units=neurons, activation=self.activation, kernel_regularizer=self.l2_reg)
 		return new_layer
@@ -42,11 +42,11 @@ class BSSCS_AUTO_ENCODER:
 		'''
 		'''
 		nodes = []
-		if not input:
+		if input is None:
 			input = tf.placeholder(tf.float32, shape=[None, neurons[0]])
 		nodes.append(input)
 		for layer in neurons:
-			new_layer = tf.layers.dense(inputs=input, units=layer, activation=self.activation, kernel_regularizer=self.l2_reg)
+			new_layer = self.create_layer(neurons=layer, input=input)
 			nodes.append(new_layer)
 			input = new_layer
 		return	nodes
