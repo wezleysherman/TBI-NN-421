@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.BorderLayout;
 import java.io.File;
 import java.time.LocalDate;
 
@@ -19,16 +18,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class PatientInfoEntryScene {
 	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
@@ -73,6 +68,7 @@ public class PatientInfoEntryScene {
 				pointerGrid.getChildren().clear();
 				boolean complete = true;
 				
+				//Add pointers to missing required fields
 				StackPane fNameStackPane = makeRequiredSVG();
 				GridPane.setConstraints(fNameStackPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
 				pointerGrid.getChildren().add(fNameStackPane);
@@ -110,6 +106,7 @@ public class PatientInfoEntryScene {
 					dateStackPane.setVisible(false);
 				}
 				
+				//Switch to proper scene
 				if(complete) {
 					manager.sceneStack.push(manager.sceneID);
 					// TODO: change key from landing to new page key when page is created
@@ -200,6 +197,7 @@ public class PatientInfoEntryScene {
 		return scene;
 	}
 	
+	//Construct SVG image for pointing to empty elements
 	public static StackPane makeRequiredSVG() {
 		StackPane stackPane = new StackPane();
 		SVGPath svg = new SVGPath();
