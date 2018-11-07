@@ -25,20 +25,66 @@ class BSSCS_CLASSIFIER:
 		self.loss = loss
 		self.optimizer = optimizer
 
-	def create_layer(self, input, neurons, activation=tf.nn.relu):
-		# To-Do: implement
-		return
+	def create_layer(self, neurons, activation=tf.nn.relu, input=None):
+		''' Handles the creation of a single layer within the fully connected network
+
+			Inputs:
+				- neurons: number of neurons we want within the layer
+				- activation: the activation to use for the layer (default: relu)
+				- input: Input tensor object for the layer
+
+			Returns:
+				- A single layer for a FC graph
+		'''
+		if input is None:
+			input = tf.placeholder(tf.float32, shape=[None, neurons])
+		layer = tf.layers.dense(inputs=input, units=neurons, activation=activation)
+		return layer
 
 	def create_loss_function(self, input, labels):
-		# To-Do: implement
-		# Will use Softmax Cross Entropy
-		return
+		''' Default loss function will be softmax cross entropy
+			
+			Returns:
+				- Instance of softmax_cross_entropy_with_logits_v2 loss function
 
-	def create_optimizer(self, loss_function)
-		# To-Do: implement
-		# Will use Adam Optmizer
-		return
+			TensorFlow documentation: 
+			https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits_v2
+		'''
+		loss_function = tf.nn.softmax_cross_entropy_with_logits_v2(logits=input, labels=labels)
+		self.loss = loss_function
+		return loss_function
 
-	def create_classifier(self, neurons, input)
-		# To-Do: implement
-		return
+	def create_optimizer(self):
+		''' Default optimizer will be AdamOptmizer
+
+			Returns:
+				- Instance of AdamOptimizer with learning rate set
+
+			TensorFlow documentation: 
+			https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizer
+		'''
+		bsscs_optmizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate)
+		self.optimizer = bsscs_optmizer
+		return bsscs_optmizer
+
+	def create_classifier(self, neurons, input=None):
+		''' Creates a fully connected classifier
+			
+			Input:
+				- neurons: an array of neurons for each layer
+				- input: input tensor object for the intial layer
+
+			Returns:
+				- array of tensor objects connected within the graph
+		'''
+		return_arr = []
+		if input is None:
+			input = tf.placeholder(tf.float32, shape=[None, neurons[0]])
+
+		return_arr.append(input)
+		
+		for layer in neurons:
+			curr_layer = self.create_layer(neurons=layer, input=input)
+			input = curr_layer
+			return_arr.append(curr_layer)
+		return return_arr
