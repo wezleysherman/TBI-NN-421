@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -32,7 +33,6 @@ import javafx.stage.Stage;
 public class PatientInfoEntryScene {
 	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
 	static boolean dateSelected = false;
-	static int requiredSelected = 0;
 	
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
@@ -70,38 +70,46 @@ public class PatientInfoEntryScene {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				int numElements = contentGrid.getChildren().size();
 				pointerGrid.getChildren().clear();
 				boolean complete = true;
+				
+				StackPane fNameStackPane = makeRequiredSVG();
+				GridPane.setConstraints(fNameStackPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+				pointerGrid.getChildren().add(fNameStackPane);
 				if(patFNameField.getText().equals("")) {
-					StackPane stackPane = makeRequiredSVG();
-					GridPane.setConstraints(stackPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-					pointerGrid.getChildren().add(stackPane);
 					complete = false;
-					requiredSelected++;
+				} else {
+					fNameStackPane.setVisible(false);
 				}
+				
+				StackPane lNameStackPane = makeRequiredSVG();
+				GridPane.setConstraints(lNameStackPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(1, 0, 4, 0));
+				pointerGrid.getChildren().add(lNameStackPane);
 				if(patLNameField.getText().equals("")) {
-					StackPane stackPane = makeRequiredSVG();
-					GridPane.setConstraints(stackPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
-					pointerGrid.getChildren().add(stackPane);
 					complete = false;
-					requiredSelected++;
+				} else {
+					lNameStackPane.setVisible(false);
 				}
+				
 				//TODO implement file selection fully and add this back in
-				if(fileField.getText().equals("")) {
-					StackPane stackPane = makeRequiredSVG();
-					GridPane.setConstraints(stackPane, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER);
-					pointerGrid.getChildren().add(stackPane);
+				StackPane fileStackPane = makeRequiredSVG();
+				GridPane.setConstraints(fileStackPane, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
+				pointerGrid.getChildren().add(fileStackPane);
+				/*if(fileField.getText().equals("")) {
 					complete = false;
-					requiredSelected++;
-				}
+				*///} else {
+					fileStackPane.setVisible(false);
+				//}
+				
+				StackPane dateStackPane = makeRequiredSVG();
+				GridPane.setConstraints(dateStackPane, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(1, 0, 0, 0));
+				pointerGrid.getChildren().add(dateStackPane);
 				if(!dateSelected) {
-					StackPane stackPane = makeRequiredSVG();
-					GridPane.setConstraints(stackPane, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-					pointerGrid.getChildren().add(stackPane);
 					complete = false;
-					requiredSelected++;
+				} else {
+					dateStackPane.setVisible(false);
 				}
+				
 				if(complete) {
 					manager.sceneStack.push(manager.sceneID);
 					// TODO: change key from landing to new page key when page is created
@@ -115,10 +123,8 @@ public class PatientInfoEntryScene {
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		contentGrid.setVgap(15);
 		contentGrid.setHgap(10);
-		
-		pointerGrid.setPadding(new Insets(0, 0, 0, 10));
+				
 		pointerGrid.setVgap(15);
-		pointerGrid.setHgap(10);
 		
 		GridPane.setConstraints(patFNameField, 1, 2, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(patLNameField, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -126,24 +132,24 @@ public class PatientInfoEntryScene {
 		GridPane.setConstraints(datePicker, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(notesField, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(analyze, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(pointerGrid, 2, 2, 1, 5, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(pointerGrid, 2, 2, 1, 4, HPos.CENTER, VPos.CENTER);
 		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, datePicker, notesField, analyze, pointerGrid);
 		contentGrid.setMaxHeight(10);
 		
 		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100/11);
+		rowCon.setPercentHeight(100.0/11);
 		contentGrid.getRowConstraints().add(rowCon);
 		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setPercentWidth(100/3);
+		columnCon.setPercentWidth(100.0/3);
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100/5);
+		rowCon.setPercentHeight(100.0/4);
 		pointerGrid.getRowConstraints().add(rowCon);
 		columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100);
 		pointerGrid.getColumnConstraints().add(columnCon);
-		
+				
 		//File Chooser Setup
 		fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
@@ -199,7 +205,7 @@ public class PatientInfoEntryScene {
 		SVGPath svg = new SVGPath();
 		svg.setStroke(new Color(.949019607, .30980392157, .227450980392, 1));
 		svg.setFill(new Color(.949019607, .30980392157, .227450980392, 1));
-		svg.setContent("M200 5h-200v24h200l7-12z");
+		svg.setContent("M200 5h-200v20h200l7-10z");
 		svg.setRotate(180);
 		svg.setStyle("-fx-background-color: #f24f3a");
 		Label dialogLabel = new Label("This Field is Required");
