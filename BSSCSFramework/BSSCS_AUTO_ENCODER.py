@@ -25,9 +25,11 @@ class BSSCS_AUTO_ENCODER:
 		self.steps = steps
 		self.batch_size = batch_size
 
-	def create_layer(input, nuerons, activation=tf.nn.relu):
-		# To-Do: implement
-		return
+	def create_layer(nuerons, activation=tf.nn.relu, input=None):
+		if not input:
+			input = tf.placeholder(tf.float32, shape=[None, neurons])
+		new_layer = tf.layers.dense(inputs=input, units=neurons, activation=tf.nn.relu, kernel_regularizer=self.l2_reg)
+		return new_layer
 
 	def get_partial():
 		# To-Do: implement
