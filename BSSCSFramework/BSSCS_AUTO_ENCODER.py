@@ -26,7 +26,9 @@ class BSSCS_AUTO_ENCODER:
 		self.batch_size = batch_size
 		self.activation = activation
 
-	def create_layer(nuerons, input=None):
+	def create_layer(self, neurons, input=None):
+		'''
+		'''
 		if not input:
 			input = tf.placeholder(tf.float32, shape=[None, neurons])
 		new_layer = tf.layers.dense(inputs=input, units=neurons, activation=self.activation, kernel_regularizer=self.l2_reg)
@@ -36,10 +38,12 @@ class BSSCS_AUTO_ENCODER:
 		# To-Do: implement
 		return
 
-	def create_autoencoder(neurons, input=None):
+	def create_autoencoder(self, neurons, input=None):
+		'''
+		'''
 		nodes = []
 		if not input:
-			input = tf.placeholder(tf.float32, shape=[None, neurons])
+			input = tf.placeholder(tf.float32, shape=[None, neurons[0]])
 		nodes.append(input)
 		for layer in neurons:
 			new_layer = tf.layers.dense(inputs=input, units=layer, activation=self.activation, kernel_regularizer=self.l2_reg)
