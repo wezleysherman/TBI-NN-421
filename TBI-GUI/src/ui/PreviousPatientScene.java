@@ -35,7 +35,6 @@ public class PreviousPatientScene {
 		retrieve.setText("Retrieve");
 		
 		retrieve.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
@@ -54,8 +53,8 @@ public class PreviousPatientScene {
 		TableColumn lastNameCol = new TableColumn("Last Name");
 		lastNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastName"));
 		
-		TableColumn fileCol = new TableColumn("File");
-		fileCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("file"));
+		TableColumn fileCol = new TableColumn("Directory");
+		fileCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("directory"));
 		
 		TableColumn dateCol = new TableColumn("Date");
 		dateCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("date"));

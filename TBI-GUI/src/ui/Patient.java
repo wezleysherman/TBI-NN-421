@@ -7,14 +7,14 @@ public class Patient {
 
 	private String firstName;
 	private String lastName;
-	private String file;
+	private String directory;
 	private Date date;
 	private String notes;
 	
-	public Patient(String fName, String lName, String fileN, Date pDate, String pNotes) {
+	public Patient(String fName, String lName, String directoryN, Date pDate, String pNotes) {
 		this.setFirstName(fName);
 		this.setLastName(lName);
-		this.setFile(fileN);
+		this.setDirectory(directoryN);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
 	}
@@ -35,12 +35,12 @@ public class Patient {
 		this.lastName = lastName;
 	}
 
-	public String getFile() {
-		return file;
+	public String getDirectory() {
+		return directory;
 	}
 
-	public void setFile(String file) {
-		this.file = file;
+	public void setDirectory(String directory) {
+		this.directory = directory;
 	}
 
 	public Date getDate() {
