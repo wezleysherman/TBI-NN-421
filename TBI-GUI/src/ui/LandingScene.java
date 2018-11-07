@@ -57,21 +57,18 @@ public class LandingScene {
 			public void handle(MouseEvent event) {
 				newPatBtn.setStyle(BUTTON_ENTERED);
 			}
-			
 		});
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				newPatBtn.setStyle(BUTTON_DEFAULT);
 			}
-			
 		});
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				newPatBtn.setStyle(BUTTON_PRESSED);
 			}
-			
 		});
 		
 		algoVisBtn.setText("Algorithm Visualizer");
@@ -82,7 +79,6 @@ public class LandingScene {
 				manager.paintScene("algoVis");
 			}
 		});
-		
 		
 		viewScanBtn.setText("View Scan <DEBUG>");
 		viewScanBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -102,17 +98,13 @@ public class LandingScene {
 			}
 		});
 		
-		//Previous Patient Button Setup
 		prevPatient.setText("Find Previous Patient");
 		prevPatient.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.sceneStack.push(manager.sceneID);
 				manager.paintScene("prevPat");
-				
 			}
-			
 		});
 		
 		//Construct Grid

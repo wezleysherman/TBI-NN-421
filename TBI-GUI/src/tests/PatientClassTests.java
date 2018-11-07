@@ -19,11 +19,11 @@ public class PatientClassTests {
 		assertEquals(patient.getDate(), testDate);
 		assertEquals(patient.getFirstName(), "John");
 		assertEquals(patient.getLastName(), "Doe");
-		assertEquals(patient.getFile(), "FilePath");
+		assertEquals(patient.getDirectory(), "FilePath");
 		assertEquals(patient.getNotes(), "Some notes");
 		
 		assertNotEquals(patient.getDate(), testChangeDate);
-		assertNotEquals(patient.getFile(), "The wrong file path");
+		assertNotEquals(patient.getDirectory(), "The wrong file path");
 	}
 	
 	@Test
@@ -33,7 +33,7 @@ public class PatientClassTests {
 		Patient patient = new Patient("John", "Doe", "FilePath", testDate, "Some notes");
 		
 		patient.setDate(testChangeDate);
-		patient.setFile("newFilePath");
+		patient.setDirectory("newFilePath");
 		patient.setFirstName("Jane");
 		patient.setLastName("McJane");
 		patient.setNotes("A whole lot of notes.");
@@ -41,13 +41,13 @@ public class PatientClassTests {
 		assertNotEquals(patient.getDate(), testDate);
 		assertNotEquals(patient.getFirstName(), "John");
 		assertNotEquals(patient.getLastName(), "Doe");
-		assertNotEquals(patient.getFile(), "FilePath");
+		assertNotEquals(patient.getDirectory(), "FilePath");
 		assertNotEquals(patient.getNotes(), "Some notes");
 		
 		assertEquals(patient.getDate(), testChangeDate);
 		assertEquals(patient.getFirstName(), "Jane");
 		assertEquals(patient.getLastName(), "McJane");
-		assertEquals(patient.getFile(), "newFilePath");
+		assertEquals(patient.getDirectory(), "newFilePath");
 		assertEquals(patient.getNotes(), "A whole lot of notes.");
 	}
 }
