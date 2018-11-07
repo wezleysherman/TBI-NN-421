@@ -9,6 +9,7 @@
 # https://www.tensorflow.org/api_docs/python/tf/nn/relu
 
 import tensorflow as tf
+import math
 
 class BSSCS_AUTO_ENCODER:
 	def __init__ (self, l2_reg, learning_rate, steps, batch_size, activation):
@@ -25,6 +26,7 @@ class BSSCS_AUTO_ENCODER:
 		self.steps = steps
 		self.batch_size = batch_size
 		self.activation = activation
+		self.layers = []
 
 	def create_layer(self, neurons, input=None):
 		''' Handles creating a single dense layer for the autoencoder
@@ -41,9 +43,14 @@ class BSSCS_AUTO_ENCODER:
 		new_layer = tf.layers.dense(inputs=input, units=neurons, activation=self.activation, kernel_regularizer=self.l2_reg)
 		return new_layer
 
-	def get_partial():
-		# To-Do: implement
-		return
+	def get_partial(self):
+		''' Handles retreiving the middle layer of the autoencoder (most condensed representation)
+
+			Returns:
+				- Single tensor for the middle layer of the autoencoder
+		'''
+		middle_idx = math.ceil(len(self.layers)/2)
+		return self.layers[middle_idx]
 
 	def create_autoencoder(self, neurons, input=None):
 		''' Handles creating a full autoencoder graph to train a model
@@ -63,4 +70,5 @@ class BSSCS_AUTO_ENCODER:
 			new_layer = self.create_layer(neurons=layer, input=input)
 			nodes.append(new_layer)
 			input = new_layer
+		self.layers = nodes
 		return	nodes
