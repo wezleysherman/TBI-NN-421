@@ -11,7 +11,7 @@
 import tensorflow as tf
 
 class BSSCS_AUTO_ENCODER:
-	def __init__ (self, l2_reg, learning_rate, steps, batch_size):
+	def __init__ (self, l2_reg, learning_rate, steps, batch_size, activation):
 		''' Constructor for the BSSCS autoencoder object
 			
 			The purpose of this is to set initial hyperparameters on the creation
@@ -24,11 +24,12 @@ class BSSCS_AUTO_ENCODER:
 		self.learning_rate = learning_rate
 		self.steps = steps
 		self.batch_size = batch_size
+		self.activation = activation
 
-	def create_layer(nuerons, activation=tf.nn.relu, input=None):
+	def create_layer(nuerons, input=None):
 		if not input:
 			input = tf.placeholder(tf.float32, shape=[None, neurons])
-		new_layer = tf.layers.dense(inputs=input, units=neurons, activation=tf.nn.relu, kernel_regularizer=self.l2_reg)
+		new_layer = tf.layers.dense(inputs=input, units=neurons, activation=self.activation, kernel_regularizer=self.l2_reg)
 		return new_layer
 
 	def get_partial():
@@ -36,5 +37,10 @@ class BSSCS_AUTO_ENCODER:
 		return
 
 	def create_autoencoder(neurons, input=None):
-		#To-Do: implement
+		nodes = []
+		if not input:
+			input = tf.placeholder(tf.float32, shape=[None, neurons])
+		nodes.append(input)
+		for layer in neurons:
+
 		return
