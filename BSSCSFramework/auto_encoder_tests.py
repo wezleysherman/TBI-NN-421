@@ -53,5 +53,25 @@ class AutoEncoderTests(unittest.TestCase):
 		self.assertTrue(len(full_network) == 6)
 		self.assertTrue(full_network != None)
 
+	def test_partial_get(self):
+		''' Handles retreiving the middle layer in the autoencoder
+			Preconditions: No autoencoder exists
+			Postconditions: A single autoencoder has been created
+
+			Note on regularizer: We use l2 regularization here due to efficiency on a larger dataset.
+			Regularization is needed to prevent overfitting with the autoencoder.
+		'''
+		bsscs = BSSCS_AUTO_ENCODER(
+			l2_reg=tf.contrib.layers.l2_regularizer(scale=0.001),
+			learning_rate=0.001,
+			steps=250, # Arbitrary
+			batch_size=250, # Arbitrary
+			activation=tf.nn.relu,
+		)
+
+		full_network = bsscs.create_autoencoder(neurons=[512, 256, 128, 256, 512])
+		middle_layer = bsscs.get_partial()
+		self.assertTrue(middle_layer == full_network[3])
+
 if __name__ == '__main__':
 	unittest.main()
