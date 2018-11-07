@@ -21,9 +21,18 @@ public class PatientClassTests {
 		assertEquals(patient.getLastName(), "Doe");
 		assertEquals(patient.getFile(), "FilePath");
 		assertEquals(patient.getNotes(), "Some notes");
+		assertEquals(36, patient.getUID().length());
 		
 		assertNotEquals(patient.getDate(), testChangeDate);
 		assertNotEquals(patient.getFile(), "The wrong file path");
+	}
+	
+	@Test
+	public void PreviousPatientTestInit() {
+		Date testDate = new Date();
+		Date testChangeDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60);
+		Patient patient = new Patient("John", "Doe", "FilePath", testDate, "Some notes", "4c2a904b-afba-3659-9225-113ad17b5cec");
+		assertEquals("4c2a904b-afba-3659-9225-113ad17b5cec", patient.getUID());
 	}
 	
 	@Test
