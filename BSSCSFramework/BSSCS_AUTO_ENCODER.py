@@ -27,7 +27,14 @@ class BSSCS_AUTO_ENCODER:
 		self.activation = activation
 
 	def create_layer(self, neurons, input=None):
-		''' Handles
+		''' Handles creating a single dense layer for the autoencoder
+
+			Inputs:
+				- neurons: an int containing the number of neurons we want the layer to contain
+				- input: Takes a tensor object for an input (should probably be a placeholder)
+
+			Returns:
+				- A single tensor object for the layer
 		'''
 		if input is None:
 			input = tf.placeholder(tf.float32, shape=[None, neurons])
@@ -39,7 +46,14 @@ class BSSCS_AUTO_ENCODER:
 		return
 
 	def create_autoencoder(self, neurons, input=None):
-		'''
+		''' Handles creating a full autoencoder graph to train a model
+
+			Inputs:
+				- neurons: an array containing the sizes for each layer (eg. [512, 256, 128, 256, 512] is an autoencoder with 5 layers)
+				- input: Takes in a tensor object for an input (should probably be a placeholder)
+
+			Returns:
+				- Array continaing all layers within the TF graph. (Neural Network) 
 		'''
 		nodes = []
 		if input is None:
