@@ -42,5 +42,7 @@ class BSSCS_AUTO_ENCODER:
 			input = tf.placeholder(tf.float32, shape=[None, neurons])
 		nodes.append(input)
 		for layer in neurons:
-
-		return
+			new_layer = tf.layers.dense(inputs=input, units=layer, activation=self.activation, kernel_regularizer=self.l2_reg)
+			nodes.append(new_layer)
+			input = new_layer
+		return	nodes
