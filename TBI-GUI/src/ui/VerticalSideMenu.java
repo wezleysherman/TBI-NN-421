@@ -20,6 +20,7 @@ public class VerticalSideMenu {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
 		Button backBtn = new Button();
+		Button homeBtn = new Button();
 		Label pageName = new Label();
 		Pane colorPane = new Pane();
 		
@@ -43,6 +44,17 @@ public class VerticalSideMenu {
 			
 		});
 		
+		homeBtn.setText("HOME");
+		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.sceneStack.clear();
+				manager.paintScene("landing");
+			}
+			
+		});
+		
 		//Color Cells of Vertical Side Menu and combine content with main grid layout
 		colorPane.setStyle(VERTICAL_MENU_COLOR);
 		
@@ -55,10 +67,11 @@ public class VerticalSideMenu {
 		//Label Setup
 		pageName.setText("New Patient Entry");
 		
-		GridPane.setConstraints(backBtn, 0, 0, 1, 1, HPos.LEFT, VPos.TOP);
-		GridPane.setConstraints(pageName, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(homeBtn,  0, 0, 1, 1, HPos.LEFT, VPos.TOP);
+		GridPane.setConstraints(backBtn, 0, 1, 1, 1, HPos.LEFT, VPos.TOP);
+		GridPane.setConstraints(pageName, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER);
 
-		contentGrid.getChildren().addAll(backBtn, pageName);
+		contentGrid.getChildren().addAll(homeBtn, backBtn, pageName);
 		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100);

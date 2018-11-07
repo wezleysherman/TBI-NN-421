@@ -39,7 +39,7 @@ public class PreviousPatientScene {
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
 					manager.sceneStack.push(manager.sceneID);
-					manager.paintPatientScene("patInfo", (Patient)patientTable.getSelectionModel().getSelectedItem());
+					manager.paintScene("patInfo", (Patient)patientTable.getSelectionModel().getSelectedItem());
 				}
 			}
 		});
