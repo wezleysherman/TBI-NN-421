@@ -11,7 +11,7 @@
 import tensorflow as tf
 
 class BSSCS_AUTO_ENCODER:
-	def __init__ (self, l2_reg, learning_rate, steps, batch_size):
+	def __init__ (self, l2_reg, learning_rate, steps, batch_size, activation):
 		''' Constructor for the BSSCS autoencoder object
 			
 			The purpose of this is to set initial hyperparameters on the creation
@@ -24,15 +24,43 @@ class BSSCS_AUTO_ENCODER:
 		self.learning_rate = learning_rate
 		self.steps = steps
 		self.batch_size = batch_size
+		self.activation = activation
 
-	def create_layer(input, nuerons, activation=tf.nn.relu):
-		# To-Do: implement
-		return
+	def create_layer(self, neurons, input=None):
+		''' Handles creating a single dense layer for the autoencoder
+
+			Inputs:
+				- neurons: an int containing the number of neurons we want the layer to contain
+				- input: Takes a tensor object for an input (should probably be a placeholder)
+
+			Returns:
+				- A single tensor object for the layer
+		'''
+		if input is None:
+			input = tf.placeholder(tf.float32, shape=[None, neurons])
+		new_layer = tf.layers.dense(inputs=input, units=neurons, activation=self.activation, kernel_regularizer=self.l2_reg)
+		return new_layer
 
 	def get_partial():
 		# To-Do: implement
 		return
 
-	def create_autoencoder(neurons, input=None):
-		#To-Do: implement
-		return
+	def create_autoencoder(self, neurons, input=None):
+		''' Handles creating a full autoencoder graph to train a model
+
+			Inputs:
+				- neurons: an array containing the sizes for each layer (eg. [512, 256, 128, 256, 512] is an autoencoder with 5 layers)
+				- input: Takes in a tensor object for an input (should probably be a placeholder)
+
+			Returns:
+				- Array continaing all layers within the TF graph. (Neural Network) 
+		'''
+		nodes = []
+		if input is None:
+			input = tf.placeholder(tf.float32, shape=[None, neurons[0]])
+		nodes.append(input)
+		for layer in neurons:
+			new_layer = self.create_layer(neurons=layer, input=input)
+			nodes.append(new_layer)
+			input = new_layer
+		return	nodes
