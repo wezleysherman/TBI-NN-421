@@ -39,7 +39,6 @@ public class LandingScene {
 		Button newPatBtn = new Button();
 		Button prevPatient = new Button();
 		Button algoVisBtn = new Button();
-		Button viewScanBtn = new Button();
 		Button viewCNNBtn = new Button();
 		
 		//Button Setup/Styling
@@ -80,15 +79,6 @@ public class LandingScene {
 			}
 		});
 		
-		viewScanBtn.setText("View Scan <DEBUG>");
-		viewScanBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
-				manager.paintScene("viewScan");
-			}
-		});
-		
 		viewCNNBtn.setText("View CNN Vis <DEBUG>");
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -118,9 +108,8 @@ public class LandingScene {
 		GridPane.setConstraints(algoVisBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
 		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient, algoVisBtn);
 		if (debug) {
-			GridPane.setConstraints(viewScanBtn, 0, 8, 1, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(viewCNNBtn, 0,9, 1, 1, HPos.CENTER, VPos.CENTER);
-			grid.getChildren().addAll(viewScanBtn, viewCNNBtn);
+			grid.getChildren().addAll(viewCNNBtn);
 		}
 			
 		RowConstraints rowCon = new RowConstraints();
