@@ -26,19 +26,23 @@ public class ScanVisualizerScene {
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
 		FileChooser fileChooser = new FileChooser();
-		Button viewBtn = new Button();
+		Button fileChoiceBtn = new Button();
 		Button likelyTraumaBtn = new Button();
+		Button algoVisBtn = new Button();
+		Button viewCNNBtn = new Button();
 		
 		//Analyze button Setup/Styling
-		viewBtn.setText("Select File");
-		likelyTraumaBtn.setText("View Likely Trauma Areas");
+		fileChoiceBtn.setText("Select File");
+		viewCNNBtn.setText("CNN Visualizer");
+		likelyTraumaBtn.setText("Trauma Area Visualizer");
+		algoVisBtn.setText("Algorithm Visualizer");
 		
 		fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
                 new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
             );
 		
-		viewBtn.setOnAction(new EventHandler<ActionEvent>() {
+		fileChoiceBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent e) {
                 File file = fileChooser.showOpenDialog(manager.stage);
@@ -48,11 +52,27 @@ public class ScanVisualizerScene {
             }
         });
 		
+		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("viewCNN");
+			}
+		});
+		
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
 				manager.sceneStack.push(manager.sceneID);
 				manager.paintScene("likelyTrauma");
+			}
+		});
+		
+		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.sceneStack.push(manager.sceneID);
+				manager.paintScene("algoVis");
 			}
 		});
 				
@@ -62,17 +82,19 @@ public class ScanVisualizerScene {
 		contentGrid.setHgap(10);
 		
 		// Button Positions on UI
-		GridPane.setConstraints(viewBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(likelyTraumaBtn, 0, 20, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(fileChoiceBtn, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(likelyTraumaBtn, 2, 15, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(algoVisBtn, 3, 15, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(viewCNNBtn, 3,14, 1, 1, HPos.CENTER, VPos.CENTER);
 		
 		// add buttons to UI
-		contentGrid.getChildren().addAll(viewBtn, likelyTraumaBtn);
+		contentGrid.getChildren().addAll(fileChoiceBtn, viewCNNBtn, likelyTraumaBtn, algoVisBtn);
 		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100/11);
 		contentGrid.getRowConstraints().add(rowCon);
 		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setPercentWidth(100);
+		columnCon.setPercentWidth(20);
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		//Merge Vertical Side Menu and Content

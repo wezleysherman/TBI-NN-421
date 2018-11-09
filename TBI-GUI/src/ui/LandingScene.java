@@ -38,8 +38,6 @@ public class LandingScene {
 		Label orLabel = new Label("or");
 		Button newPatBtn = new Button();
 		Button prevPatient = new Button();
-		Button algoVisBtn = new Button();
-		Button viewCNNBtn = new Button();
 		
 		//Button Setup/Styling
 		newPatBtn.setText("Start New Patient");
@@ -70,24 +68,6 @@ public class LandingScene {
 			}
 		});
 		
-		algoVisBtn.setText("Algorithm Visualizer");
-		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
-				manager.paintScene("algoVis");
-			}
-		});
-		
-		viewCNNBtn.setText("View CNN Vis <DEBUG>");
-		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
-				manager.paintScene("viewCNN");
-			}
-		});
-		
 		prevPatient.setText("Find Previous Patient");
 		prevPatient.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -105,11 +85,12 @@ public class LandingScene {
 		GridPane.setConstraints(newPatBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(orLabel, 0, 4, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(prevPatient, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(algoVisBtn, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
-		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient, algoVisBtn);
+
+		grid.getChildren().addAll(newPatBtn, orLabel, prevPatient);
 		if (debug) {
-			GridPane.setConstraints(viewCNNBtn, 0,9, 1, 1, HPos.CENTER, VPos.CENTER);
-			grid.getChildren().addAll(viewCNNBtn);
+			manager.sceneStack.push(manager.sceneID);
+			// TODO: change key from landing to new page key when page is created
+			manager.paintScene("viewScan");
 		}
 			
 		RowConstraints rowCon = new RowConstraints();
