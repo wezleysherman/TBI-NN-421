@@ -33,11 +33,11 @@ class BSSCS_AUTO_ENCODER:
 		self.activation = activation
 		self.layers = []
 
-	def create_loss_function(input, labels, loss=Loss_Functions.SIGMOID):
+	def create_loss_function(input, labels, loss=config.Loss_Functions.SIGMOID):
 		''' Default loss function will be sigmoid cross entropy
 			
 			Inputs:
-				- loss: Loss function to use from enum LOSS_FUNCTIONS in config.py
+				- loss: Loss function to use from enum Loss_Functions in config.py
 				- input: Input tensor of the final output from NN
 				- labels: Associated labels to the input data
 
@@ -53,13 +53,13 @@ class BSSCS_AUTO_ENCODER:
 		'''
 		set_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=input, labels=labels)
 
-		if(loss is LOSS_FUNCTIONS.SOFTMAX):
+		if(loss is config.Loss_Functions.SOFTMAX):
 			set_loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=input, labels=labels)
 
 		self.loss = set_loss
 		return set_loss
 
-	def create_optimizer(optimizer=Optimizers.ADAM):
+	def create_optimizer(optimizer=config.Optimizers.ADAM):
 		''' Default optimizer will be AdamOptmizer
 
 			Returns:
@@ -75,7 +75,7 @@ class BSSCS_AUTO_ENCODER:
 		'''
 		bsscs_optmizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate)
 
-		if(optimizer is Optimizers.GRADIENT_DESCENT):
+		if(optimizer is config.Optimizers.GRADIENT_DESCENT):
 			bsscs_optmizer = tf.train.GradientDescentOptimizer(learning_rate=self.learning_rate)
 
 		self.optimizer = bsscs_optmizer
