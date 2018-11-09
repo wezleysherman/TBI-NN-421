@@ -8,7 +8,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,7 +17,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -28,6 +26,7 @@ import javafx.stage.FileChooser;
 public class PatientInfoEntryScene {
 	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
 	static boolean dateSelected = false;
+	static boolean analyzeFailed = false;
 	
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
@@ -57,6 +56,28 @@ public class PatientInfoEntryScene {
 		
 		datePicker.setPromptText("Select Date of Scan");
 		
+		//Add required indicator tags
+		StackPane fNameStackPane = makeRequiredSVG();
+		GridPane.setConstraints(fNameStackPane, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
+		pointerGrid.getChildren().add(fNameStackPane);
+		
+		StackPane lNameStackPane = makeRequiredSVG();
+		GridPane.setConstraints(lNameStackPane, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
+		pointerGrid.getChildren().add(lNameStackPane);
+		
+		StackPane fileStackPane = makeRequiredSVG();
+		GridPane.setConstraints(fileStackPane, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
+		pointerGrid.getChildren().add(fileStackPane);
+		
+		StackPane dateStackPane = makeRequiredSVG();
+		GridPane.setConstraints(dateStackPane, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
+		pointerGrid.getChildren().add(dateStackPane);
+		
+		fNameStackPane.setVisible(false);
+		lNameStackPane.setVisible(false);
+		fileStackPane.setVisible(false);
+		dateStackPane.setVisible(false);
+		
 		//Analyze button Setup/Styling
 		//TODO: Button function (right now just sends back to landing)
 		analyze.setText("Analyze");
@@ -65,43 +86,31 @@ public class PatientInfoEntryScene {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				pointerGrid.getChildren().clear();
+
 				boolean complete = true;
 				
-				//Add pointers to missing required fields
-				StackPane fNameStackPane = makeRequiredSVG();
-				GridPane.setConstraints(fNameStackPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
-				pointerGrid.getChildren().add(fNameStackPane);
 				if(patFNameField.getText().equals("")) {
 					complete = false;
+					fNameStackPane.setVisible(true);
 				} else {
 					fNameStackPane.setVisible(false);
-				}
-				
-				StackPane lNameStackPane = makeRequiredSVG();
-				GridPane.setConstraints(lNameStackPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(1, 0, 4, 0));
-				pointerGrid.getChildren().add(lNameStackPane);
+				}	
 				if(patLNameField.getText().equals("")) {
 					complete = false;
+					lNameStackPane.setVisible(true);
 				} else {
 					lNameStackPane.setVisible(false);
 				}
-				
 				//TODO implement file selection fully and add this back in
-				StackPane fileStackPane = makeRequiredSVG();
-				GridPane.setConstraints(fileStackPane, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(0, 0, 0, 0));
-				pointerGrid.getChildren().add(fileStackPane);
 				/*if(fileField.getText().equals("")) {
 					complete = false;
-				*///} else {
 					fileStackPane.setVisible(false);
-				//}
-				
-				StackPane dateStackPane = makeRequiredSVG();
-				GridPane.setConstraints(dateStackPane, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER, new Insets(1, 0, 0, 0));
-				pointerGrid.getChildren().add(dateStackPane);
+				} else {
+					fileStackPane.setVisible(false);
+				}*/
 				if(!dateSelected) {
 					complete = false;
+					dateStackPane.setVisible(true);
 				} else {
 					dateStackPane.setVisible(false);
 				}
@@ -117,10 +126,7 @@ public class PatientInfoEntryScene {
 		});
 				
 		//Construct Grid
-		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		contentGrid.setVgap(15);
-		contentGrid.setHgap(10);
-				
 		pointerGrid.setVgap(15);
 		
 		GridPane.setConstraints(patFNameField, 1, 2, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -129,20 +135,20 @@ public class PatientInfoEntryScene {
 		GridPane.setConstraints(datePicker, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(notesField, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(analyze, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(pointerGrid, 2, 2, 1, 4, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(pointerGrid, 2, 2, 2, 4, HPos.LEFT, VPos.CENTER);
 		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, datePicker, notesField, analyze, pointerGrid);
-		contentGrid.setMaxHeight(10);
 		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100.0/11);
 		contentGrid.getRowConstraints().add(rowCon);
 		ColumnConstraints columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100.0/3);
-		contentGrid.getColumnConstraints().add(columnCon);
+		ColumnConstraints columnCon2 = new ColumnConstraints();
+		contentGrid.getColumnConstraints().addAll(columnCon, columnCon2, columnCon2);
 		
 		rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100.0/4);
-		pointerGrid.getRowConstraints().add(rowCon);
+		rowCon.setPercentHeight(100.0);
+		pointerGrid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon);
 		columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100);
 		pointerGrid.getColumnConstraints().add(columnCon);
@@ -203,7 +209,7 @@ public class PatientInfoEntryScene {
 		SVGPath svg = new SVGPath();
 		svg.setStroke(new Color(.949019607, .30980392157, .227450980392, 1));
 		svg.setFill(new Color(.949019607, .30980392157, .227450980392, 1));
-		svg.setContent("M200 5h-200v20h200l7-10z");
+		svg.setContent("M200 5h-150v20h150l7-10z");
 		svg.setRotate(180);
 		svg.setStyle("-fx-background-color: #f24f3a");
 		Label dialogLabel = new Label("This Field is Required");
