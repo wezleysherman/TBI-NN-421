@@ -24,6 +24,7 @@ public class ScanVisualizerScene {
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
+		GridPane sideGrid = new GridPane();
 		GridPane mainGrid;
 		FileChooser fileChooser = new FileChooser();
 		Button fileChoiceBtn = new Button();
@@ -80,25 +81,25 @@ public class ScanVisualizerScene {
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		contentGrid.setVgap(15);
 		contentGrid.setHgap(10);
+		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
+		
+		sideGrid = VerticalSideMenu.newSideBar(manager);
+		
+		
+		
+		
 		
 		// Button Positions on UI
-		GridPane.setConstraints(fileChoiceBtn, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(likelyTraumaBtn, 2, 15, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(algoVisBtn, 3, 15, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(viewCNNBtn, 3,14, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(fileChoiceBtn, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(likelyTraumaBtn, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(algoVisBtn, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(viewCNNBtn, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		
 		// add buttons to UI
 		contentGrid.getChildren().addAll(fileChoiceBtn, viewCNNBtn, likelyTraumaBtn, algoVisBtn);
 		
-		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100/11);
-		contentGrid.getRowConstraints().add(rowCon);
-		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setPercentWidth(20);
-		contentGrid.getColumnConstraints().add(columnCon);
-		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newSideBar(manager);
+		mainGrid = sideGrid;
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);
