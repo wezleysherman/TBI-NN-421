@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 
 /**
@@ -85,10 +86,28 @@ public class ScanVisualizerScene {
 		
 		sideGrid = VerticalSideMenu.newSideBar(manager);
 		
+		ColumnConstraints column1 = new ColumnConstraints(200,200,Double.MAX_VALUE);
+		column1.setHgrow(Priority.ALWAYS);
+		column1.setPercentWidth(50);
+		contentGrid.getColumnConstraints().add(column1);
 		
+		RowConstraints row1 = new RowConstraints(200, 200, Double.MAX_VALUE);
+		row1.setVgrow(Priority.ALWAYS);
+		row1.setPercentHeight(50);
+		contentGrid.getRowConstraints().add(row1);
 		
+		ColumnConstraints column2 = new ColumnConstraints(200,200,Double.MAX_VALUE);
+		column2.setHgrow(Priority.ALWAYS);
+		column2.setPercentWidth(50);
+		contentGrid.getColumnConstraints().add(column2);
 		
+		RowConstraints row2 = new RowConstraints(200,200,Double.MAX_VALUE);
+		row2.setVgrow(Priority.ALWAYS);
+		row2.setPercentHeight(50);
+		contentGrid.getRowConstraints().add(row2);
 		
+		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
+
 		// Button Positions on UI
 		GridPane.setConstraints(fileChoiceBtn, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(likelyTraumaBtn, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -100,7 +119,6 @@ public class ScanVisualizerScene {
 		
 		//Merge Vertical Side Menu and Content
 		mainGrid = sideGrid;
-		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);
 		
