@@ -78,7 +78,7 @@ public class PreviousPatientScene {
 		contentGrid.getChildren().addAll(patientTable);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
+		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(innerLayout, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(innerLayout);
