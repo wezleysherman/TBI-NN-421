@@ -33,7 +33,7 @@ class BSSCS_AUTO_ENCODER:
 		self.activation = activation
 		self.layers = []
 
-	def create_loss_function(loss=Loss_Functions.SIGMOID, input, labels):
+	def create_loss_function(input, labels, loss=Loss_Functions.SIGMOID):
 		''' Default loss function will be sigmoid cross entropy
 			
 			Inputs:
@@ -55,7 +55,7 @@ class BSSCS_AUTO_ENCODER:
 
 		if(loss is LOSS_FUNCTIONS.SOFTMAX):
 			set_loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=input, labels=labels)
-			
+
 		self.loss = set_loss
 		return set_loss
 
