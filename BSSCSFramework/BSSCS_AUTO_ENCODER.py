@@ -7,7 +7,12 @@
 # https://www.tensorflow.org/api_docs/python/tf/contrib/layers/l2_regularizer
 # Tensorflow Relu activation:
 # https://www.tensorflow.org/api_docs/python/tf/nn/relu
+# Optimizer and Gradient Descent:
+# https://www.tensorflow.org/api_docs/python/tf/train/Optimizer
+# Python Enum documentation:
+# https://docs.python.org/3/library/enum.html
 
+import config
 import tensorflow as tf
 import math
 
@@ -27,6 +32,54 @@ class BSSCS_AUTO_ENCODER:
 		self.batch_size = batch_size
 		self.activation = activation
 		self.layers = []
+
+	def create_loss_function(loss=Loss_Functions.SIGMOID, input, labels):
+		''' Default loss function will be sigmoid cross entropy
+			
+			Inputs:
+				- loss: Loss function to use from enum LOSS_FUNCTIONS in config.py
+				- input: Input tensor of the final output from NN
+				- labels: Associated labels to the input data
+
+			Returns:
+				- Instance of softmax_cross_entropy_with_logits_v2 loss function
+
+			TensorFlow documentation: 
+				Softmax v2:
+				https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits_v2
+
+				Sigmoid:
+				https://www.tensorflow.org/api_docs/python/tf/nn/sigmoid_cross_entropy_with_logits
+		'''
+		set_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=input, labels=labels)
+
+		if(loss is LOSS_FUNCTIONS.SOFTMAX):
+			set_loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=input, labels=labels)
+			
+		self.loss = set_loss
+		return set_loss
+
+	def create_optimizer(optimizer=Optimizers.ADAM):
+		''' Default optimizer will be AdamOptmizer
+
+			Returns:
+				- Instance of AdamOptimizer with learning rate set
+
+			TensorFlow documentation: 
+
+				Adam:
+				https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizer
+
+				Gradient Descent:
+				https://www.tensorflow.org/api_docs/python/tf/train/GradientDescentOptimizer
+		'''
+		bsscs_optmizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate)
+
+		if(optimizer is Optimizers.GRADIENT_DESCENT):
+			bsscs_optmizer = tf.train.GradientDescentOptimizer(learning_rate=self.learning_rate)
+
+		self.optimizer = bsscs_optmizer
+		return bsscs_optmizer
 
 	def create_layer(self, neurons, input=None):
 		''' Handles creating a single dense layer for the autoencoder
