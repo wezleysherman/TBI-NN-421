@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 
 /**
@@ -46,6 +47,7 @@ public class ScanVisualizerScene {
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
+		GridPane sideGrid = new GridPane();
 		GridPane mainGrid;
 		FileChooser fileChooser = new FileChooser();
 		Button fileChoiceBtn = new Button();
@@ -247,8 +249,38 @@ public class ScanVisualizerScene {
 		GridPane.setConstraints(fileChoiceBtn, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(likelyTraumaBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(algoVisBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		//GridPane.setConstraints(viewCNNBtn, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(cnnBPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
+		
+		sideGrid = VerticalSideMenu.newSideBar(manager);
+		
+		ColumnConstraints column1 = new ColumnConstraints(200,200,Double.MAX_VALUE);
+		column1.setHgrow(Priority.ALWAYS);
+		column1.setPercentWidth(50);
+		contentGrid.getColumnConstraints().add(column1);
+		
+		RowConstraints row1 = new RowConstraints(200, 200, Double.MAX_VALUE);
+		row1.setVgrow(Priority.ALWAYS);
+		row1.setPercentHeight(50);
+		contentGrid.getRowConstraints().add(row1);
+		
+		ColumnConstraints column2 = new ColumnConstraints(200,200,Double.MAX_VALUE);
+		column2.setHgrow(Priority.ALWAYS);
+		column2.setPercentWidth(50);
+		contentGrid.getColumnConstraints().add(column2);
+		
+		RowConstraints row2 = new RowConstraints(200,200,Double.MAX_VALUE);
+		row2.setVgrow(Priority.ALWAYS);
+		row2.setPercentHeight(50);
+		contentGrid.getRowConstraints().add(row2);
+		
+		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
+
+		// Button Positions on UI
+		GridPane.setConstraints(fileChoiceBtn, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(likelyTraumaBtn, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(algoVisBtn, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(viewCNNBtn, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		
 		// add Elements to the scene
 		contentGrid.getChildren().addAll(fileChoiceBtn, likelyTraumaBPane, algoVisBPane, cnnBPane);
@@ -263,8 +295,7 @@ public class ScanVisualizerScene {
 		contentGrid.getColumnConstraints().addAll(columnCon, columnCon);
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newSideBar(manager);
-		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		mainGrid = sideGrid;
 
 		mainGrid.getChildren().add(contentGrid);
 		
