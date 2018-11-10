@@ -7,10 +7,18 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 
@@ -20,6 +28,20 @@ import javafx.stage.FileChooser;
  * REFERENCES: https://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm
  */
 public class ScanVisualizerScene {
+	
+	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
+	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
 	
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
@@ -31,7 +53,83 @@ public class ScanVisualizerScene {
 		Button algoVisBtn = new Button();
 		Button viewCNNBtn = new Button();
 		
-		//Analyze button Setup/Styling
+		Image filterImage = new Image("resources/TestImage1.jpg");
+		ImageView displayCNNImage = new ImageView();
+		displayCNNImage.setImage(filterImage);
+		ImageView displayLTAImage = new ImageView();
+		displayLTAImage.setImage(filterImage);
+		
+		GridPane cnnBtnGrid = new GridPane();
+		GridPane ltaBtnGrid = new GridPane();
+		GridPane algoBtnGrid = new GridPane();
+		
+		//Temp Chart for proof of concept with dummy data
+		LineChart<Number, Number> chart1 = null;
+		int[] fileNum = new int[]{100, 200, 300, 400, 500, 600, 700, 800};
+		double[] percentages = new double[]{10.5, 15.6, 20.5, 35.6, 48.9, 68.3, 80.1, 92.3};
+		NumberAxis xAxis1 = new NumberAxis();
+		xAxis1.setLabel("Files analyzed");
+		NumberAxis yAxis1 = new NumberAxis();
+		yAxis1.setLabel("Percent Accuracy");
+		chart1 = new LineChart<Number, Number>(xAxis1, yAxis1);
+		chart1.setTitle("Percent Accuracy Increase with More Files Analyzed");
+		XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Specific Data Points");
+		for (int i = 0; i < fileNum.length; ++i) {
+			series1.getData().add(new XYChart.Data<Integer, Double>(fileNum[i],percentages[i]));
+		}
+		chart1.getData().add(series1);
+		chart1.setMaxWidth(Double.MAX_VALUE);
+		
+		//Add more information in the 4 quadrants via pictures/charts
+		BorderPane cnnBPane = new BorderPane();
+		Pane cnnPane = new Pane();
+		Pane likelyTraumaPane = new Pane();
+		BorderPane likelyTraumaBPane = new BorderPane();
+		BorderPane algoVisBPane = new BorderPane();
+		Pane algoVisPane = new Pane();
+		
+		//Algorithm Cell setup
+		algoVisBPane.prefWidthProperty().bind(contentGrid.widthProperty());
+		algoVisBtn.setMaxWidth(Double.MAX_VALUE);
+		algoVisBPane.setCenter(chart1);
+		RowConstraints rowConQuads = new RowConstraints();
+		ColumnConstraints columnConQuads = new ColumnConstraints();
+		columnConQuads.setPercentWidth(90);
+		columnConQuads.setFillWidth(true);
+		columnConQuads.setHgrow(Priority.ALWAYS);
+		algoBtnGrid.getRowConstraints().add(rowConQuads);
+		algoBtnGrid.getColumnConstraints().add(columnConQuads);
+		algoBtnGrid.getChildren().add(algoVisBtn);
+		algoVisBPane.setBottom(algoBtnGrid);
+		
+		//Likely Trauma Area cell setup
+		displayLTAImage.fitWidthProperty().bind(likelyTraumaPane.widthProperty());
+		displayLTAImage.fitHeightProperty().bind(likelyTraumaPane.heightProperty());
+		
+		likelyTraumaBPane.prefWidthProperty().bind(contentGrid.widthProperty());
+		likelyTraumaBtn.setMaxWidth(Double.MAX_VALUE);
+		likelyTraumaBPane.setCenter(likelyTraumaPane);
+		ltaBtnGrid.getRowConstraints().add(rowConQuads);
+		ltaBtnGrid.getColumnConstraints().add(columnConQuads);
+		ltaBtnGrid.getChildren().add(likelyTraumaBtn);
+		likelyTraumaBPane.setBottom(ltaBtnGrid);
+		likelyTraumaPane.getChildren().add(displayLTAImage);
+		
+		//CNN cell setup
+		displayCNNImage.fitWidthProperty().bind(cnnPane.widthProperty());
+		displayCNNImage.fitHeightProperty().bind(cnnPane.heightProperty());
+		
+		cnnBPane.prefWidthProperty().bind(contentGrid.widthProperty());
+		viewCNNBtn.setMaxWidth(Double.MAX_VALUE);
+		cnnBPane.setCenter(cnnPane);
+		cnnBtnGrid.getRowConstraints().add(rowConQuads);
+		cnnBtnGrid.getColumnConstraints().add(columnConQuads);
+		cnnBtnGrid.getChildren().add(viewCNNBtn);		
+		cnnBPane.setBottom(cnnBtnGrid);
+		cnnPane.getChildren().add(displayCNNImage);
+		
+		//Setup buttons on the scene
 		fileChoiceBtn.setText("Select File");
 		viewCNNBtn.setText("CNN Visualizer");
 		likelyTraumaBtn.setText("Trauma Area Visualizer");
@@ -75,27 +173,94 @@ public class ScanVisualizerScene {
 				manager.paintScene("algoVis");
 			}
 		});
+		
+		//Button Design
+		//Algorithm button
+		algoVisBtn.setStyle(BUTTON_DEFAULT);
+		algoVisBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				algoVisBtn.setStyle(BUTTON_ENTERED);
+			}
+		});
+		algoVisBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				algoVisBtn.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		algoVisBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				algoVisBtn.setStyle(BUTTON_PRESSED);
+			}
+		});
+		
+		//CNN Button
+		viewCNNBtn.setStyle(BUTTON_DEFAULT);
+		viewCNNBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				viewCNNBtn.setStyle(BUTTON_ENTERED);
+			}
+		});
+		viewCNNBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				viewCNNBtn.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		viewCNNBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				viewCNNBtn.setStyle(BUTTON_PRESSED);
+			}
+		});
+		
+		//Likely Trauma Button
+		likelyTraumaBtn.setStyle(BUTTON_DEFAULT);
+		likelyTraumaBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				likelyTraumaBtn.setStyle(BUTTON_ENTERED);
+			}
+		});
+		likelyTraumaBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				likelyTraumaBtn.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		likelyTraumaBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				likelyTraumaBtn.setStyle(BUTTON_PRESSED);
+			}
+		});
 				
 		//Construct Grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		contentGrid.setVgap(15);
 		contentGrid.setHgap(10);
-		
+				
 		// Button Positions on UI
-		GridPane.setConstraints(fileChoiceBtn, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(likelyTraumaBtn, 2, 15, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(algoVisBtn, 3, 15, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(viewCNNBtn, 3,14, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(fileChoiceBtn, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(likelyTraumaBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(algoVisBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		//GridPane.setConstraints(viewCNNBtn, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(cnnBPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		
-		// add buttons to UI
-		contentGrid.getChildren().addAll(fileChoiceBtn, viewCNNBtn, likelyTraumaBtn, algoVisBtn);
+		// add Elements to the scene
+		contentGrid.getChildren().addAll(fileChoiceBtn, likelyTraumaBPane, algoVisBPane, cnnBPane);
 		
 		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100/11);
-		contentGrid.getRowConstraints().add(rowCon);
+		rowCon.setPercentHeight(50);
+		contentGrid.getRowConstraints().addAll(rowCon, rowCon);
 		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setPercentWidth(20);
-		contentGrid.getColumnConstraints().add(columnCon);
+		columnCon.setFillWidth(true);
+		columnCon.setPercentWidth(50);
+		columnCon.setFillWidth(false);
+		contentGrid.getColumnConstraints().addAll(columnCon, columnCon);
 		
 		//Merge Vertical Side Menu and Content
 		mainGrid = VerticalSideMenu.newSideBar(manager);
@@ -103,6 +268,7 @@ public class ScanVisualizerScene {
 
 		mainGrid.getChildren().add(contentGrid);
 		
+		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(mainGrid);
 		
 		Scene scene = new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
