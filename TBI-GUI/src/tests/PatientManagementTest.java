@@ -38,7 +38,7 @@ public class PatientManagementTest {
 	}
 
 	@Test
-	public void testRead() throws IOException, InvalidKeyException, ClassNotFoundException, NoSuchPaddingException, NoSuchAlgorithmException {
+	public void testRead() throws Exception {
 		patient = (Patient)PatientManagement.importPatient(System.getProperty("user.dir") + "\\src\\resources\\patients\\", patient.getUID());
 		assertEquals(patient.getDate(), testDate);
 		assertEquals(patient.getFirstName(), "John");
