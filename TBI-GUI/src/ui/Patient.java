@@ -91,21 +91,5 @@ public class Patient implements Serializable{
 	public String getUID() {
 		return uid.toString();
 	}
-	public void export() throws IOException {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(bytes);
-		
-		writeObject(oos);
-	}
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException{
-		
-	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
-		
-	}
-		 
-	private void readObjectNoData() throws ObjectStreamException{
-		
-	}
+
 }
