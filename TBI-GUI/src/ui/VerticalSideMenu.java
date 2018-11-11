@@ -9,6 +9,7 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -43,7 +44,7 @@ public class VerticalSideMenu {
 		homeWarning.getDialogPane().setContent(hwPane);
 		homeWarning.getDialogPane().getButtonTypes().addAll(hwConfirm, hwDecline);	
 		
-		//Button Handling
+		//Button Handling/Tooltips
 		backBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -59,6 +60,8 @@ public class VerticalSideMenu {
 				}
 			}
 		});
+		String backBtnTT = "Return to the previous page (You will lose any information you input on this page).";
+		backBtn.setTooltip(new Tooltip(backBtnTT));
 		
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -70,6 +73,8 @@ public class VerticalSideMenu {
 				}
 			}
 		});
+		String homeBtnTT = "Return to the home page (You will lose any unsaved information from this run of the program).";
+		homeBtn.setTooltip(new Tooltip(homeBtnTT));
 		
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
