@@ -275,24 +275,9 @@ public class ScanVisualizerScene {
 		contentGrid.getRowConstraints().add(row2);
 		
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
-
-		// Button Positions on UI
-		GridPane.setConstraints(fileChoiceBtn, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(likelyTraumaBtn, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(algoVisBtn, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(viewCNNBtn, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		
 		// add Elements to the scene
 		contentGrid.getChildren().addAll(fileChoiceBtn, likelyTraumaBPane, algoVisBPane, cnnBPane);
-		
-		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(50);
-		contentGrid.getRowConstraints().addAll(rowCon, rowCon);
-		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setFillWidth(true);
-		columnCon.setPercentWidth(50);
-		columnCon.setFillWidth(false);
-		contentGrid.getColumnConstraints().addAll(columnCon, columnCon);
 		
 		//Merge Vertical Side Menu and Content
 		mainGrid = sideGrid;
