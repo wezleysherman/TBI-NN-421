@@ -28,6 +28,74 @@ class BSSCS_AUTO_ENCODER:
 		self.activation = activation
 		self.layers = []
 
+	def get_regularizer():
+		''' Handles returning the regularizer
+
+			Returns:
+				- Regularizer object
+		'''
+		return self.l2_reg
+
+	def set_regularizer(l2_reg):
+		''' Handles setting a regularizer
+
+			Input:
+				- l2_reg: regularizer we want to be set.
+
+			Returns:
+				- Regularizer that we've set
+		'''
+		self.l2_reg = l2_reg
+		return l2_reg
+
+	def get_learning_rate():
+		''' Returns the current learning rate of the auto encoder object.
+
+			Returns:
+				- Returns the learning rate
+		'''
+		return self.learning_rate
+
+	def set_learning_rate(learning_rate):
+		''' Handles setting the learning rate for the object
+
+			Input:
+				- learning_rate: a number indicating the new learning rate (Should be between 0.0001 and 0.000001)
+
+			Returns:
+				- The learning rate that's been set
+		'''
+		self.learning_rate = learning_rate
+		return self.learning_rate
+
+	def get_steps():
+		''' Handles returning the number of training steps for the autoencoder.
+
+			Returns:
+				- Number of training steps it will take
+		'''
+		return steps
+
+	def set_steps(steps):
+		''' Handles setting the number of training steps
+
+			Input:
+				- steps: number of training steps to be set.
+
+			Returns:
+				- Number of steps
+		'''
+		self.steps = steps
+		return self.steps
+
+	def get_layers():
+		''' Handles returning all of the layers in the autoencoder
+
+			Returns:
+				- Array of tensor objects
+		'''
+		return self.layers
+
 	def create_layer(self, neurons, input=None):
 		''' Handles creating a single dense layer for the autoencoder
 
