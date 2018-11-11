@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -43,6 +44,8 @@ public class PreviousPatientScene {
 				}
 			}
 		});
+		String retrieveTT = "Retrieve patient info and scans for selected patient.";
+		retrieve.setTooltip(new Tooltip(retrieveTT));
 		
 		//Setup table
 		patientTable.setEditable(false);

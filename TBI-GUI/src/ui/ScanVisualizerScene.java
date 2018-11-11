@@ -11,6 +11,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -142,6 +143,7 @@ public class ScanVisualizerScene {
                 new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
             );
 		
+		// button actions and tooltips
 		fileChoiceBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent e) {
@@ -159,6 +161,8 @@ public class ScanVisualizerScene {
 				manager.paintScene("viewCNN");
 			}
 		});
+		String viewCNNTT = "View the Convolutional Neural Network Visualizer.";
+		viewCNNBtn.setTooltip(new Tooltip(viewCNNTT));
 		
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -167,6 +171,8 @@ public class ScanVisualizerScene {
 				manager.paintScene("likelyTrauma");
 			}
 		});
+		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
+		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
 		
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -175,6 +181,8 @@ public class ScanVisualizerScene {
 				manager.paintScene("algoVis");
 			}
 		});
+		String algoVisTT = "View the Algorithm Visualizer.";
+		algoVisBtn.setTooltip(new Tooltip(algoVisTT));
 		
 		//Button Design
 		//Algorithm button

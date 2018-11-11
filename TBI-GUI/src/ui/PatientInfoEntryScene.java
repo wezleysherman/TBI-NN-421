@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -91,7 +92,7 @@ public class PatientInfoEntryScene {
 		fileStackPane.setVisible(false);
 		dateStackPane.setVisible(false);
 		
-		//Analyze button Setup/Styling
+		//Analyze button Setup/Styling/Tooltips
 		//TODO: Button function (right now just sends back to landing)
 		analyze.setText("Analyze");
 		
@@ -158,6 +159,8 @@ public class PatientInfoEntryScene {
 			}
 			
 		});
+		String analyzeTT = "Save patient information and analyze the selected scan (displays %chance of abuse and links to more information).";
+		analyze.setTooltip(new Tooltip(analyzeTT));
 				
 		//Construct Grid
 		contentGrid.setVgap(15);

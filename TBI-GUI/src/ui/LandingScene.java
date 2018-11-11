@@ -8,6 +8,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -39,7 +40,7 @@ public class LandingScene {
 		Button newPatBtn = new Button();
 		Button prevPatBtn = new Button();
 		
-		//Button Setup/Styling
+		//Button Setup/Styling/Tooltips
 		newPatBtn.setText("Start New Patient");
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -48,25 +49,28 @@ public class LandingScene {
 				manager.paintScene("newPat");
 			}
 		});
+		String newPatTT = "Input information and a scan for a new patient.";
+		newPatBtn.setTooltip(new Tooltip(newPatTT)); 
+		
 		newPatBtn.setStyle(BUTTON_DEFAULT);
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				newPatBtn.setStyle(BUTTON_ENTERED);
 			}
-		});
+		});		
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				newPatBtn.setStyle(BUTTON_DEFAULT);
 			}
-		});
+		});		
 		newPatBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				newPatBtn.setStyle(BUTTON_PRESSED);
 			}
-		});
+		});		
 		
 		prevPatBtn.setText("Find Previous Patient");
 		prevPatBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -76,6 +80,9 @@ public class LandingScene {
 				manager.paintScene("prevPat");
 			}
 		});
+		String prevPatTT = "View/edit information and scans of patients already in the system.";
+		prevPatBtn.setTooltip(new Tooltip(prevPatTT));
+		
 		prevPatBtn.setStyle(BUTTON_DEFAULT);
 		prevPatBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			@Override
