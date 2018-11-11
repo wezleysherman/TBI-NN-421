@@ -24,6 +24,75 @@ class BSSCS_CLASSIFIER:
 		self.batch = batch
 		self.loss = loss
 		self.optimizer = optimizer
+		self.layers = []
+
+	def get_regularizer():
+		''' Handles returning the regularizer
+
+			Returns:
+				- Regularizer object
+		'''
+		return self.l2_reg
+
+	def set_regularizer(l2_reg):
+		''' Handles setting a regularizer
+
+			Input:
+				- l2_reg: regularizer we want to be set.
+
+			Returns:
+				- Regularizer that we've set
+		'''
+		self.l2_reg = l2_reg
+		return l2_reg
+
+	def get_learning_rate():
+		''' Returns the current learning rate of the classifier object.
+
+			Returns:
+				- Returns the learning rate
+		'''
+		return self.learning_rate
+
+	def set_learning_rate(learning_rate):
+		''' Handles setting the learning rate for the object
+
+			Input:
+				- learning_rate: a number indicating the new learning rate (Should be between 0.0001 and 0.000001)
+
+			Returns:
+				- The learning rate that's been set
+		'''
+		self.learning_rate = learning_rate
+		return self.learning_rate
+
+	def get_steps():
+		''' Handles returning the number of training steps for the classifier.
+
+			Returns:
+				- Number of training steps it will take
+		'''
+		return steps
+
+	def set_steps(steps):
+		''' Handles setting the number of training steps
+
+			Input:
+				- steps: number of training steps to be set.
+
+			Returns:
+				- Number of steps
+		'''
+		self.steps = steps
+		return self.steps
+
+	def get_layers():
+		''' Handles returning all of the layers in the classifier
+
+			Returns:
+				- Array of tensor objects
+		'''
+		return self.layers
 
 	def create_layer(self, neurons, activation=tf.nn.relu, input=None):
 		''' Handles the creation of a single layer within the fully connected network
@@ -87,4 +156,6 @@ class BSSCS_CLASSIFIER:
 			curr_layer = self.create_layer(neurons=layer, input=input)
 			input = curr_layer
 			return_arr.append(curr_layer)
+
+		self.layers = return_arr
 		return return_arr
