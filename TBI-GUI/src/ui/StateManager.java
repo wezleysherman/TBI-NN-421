@@ -24,6 +24,8 @@ public class StateManager {
 		stage.setTitle("TBI");
 		stage.setWidth(960);
 		stage.setHeight(540);
+		stage.setMinWidth(960);
+		stage.setMinHeight(540);
 		
 		this.paintScene(sceneID);
 		
