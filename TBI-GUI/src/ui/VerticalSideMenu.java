@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
@@ -21,6 +22,40 @@ import java.util.EmptyStackException;
 public class VerticalSideMenu {
 	
 	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
+	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	
+	private static void styleButton(Button button) {
+		button.setStyle(BUTTON_DEFAULT);
+		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_ENTERED);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_PRESSED);
+			}
+		});
+	}
 	
 	public static GridPane newSideBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
@@ -45,6 +80,8 @@ public class VerticalSideMenu {
 		homeWarning.getDialogPane().getButtonTypes().addAll(hwConfirm, hwDecline);	
 		
 		//Button Handling/Tooltips
+		
+		//backBtn------------------------------------------------------------------------------------------------------------------------------------
 		backBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -60,9 +97,10 @@ public class VerticalSideMenu {
 				}
 			}
 		});
-		String backBtnTT = "Return to the previous page (You will lose any information you input on this page).";
-		backBtn.setTooltip(new Tooltip(backBtnTT));
+		styleButton(backBtn);
+		backBtn.setTooltip(new Tooltip("Return to the previous page (You will lose any information you input on this page)."));
 		
+		//homeBtn------------------------------------------------------------------------------------------------------------------------------------
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -73,9 +111,10 @@ public class VerticalSideMenu {
 				}
 			}
 		});
-		String homeBtnTT = "Return to the home page (You will lose any unsaved information from this run of the program).";
-		homeBtn.setTooltip(new Tooltip(homeBtnTT));
+		styleButton(homeBtn);
+		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
 		
+		//algoVisBtn---------------------------------------------------------------------------------------------------------------------------------
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -85,6 +124,9 @@ public class VerticalSideMenu {
 				}
 			}
 		});
+		styleButton(algoVisBtn);
+		
+		//-------------------------------------------------------------------------------------------------------------------------------------------
 		
 		//Construct content grid
 		contentGrid.setHgap(5);
