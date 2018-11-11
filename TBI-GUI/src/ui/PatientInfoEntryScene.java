@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -25,6 +26,18 @@ import javafx.stage.FileChooser;
 
 public class PatientInfoEntryScene {
 	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
+	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
+	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
+			"    -fx-background-radius: 5;" + 
+			"    -fx-background-insets: 0,1,2;" + 
+			"    -fx-text-fill: black;";
 	static boolean dateSelected = false;
 	static boolean analyzeFailed = false;
 	
@@ -82,6 +95,26 @@ public class PatientInfoEntryScene {
 		//TODO: Button function (right now just sends back to landing)
 		analyze.setText("Analyze");
 		
+		analyze.setStyle(BUTTON_DEFAULT);
+		analyze.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				analyze.setStyle(BUTTON_ENTERED);
+			}
+		});
+		analyze.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				analyze.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		analyze.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				analyze.setStyle(BUTTON_PRESSED);
+			}
+		});
+		
 		analyze.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -117,6 +150,7 @@ public class PatientInfoEntryScene {
 				
 				//Switch to proper scene
 				if(complete) {
+					dateSelected = false;
 					manager.sceneStack.push(manager.sceneID);
 					// TODO: change key from landing to new page key when page is created
 					manager.paintScene("viewScan");
@@ -188,7 +222,7 @@ public class PatientInfoEntryScene {
 		});
 		
 		//Merge Vertical Side Menu and Content
-		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
+		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		mainGrid.getChildren().add(contentGrid);

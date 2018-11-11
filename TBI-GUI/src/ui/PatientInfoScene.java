@@ -1,7 +1,6 @@
 package ui;
 
 import java.io.File;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -58,7 +57,7 @@ public class PatientInfoScene {
 		notesLabel.setStyle("-fx-font-weight: bold");
 		filesLabel.setStyle("-fx-font-weight: bold");
 		
-		//Construct grid
+		//Construct content grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		ColumnConstraints column0 = new ColumnConstraints();
 		column0.setPercentWidth(25);
@@ -66,7 +65,7 @@ public class PatientInfoScene {
 		column1.setPercentWidth(75);
 		contentGrid.getColumnConstraints().addAll(column0, column1);
 		
-		//Add elements to grid
+		//Add elements to content grid
 		GridPane.setConstraints(firstNameLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(lastNameLabel, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(notesLabel, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
@@ -80,7 +79,7 @@ public class PatientInfoScene {
 			);
 		
 		//Merge content grid with left nav
-		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
+		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(contentGrid);
 		layout.setCenter(mainGrid);

@@ -3,6 +3,7 @@ package ui;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
@@ -13,7 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.ButtonType;
 import java.util.EmptyStackException;
 
@@ -21,12 +21,12 @@ public class VerticalSideMenu {
 	
 	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
 	
-	public static GridPane newPatientInfoBar(StateManager manager) {
+	public static GridPane newSideBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
-		Button backBtn = new Button();
-		Button homeBtn = new Button();
-		Label pageName = new Label();
+		Button backBtn = new Button("BACK");
+		Button homeBtn = new Button("HOME");
+		Button algoVisBtn = new Button ("Algorithm Visualizer");
 		Pane colorPane = new Pane();
 		
 		// Home Button Dialog SetUp TODO: Find a way to center the yes/no buttons
@@ -43,10 +43,8 @@ public class VerticalSideMenu {
 		homeWarning.getDialogPane().setContent(hwPane);
 		homeWarning.getDialogPane().getButtonTypes().addAll(hwConfirm, hwDecline);	
 		
-		//Button Setup
-		backBtn.setText("BACK");
+		//Button Handling
 		backBtn.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
@@ -60,43 +58,49 @@ public class VerticalSideMenu {
 					System.out.println(ex + " Something wrong with stack implementation, returning to landing page.");
 				}
 			}
-			
 		});
 		
-		homeBtn.setText("HOME");
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
-			
 			@Override
 			public void handle(ActionEvent arg0) {
-				
 				homeWarning.showAndWait();
-				
 				if (homeWarning.getResult().getButtonData().equals(ButtonData.YES)) {
 					manager.sceneStack.clear();
 					manager.paintScene("landing");
 				}
 			}
-			
 		});
 		
-		//Color Cells of Vertical Side Menu and combine content with main grid layout
-		colorPane.setStyle(VERTICAL_MENU_COLOR);
+		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (!manager.sceneID.equals("algoVis")) {
+					manager.sceneStack.push(manager.sceneID);
+					manager.paintScene("algoVis");
+				}
+			}
+		});
 		
-		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+		//Construct content grid
+		contentGrid.setHgap(5);
+		contentGrid.setVgap(5);
+		contentGrid.setPadding(new Insets(5, 5, 5, 5));
+		ColumnConstraints column0 = new ColumnConstraints();
+		column0.setPercentWidth(50);
+		ColumnConstraints column1 = new ColumnConstraints();
+		column1.setPercentWidth(50);
+		contentGrid.getColumnConstraints().addAll(column0, column1);
 		
-		mainGrid.getChildren().addAll(colorPane, contentGrid);
+		//Add elements to content grid
+		backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		algoVisBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setConstraints(backBtn, 0, 0, 1, 1, HPos.LEFT, VPos.TOP);
+		GridPane.setConstraints(homeBtn,  1, 0, 1, 1, HPos.LEFT, VPos.TOP);
+		GridPane.setConstraints(algoVisBtn, 0, 1, 2, 1, HPos.LEFT, VPos.TOP);
+		contentGrid.getChildren().addAll(backBtn, homeBtn, algoVisBtn);
 		
-		
-		//Label Setup
-		pageName.setText("New Patient Entry");
-		
-		GridPane.setConstraints(homeBtn,  0, 0, 1, 1, HPos.LEFT, VPos.TOP);
-		GridPane.setConstraints(backBtn, 0, 1, 1, 1, HPos.LEFT, VPos.TOP);
-		GridPane.setConstraints(pageName, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER);
-
-		contentGrid.getChildren().addAll(homeBtn, backBtn, pageName);
-		
+		//Construct main grid
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100);
 		mainGrid.getRowConstraints().add(rowCon);
@@ -108,6 +112,12 @@ public class VerticalSideMenu {
 		ColumnConstraints columnCon2 = new ColumnConstraints();
 		columnCon2.setPercentWidth(400/5);
 		mainGrid.getColumnConstraints().add(1, columnCon2);
+		
+		//Merge content grid with main grid
+		colorPane.setStyle(VERTICAL_MENU_COLOR);
+		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+		mainGrid.getChildren().addAll(colorPane, contentGrid);
 		
 		return mainGrid;
 	}
