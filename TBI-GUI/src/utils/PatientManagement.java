@@ -38,7 +38,7 @@ public class PatientManagement{
 		
 		//create file stream
 		f.createNewFile();
-		FileOutputStream fout = new FileOutputStream(patient.getFile() + "/data.enc");
+		FileOutputStream fout = new FileOutputStream(f.getAbsoluteFile());
 		BufferedOutputStream bout = new BufferedOutputStream(fout);
 		try {
 			//setup cipher
