@@ -1,20 +1,20 @@
 package ui;
 
 import java.util.Date;
-import java.io.File;
+import javafx.scene.image.Image;
 
 public class Scan {
 
 	private Date dateOfScan;
-	private File scan;
+	private Image scan;
 	private String notes;
 	
-	public Scan(Date dOS, File inScan) {
+	public Scan(Date dOS, Image inScan) {
 		this.setDateOfScan(dOS);
 		this.setScan(inScan);
 	}
 	
-	public Scan(Date dOS, File inScan, String inNotes) {
+	public Scan(Date dOS, Image inScan, String inNotes) {
 		this.setDateOfScan(dOS);
 		this.setScan(inScan);
 		this.setNotes(inNotes);
@@ -28,11 +28,11 @@ public class Scan {
 		this.dateOfScan = dateOfScan;
 	}
 
-	public File getScan() {
+	public Image getScan() {
 		return scan;
 	}
 
-	public void setScan(File scan) {
+	public void setScan(Image scan) {
 		this.scan = scan;
 	}
 

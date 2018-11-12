@@ -1,6 +1,8 @@
 package ui;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.io.File;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +11,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -28,9 +32,14 @@ public class PreviousPatientScene {
 		GridPane mainGrid;
 		TableView patientTable = new TableView();
 		Button retrieve = new Button();
+		
+		// test patients --------------------------------------------------------------------------------------
+		LinkedList<Scan> johnScans = new LinkedList<Scan>();
+		johnScans.push(new Scan(new Date(), new Image("resources/TestImage1.jpg")));
 		ObservableList<Patient> patientList = FXCollections.observableArrayList(
-				new Patient("John", "Doe", "FilePath", new Date(), "notes"),
-				new Patient("Jane", "Doe", "AnotherFilePath", new Date(), "More notes than last time"));
+				new Patient("John", "Doe", new Date(), "notes", johnScans),
+				new Patient("Jane", "Doe", new Date(), "More notes than last time"));
+		// ----------------------------------------------------------------------------------------------------
 		
 		//Retrieve button Setup/Styling
 		retrieve.setText("Retrieve");
@@ -56,8 +65,9 @@ public class PreviousPatientScene {
 		TableColumn lastNameCol = new TableColumn("Last Name");
 		lastNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastName"));
 		
-		TableColumn fileCol = new TableColumn("Directory");
-		fileCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("directory"));
+		// TODO: figure out how to do number of scans or last scan date or something here
+		TableColumn fileCol = new TableColumn("# of Scans");
+		fileCol.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("numScans"));
 		
 		TableColumn dateCol = new TableColumn("Date");
 		dateCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("date"));
