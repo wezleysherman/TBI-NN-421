@@ -39,7 +39,7 @@ try:
         print(i['mrn'])
         time.sleep(5)
         pyUI.typewrite(i['mrn'])
-        pyUI.moveTo(click1, duration=.5)  #Selec
+        pyUI.moveTo(click1, duration=.5)
         pyUI.moveTo(click2, duration=.5)
         pyUI.moveTo(click3, duration=.5)
         pyUI.moveTo(click4, duration=.5)
