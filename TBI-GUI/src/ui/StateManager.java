@@ -24,6 +24,8 @@ public class StateManager {
 		stage.setTitle("TBI");
 		stage.setWidth(960);
 		stage.setHeight(540);
+		stage.setMinWidth(960);
+		stage.setMinHeight(540);
 		
 		this.paintScene(sceneID);
 		
@@ -67,7 +69,7 @@ public class StateManager {
 	 * @param newSceneID :is currently a distinct string indicating which scene will be displayed, it is different than sceneID for stack pushing purposes
 	 */
 	@SuppressWarnings("static-access")
-	public void paintPatientScene(String newSceneID, Patient patient) {			
+	public void paintScene(String newSceneID, Patient patient) {			
 		sceneID = newSceneID;
 		if (sceneID.equals("patInfo"))
 			scene = new PatientInfoScene().initializeScene(this, patient);

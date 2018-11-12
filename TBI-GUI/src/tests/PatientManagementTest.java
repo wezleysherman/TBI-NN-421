@@ -27,9 +27,8 @@ public class PatientManagementTest {
 		testDate = new Date();
 		testChangeDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60);
 
-		patient = new Patient("John", "Doe", "FilePath", testDate, "Some notes");
+		patient = new Patient("John", "Doe", testDate, "Some notes");
 		uid = patient.getUID();
-		patient.setFile(System.getProperty("user.dir") + "\\src\\resources\\patients\\" + uid);
 		PatientManagement.exportPatient(patient);
 	}
 
