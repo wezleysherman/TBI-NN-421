@@ -17,7 +17,7 @@ import javafx.scene.layout.RowConstraints;
 
 public class LandingScene {
 	
-	public static boolean debug = true; //Manually change this value
+	public static boolean debug = false; //Manually change this value
 	private final static String BACKGROUND_COLOR = "-fx-background-color: #455357";
 	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
 			"    -fx-background-radius: 5;" + 
@@ -52,25 +52,7 @@ public class LandingScene {
 		String newPatTT = "Input information and a scan for a new patient.";
 		newPatBtn.setTooltip(new Tooltip(newPatTT)); 
 		
-		newPatBtn.setStyle(BUTTON_DEFAULT);
-		newPatBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				newPatBtn.setStyle(BUTTON_ENTERED);
-			}
-		});		
-		newPatBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				newPatBtn.setStyle(BUTTON_DEFAULT);
-			}
-		});		
-		newPatBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				newPatBtn.setStyle(BUTTON_PRESSED);
-			}
-		});		
+		styleButton(newPatBtn);	
 		
 		prevPatBtn.setText("Find Previous Patient");
 		prevPatBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -83,25 +65,7 @@ public class LandingScene {
 		String prevPatTT = "View/edit information and scans of patients already in the system.";
 		prevPatBtn.setTooltip(new Tooltip(prevPatTT));
 		
-		prevPatBtn.setStyle(BUTTON_DEFAULT);
-		prevPatBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				prevPatBtn.setStyle(BUTTON_ENTERED);
-			}
-		});
-		prevPatBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				prevPatBtn.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		prevPatBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				prevPatBtn.setStyle(BUTTON_PRESSED);
-			}
-		});
+		styleButton(prevPatBtn);
 		
 		//Construct Grid
 		grid.setPadding(new Insets(10, 10, 10, 10));
@@ -155,5 +119,28 @@ public class LandingScene {
 		Scene scene = new Scene(layout, x, y);
 		
 		return scene;
+	}
+	
+	//Styles Buttons to make layout and style of page
+	private static void styleButton(Button button) {
+		button.setStyle(BUTTON_DEFAULT);
+		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_ENTERED);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_PRESSED);
+			}
+		});
 	}
 }
