@@ -62,7 +62,6 @@ public class VerticalSideMenu {
 		GridPane contentGrid = new GridPane();
 		Button backBtn = new Button("BACK");
 		Button homeBtn = new Button("HOME");
-		Button algoVisBtn = new Button ("Algorithm Visualizer");
 		Pane colorPane = new Pane();
 		
 		// Home Button Dialog SetUp TODO: Find a way to center the yes/no buttons
@@ -114,58 +113,105 @@ public class VerticalSideMenu {
 		styleButton(homeBtn);
 		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
 		
-		//algoVisBtn---------------------------------------------------------------------------------------------------------------------------------
-		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if (!manager.sceneID.equals("algoVis")) {
-					manager.sceneStack.push(manager.sceneID);
-					manager.paintScene("algoVis");
+		
+		// side bar for different pages --------------------------------------------------------------------------------------------
+		if (manager.sceneID.equals("viewScan")) {
+			
+			
+			//Construct content grid
+			contentGrid.setHgap(5);
+			contentGrid.setVgap(5);
+			contentGrid.setPadding(new Insets(5, 5, 5, 5));
+			ColumnConstraints column0 = new ColumnConstraints();
+			column0.setPercentWidth(50);
+			ColumnConstraints column1 = new ColumnConstraints();
+			column1.setPercentWidth(50);
+			contentGrid.getColumnConstraints().addAll(column0, column1);
+			
+			//Add elements to content grid
+			backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			GridPane.setConstraints(backBtn, 0, 0, 1, 1, HPos.LEFT, VPos.TOP);
+			GridPane.setConstraints(homeBtn,  1, 0, 1, 1, HPos.LEFT, VPos.TOP);
+			contentGrid.getChildren().addAll(backBtn, homeBtn);
+			
+			//Construct main grid
+			RowConstraints rowCon = new RowConstraints();
+			rowCon.setPercentHeight(100);
+			mainGrid.getRowConstraints().add(rowCon);
+			
+			ColumnConstraints columnCon = new ColumnConstraints();
+			columnCon.setPercentWidth(100/5);
+			mainGrid.getColumnConstraints().add(0, columnCon);
+			
+			ColumnConstraints columnCon2 = new ColumnConstraints();
+			columnCon2.setPercentWidth(400/5);
+			mainGrid.getColumnConstraints().add(1, columnCon2);
+			
+			//Merge content grid with main grid
+			colorPane.setStyle(VERTICAL_MENU_COLOR);
+			GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+			GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+			mainGrid.getChildren().addAll(colorPane, contentGrid);
+		}
+		else {
+
+			Button algoVisBtn = new Button ("Algorithm Visualizer");
+			
+
+			
+			//algoVisBtn---------------------------------------------------------------------------------------------------------------------------------
+			algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					if (!manager.sceneID.equals("algoVis")) {
+						manager.sceneStack.push(manager.sceneID);
+						manager.paintScene("algoVis");
+					}
 				}
-			}
-		});
-		styleButton(algoVisBtn);
-		
-		//-------------------------------------------------------------------------------------------------------------------------------------------
-		
-		//Construct content grid
-		contentGrid.setHgap(5);
-		contentGrid.setVgap(5);
-		contentGrid.setPadding(new Insets(5, 5, 5, 5));
-		ColumnConstraints column0 = new ColumnConstraints();
-		column0.setPercentWidth(50);
-		ColumnConstraints column1 = new ColumnConstraints();
-		column1.setPercentWidth(50);
-		contentGrid.getColumnConstraints().addAll(column0, column1);
-		
-		//Add elements to content grid
-		backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		algoVisBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		GridPane.setConstraints(backBtn, 0, 0, 1, 1, HPos.LEFT, VPos.TOP);
-		GridPane.setConstraints(homeBtn,  1, 0, 1, 1, HPos.LEFT, VPos.TOP);
-		GridPane.setConstraints(algoVisBtn, 0, 1, 2, 1, HPos.LEFT, VPos.TOP);
-		contentGrid.getChildren().addAll(backBtn, homeBtn, algoVisBtn);
-		
-		//Construct main grid
-		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100);
-		mainGrid.getRowConstraints().add(rowCon);
-		
-		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setPercentWidth(100/5);
-		mainGrid.getColumnConstraints().add(0, columnCon);
-		
-		ColumnConstraints columnCon2 = new ColumnConstraints();
-		columnCon2.setPercentWidth(400/5);
-		mainGrid.getColumnConstraints().add(1, columnCon2);
-		
-		//Merge content grid with main grid
-		colorPane.setStyle(VERTICAL_MENU_COLOR);
-		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-		mainGrid.getChildren().addAll(colorPane, contentGrid);
-		
+			});
+			styleButton(algoVisBtn);
+			
+			//-------------------------------------------------------------------------------------------------------------------------------------------
+			
+			//Construct content grid
+			contentGrid.setHgap(5);
+			contentGrid.setVgap(5);
+			contentGrid.setPadding(new Insets(5, 5, 5, 5));
+			ColumnConstraints column0 = new ColumnConstraints();
+			column0.setPercentWidth(50);
+			ColumnConstraints column1 = new ColumnConstraints();
+			column1.setPercentWidth(50);
+			contentGrid.getColumnConstraints().addAll(column0, column1);
+			
+			//Add elements to content grid
+			backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			algoVisBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			GridPane.setConstraints(backBtn, 0, 0, 1, 1, HPos.LEFT, VPos.TOP);
+			GridPane.setConstraints(homeBtn,  1, 0, 1, 1, HPos.LEFT, VPos.TOP);
+			GridPane.setConstraints(algoVisBtn, 0, 1, 2, 1, HPos.LEFT, VPos.TOP);
+			contentGrid.getChildren().addAll(backBtn, homeBtn, algoVisBtn);
+			
+			//Construct main grid
+			RowConstraints rowCon = new RowConstraints();
+			rowCon.setPercentHeight(100);
+			mainGrid.getRowConstraints().add(rowCon);
+			
+			ColumnConstraints columnCon = new ColumnConstraints();
+			columnCon.setPercentWidth(100/5);
+			mainGrid.getColumnConstraints().add(0, columnCon);
+			
+			ColumnConstraints columnCon2 = new ColumnConstraints();
+			columnCon2.setPercentWidth(400/5);
+			mainGrid.getColumnConstraints().add(1, columnCon2);
+			
+			//Merge content grid with main grid
+			colorPane.setStyle(VERTICAL_MENU_COLOR);
+			GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+			GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+			mainGrid.getChildren().addAll(colorPane, contentGrid);
+		}
 		return mainGrid;
 	}
 }

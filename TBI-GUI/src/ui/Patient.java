@@ -1,22 +1,48 @@
 package ui;
 
 import java.util.Date;
+import java.util.LinkedList;
+import javafx.scene.image.Image;
 
 //Class for saving patient information
 public class Patient {
 
 	private String firstName;
 	private String lastName;
-	private String directory;
 	private Date date;
 	private String notes;
+	//TODO: clean up linkedList implementation (size tracker, adding/removing scans, etc)
+	private LinkedList<Scan> scans = new LinkedList<Scan>();
+	private Integer numScans;
 	
-	public Patient(String fName, String lName, String directoryN, Date pDate, String pNotes) {
+	// constructor for fresh patient with no scans
+	public Patient(String fName, String lName, Date pDate, String pNotes) {
 		this.setFirstName(fName);
 		this.setLastName(lName);
-		this.setDirectory(directoryN);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
+		this.numScans = scans.size();
+	}
+	
+	// constructor for patient with only one scan being entered
+	public Patient(String fName, String lName, Date pDate, String pNotes, Image pScan) {
+		this.setFirstName(fName);
+		this.setLastName(lName);
+		this.setDate(pDate);
+		this.setNotes(pNotes);
+		Scan newScan = new Scan(pDate, pScan);
+		this.scans.push(newScan);
+		this.numScans = scans.size();
+	}
+	
+	// constructor for patient with multiple scans being entered
+	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans) {
+		this.setFirstName(fName);
+		this.setLastName(lName);
+		this.setDate(pDate);
+		this.setNotes(pNotes);
+		this.setScans(pScans);
+		this.numScans = scans.size();
 	}
 
 	public String getFirstName() {
@@ -35,14 +61,6 @@ public class Patient {
 		this.lastName = lastName;
 	}
 
-	public String getDirectory() {
-		return directory;
-	}
-
-	public void setDirectory(String directory) {
-		this.directory = directory;
-	}
-
 	public Date getDate() {
 		return date;
 	}
@@ -57,5 +75,19 @@ public class Patient {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+	
+	public LinkedList<Scan> getScans() {
+		this.numScans = scans.size();
+		return scans;
+	}
+	
+	public void setScans(LinkedList<Scan> scans) {
+		this.numScans = scans.size();
+		this.scans = scans;
+	}
+	
+	public Integer getNumScans() {
+		return numScans;
 	}
 }

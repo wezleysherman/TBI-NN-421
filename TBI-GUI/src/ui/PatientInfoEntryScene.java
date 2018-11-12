@@ -93,7 +93,6 @@ public class PatientInfoEntryScene {
 		dateStackPane.setVisible(false);
 		
 		//Analyze button Setup/Styling/Tooltips
-		//TODO: Button function (right now just sends back to landing)
 		analyze.setText("Analyze");
 		
 		styleButton(analyze);
@@ -135,7 +134,6 @@ public class PatientInfoEntryScene {
 				if(complete) {
 					dateSelected = false;
 					manager.sceneStack.push(manager.sceneID);
-					// TODO: change key from landing to new page key when page is created
 					manager.paintScene("viewScan");
 				}
 			}
