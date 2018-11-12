@@ -36,9 +36,11 @@ public class PatientInfoScene {
 		Label notes = new Label(patient.getNotes());
 		
 		ImageView displayImg = new ImageView();
-		displayImg.setImage(patient.getScans().get(0).getScan());
+		if (patient.getNumScans() > 0) {
+			displayImg.setImage(patient.getScans().get(0).getScan());
+		}
 		
-		//TODO: Decide if filepicker is good here instead of just displayign images?
+		//TODO: Decide if filepicker is good here instead of just displaying images?
 		//Button filesBtn = new Button("Select File");
 		
 		//Button specifications

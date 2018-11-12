@@ -57,11 +57,14 @@ public class VerticalSideMenu {
 		});
 	}
 	
+	private static void styleLabel(Label label) {
+		label.setStyle("-fx-text-fill: #f1fafe; -fx-font-size:14px;");
+	}
+	
 	public static GridPane newSideBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
-		Button backBtn = new Button("BACK");
-		Button homeBtn = new Button("HOME");
+		Label appLabel = new Label("TBI Application");
 		Pane colorPane = new Pane();
 		
 		// Home Button Dialog SetUp TODO: Find a way to center the yes/no buttons
@@ -78,9 +81,43 @@ public class VerticalSideMenu {
 		homeWarning.getDialogPane().setContent(hwPane);
 		homeWarning.getDialogPane().getButtonTypes().addAll(hwConfirm, hwDecline);	
 		
-		//Button Handling/Tooltips
+		//Construct content grid
+		contentGrid.setHgap(5);
+		contentGrid.setVgap(5);
+		contentGrid.setPadding(new Insets(5, 5, 5, 5));
+		ColumnConstraints column0 = new ColumnConstraints();
+		column0.setPercentWidth(50);
+		ColumnConstraints column1 = new ColumnConstraints();
+		column1.setPercentWidth(50);
+		contentGrid.getColumnConstraints().addAll(column0, column1);
+		
+		//Add elements to content grid
+		styleLabel(appLabel);
+		GridPane.setConstraints(appLabel, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
+		contentGrid.getChildren().add(appLabel);
+		
+		//Construct main grid
+		RowConstraints rowCon = new RowConstraints();
+		rowCon.setPercentHeight(100);
+		mainGrid.getRowConstraints().add(rowCon);
+		ColumnConstraints columnCon = new ColumnConstraints();
+		columnCon.setPercentWidth(100/5);
+		mainGrid.getColumnConstraints().add(0, columnCon);
+		ColumnConstraints columnCon2 = new ColumnConstraints();
+		columnCon2.setPercentWidth(400/5);
+		mainGrid.getColumnConstraints().add(1, columnCon2);
+		
+		//Merge content grid with main grid
+		colorPane.setStyle(VERTICAL_MENU_COLOR);
+		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
+		mainGrid.getChildren().addAll(colorPane, contentGrid);
 		
 		//backBtn------------------------------------------------------------------------------------------------------------------------------------
+		Button backBtn = new Button("Back");
+		backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		styleButton(backBtn);
+		backBtn.setTooltip(new Tooltip("Return to the previous page (You will lose any information you input on this page)."));
 		backBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -89,17 +126,18 @@ public class VerticalSideMenu {
 				}
 				catch (EmptyStackException ex) {
 					manager.paintScene("landing");
-					/* if this message prints, the implementation of a previous page is probably missing a push operation.
-					 * this makes the code safe for master and general testing, but makes problems less obvious during development (watch for console messages)
-					 */
 					System.out.println(ex + " Something wrong with stack implementation, returning to landing page.");
 				}
 			}
 		});
-		styleButton(backBtn);
-		backBtn.setTooltip(new Tooltip("Return to the previous page (You will lose any information you input on this page)."));
+		GridPane.setConstraints(backBtn, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		contentGrid.getChildren().add(backBtn);
 		
 		//homeBtn------------------------------------------------------------------------------------------------------------------------------------
+		Button homeBtn = new Button("Home");
+		homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		styleButton(homeBtn);
+		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -110,107 +148,62 @@ public class VerticalSideMenu {
 				}
 			}
 		});
-		styleButton(homeBtn);
-		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
+		GridPane.setConstraints(homeBtn,  1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		contentGrid.getChildren().add(homeBtn);
 		
+		//algoVisBtn---------------------------------------------------------------------------------------------------------------------------------
+		Button algoVisBtn = new Button ("Algorithm Visualizer");
+		algoVisBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		styleButton(algoVisBtn);
+		algoVisBtn.setTooltip(new Tooltip("View the accuracy of the algorithm as a whole."));
+		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (!manager.sceneID.equals("algoVis")) {
+					manager.sceneStack.push(manager.sceneID);
+				}
+				manager.paintScene("algoVis");
+			}
+		});
+		GridPane.setConstraints(algoVisBtn, 0, 2, 2, 1, HPos.CENTER, VPos.CENTER);
+		contentGrid.getChildren().add(algoVisBtn);
 		
-		// side bar for different pages --------------------------------------------------------------------------------------------
-		if (manager.sceneID.equals("viewScan")) {
-			
-			
-			//Construct content grid
-			contentGrid.setHgap(5);
-			contentGrid.setVgap(5);
-			contentGrid.setPadding(new Insets(5, 5, 5, 5));
-			ColumnConstraints column0 = new ColumnConstraints();
-			column0.setPercentWidth(50);
-			ColumnConstraints column1 = new ColumnConstraints();
-			column1.setPercentWidth(50);
-			contentGrid.getColumnConstraints().addAll(column0, column1);
-			
-			//Add elements to content grid
-			backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			GridPane.setConstraints(backBtn, 0, 0, 1, 1, HPos.LEFT, VPos.TOP);
-			GridPane.setConstraints(homeBtn,  1, 0, 1, 1, HPos.LEFT, VPos.TOP);
-			contentGrid.getChildren().addAll(backBtn, homeBtn);
-			
-			//Construct main grid
-			RowConstraints rowCon = new RowConstraints();
-			rowCon.setPercentHeight(100);
-			mainGrid.getRowConstraints().add(rowCon);
-			
-			ColumnConstraints columnCon = new ColumnConstraints();
-			columnCon.setPercentWidth(100/5);
-			mainGrid.getColumnConstraints().add(0, columnCon);
-			
-			ColumnConstraints columnCon2 = new ColumnConstraints();
-			columnCon2.setPercentWidth(400/5);
-			mainGrid.getColumnConstraints().add(1, columnCon2);
-			
-			//Merge content grid with main grid
-			colorPane.setStyle(VERTICAL_MENU_COLOR);
-			GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-			GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-			mainGrid.getChildren().addAll(colorPane, contentGrid);
+		//Side bar for different pages---------------------------------------------------------------------------------------------------------------
+		if (manager.sceneID.equals("newPat")) {
+			//TODO
 		}
-		else {
-
-			Button algoVisBtn = new Button ("Algorithm Visualizer");
+		else if (manager.sceneID.equals("viewScan")) {
+			//TODO
+		}
+		else if (manager.sceneID.equals("likelyTrauma")) {
+			//TODO
+		}
+		else if (manager.sceneID.equals("viewCNN")) {
+			//TODO
+		}
+		else if (manager.sceneID.equals("prevPat")) {
+			//TODO
+		}
+		else if (manager.sceneID.equals("algoVis")) {
+			Label sceneLabel = new Label("Algorithm Visualizer");
+			styleLabel(sceneLabel);
+			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
+			Button recentBtn = new Button("Last 100 Scans");
+			styleButton(recentBtn);
+			recentBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			recentBtn.setTooltip(new Tooltip("View the accuracy of the algorithm in its last 100 uses."));
+			GridPane.setConstraints(recentBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
+			contentGrid.getChildren().addAll(sceneLabel, recentBtn);
 			
-
-			
-			//algoVisBtn---------------------------------------------------------------------------------------------------------------------------------
-			algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
+			recentBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					if (!manager.sceneID.equals("algoVis")) {
-						manager.sceneStack.push(manager.sceneID);
-						manager.paintScene("algoVis");
-					}
+					manager.paintScene("algoVis", false);
 				}
 			});
-			styleButton(algoVisBtn);
-			
-			//-------------------------------------------------------------------------------------------------------------------------------------------
-			
-			//Construct content grid
-			contentGrid.setHgap(5);
-			contentGrid.setVgap(5);
-			contentGrid.setPadding(new Insets(5, 5, 5, 5));
-			ColumnConstraints column0 = new ColumnConstraints();
-			column0.setPercentWidth(50);
-			ColumnConstraints column1 = new ColumnConstraints();
-			column1.setPercentWidth(50);
-			contentGrid.getColumnConstraints().addAll(column0, column1);
-			
-			//Add elements to content grid
-			backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			algoVisBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			GridPane.setConstraints(backBtn, 0, 0, 1, 1, HPos.LEFT, VPos.TOP);
-			GridPane.setConstraints(homeBtn,  1, 0, 1, 1, HPos.LEFT, VPos.TOP);
-			GridPane.setConstraints(algoVisBtn, 0, 1, 2, 1, HPos.LEFT, VPos.TOP);
-			contentGrid.getChildren().addAll(backBtn, homeBtn, algoVisBtn);
-			
-			//Construct main grid
-			RowConstraints rowCon = new RowConstraints();
-			rowCon.setPercentHeight(100);
-			mainGrid.getRowConstraints().add(rowCon);
-			
-			ColumnConstraints columnCon = new ColumnConstraints();
-			columnCon.setPercentWidth(100/5);
-			mainGrid.getColumnConstraints().add(0, columnCon);
-			
-			ColumnConstraints columnCon2 = new ColumnConstraints();
-			columnCon2.setPercentWidth(400/5);
-			mainGrid.getColumnConstraints().add(1, columnCon2);
-			
-			//Merge content grid with main grid
-			colorPane.setStyle(VERTICAL_MENU_COLOR);
-			GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-			GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-			mainGrid.getChildren().addAll(colorPane, contentGrid);
+		}
+		else if (manager.sceneID.equals("patInfo")) {
+			//TODO
 		}
 		return mainGrid;
 	}
