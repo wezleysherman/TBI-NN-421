@@ -43,7 +43,7 @@ public class PatientManagementTest {
 		assertEquals(patient.getDate(), testDate);
 		assertEquals(patient.getFirstName(), "John");
 		assertEquals(patient.getLastName(), "Doe");
-		assertEquals(patient.getFile(), "FilePath");
+		assertEquals(patient.getFile(), System.getProperty("user.dir") + "\\src\\resources\\patients\\" + patient.getUID());
 		assertEquals(patient.getNotes(), "Some notes");
 		assertEquals(36, patient.getUID().length());
 		

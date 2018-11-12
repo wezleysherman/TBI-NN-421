@@ -1,10 +1,9 @@
 package utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,8 +13,8 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Date;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -36,69 +35,91 @@ public class PatientManagement{
 		File f = new File(patient.getFile());
 		f.mkdirs();
 		f = new File(f.getAbsolutePath(), "data.enc");
-
-		System.out.println(f.getAbsolutePath());
-		f.createNewFile();
-		FileOutputStream out = new FileOutputStream(patient.getFile() + "/data.enc");
 		
-		CipherOutputStream cout;
+		//create file stream
+		f.createNewFile();
+		FileOutputStream fout = new FileOutputStream(patient.getFile() + "/data.enc");
+		BufferedOutputStream bout = new BufferedOutputStream(fout);
 		try {
+			//setup cipher
 			byte[] iv = new byte[128/8];
 			new SecureRandom().nextBytes(iv);
 			ivs = new IvParameterSpec(iv);
 			key = KeyGenerator.getInstance("AES").generateKey();
-			System.out.println(key);
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, key, ivs);
+			
+			//create sealed object
 			SealedObject sobj = new SealedObject(patient, cipher);
-			cout = new CipherOutputStream(out, cipher);
-			ObjectOutputStream oos = new ObjectOutputStream(cout);
+			
+			//create cipher stream
+	        CipherOutputStream cos = new CipherOutputStream(bout, cipher);
+	        ObjectOutputStream oos = new ObjectOutputStream(cos);
+	        
+	        //write object
 			oos.writeObject(sobj);
+			oos.close();
+			return true;
 		} catch (NoSuchAlgorithmException e) {
-			out.close();
-			return false;
+			fout.close();
+			throw new IOException("Invalid encryption algorithm. Write failed.");
 		} catch (NoSuchPaddingException e) {
-			out.close();
-			return false;
+			fout.close();
+			throw new IOException("Invalid padding. Write failed.");
 		} catch (InvalidKeyException e) {
-			out.close();
-			return false;
+			fout.close();
+			throw new IOException("Invalid key used. Write failed.");
 		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fout.close();
+			throw new IOException("Object seal failed. Write failed.");
 		} catch (InvalidAlgorithmParameterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fout.close();
+			throw new IOException("Invalid algorithm parameters. Write failed.");
 		}
-
-		return true;
 	}
 	
-	public static Object importPatient(String path, String uid) throws Exception {
+	public static Patient importPatient(String path, String uid) throws IOException {
+		//setup output file
 		String fullPath = path + uid + "\\data.enc";
-		System.out.println(fullPath);
-		System.out.println(key);
-		FileInputStream in = new FileInputStream(fullPath);
-		ObjectInputStream oin;
-		CipherInputStream cin;
+		FileInputStream fin = new FileInputStream(fullPath);
+		BufferedInputStream bin = new BufferedInputStream(fin);
 		
 		try {
+			//setup cipher
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			cipher.init(Cipher.DECRYPT_MODE, key, ivs);
-			cin = new CipherInputStream(in, cipher);
-			oin = new ObjectInputStream(cin);
+			
+			//setup decryption
+			CipherInputStream cin = new CipherInputStream(bin, cipher);
+			ObjectInputStream oin = new ObjectInputStream(cin);
+			
+			//read and unseal object
 			SealedObject sobj = (SealedObject)oin.readObject();
-			return sobj.getObject(cipher);
+			oin.close();
+			
+			//return patient
+			return (Patient)sobj.getObject(cipher);
 		}catch(ClassNotFoundException e) {
-			throw e;
+			fin.close();
+			throw new IOException("Could not parse write as patient. Read failed.");
 		}catch(NoSuchPaddingException e) {
-			throw e;
+			fin.close();
+			throw new IOException("Invalid padding on algorithm. Read failed.");
 		}catch(InvalidKeyException e){
-			throw e;
+			fin.close();
+			throw new IOException("Invalid key. Read failed.");
 		}catch(NoSuchAlgorithmException e){
-			throw e;
-		}catch(Exception e){ 
-			throw e;
+			fin.close();
+			throw new IOException("Invalid algorithm. Read failed.");
+		} catch (InvalidAlgorithmParameterException e) {
+			fin.close();
+			throw new IOException("Invalid algorithm parameter. Read failed");
+		} catch (IllegalBlockSizeException e) {
+			fin.close();
+			throw new IOException("Could not unseal sealed patient. Read failed");
+		} catch (BadPaddingException e) {
+			fin.close();
+			throw new IOException("Invalid padding on algorithm. Read failed");
 		}
 	}
 	
