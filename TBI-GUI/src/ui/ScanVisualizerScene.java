@@ -154,6 +154,7 @@ public class ScanVisualizerScene {
             }
         });
 		
+		styleButton(viewCNNBtn);
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -164,6 +165,7 @@ public class ScanVisualizerScene {
 		String viewCNNTT = "View the Convolutional Neural Network Visualizer.";
 		viewCNNBtn.setTooltip(new Tooltip(viewCNNTT));
 		
+		styleButton(likelyTraumaBtn);
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
@@ -174,6 +176,7 @@ public class ScanVisualizerScene {
 		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
 		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
 		
+		styleButton(algoVisBtn);
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -183,70 +186,6 @@ public class ScanVisualizerScene {
 		});
 		String algoVisTT = "View the Algorithm Visualizer.";
 		algoVisBtn.setTooltip(new Tooltip(algoVisTT));
-		
-		//Button Design
-		//Algorithm button
-		algoVisBtn.setStyle(BUTTON_DEFAULT);
-		algoVisBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				algoVisBtn.setStyle(BUTTON_ENTERED);
-			}
-		});
-		algoVisBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				algoVisBtn.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		algoVisBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				algoVisBtn.setStyle(BUTTON_PRESSED);
-			}
-		});
-		
-		//CNN Button
-		viewCNNBtn.setStyle(BUTTON_DEFAULT);
-		viewCNNBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				viewCNNBtn.setStyle(BUTTON_ENTERED);
-			}
-		});
-		viewCNNBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				viewCNNBtn.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		viewCNNBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				viewCNNBtn.setStyle(BUTTON_PRESSED);
-			}
-		});
-		
-		//Likely Trauma Button
-		likelyTraumaBtn.setStyle(BUTTON_DEFAULT);
-		likelyTraumaBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				likelyTraumaBtn.setStyle(BUTTON_ENTERED);
-			}
-		});
-		likelyTraumaBtn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				likelyTraumaBtn.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		likelyTraumaBtn.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				likelyTraumaBtn.setStyle(BUTTON_PRESSED);
-			}
-		});
 				
 		//Construct Grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
@@ -298,5 +237,28 @@ public class ScanVisualizerScene {
 		Scene scene = new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
 		
 		return scene;
+	}
+	
+	//Styles Buttons to make layout and style of page
+	private static void styleButton(Button button) {
+		button.setStyle(BUTTON_DEFAULT);
+		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_ENTERED);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_PRESSED);
+			}
+		});
 	}
 }

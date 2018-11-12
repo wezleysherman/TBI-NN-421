@@ -96,25 +96,7 @@ public class PatientInfoEntryScene {
 		//TODO: Button function (right now just sends back to landing)
 		analyze.setText("Analyze");
 		
-		analyze.setStyle(BUTTON_DEFAULT);
-		analyze.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				analyze.setStyle(BUTTON_ENTERED);
-			}
-		});
-		analyze.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				analyze.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		analyze.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				analyze.setStyle(BUTTON_PRESSED);
-			}
-		});
+		styleButton(analyze);
 		
 		analyze.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -252,5 +234,28 @@ public class PatientInfoEntryScene {
 		Label dialogLabel = new Label("This Field is Required");
 		stackPane.getChildren().addAll(svg, dialogLabel);
 		return stackPane;
+	}
+	
+	//Styles Buttons to make layout and style of page
+	private static void styleButton(Button button) {
+		button.setStyle(BUTTON_DEFAULT);
+		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_ENTERED);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_DEFAULT);
+			}
+		});
+		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				button.setStyle(BUTTON_PRESSED);
+			}
+		});
 	}
 }
