@@ -24,6 +24,8 @@ public class StateManager {
 		stage.setTitle("TBI");
 		stage.setWidth(960);
 		stage.setHeight(540);
+		stage.setMinWidth(960);
+		stage.setMinHeight(540);
 		
 		this.paintScene(sceneID);
 		
@@ -51,7 +53,7 @@ public class StateManager {
 		else if (sceneID.equals("prevPat"))
 			scene = new PreviousPatientScene().initializeScene(this);
 		else if (sceneID.equals("algoVis"))
-			scene = new AlgorithmVisualizerScene().initializeScene(this);
+			scene = new AlgorithmVisualizerScene().initializeScene(this, true);
 		
 		stage.setScene(scene);
 		
@@ -61,4 +63,23 @@ public class StateManager {
 		System.out.println(sceneStack.toString());
 		*/
 	}
+	
+	@SuppressWarnings("static-access")
+	public void paintScene(String newSceneID, Patient patient) {			
+		sceneID = newSceneID;
+		if (sceneID.equals("patInfo"))
+			scene = new PatientInfoScene().initializeScene(this, patient);
+		
+		stage.setScene(scene);
+	}
+	
+	@SuppressWarnings("static-access")
+	public void paintScene(String newSceneID, boolean displayFull) {			
+		sceneID = newSceneID;
+		if (sceneID.equals("algoVis"))
+			scene = new AlgorithmVisualizerScene().initializeScene(this, displayFull);
+		
+		stage.setScene(scene);
+	}
+	
 }

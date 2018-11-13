@@ -44,7 +44,7 @@ public class LikelyTraumaAreasScene {
 		contentGrid.getColumnConstraints().add(columnCon);
 		
 		// adding side menu and content to the main scene
-		mainGrid = VerticalSideMenu.newPatientInfoBar(manager);
+		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		
 		mainGrid.getChildren().add(contentGrid);
