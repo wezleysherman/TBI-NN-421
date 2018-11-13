@@ -53,7 +53,7 @@ public class StateManager {
 		else if (sceneID.equals("prevPat"))
 			scene = new PreviousPatientScene().initializeScene(this);
 		else if (sceneID.equals("algoVis"))
-			scene = new AlgorithmVisualizerScene().initializeScene(this);
+			scene = new AlgorithmVisualizerScene().initializeScene(this, true);
 		
 		stage.setScene(scene);
 		
@@ -64,15 +64,20 @@ public class StateManager {
 		*/
 	}
 	
-	/**
-	 * Determines which scene to paint to the stage
-	 * @param newSceneID :is currently a distinct string indicating which scene will be displayed, it is different than sceneID for stack pushing purposes
-	 */
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID, Patient patient) {			
 		sceneID = newSceneID;
 		if (sceneID.equals("patInfo"))
 			scene = new PatientInfoScene().initializeScene(this, patient);
+		
+		stage.setScene(scene);
+	}
+	
+	@SuppressWarnings("static-access")
+	public void paintScene(String newSceneID, boolean displayFull) {			
+		sceneID = newSceneID;
+		if (sceneID.equals("algoVis"))
+			scene = new AlgorithmVisualizerScene().initializeScene(this, displayFull);
 		
 		stage.setScene(scene);
 	}
