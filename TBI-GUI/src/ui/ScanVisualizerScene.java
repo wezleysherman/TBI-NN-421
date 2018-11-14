@@ -45,7 +45,7 @@ public class ScanVisualizerScene {
 			"    -fx-background-insets: 0,1,2;" + 
 			"    -fx-text-fill: black;";
 	
-	public static Scene initializeScene(StateManager manager, Patient patient) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane sideGrid = new GridPane();
@@ -226,7 +226,7 @@ public class ScanVisualizerScene {
 		contentGrid.getChildren().addAll(fileChoiceBtn, likelyTraumaBPane, algoVisBPane, cnnBPane);
 		
 		//Merge Vertical Side Menu and Content
-		sideGrid = VerticalSideMenu.newSideBar(manager, patient);
+		sideGrid = VerticalSideMenu.newSideBar(manager);
 		
 		mainGrid = sideGrid;
 

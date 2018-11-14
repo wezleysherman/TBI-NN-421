@@ -182,9 +182,6 @@ public class VerticalSideMenu {
 		if (manager.sceneID.equals("newPat")) {
 			//TODO
 		}
-		else if (manager.sceneID.equals("viewScan")) {
-			//TODO
-		}
 		else if (manager.sceneID.equals("likelyTrauma")) {
 			//TODO
 		}
@@ -216,136 +213,43 @@ public class VerticalSideMenu {
 		else if (manager.sceneID.equals("patInfo")) {
 			//TODO
 		}
-		return mainGrid;
-	}
-	
-	public static GridPane newSideBar(StateManager manager, Patient patient) {
-		GridPane mainGrid = new GridPane();
-		GridPane contentGrid = new GridPane();
-		Label appLabel = new Label("TBI Application");
-		Pane colorPane = new Pane();
-	
-		// Home Button Dialog SetUp TODO: Find a way to center the yes/no buttons
-		Dialog<ButtonType> homeWarning = new Dialog<ButtonType>();
-		homeWarning.setTitle("Warning!");
-		homeWarning.setHeaderText("Returning to the home page will cause you to lose all unsaved information!");
-		homeWarning.setResizable(false);
-		GridPane hwPane = new GridPane();
-		Label hwLabel = new Label("Continue?");
-		hwPane.add(hwLabel, 1, 0);
-		hwPane.setAlignment(Pos.CENTER);
-		ButtonType hwConfirm = new ButtonType("Yes", ButtonData.YES);
-		ButtonType hwDecline = new ButtonType("No", ButtonData.NO);
-		homeWarning.getDialogPane().setContent(hwPane);
-		homeWarning.getDialogPane().getButtonTypes().addAll(hwConfirm, hwDecline);	
-		
-		//Construct content grid
-		contentGrid.setHgap(5);
-		contentGrid.setVgap(5);
-		contentGrid.setPadding(new Insets(5, 5, 5, 5));
-		ColumnConstraints column0 = new ColumnConstraints();
-		column0.setPercentWidth(50);
-		ColumnConstraints column1 = new ColumnConstraints();
-		column1.setPercentWidth(50);
-		ColumnConstraints column2 = new ColumnConstraints();
-		column2.setPercentWidth(50);
-		ColumnConstraints column3 = new ColumnConstraints();
-		column3.setPercentWidth(50);
-		contentGrid.getColumnConstraints().addAll(column0, column1, column2, column3);
-		
-		//Add elements to content grid
-		styleLabel(appLabel);
-		GridPane.setConstraints(appLabel, 0, 0, 4, 1, HPos.CENTER, VPos.CENTER);
-		contentGrid.getChildren().add(appLabel);
-		
-		//Construct main grid
-		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100);
-		mainGrid.getRowConstraints().add(rowCon);
-		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setPercentWidth(100/5);
-		mainGrid.getColumnConstraints().add(0, columnCon);
-		ColumnConstraints columnCon2 = new ColumnConstraints();
-		columnCon2.setPercentWidth(400/5);
-		mainGrid.getColumnConstraints().add(1, columnCon2);
-		
-		//Merge content grid with main grid
-		colorPane.setStyle(VERTICAL_MENU_COLOR);
-		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
-		mainGrid.getChildren().addAll(colorPane, contentGrid);
-		
-		//backBtn------------------------------------------------------------------------------------------------------------------------------------
-		Button backBtn = new Button("Back");
-		backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		styleButton(backBtn);
-		backBtn.setTooltip(new Tooltip("Return to the previous page (You will lose any information you input on this page)."));
-		backBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				try {
-					if (manager.sceneID.equals("algoVis") && manager.sceneStack.peek().equals("algoVis")) {
-						manager.sceneStack.pop();
-						manager.paintScene(manager.sceneStack.pop());
-					}
-					else {
-						manager.paintScene(manager.sceneStack.pop());
-					}
-				}
-				catch (EmptyStackException ex) {
-					manager.paintScene("landing");
-					System.out.println(ex + " Something wrong with stack implementation, returning to landing page.");
-				}
-			}
-		});
-		GridPane.setConstraints(backBtn, 0, 1, 2, 1, HPos.CENTER, VPos.CENTER);
-		contentGrid.getChildren().add(backBtn);
-		
-		//homeBtn------------------------------------------------------------------------------------------------------------------------------------
-		Button homeBtn = new Button("Home");
-		homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		styleButton(homeBtn);
-		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
-		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				homeWarning.showAndWait();
-				if (homeWarning.getResult().getButtonData().equals(ButtonData.YES)) {
-					manager.sceneStack.clear();
-					manager.paintScene("landing");
-				}
-			}
-		});
-		GridPane.setConstraints(homeBtn,  2, 1, 2, 1, HPos.CENTER, VPos.CENTER);
-		contentGrid.getChildren().add(homeBtn);
-		
-		// TODO: Change around formatting based on group concensus
-		if (manager.sceneID.equals("viewScan")) {
-			Label patientLabel = new Label(patient.getFirstName() + " " + patient.getLastName());
+		else if (manager.sceneID.equals("viewScan")) {
+			ColumnConstraints column2 = new ColumnConstraints();
+			column2.setPercentWidth(50);
+			ColumnConstraints column3 = new ColumnConstraints();
+			column3.setPercentWidth(50);
+			contentGrid.getColumnConstraints().addAll(column2, column3);
+			
+			GridPane.setConstraints(appLabel, 0, 0, 4, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(backBtn, 0, 1, 2, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(homeBtn,  2, 1, 2, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(algoVisBtn, 0, 2, 4, 1, HPos.CENTER, VPos.CENTER);
+			
+			Label patientLabel = new Label(manager.patient.getFirstName() + " " + manager.patient.getLastName());
 			styleLabel(patientLabel);
-			GridPane.setConstraints(patientLabel, 0, 5, 4, 1, HPos.CENTER, VPos.CENTER);
-			Label dateLabel = new Label(patient.getDate().toString());
+			GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
+			Label dateLabel = new Label(manager.patient.getDate().toString());
 			styleLabel(dateLabel);
-			GridPane.setConstraints(dateLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
 			Label recentLabel = new Label("Other Recent Scans:");
 			styleLabel(recentLabel);
-			GridPane.setConstraints(recentLabel, 0, 8, 4, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(recentLabel, 0, 9, 4, 1, HPos.CENTER, VPos.CENTER);
 			
 			contentGrid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
 			
-			for (int i = 0; i < patient.getNumScans(); ++i) {
+			for (int i = 0; i < manager.patient.getNumScans(); ++i) {
 				Label newLbl = new Label("");
 				if (i == 0) {
 					newLbl.setText("Latest:");
 				}
-				else if (i == patient.getNumScans()-1) {
+				else if (i == manager.patient.getNumScans()-1) {
 					newLbl.setText("Oldest:");
 				}
 				styleLabel(newLbl);
-				GridPane.setConstraints(newLbl, 0, i + 9, 1, 1, HPos.RIGHT, VPos.CENTER);
-				Button newBtn = new Button(patient.getScans().get(i).getDateOfScan().toString());
+				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
+				Button newBtn = new Button(manager.patient.getScans().get(i).getDateOfScan().toString());
 				styleButton(newBtn);
-				GridPane.setConstraints(newBtn, 1, i + 9, 3, 1, HPos.CENTER, VPos.CENTER);
+				GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
 				newBtn.setTooltip(new Tooltip("View this scan."));
 				
 				// TODO: Implement this?
@@ -361,7 +265,7 @@ public class VerticalSideMenu {
 			
 			Button uploadBtn = new Button("Upload New Scan");
 			styleButton(uploadBtn);
-			GridPane.setConstraints(uploadBtn, 1, 10 + patient.getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(uploadBtn, 1, 11 + manager.patient.getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
 			// TODO: Implement this?
 			uploadBtn.setTooltip(new Tooltip("Upload a new scan for this patient."));
 			
@@ -380,14 +284,13 @@ public class VerticalSideMenu {
 				}
 			});
 			
-			Label notesLabel = new Label("Doctors Notes: \n" + patient.getNotes());
+			Label notesLabel = new Label("Doctors Notes: \n" + manager.patient.getNotes());
 			styleLabel(notesLabel);
 			notesLabel.setWrapText(true);
-			GridPane.setConstraints(notesLabel, 0, 13 + patient.getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(notesLabel, 0, 14 + manager.patient.getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
 			
 			contentGrid.getChildren().addAll(uploadBtn, notesLabel);
 		}
-		
 		return mainGrid;
 	}
 }

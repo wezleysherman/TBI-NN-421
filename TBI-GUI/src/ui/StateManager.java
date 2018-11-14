@@ -58,7 +58,7 @@ public class StateManager {
 		else if (sceneID.equals("algoVis"))
 			scene = new AlgorithmVisualizerScene().initializeScene(this, true);
 		else if (sceneID.equals("viewScan"))
-			scene = new ScanVisualizerScene().initializeScene(this, patient);
+			scene = new ScanVisualizerScene().initializeScene(this);
 		
 		stage.setScene(scene);
 		
@@ -74,7 +74,7 @@ public class StateManager {
 		}
 		else if (sceneID.equals("viewScan")) {
 			this.patient = patient;
-			scene = new ScanVisualizerScene().initializeScene(this, patient);
+			scene = new ScanVisualizerScene().initializeScene(this);
 		}
 		
 		stage.setScene(scene);
