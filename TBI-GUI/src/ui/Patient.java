@@ -9,7 +9,8 @@ public class Patient {
 
 	private String firstName;
 	private String lastName;
-	private Date date;
+	private Date dateCreated;
+	private Date lastScanDate;
 	private String notes;
 	//TODO: clean up linkedList implementation (size tracker, adding/removing scans, etc)
 	private LinkedList<Scan> scans = new LinkedList<Scan>();
@@ -21,6 +22,7 @@ public class Patient {
 		this.setLastName(lName);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
+		this.setLastScanDate(pDate);
 		this.numScans = scans.size();
 	}
 	
@@ -32,6 +34,7 @@ public class Patient {
 		this.setNotes(pNotes);
 		Scan newScan = new Scan(pDate, pScan);
 		this.scans.push(newScan);
+		this.setLastScanDate(pDate);
 		this.numScans = scans.size();
 	}
 	
@@ -42,11 +45,12 @@ public class Patient {
 		this.setDate(pDate);
 		this.setNotes(pNotes);
 		this.setScans(pScans);
+		this.setLastScanDate(pDate);
 		this.numScans = scans.size();
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return this.firstName;
 	}
 
 	public void setFirstName(String firstName) {
@@ -54,7 +58,7 @@ public class Patient {
 	}
 
 	public String getLastName() {
-		return lastName;
+		return this.lastName;
 	}
 
 	public void setLastName(String lastName) {
@@ -62,15 +66,15 @@ public class Patient {
 	}
 
 	public Date getDate() {
-		return date;
+		return this.dateCreated;
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.dateCreated = date;
 	}
 
 	public String getNotes() {
-		return notes;
+		return this.notes;
 	}
 
 	public void setNotes(String notes) {
@@ -88,6 +92,40 @@ public class Patient {
 	}
 	
 	public Integer getNumScans() {
-		return numScans;
+		return this.numScans;
+	}
+
+	public void setLastScanDate(Date date) {
+		this.lastScanDate = date;
+	}
+
+	public Date getLastScanDate() {
+		return this.lastScanDate;
+	}
+
+	public void addScan(Scan scan) {
+		/* Handles adding a new scan to the patient's linked list.
+		 *
+		 *	Input:
+		 * 		- scan: A dicom scan object conainting the patient's scan image
+		 */
+		this.numScans ++;
+		this.scans.add(scan);
+		Date scanDate = scan.getDateOfScan();
+		this.setLastScanDate(scanDate);
+	}
+
+	public Scan getScan(int idx) {
+		/* Handles getting a scan of a specific index from the linked list
+		 *
+		 *	Input:
+		 * 		- idx: index of scan we want to return
+		 */
+		Scan returnScan = this.scans.get(idx);
+		return returnScan;
+	}
+
+	public void savePatient() {
+		// To-Do: Implement once branch is merged containing data encrcyption
 	}
 }
