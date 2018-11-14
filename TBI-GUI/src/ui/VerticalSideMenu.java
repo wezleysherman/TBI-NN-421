@@ -71,19 +71,47 @@ public class VerticalSideMenu {
 		Label appLabel = new Label("TBI Application");
 		Pane colorPane = new Pane();
 		
-		// Home Button Dialog SetUp TODO: Find a way to center the yes/no buttons
+		// Home Button Dialog SetUp
 		Dialog<ButtonType> homeWarning = new Dialog<ButtonType>();
 		homeWarning.setTitle("Warning!");
 		homeWarning.setHeaderText("Returning to the home page will cause you to lose all unsaved information!");
 		homeWarning.setResizable(false);
 		GridPane hwPane = new GridPane();
+		ColumnConstraints hwCol1 = new ColumnConstraints();
+		hwCol1.setPercentWidth(50);
+		ColumnConstraints hwCol2 = new ColumnConstraints();
+		hwCol2.setPercentWidth(50);
+		hwPane.getColumnConstraints().addAll(hwCol1, hwCol2);
 		Label hwLabel = new Label("Continue?");
-		hwPane.add(hwLabel, 1, 0);
 		hwPane.setAlignment(Pos.CENTER);
-		ButtonType hwConfirm = new ButtonType("Yes", ButtonData.YES);
-		ButtonType hwDecline = new ButtonType("No", ButtonData.NO);
+		Button hwY = new Button("Yes");
+		Button hwN = new Button("No");
+		hwY.setOnAction(new EventHandler<ActionEvent> () {
+			@Override
+			public void handle(ActionEvent arg0) {
+				homeWarning.setResult(ButtonType.YES);
+				homeWarning.close();
+			}
+		});
+		hwN.setOnAction(new EventHandler<ActionEvent> () {
+			@Override
+			public void handle(ActionEvent arg0) {
+				homeWarning.setResult(ButtonType.NO);
+				homeWarning.close();
+			}
+		});
+		hwY.setPrefWidth(75);
+		hwN.setPrefWidth(75);
+		hwPane.setVgap(5);
+		hwPane.setHgap(5);
+		hwN.setDefaultButton(true);
+		hwPane.getChildren().addAll(hwLabel, hwY, hwN);
+		GridPane.setConstraints(hwLabel, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(hwY, 0, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(hwN, 1, 1, 1, 1, HPos.LEFT, VPos.CENTER);
+		
 		homeWarning.getDialogPane().setContent(hwPane);
-		homeWarning.getDialogPane().getButtonTypes().addAll(hwConfirm, hwDecline);	
+		// TODO: Find a way to remove empty button bar (empty padding at the button)
 		
 		//Construct content grid
 		contentGrid.setHgap(5);
