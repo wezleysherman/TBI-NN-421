@@ -179,8 +179,10 @@ public class PatientInfoEntryScene {
 				
 		//File Chooser Setup
 		fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
-                new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
+				new FileChooser.ExtensionFilter("DICOM", "*.dcm"),
+				new FileChooser.ExtensionFilter("NIFTI", "*.nii"),
+                new FileChooser.ExtensionFilter("DICOM Full", "*.dicom"),
+                new FileChooser.ExtensionFilter("NIFTI Full", "*.nifti")
             );
 		
 		//Use File Chooser on file select
