@@ -17,6 +17,7 @@ public class StateManager {
 	StackPane root = new StackPane();
 	Scene scene = new Scene(root, 960, 540);
 	String sceneID = "landing";
+	Patient patient = null;
 	
 	public StateManager(Stage inStage) {
 		sceneStack = new Stack<String>();
@@ -40,12 +41,14 @@ public class StateManager {
 	public void paintScene(String newSceneID) {			
 		sceneID = newSceneID;
 	//TODO: Add key and scene when more scenes are added (keys are the names of corresponding buttons)	
-		if (sceneID.equals("landing"))
+		if (sceneID.equals("landing")) {
+			patient = null;
 			scene = new LandingScene().initializeScene(this);
-		else if (sceneID.equals("newPat"))
+		}
+		else if (sceneID.equals("newPat")) {
+			patient = null;
 			scene = new PatientInfoEntryScene().initializeScene(this);
-		else if (sceneID.equals("viewScan"))
-			scene = new ScanVisualizerScene().initializeScene(this);
+		}
 		else if (sceneID.equals("likelyTrauma"))
 			scene = new LikelyTraumaAreasScene().initializeScene(this);
 		else if (sceneID.equals("viewCNN"))
@@ -54,23 +57,29 @@ public class StateManager {
 			scene = new PreviousPatientScene().initializeScene(this);
 		else if (sceneID.equals("algoVis"))
 			scene = new AlgorithmVisualizerScene().initializeScene(this, true);
+		else if (sceneID.equals("viewScan"))
+			scene = new ScanVisualizerScene().initializeScene(this, patient);
 		
 		stage.setScene(scene);
 		
-		/* DEBUG CONSOLE OUTPUTS
-		System.out.println(sceneID);
-		System.out.println(sceneStack.size());
-		System.out.println(sceneStack.toString());
-		*/
+		//debugStack();
 	}
 	
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID, Patient patient) {			
 		sceneID = newSceneID;
-		if (sceneID.equals("patInfo"))
+		if (sceneID.equals("patInfo")) {
+			this.patient = patient;
 			scene = new PatientInfoScene().initializeScene(this, patient);
+		}
+		else if (sceneID.equals("viewScan")) {
+			this.patient = patient;
+			scene = new ScanVisualizerScene().initializeScene(this, patient);
+		}
 		
 		stage.setScene(scene);
+		
+		//debugStack();
 	}
 	
 	@SuppressWarnings("static-access")
@@ -80,6 +89,20 @@ public class StateManager {
 			scene = new AlgorithmVisualizerScene().initializeScene(this, displayFull);
 		
 		stage.setScene(scene);
+		
+		//debugStack();
 	}
 	
+	/* DEBUG CONSOLE OUTPUTS*/
+	public void debugStack() {
+		System.out.println(sceneID);
+		System.out.println(sceneStack.size());
+		System.out.println(sceneStack.toString());
+		try {
+			System.out.println(patient.getFirstName() + " " + patient.getLastName());
+		}
+		catch (Exception e) {
+			System.out.println(patient);
+		}
+	}
 }

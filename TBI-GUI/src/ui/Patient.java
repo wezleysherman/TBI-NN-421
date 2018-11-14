@@ -9,11 +9,19 @@ public class Patient {
 
 	private String firstName;
 	private String lastName;
-	private Date date;
+	private Date date; // date of latest scan?
 	private String notes;
 	//TODO: clean up linkedList implementation (size tracker, adding/removing scans, etc)
 	private LinkedList<Scan> scans = new LinkedList<Scan>();
 	private Integer numScans;
+	
+	// constructor for fresh patient with no scans or notes
+	public Patient(String fName, String lName, Date pDate) {
+		this.setFirstName(fName);
+		this.setLastName(lName);
+		this.setDate(pDate);
+		this.numScans = scans.size();
+	}
 	
 	// constructor for fresh patient with no scans
 	public Patient(String fName, String lName, Date pDate, String pNotes) {
