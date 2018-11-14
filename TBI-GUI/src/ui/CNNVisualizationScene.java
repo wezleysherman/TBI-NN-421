@@ -63,6 +63,7 @@ public class CNNVisualizationScene {
 		}
 		
 		for(int j = 0; j < layerList.size(); j++) {
+			//Place Holder -> Can be changed to panes for better look
 			Button layerButton = new Button();
 			layerButton.setMaxWidth(Double.MAX_VALUE);
 			layerButton.setText((String) layerList.get(j));
