@@ -14,9 +14,13 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.stage.FileChooser;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
+
+import java.io.File;
 import java.util.EmptyStackException;
 
 public class VerticalSideMenu {
@@ -122,7 +126,13 @@ public class VerticalSideMenu {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					manager.paintScene(manager.sceneStack.pop());
+					if (manager.sceneID.equals("algoVis") && manager.sceneStack.peek().equals("algoVis")) {
+						manager.sceneStack.pop();
+						manager.paintScene(manager.sceneStack.pop());
+					}
+					else {
+						manager.paintScene(manager.sceneStack.pop());
+					}
 				}
 				catch (EmptyStackException ex) {
 					manager.paintScene("landing");
@@ -172,9 +182,6 @@ public class VerticalSideMenu {
 		if (manager.sceneID.equals("newPat")) {
 			//TODO
 		}
-		else if (manager.sceneID.equals("viewScan")) {
-			//TODO
-		}
 		else if (manager.sceneID.equals("likelyTrauma")) {
 			//TODO
 		}
@@ -198,12 +205,91 @@ public class VerticalSideMenu {
 			recentBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
+					manager.sceneStack.push("algoVis");
 					manager.paintScene("algoVis", false);
 				}
 			});
 		}
 		else if (manager.sceneID.equals("patInfo")) {
 			//TODO
+		}
+		else if (manager.sceneID.equals("viewScan")) {
+			ColumnConstraints column2 = new ColumnConstraints();
+			column2.setPercentWidth(50);
+			ColumnConstraints column3 = new ColumnConstraints();
+			column3.setPercentWidth(50);
+			contentGrid.getColumnConstraints().addAll(column2, column3);
+			
+			GridPane.setConstraints(appLabel, 0, 0, 4, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(backBtn, 0, 1, 2, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(homeBtn,  2, 1, 2, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(algoVisBtn, 0, 2, 4, 1, HPos.CENTER, VPos.CENTER);
+			
+			Label patientLabel = new Label(manager.patient.getFirstName() + " " + manager.patient.getLastName());
+			styleLabel(patientLabel);
+			GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
+			Label dateLabel = new Label(manager.patient.getDate().toString());
+			styleLabel(dateLabel);
+			GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
+			Label recentLabel = new Label("Other Recent Scans:");
+			styleLabel(recentLabel);
+			GridPane.setConstraints(recentLabel, 0, 9, 4, 1, HPos.CENTER, VPos.CENTER);
+			
+			contentGrid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
+			
+			for (int i = 0; i < manager.patient.getNumScans(); ++i) {
+				Label newLbl = new Label("");
+				if (i == 0) {
+					newLbl.setText("Latest:");
+				}
+				else if (i == manager.patient.getNumScans()-1) {
+					newLbl.setText("Oldest:");
+				}
+				styleLabel(newLbl);
+				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
+				Button newBtn = new Button(manager.patient.getScans().get(i).getDateOfScan().toString());
+				styleButton(newBtn);
+				GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
+				newBtn.setTooltip(new Tooltip("View this scan."));
+				
+				// TODO: Implement this?
+				newBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						
+					}
+				});
+				
+				contentGrid.getChildren().addAll(newLbl, newBtn);
+			}
+			
+			Button uploadBtn = new Button("Upload New Scan");
+			styleButton(uploadBtn);
+			GridPane.setConstraints(uploadBtn, 1, 11 + manager.patient.getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
+			// TODO: Implement this?
+			uploadBtn.setTooltip(new Tooltip("Upload a new scan for this patient."));
+			
+			uploadBtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					FileChooser fileChooser = new FileChooser();
+					fileChooser.getExtensionFilters().addAll(
+			                new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
+			                new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
+			            );
+					File file = fileChooser.showOpenDialog(manager.stage);
+	                if (file != null) {
+	                    //TODO
+	                }
+				}
+			});
+			
+			Label notesLabel = new Label("Doctors Notes: \n" + manager.patient.getNotes());
+			styleLabel(notesLabel);
+			notesLabel.setWrapText(true);
+			GridPane.setConstraints(notesLabel, 0, 14 + manager.patient.getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
+			
+			contentGrid.getChildren().addAll(uploadBtn, notesLabel);
 		}
 		return mainGrid;
 	}

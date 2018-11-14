@@ -16,6 +16,14 @@ public class Patient {
 	private LinkedList<Scan> scans = new LinkedList<Scan>();
 	private Integer numScans;
 	
+	// constructor for fresh patient with no scans or notes
+	public Patient(String fName, String lName, Date pDate) {
+		this.setFirstName(fName);
+		this.setLastName(lName);
+		this.setDate(pDate);
+		this.numScans = scans.size();
+	}
+	
 	// constructor for fresh patient with no scans
 	public Patient(String fName, String lName, Date pDate, String pNotes) {
 		this.setFirstName(fName);

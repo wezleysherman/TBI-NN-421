@@ -1,7 +1,10 @@
 package ui;
 
 import java.io.File;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -133,8 +136,12 @@ public class PatientInfoEntryScene {
 				//Switch to proper scene
 				if(complete) {
 					dateSelected = false;
+					// TODO: this sets the time to midnight, find a way to get correct date/time
+					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
+					Date date = Date.from(instant);
+					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), date, notesField.getText());
 					manager.sceneStack.push(manager.sceneID);
-					manager.paintScene("viewScan");
+					manager.paintScene("viewScan", patient);
 				}
 			}
 			
