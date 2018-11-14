@@ -14,7 +14,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Dialog;
@@ -228,7 +227,6 @@ public class VerticalSideMenu {
 			recentBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			recentBtn.setTooltip(new Tooltip("View the accuracy of the algorithm in its last 100 uses."));
 			GridPane.setConstraints(recentBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
-			contentGrid.getChildren().addAll(sceneLabel, recentBtn);
 			
 			recentBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -237,9 +235,27 @@ public class VerticalSideMenu {
 					manager.paintScene("algoVis", false);
 				}
 			});
+			
+			contentGrid.getChildren().addAll(sceneLabel, recentBtn);
 		}
 		else if (manager.sceneID.equals("patInfo")) {
-			//TODO
+			Label sceneLabel = new Label("Patient Info");
+			styleLabel(sceneLabel);
+			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
+			Button editBtn = new Button("Edit Patient");
+			styleButton(editBtn);
+			editBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			editBtn.setTooltip(new Tooltip("Edit this patient's data."));
+			GridPane.setConstraints(editBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
+			
+			editBtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					manager.paintScene("patInfo", true);
+				}
+			});
+			
+			contentGrid.getChildren().addAll(sceneLabel, editBtn);
 		}
 		else if (manager.sceneID.equals("viewScan")) {
 			ColumnConstraints column2 = new ColumnConstraints();

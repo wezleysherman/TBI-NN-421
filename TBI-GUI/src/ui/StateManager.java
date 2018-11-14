@@ -70,7 +70,7 @@ public class StateManager {
 		sceneID = newSceneID;
 		if (sceneID.equals("patInfo")) {
 			this.patient = patient;
-			scene = new PatientInfoScene().initializeScene(this, patient);
+			scene = new PatientInfoScene().initializeScene(this, patient, false);
 		}
 		else if (sceneID.equals("viewScan")) {
 			this.patient = patient;
@@ -83,10 +83,12 @@ public class StateManager {
 	}
 	
 	@SuppressWarnings("static-access")
-	public void paintScene(String newSceneID, boolean displayFull) {			
+	public void paintScene(String newSceneID, boolean isTrue) {			
 		sceneID = newSceneID;
 		if (sceneID.equals("algoVis"))
-			scene = new AlgorithmVisualizerScene().initializeScene(this, displayFull);
+			scene = new AlgorithmVisualizerScene().initializeScene(this, isTrue); //display recent graph
+		else if (sceneID.equals("patInfo"))
+			scene = new PatientInfoScene().initializeScene(this, this.patient, isTrue); //allow edits
 		
 		stage.setScene(scene);
 		
