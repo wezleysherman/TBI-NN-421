@@ -26,13 +26,17 @@ public class PatientManagementTest {
 	public void setUp() throws Exception {
 		testDate = new Date();
 
-		patient = new Patient("John", "Doe", testDate, "Some notes");
-		uid = patient.getUID();
-		PatientManagement.exportPatient(patient);
-		
-		patient2 = new Patient("Bob", "Smith", testDate, "Some notes");
-		uid = patient2.getUID();
-		PatientManagement.exportPatient(patient2);
+		try{
+			patient = new Patient("John", "Doe", testDate, "Some notes");
+			uid = patient.getUID();
+			PatientManagement.exportPatient(patient);
+
+			patient2 = new Patient("Bob", "Smith", testDate, "Some notes");
+			uid = patient2.getUID();
+			PatientManagement.exportPatient(patient2);
+		} catch(Exception e){
+			
+		}
 	}
 
 	@Test
@@ -44,7 +48,7 @@ public class PatientManagementTest {
 		assertEquals(patient.getFile(), System.getProperty("user.dir") + "\\src\\resources\\patients\\" + patient.getUID());
 		assertEquals(patient.getNotes(), "Some notes");
 		assertEquals(36, patient.getUID().length());
-		
+
 		patient2 = (Patient)PatientManagement.importPatient(System.getProperty("user.dir") + "\\src\\resources\\patients\\", patient2.getUID());
 		assertEquals(patient2.getDate(), testDate);
 		assertEquals(patient2.getFirstName(), "Bob");
