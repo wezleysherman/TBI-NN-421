@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -19,8 +21,11 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
 
+import java.util.ArrayList;
 import java.io.File;
 import java.util.EmptyStackException;
+
+import com.sun.prism.paint.Color;
 
 public class VerticalSideMenu {
 	
@@ -213,7 +218,7 @@ public class VerticalSideMenu {
 			//TODO
 		}
 		else if (manager.sceneID.equals("viewCNN")) {
-			//TODO
+			makeCNN(contentGrid);
 		}
 		else if (manager.sceneID.equals("prevPat")) {
 			//TODO
@@ -336,5 +341,28 @@ public class VerticalSideMenu {
 			contentGrid.getChildren().addAll(uploadBtn, notesLabel);
 		}
 		return mainGrid;
+	}
+	
+	//Add CNN Elements to the main grid
+	private static void makeCNN(GridPane grid) {
+		//Construct main grid
+		RowConstraints rowCon = new RowConstraints();
+		ColumnConstraints columnCon = new ColumnConstraints();
+
+		//Construct Grid for sideBar
+		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon);
+		grid.getColumnConstraints().addAll(columnCon);
+		
+		RowConstraints rowCon2 = new RowConstraints();
+		rowCon2.setPercentHeight(40);
+		grid.getRowConstraints().add(rowCon2);
+		
+		RowConstraints rowCon3 = new RowConstraints();
+		rowCon3.setPercentHeight(30);
+		grid.getRowConstraints().add(rowCon3);
+		
+		//Create Elements
+		ColumnConstraints columnConScroll = new ColumnConstraints();
+		columnConScroll.setPercentWidth(100);
 	}
 }
