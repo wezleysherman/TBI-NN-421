@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -18,6 +19,10 @@ import javafx.scene.layout.RowConstraints;
 
 public class CNNVisualizationScene {
 	
+	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
+	final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
+	final static String SIDE_TEXT_AREA_COLOR = "-fx-control-inner-background: #455357";
+
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -50,12 +55,12 @@ public class CNNVisualizationScene {
 		GridPane scrollGrid = new GridPane();
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		
+		scrollPane.setStyle(VERTICAL_MENU_COLOR);
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
 		scrollGrid.getColumnConstraints().add(scrollGridCols);
 		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
-
+		
 		//Dummy Data for testing purposes
 		ArrayList layerList = new ArrayList();
 		for(int i = 0; i < 10; i++) {
@@ -72,6 +77,11 @@ public class CNNVisualizationScene {
 			scrollGrid.getChildren().add(layerButton);
 		}
 		
+		//Set up text area
+		docNotesField.setStyle(SIDE_TEXT_AREA_COLOR);
+		docNotesField.setWrapText(true);
+		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
+		
 		//Add elements to sideBar
 		GridPane.setConstraints(scrollPane, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(docNotesField, 0, 4, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -83,6 +93,7 @@ public class CNNVisualizationScene {
 		//Add contentGrid to main grid
 		mainGrid.getChildren().add(contentGrid);
 		
+		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(mainGrid);
 		
 		double x = manager.stage.getWidth();

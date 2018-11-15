@@ -99,7 +99,7 @@ public class ScanVisualizerScene {
 		algoVisBPane.setCenter(chart1);
 		RowConstraints rowConQuads = new RowConstraints();
 		ColumnConstraints columnConQuads = new ColumnConstraints();
-		columnConQuads.setPercentWidth(90);
+		columnConQuads.setPercentWidth(100);
 		columnConQuads.setFillWidth(true);
 		columnConQuads.setHgrow(Priority.ALWAYS);
 		algoBtnGrid.getRowConstraints().add(rowConQuads);
