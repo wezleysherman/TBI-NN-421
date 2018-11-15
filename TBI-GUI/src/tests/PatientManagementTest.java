@@ -18,22 +18,21 @@ import utils.PatientManagement;
 
 public class PatientManagementTest {
 	private Patient patient;
+	private Patient patient2;
 	private String uid;
 	Date testDate;
-	Date testChangeDate;
 
 	@Before
 	public void setUp() throws Exception {
 		testDate = new Date();
-		testChangeDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60);
 
 		patient = new Patient("John", "Doe", testDate, "Some notes");
 		uid = patient.getUID();
 		PatientManagement.exportPatient(patient);
-	}
-
-	@After
-	public void tearDown() throws Exception {
+		
+		patient2 = new Patient("Bob", "Smith", testDate, "Some notes");
+		uid = patient2.getUID();
+		PatientManagement.exportPatient(patient2);
 	}
 
 	@Test
@@ -46,8 +45,13 @@ public class PatientManagementTest {
 		assertEquals(patient.getNotes(), "Some notes");
 		assertEquals(36, patient.getUID().length());
 		
-		assertNotEquals(patient.getDate(), testChangeDate);
-		assertNotEquals(patient.getFile(), "The wrong file path");
+		patient2 = (Patient)PatientManagement.importPatient(System.getProperty("user.dir") + "\\src\\resources\\patients\\", patient2.getUID());
+		assertEquals(patient2.getDate(), testDate);
+		assertEquals(patient2.getFirstName(), "Bob");
+		assertEquals(patient2.getLastName(), "Smith");
+		assertEquals(patient2.getFile(), System.getProperty("user.dir") + "\\src\\resources\\patients\\" + patient2.getUID());
+		assertEquals(patient2.getNotes(), "Some notes");
+		assertEquals(36, patient2.getUID().length());
 	}
 
 }
