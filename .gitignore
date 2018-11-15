@@ -4,3 +4,14 @@
 .DS_Store?
 ._*
 __pycache__/
+*.py[cod]
+.class
+/.gradle/
+/gui/.gradle/
+/TBI-GUI/.gradle/
+/TBI-GUI/build/
+/.metadata/
+.metadata/
+.recommenders/
+.gradle
+
