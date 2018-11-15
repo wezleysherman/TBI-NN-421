@@ -26,6 +26,23 @@ class BSSCS_CLASSIFIER:
 		self.optimizer = optimizer
 		self.layers = []
 
+	def connect_conv_net(self, conv_graph):
+	''' Handles connecting the classifier to the conv network input.
+		Fancy way of handling array creation?
+
+		See: BSSCS_CNN.py for more info
+
+		Inputs:
+			- conv_graph: A graph of tensor objects for the convolutional neural network
+
+		Returns:
+			- Array containing both a graph for the conv network and autoencoder
+				[classifier, conv_network]
+	'''
+	
+	return_arr = [self.layers, conv_graph]
+	return return_arr
+
 	def get_regularizer():
 		''' Handles returning the regularizer
 

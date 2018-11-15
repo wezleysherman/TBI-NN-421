@@ -21,7 +21,7 @@ import javafx.stage.FileChooser;
  * @author Ty Chase
  */
 public class PatientInfoScene {
-	public static Scene initializeScene(StateManager manager, Patient patient) {
+	public static Scene initializeScene(StateManager manager, Patient patient, boolean edit) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -40,11 +40,9 @@ public class PatientInfoScene {
 			displayImg.setImage(patient.getScans().get(0).getScan());
 		}
 		
-		//TODO: Decide if filepicker is good here instead of just displaying images?
-		//Button filesBtn = new Button("Select File");
-		
-		//Button specifications
 		/*
+		Button specifications
+		Button filesBtn = new Button("Select File");
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
