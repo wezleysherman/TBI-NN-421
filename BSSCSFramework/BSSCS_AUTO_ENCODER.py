@@ -33,6 +33,23 @@ class BSSCS_AUTO_ENCODER:
 		self.activation = activation
 		self.layers = []
 
+	def connect_conv_net(self, conv_graph):
+		''' Handles connecting the autoencoder to the conv network input.
+			Fancy way of handling array creation?
+
+			See: BSSCS_CNN.py for more info
+
+			Inputs:
+				- conv_graph: A graph of tensor objects for the convolutional neural network
+
+			Returns:
+				- Array containing both a graph for the conv network and autoencoder
+					[Conv_net, Autoencoder]
+		'''
+		
+		return_arr = [conv_graph, self.layers]
+		return return_arr
+
 	def create_loss_function(input, labels, loss=config.Loss_Functions.SIGMOID):
 		''' Default loss function will be sigmoid cross entropy
 			

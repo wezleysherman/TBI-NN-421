@@ -47,12 +47,16 @@ public class LikelyTraumaAreasScene {
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		
+		// content grid gets added to the displayed grid
 		mainGrid.getChildren().add(contentGrid);
 		
+		// displayed grid is set onto the layout for the scene
 		layout.setCenter(mainGrid);
 		
+		// scene is created using the layout
 		Scene likelyTraumaAreasScene = new Scene(layout, 960, 540);
 		
+		// return the newly created scene
 		return likelyTraumaAreasScene;
 	}	
 }

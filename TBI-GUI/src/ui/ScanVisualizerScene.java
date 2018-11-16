@@ -62,6 +62,7 @@ public class ScanVisualizerScene {
 		ImageView displayLTAImage = new ImageView();
 		displayLTAImage.setImage(filterImage);
 		
+		// TODO: Align Buttons Properly
 		GridPane cnnBtnGrid = new GridPane();
 		GridPane ltaBtnGrid = new GridPane();
 		GridPane algoBtnGrid = new GridPane();
@@ -98,7 +99,7 @@ public class ScanVisualizerScene {
 		algoVisBPane.setCenter(chart1);
 		RowConstraints rowConQuads = new RowConstraints();
 		ColumnConstraints columnConQuads = new ColumnConstraints();
-		columnConQuads.setPercentWidth(90);
+		columnConQuads.setPercentWidth(100);
 		columnConQuads.setFillWidth(true);
 		columnConQuads.setHgrow(Priority.ALWAYS);
 		algoBtnGrid.getRowConstraints().add(rowConQuads);
@@ -199,8 +200,6 @@ public class ScanVisualizerScene {
 		GridPane.setConstraints(cnnBPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
 		
-		sideGrid = VerticalSideMenu.newSideBar(manager);
-		
 		ColumnConstraints column1 = new ColumnConstraints(200,200,Double.MAX_VALUE);
 		column1.setHgrow(Priority.ALWAYS);
 		column1.setPercentWidth(50);
@@ -227,6 +226,8 @@ public class ScanVisualizerScene {
 		contentGrid.getChildren().addAll(fileChoiceBtn, likelyTraumaBPane, algoVisBPane, cnnBPane);
 		
 		//Merge Vertical Side Menu and Content
+		sideGrid = VerticalSideMenu.newSideBar(manager);
+		
 		mainGrid = sideGrid;
 
 		mainGrid.getChildren().add(contentGrid);

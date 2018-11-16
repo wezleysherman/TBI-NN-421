@@ -1,7 +1,12 @@
 package ui;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -39,7 +44,6 @@ public class PatientInfoEntryScene {
 			"    -fx-background-radius: 5;" + 
 			"    -fx-background-insets: 0,1,2;" + 
 			"    -fx-text-fill: black;";
-	static boolean dateSelected = false;
 	static boolean analyzeFailed = false;
 	
 	public static Scene initializeScene(StateManager manager) {
@@ -103,7 +107,6 @@ public class PatientInfoEntryScene {
 			public void handle(ActionEvent arg0) {
 
 				boolean complete = true;
-				
 				if(patFNameField.getText().equals("")) {
 					complete = false;
 					fNameStackPane.setVisible(true);
@@ -116,14 +119,7 @@ public class PatientInfoEntryScene {
 				} else {
 					lNameStackPane.setVisible(false);
 				}
-				//TODO implement file selection fully and add this back in
-				/*if(fileField.getText().equals("")) {
-					complete = false;
-					fileStackPane.setVisible(false);
-				} else {
-					fileStackPane.setVisible(false);
-				}*/
-				if(!dateSelected) {
+				if(datePicker.getValue() == null) {
 					complete = false;
 					dateStackPane.setVisible(true);
 				} else {
@@ -132,9 +128,12 @@ public class PatientInfoEntryScene {
 				
 				//Switch to proper scene
 				if(complete) {
-					dateSelected = false;
+					// TODO: this sets the time to midnight, find a way to get correct date/time
+					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
+					Date date = Date.from(instant);
+					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), date, notesField.getText());
 					manager.sceneStack.push(manager.sceneID);
-					manager.paintScene("viewScan");
+					manager.paintScene("viewScan", patient);
 				}
 			}
 			
@@ -172,8 +171,10 @@ public class PatientInfoEntryScene {
 				
 		//File Chooser Setup
 		fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
-                new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
+				new FileChooser.ExtensionFilter("DICOM", "*.dcm"),
+				new FileChooser.ExtensionFilter("NIFTI", "*.nii"),
+                new FileChooser.ExtensionFilter("DICOM Full", "*.dicom"),
+                new FileChooser.ExtensionFilter("NIFTI Full", "*.nifti")
             );
 		
 		//Use File Chooser on file select
@@ -200,7 +201,6 @@ public class PatientInfoEntryScene {
 				//TODO: use date somewhere and remove suppression
 				@SuppressWarnings("unused")
 				LocalDate date = datePicker.getValue();
-				dateSelected = true;
 			}
 		});
 		
