@@ -4,7 +4,7 @@ matrix:
     before_script:
       cd TBI-GUI
     script:
-      - gradle test
+      - sudo gradle test
   - language: python
     python:
       - '3.6'
@@ -28,4 +28,3 @@ matrix:
       - python3 cnn_tests.py
       - python3 classifier_tests.py
       - python3 auto_encoder_tests.py
-
