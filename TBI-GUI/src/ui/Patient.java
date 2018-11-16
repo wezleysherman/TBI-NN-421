@@ -19,6 +19,7 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
+import utils.PatientManagement;
 
 //Class for saving patient information
 public class Patient implements Serializable{
@@ -159,8 +160,8 @@ public class Patient implements Serializable{
 		return returnScan;
 	}
 
-	public void savePatient() {
-		// To-Do: Implement once branch is merged containing data encrcyption
+	public void savePatient() throws Exception {
+		PatientManagement.exportPatient(this);
 	}
 
 	private static String buildDefaultPath() {
