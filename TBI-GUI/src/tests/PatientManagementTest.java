@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Hashtable;
 import org.junit.Before;
@@ -37,22 +38,20 @@ public class PatientManagementTest {
 	@Test
 	public void testRead() throws Exception {
 		patient = (Patient)PatientManagement.importPatient(PatientManagement.getDefaultPath(), patient.getUID());
-		//linux/mac testing needed
-		/*assertEquals(patient.getDate(), testDate);
+		assertEquals(patient.getDate(), testDate);
 		assertEquals(patient.getFirstName(), "John");
 		assertEquals(patient.getLastName(), "Doe");
 		assertEquals(patient.getFile(), new File(PatientManagement.getDefaultPath(), patient.getUID()).getAbsolutePath());
 		assertEquals(patient.getNotes(), "Some notes");
-		assertEquals(36, patient.getUID().length());*/
+		assertEquals(36, patient.getUID().length());
 
 		patient2 = (Patient)PatientManagement.importPatient(PatientManagement.getDefaultPath(), patient2.getUID());
-		//linux/mac testing needed
-		/*assertEquals(patient2.getDate(), testDate);
+		assertEquals(patient2.getDate(), testDate);
 		assertEquals(patient2.getFirstName(), "Bob");
 		assertEquals(patient2.getLastName(), "Smith");
 		assertEquals(patient2.getFile(), new File(PatientManagement.getDefaultPath(),patient2.getUID()).getAbsolutePath());
 		assertEquals(patient2.getNotes(), "Some notes");
-		assertEquals(36, patient2.getUID().length());*/
+		assertEquals(36, patient2.getUID().length());
 	}
 	
 	@Test

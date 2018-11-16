@@ -2,6 +2,7 @@ package tests;
 
 import ui.Patient;
 
+import java.io.File;
 import java.util.Date;
 
 import org.junit.Test;
@@ -46,7 +47,14 @@ public class PatientClassTests {
 		assertEquals(patient.getDate(), testChangeDate);
 		assertEquals(patient.getFirstName(), "Jane");
 		assertEquals(patient.getLastName(), "McJane");
-		assertEquals(patient.getFile(), System.getProperty("user.dir") + "\\src\\resources\\patients\\" + patient.getUID());
+		assertEquals(patient.getFile(), new File(buildDefaultPath(),patient.getUID()).getAbsolutePath());
 		assertEquals(patient.getNotes(), "A whole lot of notes.");
+	}
+	
+	private static String buildDefaultPath() {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		f = new File(f.getAbsolutePath(), "patients");
+		return f.getAbsolutePath();
 	}
 }
