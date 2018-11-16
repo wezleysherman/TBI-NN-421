@@ -18,7 +18,7 @@ class prepare_scans:
         try:
             return DICOM_2_NIFTI.convert_dicom_series(input_path)
         except ConversionError:
-            debug("nope")
+            raise ConversionError("Conversion failed.")
 
     @retry(stop_max_attempt_number=5, wait_fixed=2000)
     def decompress(input_path):
