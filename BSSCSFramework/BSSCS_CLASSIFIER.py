@@ -7,9 +7,10 @@
 # https://www.tensorflow.org/api_docs/python/tf/contrib/layers/l2_regularizer
 # Tensorflow Relu activation:
 # https://www.tensorflow.org/api_docs/python/tf/nn/relu
+import tensorflow as tf
 
 class BSSCS_CLASSIFIER:
-	def __init__(self, l2_reg, learning_rate, steps, batch, loss, optimizer):
+	def __init__(self, l2_reg, learning_rate, steps, batch, loss=None, optimizer=None):
 		''' Constructor for the BSSCS autoencoder object
 			
 			The purpose of this is to set initial hyperparameters on the creation
@@ -27,23 +28,30 @@ class BSSCS_CLASSIFIER:
 		self.layers = []
 
 	def connect_conv_net(self, conv_graph):
-	''' Handles connecting the classifier to the conv network input.
-		Fancy way of handling array creation?
+		''' Handles connecting the classifier to the conv network input.
+			Fancy way of handling array creation?
 
-		See: BSSCS_CNN.py for more info
+			See: BSSCS_CNN.py for more info
 
-		Inputs:
-			- conv_graph: A graph of tensor objects for the convolutional neural network
+			Inputs:
+				- conv_graph: A graph of tensor objects for the convolutional neural network
 
-		Returns:
-			- Array containing both a graph for the conv network and autoencoder
-				[classifier, conv_network]
-	'''
-	
-	return_arr = [self.layers, conv_graph]
-	return return_arr
+			Returns:
+				- Array containing both a graph for the conv network and autoencoder
+					[classifier, conv_network]
+		'''
+		return_arr = [self.layers, conv_graph]
+		return return_arr
 
-	def get_regularizer():
+	def get_optimizer(self):
+		''' Handkles returning the optmizer for the class
+
+			Returns:
+				- Optimizer object
+		'''
+		return self.optimizer
+		
+	def get_regularizer(self):
 		''' Handles returning the regularizer
 
 			Returns:
@@ -51,7 +59,7 @@ class BSSCS_CLASSIFIER:
 		'''
 		return self.l2_reg
 
-	def set_regularizer(l2_reg):
+	def set_regularizer(self, l2_reg):
 		''' Handles setting a regularizer
 
 			Input:
@@ -63,7 +71,7 @@ class BSSCS_CLASSIFIER:
 		self.l2_reg = l2_reg
 		return l2_reg
 
-	def get_learning_rate():
+	def get_learning_rate(self):
 		''' Returns the current learning rate of the classifier object.
 
 			Returns:
@@ -71,7 +79,7 @@ class BSSCS_CLASSIFIER:
 		'''
 		return self.learning_rate
 
-	def set_learning_rate(learning_rate):
+	def set_learning_rate(self, learning_rate):
 		''' Handles setting the learning rate for the object
 
 			Input:
@@ -83,7 +91,7 @@ class BSSCS_CLASSIFIER:
 		self.learning_rate = learning_rate
 		return self.learning_rate
 
-	def get_steps():
+	def get_steps(self):
 		''' Handles returning the number of training steps for the classifier.
 
 			Returns:
@@ -91,7 +99,7 @@ class BSSCS_CLASSIFIER:
 		'''
 		return steps
 
-	def set_steps(steps):
+	def set_steps(self, steps):
 		''' Handles setting the number of training steps
 
 			Input:
@@ -103,13 +111,21 @@ class BSSCS_CLASSIFIER:
 		self.steps = steps
 		return self.steps
 
-	def get_layers():
+	def get_layers(self):
 		''' Handles returning all of the layers in the classifier
 
 			Returns:
 				- Array of tensor objects
 		'''
 		return self.layers
+
+	def get_loss(self):
+		''' Handles returning a loss function
+
+			Returns:
+				- Tensor for loss
+		'''
+		return self.loss
 
 	def create_layer(self, neurons, activation=tf.nn.relu, input=None):
 		''' Handles the creation of a single layer within the fully connected network
