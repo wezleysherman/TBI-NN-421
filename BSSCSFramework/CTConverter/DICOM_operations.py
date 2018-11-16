@@ -1,10 +1,32 @@
 import dicom2nifti #documentation at https://media.readthedocs.org/pdf/dicom2nifti/latest/dicom2nifti.pdf
 import nibabel #documentation at http://nipy.org/nibabel
+from retrying import retry
 import os
 import sys
 import glob
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from DICOMImporter import DICOMImporter
+
+class prepare_scans:
+    def decompress_and_convert(compressed_path):
+        raw_path = prepare_scans.decompress(compressed_path)
+        nifti_path = prepare_scans.convert(raw_path)
+        return nifti_path
+
+    @retry(stop_max_attempt_number=5, wait_fixed=2000)
+    def convert(input_path):
+        try:
+            return DICOM_2_NIFTI.convert_dicom_series(input_path)
+        except ConversionError:
+            debug("nope")
+
+    @retry(stop_max_attempt_number=5, wait_fixed=2000)
+    def decompress(input_path):
+        try:
+            return decompress_DICOM.decompress_series(input_path)
+        except FileExistsError:
+            debug("Already decompressed this!")
+
 
 class DICOM_2_NIFTI:
     def convert_dicom_series(input_path):
@@ -17,7 +39,7 @@ class DICOM_2_NIFTI:
                     - sample directory layout /patient/date/dicom_raw/*.dcm will result in
                         nifti file located at /patient/date/nifti/date.nii
 			Returns:
-				Numpy array representative of Nifti file
+				Path of newly created Nifti file
             Raises:
                 ConversionError if a) files are not decompressed or b) conversion fails
 		'''
@@ -28,7 +50,7 @@ class DICOM_2_NIFTI:
 
         output_path += os.path.basename(os.path.dirname(input_path)) + ".nii"
         open(output_path, 'a').close()
-        dicom_array = DICOMImporter.open_dicom_from_folder(input_path);
+        dicom_array = DICOMImporter.open_dicom_from_folder(input_path)
 
         try:
             dicom2nifti.convert_dicom.dicom_array_to_nifti(dicom_array, output_path)
@@ -40,9 +62,9 @@ class DICOM_2_NIFTI:
             open(output_path, 'a').close()
         except dicom2nifti.exceptions.ConversionError:
             debug("Conversion Failed")
-            return null;
+            return null
 
-        return DICOM_2_NIFTI.get_nifti_array(output_path)
+        return output_path
 
     def get_nifti_array(nifti_path):
         ''' Converts a Nifti file into a Numpy array that represents the 3D image
@@ -69,7 +91,7 @@ class decompress_DICOM:
                     - sample directory layout /patient/date/dicom/*.dcm will result in
                         raw files located at /patient/date/dicom_raw/*.dcm
             Returns:
-                nothing
+                file path of folder holding decompressed DICOMs
             Raises:
                 FileExistsError if the requested filepath has already been converted
 		'''
@@ -81,6 +103,7 @@ class decompress_DICOM:
                             + "/dicom_raw/raw_" + os.path.basename(dicom_path))
         else:
             raise FileExistsError("This file has already been decompressed. Raw files available at " + raw_path)
+        return raw_path
 
     def decompress_single(dicom_path):
         ''' Decompresses a single DICOM file and stores it based on path of compressed file
@@ -95,4 +118,4 @@ class decompress_DICOM:
                     + "/raw_" + os.path.basename(dicom_path))
 
 def debug(output):
-    print(output);
+    print(output)
