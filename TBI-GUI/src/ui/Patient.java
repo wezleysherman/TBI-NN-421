@@ -160,7 +160,7 @@ public class Patient implements Serializable{
 		return returnScan;
 	}
 
-	public void savePatient() {
+	public void savePatient() throws Exception {
 		PatientManagement.exportPatient(this);
 	}
 
