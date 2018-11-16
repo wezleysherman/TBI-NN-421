@@ -18,13 +18,16 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 //import com.sun.prism.paint.Color;
 
 public class VerticalSideMenu {
 	
+	final static String SIDE_TEXT_AREA_COLOR = "-fx-control-inner-background: #455357";
 	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
 	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
 			"    -fx-background-radius: 5;" + 
@@ -211,7 +214,7 @@ public class VerticalSideMenu {
 			//TODO
 		}
 		else if (manager.sceneID.equals("likelyTrauma")) {
-			//TODO
+			makeLTA(contentGrid);
 		}
 		else if (manager.sceneID.equals("viewCNN")) {
 			makeCNN(contentGrid);
@@ -360,5 +363,73 @@ public class VerticalSideMenu {
 		//Create Elements
 		ColumnConstraints columnConScroll = new ColumnConstraints();
 		columnConScroll.setPercentWidth(100);
+	}
+	
+	//Add LTA Elements to the Main Grid
+	private static void makeLTA(GridPane grid) {
+		//Construct main grid
+		RowConstraints rowCon = new RowConstraints();
+		ColumnConstraints columnCon = new ColumnConstraints();
+
+		//Construct Grid for sideBar
+		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon, rowCon);
+		grid.getColumnConstraints().addAll(columnCon);
+		
+		RowConstraints rowCon2 = new RowConstraints();
+		rowCon2.setPercentHeight(40);
+		grid.getRowConstraints().add(rowCon2);
+		
+		RowConstraints rowCon3 = new RowConstraints();
+		rowCon3.setPercentHeight(30);
+		grid.getRowConstraints().add(rowCon3);
+		
+		//Create Elements
+		ColumnConstraints columnConScroll = new ColumnConstraints();
+		columnConScroll.setPercentWidth(100);
+		
+		Label dateLabel = new Label("CT Scan 10/15/1994");
+		Label screenNameLabel = new Label("Likely Trauma Areas");
+		TextArea docNotesField = new TextArea();
+		GridPane scrollGrid = new GridPane();
+		ScrollPane scrollPane = new ScrollPane(scrollGrid);
+		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		scrollPane.setStyle(VERTICAL_MENU_COLOR);
+		ColumnConstraints scrollGridCols = new ColumnConstraints();
+		scrollGridCols.setPercentWidth(100);
+		scrollGrid.getColumnConstraints().add(scrollGridCols);
+		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
+		
+		//Dummy Data for testing purposes
+		ArrayList regionList = new ArrayList();
+		for(int i = 0; i < 10; i++) {
+			regionList.add("Region " + i);
+		}
+		
+		for(int j = 0; j < regionList.size(); j++) {
+			//TODO change make button set file being viewed and repaint the scene
+			//Place Holder -> Can be changed to panes for better look
+			Button layerButton = new Button();
+			layerButton.setMaxWidth(Double.MAX_VALUE);
+			layerButton.setText((String) regionList.get(j));
+			GridPane.setMargin(layerButton, new Insets(0, 20, 0, 0));
+			GridPane.setConstraints(layerButton, 0, j, 2, 1, HPos.LEFT, VPos.CENTER);
+			scrollGrid.getChildren().add(layerButton);
+		}
+		
+		//Set up text area
+		docNotesField.setStyle(SIDE_TEXT_AREA_COLOR);
+		docNotesField.setWrapText(true);
+		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
+		
+		//Set style labels
+		styleLabel(dateLabel);
+		styleLabel(screenNameLabel);
+		
+		//Add elements to sideBar
+		GridPane.setConstraints(dateLabel, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(screenNameLabel, 0, 4, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(scrollPane, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(docNotesField, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
+		grid.getChildren().addAll(dateLabel, screenNameLabel, scrollPane, docNotesField);
 	}
 }
