@@ -10,8 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -20,12 +18,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
-
-import java.util.ArrayList;
 import java.io.File;
 import java.util.EmptyStackException;
 
-import com.sun.prism.paint.Color;
+//import com.sun.prism.paint.Color;
 
 public class VerticalSideMenu {
 	

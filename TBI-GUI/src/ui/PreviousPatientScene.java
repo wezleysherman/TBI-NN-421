@@ -68,6 +68,7 @@ public class PreviousPatientScene {
 		TableView patientTable = new TableView();
 		Button retrieveBtn = new Button();
 		
+		//TODO remove test patients
 		// test patients --------------------------------------------------------------------------------------
 		LinkedList<Scan> johnScans = new LinkedList<Scan>();
 		johnScans.push(new Scan(new Date(), new Image("resources/TestImage1.jpg")));
