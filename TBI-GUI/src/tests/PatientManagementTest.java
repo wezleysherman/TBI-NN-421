@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.LinkedList;
 
 import javax.crypto.NoSuchPaddingException;
 
@@ -14,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ui.Patient;
+import utils.PatientEntry;
 import utils.PatientManagement;
 
 public class PatientManagementTest {
@@ -35,7 +38,7 @@ public class PatientManagementTest {
 			uid = patient2.getUID();
 			PatientManagement.exportPatient(patient2);
 		} catch(Exception e){
-
+			e.printStackTrace();
 		}
 	}
 
@@ -56,6 +59,16 @@ public class PatientManagementTest {
 		assertEquals(patient2.getFile(), System.getProperty("user.dir") + "\\src\\resources\\patients\\" + patient2.getUID());
 		assertEquals(patient2.getNotes(), "Some notes");
 		assertEquals(36, patient2.getUID().length());
+	}
+	
+	@Test
+	public void testPatientList() throws Exception {
+		Hashtable patientList = PatientManagement.getPatientList();
+		
+		PatientEntry temp = (PatientEntry)patientList.get(patient.getUID());
+		assertEquals(temp.name, patient.getFirstName() + " " + patient.getLastName());
+		temp = (PatientEntry)patientList.get(patient2.getUID());
+		assertEquals(temp.name, patient2.getFirstName() + " " + patient2.getLastName());
 	}
 
 }

@@ -42,7 +42,7 @@ public class Patient implements Serializable{
 		this.setNotes(pNotes);
 		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
 		this.file = basePath + uid;
-		System.out.println(file);
+		//System.out.println(file);
 	}
 
 	// constructor for patient with only one scan being entered
