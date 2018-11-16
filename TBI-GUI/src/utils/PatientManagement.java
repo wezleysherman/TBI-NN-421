@@ -26,8 +26,19 @@ import ui.Patient;
 
 public class PatientManagement {
 
-	private static final String defaultPath = System.getProperty("user.dir") + "\\src\\resources\\patients\\";
+	private static final String defaultPath = buildDefaultPath();
 	private static Hashtable <String, PatientEntry> patientList;
+	
+	private static String buildDefaultPath() {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		f = new File(f.getAbsolutePath(), "patients");
+		return f.getAbsolutePath();
+	}
+	
+	public static String getDefaultPath() {
+		return defaultPath;
+	}
 	
 	public static boolean exportPatient(Patient patient) throws IOException {
 		if(patientList == null) {
@@ -85,8 +96,9 @@ public class PatientManagement {
 
 	public static Patient importPatient(String path, String uid) throws IOException {
 		// setup output file
-		String fullPath = path + uid + "\\data.enc";
-		FileInputStream fin = new FileInputStream(fullPath);
+		File f = new File(path, uid);
+		f = new File(f.getAbsolutePath(), "data.enc");
+		FileInputStream fin = new FileInputStream(f.getAbsolutePath());
 		BufferedInputStream bin = new BufferedInputStream(fin);
 
 		Key key = null;

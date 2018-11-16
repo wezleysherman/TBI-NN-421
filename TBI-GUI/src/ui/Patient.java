@@ -23,7 +23,7 @@ import javax.crypto.NoSuchPaddingException;
 //Class for saving patient information
 public class Patient implements Serializable{
 
-	private static final String basePath = System.getProperty("user.dir") + "\\src\\resources\\patients\\";
+	private static final String basePath = buildDefaultPath();
 	private String firstName;
 	private String lastName;
 	private String file;
@@ -41,7 +41,7 @@ public class Patient implements Serializable{
 		this.setDate(pDate);
 		this.setNotes(pNotes);
 		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
-		this.file = basePath + uid;
+		this.file = new File(basePath, uid.toString()).getAbsolutePath();
 		//System.out.println(file);
 	}
 
@@ -122,5 +122,12 @@ public class Patient implements Serializable{
 
 	public Integer getNumScans() {
 		return numScans;
+	}
+	
+	private static String buildDefaultPath() {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		f = new File(f.getAbsolutePath(), "patients");
+		return f.getAbsolutePath();
 	}
 }
