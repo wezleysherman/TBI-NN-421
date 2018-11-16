@@ -35,7 +35,7 @@ public class PatientManagementTest {
 			uid = patient2.getUID();
 			PatientManagement.exportPatient(patient2);
 		} catch(Exception e){
-			
+
 		}
 	}
 
