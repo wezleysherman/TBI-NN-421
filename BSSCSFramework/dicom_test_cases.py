@@ -6,6 +6,7 @@
 from DICOMImporter import DICOMImporter
 from BSSCS_CNN import BSSCS_CNN
 from BSSCS_IMG_PROCESSING import BSSCS_IMG_PROCESSING
+from BSSCS_AUTO_ENCODER import BSSCS_AUTO_ENCODER
 import numpy as np
 import tensorflow as tf
 
@@ -40,6 +41,13 @@ def test_cnn_creator():
 
 def test_cnn_vis():
 	bsscs = BSSCS_CNN()
+	bsscs_ae = BSSCS_AUTO_ENCODER(
+		l2_reg=tf.contrib.layers.l2_regularizer(scale=0.001),
+		learning_rate=0.001,
+		steps=250, # Arbitrary
+		batch_size=250, # Arbitrary
+		activation=tf.nn.relu,
+	)
 	cnn_full_network = bsscs.create_convolution_network(input_shape=[None, 512, 512, 1], cnn_kernels=[[2, 2], [4, 4]], cnn_filters=[64, 128], pooling_filters=[[2, 2], [2, 2]])
 
 	print('full cnn network: ' + str(cnn_full_network))
@@ -50,6 +58,9 @@ def test_cnn_vis():
  	# images for UI will use this method
 	conv_output = bsscs.get_convolutional_filters(dicom_pixel_arr, cnn_full_network)
 	print(conv_output)
+	full_network = bsscs_ae.create_autoencoder(neurons=[512, 256, 128, 256, 512])
+
+	bsscs_ae.connect_conv_net(cnn_full_network)
 
 def test_img_proc():
 	dicom_file = DICOMImporter.open_dicom_file('test_dicom/test_dicom.dcm')
@@ -60,7 +71,5 @@ def test_img_proc():
 	cropped_img = BSSCS_IMG_PROCESSING.crop_image([dicom_file_pixel], 100)
 
 test_cnn_vis()
-test_cnn_creator()
-test_dicom_importer()
-test_img_proc()
+
 

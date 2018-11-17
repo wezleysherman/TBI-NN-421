@@ -12,13 +12,16 @@ import javafx.stage.Stage;
  *
  */
 public class StateManager {
-	Stack<String> sceneStack;
-	Stage stage;
 	StackPane root = new StackPane();
+	
+	// variables to be used in other classes
 	Scene scene = new Scene(root, 960, 540);
+	Stage stage;
+	Stack<String> sceneStack;
 	String sceneID = "landing";
 	Patient patient = null;
 	
+	// constructor (mostly just the app start)
 	public StateManager(Stage inStage) {
 		sceneStack = new Stack<String>();
 		stage = inStage;
@@ -39,7 +42,8 @@ public class StateManager {
 	 */
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID) {			
-		sceneID = newSceneID;
+		sceneID = newSceneID; // current scene being displayed(added onto sceneStack when changed)
+		
 	//TODO: Add key and scene when more scenes are added (keys are the names of corresponding buttons)	
 		if (sceneID.equals("landing")) {
 			patient = null;
@@ -62,9 +66,10 @@ public class StateManager {
 		
 		stage.setScene(scene);
 		
-		//debugStack();
+		debugStack();
 	}
 	
+	// paintScene with other params (can probably refactor this out)
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID, Patient patient) {			
 		sceneID = newSceneID;
@@ -79,9 +84,10 @@ public class StateManager {
 		
 		stage.setScene(scene);
 		
-		//debugStack();
+		debugStack();
 	}
 	
+	//paintScene with different params (can probably refactor this out)
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID, boolean isTrue) {			
 		sceneID = newSceneID;
@@ -92,7 +98,7 @@ public class StateManager {
 		
 		stage.setScene(scene);
 		
-		//debugStack();
+		debugStack();
 	}
 	
 	/* DEBUG CONSOLE OUTPUTS*/

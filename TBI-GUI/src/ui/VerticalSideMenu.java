@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -20,10 +22,14 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
+
+//import com.sun.prism.paint.Color;
 
 public class VerticalSideMenu {
 	
+	final static String SIDE_TEXT_AREA_COLOR = "-fx-control-inner-background: #455357";
 	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
 	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
 			"    -fx-background-radius: 5;" + 
@@ -153,13 +159,7 @@ public class VerticalSideMenu {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					if (manager.sceneID.equals("algoVis") && manager.sceneStack.peek().equals("algoVis")) {
-						manager.sceneStack.pop();
 						manager.paintScene(manager.sceneStack.pop());
-					}
-					else {
-						manager.paintScene(manager.sceneStack.pop());
-					}
 				}
 				catch (EmptyStackException ex) {
 					manager.paintScene("landing");
@@ -199,6 +199,9 @@ public class VerticalSideMenu {
 				if (!manager.sceneID.equals("algoVis")) {
 					manager.sceneStack.push(manager.sceneID);
 				}
+				else if (manager.sceneID.equals("algoVis")) {
+					manager.sceneStack.pop();
+				}
 				manager.paintScene("algoVis");
 			}
 		});
@@ -210,10 +213,10 @@ public class VerticalSideMenu {
 			//TODO
 		}
 		else if (manager.sceneID.equals("likelyTrauma")) {
-			//TODO
+			makeLTA(contentGrid);
 		}
 		else if (manager.sceneID.equals("viewCNN")) {
-			//TODO
+			makeCNN(contentGrid);
 		}
 		else if (manager.sceneID.equals("prevPat")) {
 			//TODO
@@ -231,7 +234,9 @@ public class VerticalSideMenu {
 			recentBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					manager.sceneStack.push("algoVis");
+					if (!manager.sceneStack.peek().equals("algoVis")) {
+						manager.sceneStack.push("algoVis");
+					}
 					manager.paintScene("algoVis", false);
 				}
 			});
@@ -336,5 +341,96 @@ public class VerticalSideMenu {
 			contentGrid.getChildren().addAll(uploadBtn, notesLabel);
 		}
 		return mainGrid;
+	}
+	
+	//Add CNN Elements to the main grid
+	private static void makeCNN(GridPane grid) {
+		//Construct main grid
+		RowConstraints rowCon = new RowConstraints();
+		ColumnConstraints columnCon = new ColumnConstraints();
+
+		//Construct Grid for sideBar
+		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon);
+		grid.getColumnConstraints().addAll(columnCon);
+		
+		RowConstraints rowCon2 = new RowConstraints();
+		rowCon2.setPercentHeight(40);
+		grid.getRowConstraints().add(rowCon2);
+		
+		RowConstraints rowCon3 = new RowConstraints();
+		rowCon3.setPercentHeight(30);
+		grid.getRowConstraints().add(rowCon3);
+		
+		//Create Elements
+		ColumnConstraints columnConScroll = new ColumnConstraints();
+		columnConScroll.setPercentWidth(100);
+	}
+	
+	//Add LTA Elements to the Main Grid
+	private static void makeLTA(GridPane grid) {
+		//Construct main grid
+		RowConstraints rowCon = new RowConstraints();
+		ColumnConstraints columnCon = new ColumnConstraints();
+
+		//Construct Grid for sideBar
+		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon, rowCon);
+		grid.getColumnConstraints().addAll(columnCon);
+		
+		RowConstraints rowCon2 = new RowConstraints();
+		rowCon2.setPercentHeight(40);
+		grid.getRowConstraints().add(rowCon2);
+		
+		RowConstraints rowCon3 = new RowConstraints();
+		rowCon3.setPercentHeight(30);
+		grid.getRowConstraints().add(rowCon3);
+		
+		//Create Elements
+		ColumnConstraints columnConScroll = new ColumnConstraints();
+		columnConScroll.setPercentWidth(100);
+		
+		Label dateLabel = new Label("CT Scan 10/15/1994");
+		Label screenNameLabel = new Label("Likely Trauma Areas");
+		TextArea docNotesField = new TextArea();
+		GridPane scrollGrid = new GridPane();
+		ScrollPane scrollPane = new ScrollPane(scrollGrid);
+		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		scrollPane.setStyle(VERTICAL_MENU_COLOR);
+		ColumnConstraints scrollGridCols = new ColumnConstraints();
+		scrollGridCols.setPercentWidth(100);
+		scrollGrid.getColumnConstraints().add(scrollGridCols);
+		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
+		
+		//Dummy Data for testing purposes
+		ArrayList regionList = new ArrayList();
+		for(int i = 0; i < 10; i++) {
+			regionList.add("Region " + i);
+		}
+		
+		for(int j = 0; j < regionList.size(); j++) {
+			//TODO change make button set file being viewed and repaint the scene
+			//Place Holder -> Can be changed to panes for better look
+			Button layerButton = new Button();
+			layerButton.setMaxWidth(Double.MAX_VALUE);
+			layerButton.setText((String) regionList.get(j));
+			GridPane.setMargin(layerButton, new Insets(0, 20, 0, 0));
+			GridPane.setConstraints(layerButton, 0, j, 2, 1, HPos.LEFT, VPos.CENTER);
+			scrollGrid.getChildren().add(layerButton);
+		}
+		
+		//Set up text area
+		docNotesField.setStyle(SIDE_TEXT_AREA_COLOR);
+		docNotesField.setWrapText(true);
+		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
+		
+		//Set style labels
+		styleLabel(dateLabel);
+		styleLabel(screenNameLabel);
+		
+		//Add elements to sideBar
+		GridPane.setConstraints(dateLabel, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(screenNameLabel, 0, 4, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(scrollPane, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(docNotesField, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
+		grid.getChildren().addAll(dateLabel, screenNameLabel, scrollPane, docNotesField);
 	}
 }

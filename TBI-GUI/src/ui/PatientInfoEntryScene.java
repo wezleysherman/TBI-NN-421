@@ -1,6 +1,8 @@
 package ui;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -42,7 +44,6 @@ public class PatientInfoEntryScene {
 			"    -fx-background-radius: 5;" + 
 			"    -fx-background-insets: 0,1,2;" + 
 			"    -fx-text-fill: black;";
-	static boolean dateSelected = false;
 	static boolean analyzeFailed = false;
 	
 	public static Scene initializeScene(StateManager manager) {
@@ -106,7 +107,6 @@ public class PatientInfoEntryScene {
 			public void handle(ActionEvent arg0) {
 
 				boolean complete = true;
-				
 				if(patFNameField.getText().equals("")) {
 					complete = false;
 					fNameStackPane.setVisible(true);
@@ -119,14 +119,7 @@ public class PatientInfoEntryScene {
 				} else {
 					lNameStackPane.setVisible(false);
 				}
-				//TODO implement file selection fully and add this back in
-				/*if(fileField.getText().equals("")) {
-					complete = false;
-					fileStackPane.setVisible(false);
-				} else {
-					fileStackPane.setVisible(false);
-				}*/
-				if(!dateSelected) {
+				if(datePicker.getValue() == null) {
 					complete = false;
 					dateStackPane.setVisible(true);
 				} else {
@@ -135,7 +128,6 @@ public class PatientInfoEntryScene {
 				
 				//Switch to proper scene
 				if(complete) {
-					dateSelected = false;
 					// TODO: this sets the time to midnight, find a way to get correct date/time
 					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
 					Date date = Date.from(instant);
@@ -209,7 +201,6 @@ public class PatientInfoEntryScene {
 				//TODO: use date somewhere and remove suppression
 				@SuppressWarnings("unused")
 				LocalDate date = datePicker.getValue();
-				dateSelected = true;
 			}
 		});
 		
