@@ -159,13 +159,7 @@ public class VerticalSideMenu {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					if (manager.sceneID.equals("algoVis") && manager.sceneStack.peek().equals("algoVis")) {
-						manager.sceneStack.pop();
 						manager.paintScene(manager.sceneStack.pop());
-					}
-					else {
-						manager.paintScene(manager.sceneStack.pop());
-					}
 				}
 				catch (EmptyStackException ex) {
 					manager.paintScene("landing");
@@ -205,6 +199,9 @@ public class VerticalSideMenu {
 				if (!manager.sceneID.equals("algoVis")) {
 					manager.sceneStack.push(manager.sceneID);
 				}
+				else if (manager.sceneID.equals("algoVis")) {
+					manager.sceneStack.pop();
+				}
 				manager.paintScene("algoVis");
 			}
 		});
@@ -237,7 +234,9 @@ public class VerticalSideMenu {
 			recentBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					manager.sceneStack.push("algoVis");
+					if (!manager.sceneStack.peek().equals("algoVis")) {
+						manager.sceneStack.push("algoVis");
+					}
 					manager.paintScene("algoVis", false);
 				}
 			});
