@@ -62,7 +62,7 @@ public class StateManager {
 		
 		stage.setScene(scene);
 		
-		//debugStack();
+		debugStack();
 	}
 	
 	@SuppressWarnings("static-access")
@@ -79,7 +79,7 @@ public class StateManager {
 		
 		stage.setScene(scene);
 		
-		//debugStack();
+		debugStack();
 	}
 	
 	@SuppressWarnings("static-access")
@@ -92,7 +92,7 @@ public class StateManager {
 		
 		stage.setScene(scene);
 		
-		//debugStack();
+		debugStack();
 	}
 	
 	/* DEBUG CONSOLE OUTPUTS*/
