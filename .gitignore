@@ -9,6 +9,7 @@ __pycache__/
 /.gradle/
 /gui/.gradle/
 /TBI-GUI/.gradle/
+/TBI-GUI/build/
 /.metadata/
 .metadata/
 .recommenders/
