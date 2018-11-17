@@ -22,7 +22,7 @@ import java.util.LinkedList;
 
 public class LandingScene {
 	
-	public static boolean debug = true; //Manually change this value
+	public static boolean debug = false; //Manually change this value
 	private final static String BACKGROUND_COLOR = "-fx-background-color: #455357";
 	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
 			"    -fx-background-radius: 5;" + 
