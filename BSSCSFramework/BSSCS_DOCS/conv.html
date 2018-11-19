@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<title>BSSCS CNN</title>		
+	</head>
+	<body>
+		<a href="main.html">Back</a>
+		<h1>BSSCS Convolutional Neural Network</h1>
+		<div>
+			<b>create_cnn_block(self, filters, kernel_size, cnn_strides, pool_size, pooling_strides, cnn_padding='SAME', cnn_activation=tf.nn.relu, pooling_padding='VALID', input_shape=None, input=None)</b>
+			<br>
+			<span>Handles creation of a 2D convolutional 'block'
+			A convolutional 'block' consists of both a convolutional layer
+			and a max pooling layer.</span><br>
+			<span>
+				<p>Input:</p>
+					<p>CNN: </p>
+						<p>- input: accepts a tensorflow placeholder of rank 4 (e.g. [batch_size, im_width, im_height, im_channels])</p>
+						<p>- filters: defines how many filters we want for the convolutional layer</p>
+						<p>- kernel_size: tuple containing filter size (e.g. (3, 3) for a 3x3 filter)</p>
+						<p>- cnn_strides: a single number indicating stride transform (e.g. how many pixels are traversed with a filter)</p>
+						<p>- cnn_padding: defines what we do with padding of the image when a kernel is outside image bounds ('SAME' or 'VALID')</p>
+						<p>- cnn_activation: defines the activation function for the convolutional layer</p>
+					<p>Max_Pooling:</p>
+						<p>- pool_size: indicates the size of the pool for averaging (E.g. if we have an array of [1, 3, 2, 4] max pooling will shrink it to the max value [4])</p>
+						<p>- pooling_strides: a single number indicating stride transform (e.g. how many pixels are traversed with a pooling filter)</p>
+						<p>- pooling_padding: defines what we do with padding of the image when a kernel is outside image bounds ('SAME' or 'VALID')</p>
+				<p>Returns:</p>
+					<p>- cnn layer and max pooling layer</p>
+			</span>
+		</div>
+		<div>
+			<b>create_partial_pooling(self, pool_size, pooling_strides, pooling_padding='VALID', input_shape=None, input=None)</b>
+			<br>
+			<span>Handles the creation of a 2D pooling layers</span><br>
+			<span>
+				<p>Input:</p>
+					<p>- input: accepts a convolutional or pooling layer</p>
+					<p>- pool_size: indicates the size of the pool for averaging (E.g. if we have an array of [1, 3, 2, 4] max pooling will shrink it to the max value [4])</p>
+					<p>- pooling_strides: a single number indicating stride transform (e.g. how many pixels are traversed with a pooling filter)</p>
+					<p>- pooling_padding: defines what we do with padding of the image when a kernel is outside image bounds ('SAME' or 'VALID')</p>
+				<p>Returns:</p>
+					<p>- Max pooling layer to input specifications</p>
+			</span>
+		</div>
+		<div>
+			<b>create_partial_cnn(self, filters, kernel_size, cnn_strides, cnn_padding='SAME', cnn_activation=tf.nn.relu, input_shape=None, input=None)</b>
+			<br>
+			<span>create a partial cnn layer -- convenience method</span><br>
+			<span>
+				<p>Input:</p>
+					<p>- input: accepts a tensorflow placeholder of rank 4 (e.g. [batch_size, im_width, im_height, im_channels])</p>
+					<p>- filters: defines how many filters we want for the convolutional layer</p>
+					<p>- kernel_size: tuple containing filter size (e.g. (3, 3) for a 3x3 filter)</p>
+					<p>- cnn_strides: a single number indicating stride transform (e.g. how many pixels are traversed with a filter)</p>
+					<p>- cnn_padding: defines what we do with padding of the image when a kernel is outside image bounds ('SAME' or 'VALID')</p>
+					<p>- cnn_activation: defines the activation function for the convolutional layer</p>
+				<p>Returns:</p>
+					<p>- Array CNN layer to input specifications</p>
+			</span>
+		</div>
+		<div>
+			<b>create_convolution_network(self, input_shape, cnn_kernels, cnn_filters, pooling_filters, strides=2)</b>
+			<br>
+			<span>Used to create a full convolutional network</span><br>
+			<span>
+				<p>Input:</p>
+					<p>- input_image_size: accepts an array specifying batch size, width, height, and channels for the image(s)</p>
+					<p>- cnn_kernels: array of filter sizes of the cnn</p>
+					<p>- cnn_filters: array of filter numbers for each cnn layer</p>
+					<p>- pooling_filters: 2d array of pooling sizes for the pooling layers</p>
+					<p>- strides: number of strides for each layer</p>
+				<p>Returns:</p>
+					<p>- array of cnn and max pooling layers tied together</p>
+			</span>
+		</div>
+		<div>
+			<b>get_convolutional_filters(self, input_image, conv_net)</b>
+			<br>
+			<span>get a visualization of the output of the cnn</span><br>
+			<span>
+				<p>Input:</p>
+					<p>- input_image: accepts a pixel array for input</p>
+					<p>- conv_net: accepts the convolutional network layers (in an array) as input:</p>
+				<p>Returns:</p>
+					<p>- 4D array of filter data</p>
+			</span>
+		</div>
+	</body>
+</html>
