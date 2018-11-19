@@ -50,7 +50,7 @@ public class LandingScene {
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
+				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("newPat");
 			}
 		});
@@ -63,7 +63,7 @@ public class LandingScene {
 		prevPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
+				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("prevPat");
 			}
 		});
@@ -106,7 +106,7 @@ public class LandingScene {
 						);
 				patient.setScans(scans);
 				
-				manager.sceneStack.push(manager.sceneID);
+				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("viewScan", patient);
 			}
 		});
@@ -116,7 +116,7 @@ public class LandingScene {
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
+				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("likelyTrauma");
 			}
 		});
@@ -136,11 +136,8 @@ public class LandingScene {
 		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(grid);
 		
-		double x = manager.stage.getWidth();
-		double y = manager.stage.getHeight();
-		Scene scene = new Scene(layout, x, y);
-		
-		return scene;
+		//Return constructed scene
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 	
 	//Styles Buttons to make layout and style of page

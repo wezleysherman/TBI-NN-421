@@ -96,10 +96,7 @@ public class CNNVisualizationScene {
 		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(mainGrid);
 		
-		double x = manager.stage.getWidth();
-		double y = manager.stage.getHeight();
-		Scene scene = new Scene(layout, x, y);
-		
-		return scene;
+		//Return constructed scene
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 }

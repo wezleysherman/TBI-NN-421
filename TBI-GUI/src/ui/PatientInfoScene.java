@@ -155,7 +155,7 @@ public class PatientInfoScene {
 			fileBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	                File file = fileChooser.showOpenDialog(manager.stage);
+	                File file = fileChooser.showOpenDialog(manager.getStage());
 	                if (file != null) {
 	                    //TODO patient.addSacn
 	                }
@@ -181,6 +181,6 @@ public class PatientInfoScene {
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene
-		return new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 }

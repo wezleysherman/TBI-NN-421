@@ -84,7 +84,7 @@ public class PreviousPatientScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
-					manager.sceneStack.push(manager.sceneID);
+					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("patInfo", (Patient)patientTable.getSelectionModel().getSelectedItem());
 				}
 			}
@@ -136,10 +136,7 @@ public class PreviousPatientScene {
 		innerLayout.setBottom(retrieveBtn);
 		layout.setCenter(mainGrid);
 		
-		double x = manager.stage.getWidth();
-		double y = manager.stage.getHeight();
-		Scene scene = new Scene(layout, x, y);
-		
-		return scene;
+		//Return constructed scene
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 }

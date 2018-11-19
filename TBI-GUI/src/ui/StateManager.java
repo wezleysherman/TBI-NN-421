@@ -5,21 +5,36 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-// TODO: find better way to implement state manager
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
- * @author Canyon Schubert
- *
+ * @author Canyon Schubert & Ty Chase
  */
 public class StateManager {
-	StackPane root = new StackPane();
+	private StackPane root = new StackPane();
+	private Scene scene = new Scene(root, 960, 540);
+	private Stage stage;
+	private Stack<String> sceneStack;
+	private String sceneID = "landing";
+	private Patient patient = null;
 	
-	// variables to be used in other classes
-	Scene scene = new Scene(root, 960, 540);
-	Stage stage;
-	Stack<String> sceneStack;
-	String sceneID = "landing";
-	Patient patient = null;
+	public Stage getStage() {
+		return stage;
+	}
+	public Stack<String> getSceneStack() {
+		return sceneStack;
+	}
+	public void setSceneID(String sceneID) {
+		this.sceneID = sceneID;
+	}
+	public String getSceneID() {
+		return sceneID;
+	}
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+	public Patient getPatient() {
+		return patient;
+	}
 	
 	// constructor (mostly just the app start)
 	public StateManager(Stage inStage) {
@@ -31,7 +46,7 @@ public class StateManager {
 		stage.setMinWidth(960);
 		stage.setMinHeight(540);
 		
-		this.paintScene(sceneID);
+		paintScene(sceneID);
 		
 		stage.show();
 	}
@@ -94,7 +109,7 @@ public class StateManager {
 		if (sceneID.equals("algoVis"))
 			scene = new AlgorithmVisualizerScene().initializeScene(this, isTrue); //display recent graph
 		else if (sceneID.equals("patInfo"))
-			scene = new PatientInfoScene().initializeScene(this, this.patient, isTrue); //allow edits
+			scene = new PatientInfoScene().initializeScene(this, patient, isTrue); //allow edits
 		
 		stage.setScene(scene);
 		

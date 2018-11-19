@@ -148,7 +148,7 @@ public class ScanVisualizerScene {
 		fileChoiceBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent e) {
-                File file = fileChooser.showOpenDialog(manager.stage);
+                File file = fileChooser.showOpenDialog(manager.getStage());
                 if (file != null) {
                     //TODO
                 }
@@ -159,7 +159,7 @@ public class ScanVisualizerScene {
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
+				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("viewCNN");
 			}
 		});
@@ -170,7 +170,7 @@ public class ScanVisualizerScene {
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
-				manager.sceneStack.push(manager.sceneID);
+				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("likelyTrauma");
 			}
 		});
@@ -181,7 +181,7 @@ public class ScanVisualizerScene {
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.sceneStack.push(manager.sceneID);
+				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("algoVis");
 			}
 		});
@@ -235,9 +235,8 @@ public class ScanVisualizerScene {
 		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(mainGrid);
 		
-		Scene scene = new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
-		
-		return scene;
+		//Return constructed scene
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 	
 	//Styles Buttons to make layout and style of page
