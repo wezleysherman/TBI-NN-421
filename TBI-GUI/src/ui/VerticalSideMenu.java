@@ -157,7 +157,7 @@ public class VerticalSideMenu {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-						manager.paintScene(manager.sceneStack.pop());
+						manager.paintScene(manager.getSceneStack().pop());
 				}
 				catch (EmptyStackException ex) {
 					manager.paintScene("landing");
@@ -178,7 +178,7 @@ public class VerticalSideMenu {
 			public void handle(ActionEvent arg0) {
 				homeWarning.showAndWait();
 				if (homeWarning.getResult().getButtonData().equals(ButtonData.YES)) {
-					manager.sceneStack.clear();
+					manager.getSceneStack().clear();
 					manager.paintScene("landing");
 				}
 			}
@@ -194,11 +194,11 @@ public class VerticalSideMenu {
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (!manager.sceneID.equals("algoVis")) {
-					manager.sceneStack.push(manager.sceneID);
+				if (!manager.getSceneID().equals("algoVis")) {
+					manager.getSceneStack().push(manager.getSceneID());
 				}
-				else if (manager.sceneID.equals("algoVis")) {
-					manager.sceneStack.pop();
+				else if (manager.getSceneID().equals("algoVis")) {
+					manager.getSceneStack().pop();
 				}
 				manager.paintScene("algoVis");
 			}
@@ -207,19 +207,19 @@ public class VerticalSideMenu {
 		contentGrid.getChildren().add(algoVisBtn);
 		
 		//Side bar for different pages---------------------------------------------------------------------------------------------------------------
-		if (manager.sceneID.equals("newPat")) {
+		if (manager.getSceneID().equals("newPat")) {
 			//TODO
 		}
-		else if (manager.sceneID.equals("likelyTrauma")) {
+		else if (manager.getSceneID().equals("likelyTrauma")) {
 			makeLTA(contentGrid);
 		}
-		else if (manager.sceneID.equals("viewCNN")) {
+		else if (manager.getSceneID().equals("viewCNN")) {
 			makeCNN(contentGrid);
 		}
-		else if (manager.sceneID.equals("prevPat")) {
+		else if (manager.getSceneID().equals("prevPat")) {
 			//TODO
 		}
-		else if (manager.sceneID.equals("algoVis")) {
+		else if (manager.getSceneID().equals("algoVis")) {
 			Label sceneLabel = new Label("Algorithm Visualizer");
 			styleLabel(sceneLabel);
 			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -232,8 +232,8 @@ public class VerticalSideMenu {
 			recentBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					if (!manager.sceneStack.peek().equals("algoVis")) {
-						manager.sceneStack.push("algoVis");
+					if (!manager.getSceneStack().peek().equals("algoVis")) {
+						manager.getSceneStack().push("algoVis");
 					}
 					manager.paintScene("algoVis", false);
 				}
@@ -241,7 +241,7 @@ public class VerticalSideMenu {
 			
 			contentGrid.getChildren().addAll(sceneLabel, recentBtn);
 		}
-		else if (manager.sceneID.equals("patInfo")) {
+		else if (manager.getSceneID().equals("patInfo")) {
 			Label sceneLabel = new Label("Patient Info");
 			styleLabel(sceneLabel);
 			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -260,7 +260,7 @@ public class VerticalSideMenu {
 			
 			contentGrid.getChildren().addAll(sceneLabel, editBtn);
 		}
-		else if (manager.sceneID.equals("viewScan")) {
+		else if (manager.getSceneID().equals("viewScan")) {
 			ColumnConstraints column2 = new ColumnConstraints();
 			column2.setPercentWidth(50);
 			ColumnConstraints column3 = new ColumnConstraints();
@@ -272,10 +272,10 @@ public class VerticalSideMenu {
 			GridPane.setConstraints(homeBtn,  2, 1, 2, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(algoVisBtn, 0, 2, 4, 1, HPos.CENTER, VPos.CENTER);
 			
-			Label patientLabel = new Label(manager.patient.getFirstName() + " " + manager.patient.getLastName());
+			Label patientLabel = new Label(manager.getPatient().getFirstName() + " " + manager.getPatient().getLastName());
 			styleLabel(patientLabel);
 			GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
-			Label dateLabel = new Label(manager.patient.getDate().toString());
+			Label dateLabel = new Label(manager.getPatient().getDate().toString());
 			styleLabel(dateLabel);
 			GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
 			Label recentLabel = new Label("Other Recent Scans:");
@@ -284,17 +284,17 @@ public class VerticalSideMenu {
 			
 			contentGrid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
 			
-			for (int i = 0; i < manager.patient.getNumScans(); ++i) {
+			for (int i = 0; i < manager.getPatient().getNumScans(); ++i) {
 				Label newLbl = new Label("");
 				if (i == 0) {
 					newLbl.setText("Latest:");
 				}
-				else if (i == manager.patient.getNumScans()-1) {
+				else if (i == manager.getPatient().getNumScans()-1) {
 					newLbl.setText("Oldest:");
 				}
 				styleLabel(newLbl);
 				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
-				Button newBtn = new Button(manager.patient.getScans().get(i).getDateOfScan().toString());
+				Button newBtn = new Button(manager.getPatient().getScans().get(i).getDateOfScan().toString());
 				styleButton(newBtn);
 				GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
 				newBtn.setTooltip(new Tooltip("View this scan."));
@@ -312,7 +312,7 @@ public class VerticalSideMenu {
 			
 			Button uploadBtn = new Button("Upload New Scan");
 			styleButton(uploadBtn);
-			GridPane.setConstraints(uploadBtn, 1, 11 + manager.patient.getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(uploadBtn, 1, 11 + manager.getPatient().getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
 			// TODO: Implement this?
 			uploadBtn.setTooltip(new Tooltip("Upload a new scan for this patient."));
 			
@@ -324,17 +324,17 @@ public class VerticalSideMenu {
 			                new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
 			                new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
 			            );
-					File file = fileChooser.showOpenDialog(manager.stage);
+					File file = fileChooser.showOpenDialog(manager.getStage());
 	                if (file != null) {
 	                    //TODO
 	                }
 				}
 			});
 			
-			Label notesLabel = new Label("Doctors Notes: \n" + manager.patient.getNotes());
+			Label notesLabel = new Label("Doctors Notes: \n" + manager.getPatient().getNotes());
 			styleLabel(notesLabel);
 			notesLabel.setWrapText(true);
-			GridPane.setConstraints(notesLabel, 0, 14 + manager.patient.getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(notesLabel, 0, 14 + manager.getPatient().getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
 			
 			contentGrid.getChildren().addAll(uploadBtn, notesLabel);
 		}

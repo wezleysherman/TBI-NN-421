@@ -104,6 +104,6 @@ public class AlgorithmVisualizerScene {
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene
-		return new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 }

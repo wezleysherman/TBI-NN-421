@@ -132,7 +132,7 @@ public class PatientInfoEntryScene {
 					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
 					Date date = Date.from(instant);
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), date, notesField.getText());
-					manager.sceneStack.push(manager.sceneID);
+					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("viewScan", patient);
 				}
 			}
@@ -183,7 +183,7 @@ public class PatientInfoEntryScene {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 				if(arg2) {
-					File file = fileChooser.showOpenDialog(manager.stage);
+					File file = fileChooser.showOpenDialog(manager.getStage());
 		            if (file != null) {
 		                //TODO
 		            }
@@ -213,11 +213,8 @@ public class PatientInfoEntryScene {
 		layout.setStyle(BACKGROUND_COLOR);
 		layout.setCenter(mainGrid);
 		
-		double x = manager.stage.getWidth();
-		double y = manager.stage.getHeight();
-		Scene scene = new Scene(layout, x, y);
-		
-		return scene;
+		//Return constructed scene
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 	
 	//Construct SVG image for pointing to empty elements
