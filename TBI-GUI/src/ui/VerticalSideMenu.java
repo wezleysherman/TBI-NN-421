@@ -25,8 +25,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
-//import com.sun.prism.paint.Color;
-
 public class VerticalSideMenu {
 	
 	final static String SIDE_TEXT_AREA_COLOR = "-fx-control-inner-background: #455357";
