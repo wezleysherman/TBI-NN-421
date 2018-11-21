@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<title>BSSCS Classifier</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+		<h1>BSSCS Convolutional Neural Network</h1>
+		<div>
+			<b>__init__(self, l2_reg, learning_rate, steps, batch, loss=None, optimizer=None)</b><br>
+			<span>
+				<p>Constructor for the BSSCS autoencoder object</p>
+				
+				<p>The purpose of this is to set initial hyperparameters on the creation</p>
+				<p>of an autoencoder.</p> 
+	
+				<p>l2 reg and learning rate should be easy to adjust during the training</p>
+				<p>process for the nueral network.</p>
+			</span>
+		</div>
+		<div>
+			<b>connect_conv_net(self, conv_graph)</b><br>
+			<span>Handles connecting the classifier to the conv network input.
+			Fancy way of handling array creation?
+			</span><br>
+			<span>
+				<p>Inputs:</p>
+					<p>- conv_graph: A graph of tensor objects for the convolutional neural</p> 
+					<p>network</p>
+	
+				<p>Returns:</p>
+					<p>- Array containing both a graph for the conv network and autoencoder</p>
+						<p>[classifier, conv_network]</p>
+			</span>
+		</div>
+		<div>
+			<b>create_layer(self, neurons, activation=tf.nn.relu, input=None)</b><br>
+			<span>Handles the creation of a single layer within the fully connected network</span><br>
+			<span>
+				<p>Inputs:</p>
+				<p>- neurons: number of neurons we want within the layer</p>
+				<p>- activation: the activation to use for the layer (default: relu)</p>
+				<p>- input: Input tensor object for the layer</p>
+
+				<p>Returns:</p>
+				<p>- A single layer for a FC graph</p>
+			</span>
+		</div>
+		<div>
+			<b>create_loss_function(self, input, labels)</b><br>
+			<span>Default loss function will be softmax cross entropy</span><br>
+			<span>
+				<p>Returns:</p>
+				<p>- Instance of softmax_cross_entropy_with_logits_v2 loss function</p>
+
+				<p>TensorFlow documentation: </p>
+				<p><a href="https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits_v2">https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits_v2</a></p>
+		
+			</span>
+		</div>
+		<div>
+			<b>create_optimizer(self)</b><br>
+			<span>Default optimizer will be AdamOptmizer</span><br>
+			<span>
+				<p>Returns:</p>
+				<p>- Instance of AdamOptimizer with learning rate set</p>
+
+				<p>TensorFlow documentation: </p>
+				<p><a href="https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizerd">https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizerd</a></p>
+			</span>
+		</div>
+		<div>
+			<b>create_classifier(self, neurons, input=None)</b><br>
+			<span>Creates a fully connected classifier</span><br>
+			<span>
+				<p>Input:</p>
+				<p>- neurons: an array of neurons for each layer</p>
+				<p>- input: input tensor object for the intial layer</p>
+
+				<p>Returns:</p>
+				<p>- array of tensor objects connected within the graph</p>
+			</span>
+		</div>
+	</body>
+</html>
