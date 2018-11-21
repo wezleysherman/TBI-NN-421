@@ -59,7 +59,7 @@ public class PatientInfoScene {
 		});
 	}
 	
-	public static Scene initializeScene(StateManager manager, Patient patient, boolean edit) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -92,15 +92,15 @@ public class PatientInfoScene {
 			);
 		
 		
-		if (!edit) {
+		if (!manager.getStateBool()) {
 			//Create elements
-			Label firstName = new Label(patient.getFirstName());
-			Label lastName = new Label(patient.getLastName());
-			Label notes = new Label(patient.getNotes());
+			Label firstName = new Label(manager.getPatient().getFirstName());
+			Label lastName = new Label(manager.getPatient().getLastName());
+			Label notes = new Label(manager.getPatient().getNotes());
 			
 			ImageView displayImg = new ImageView();
-			if (patient.getNumScans() > 0) {
-				displayImg.setImage(patient.getScans().get(0).getScan());
+			if (manager.getPatient().getNumScans() > 0) {
+				displayImg.setImage(manager.getPatient().getScans().get(0).getScan());
 			}
 			displayImg.fitWidthProperty().bind(contentGrid.widthProperty().divide(3));
 			displayImg.fitHeightProperty().bind(contentGrid.heightProperty().divide(3));
@@ -116,9 +116,9 @@ public class PatientInfoScene {
 		}
 		else {
 			//Create elements
-			TextField firstField = new TextField(patient.getFirstName());
-			TextField lastField = new TextField(patient.getLastName());
-			TextArea notesArea = new TextArea(patient.getNotes());
+			TextField firstField = new TextField(manager.getPatient().getFirstName());
+			TextField lastField = new TextField(manager.getPatient().getLastName());
+			TextArea notesArea = new TextArea(manager.getPatient().getNotes());
 			Button fileBtn = new Button("Add Scan");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
@@ -132,18 +132,21 @@ public class PatientInfoScene {
 			saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	            	patient.setFirstName(firstField.getText());
-	            	patient.setLastName(lastField.getText());
-	            	patient.setNotes(notesArea.getText());
+	            	manager.getPatient().setFirstName(firstField.getText());
+	            	manager.getPatient().setLastName(lastField.getText());
+	            	manager.getPatient().setNotes(notesArea.getText());
 	            	
-	            	manager.paintScene("patInfo", patient);
+	            	manager.setPatient(manager.getPatient());
+	            	manager.setStateBool(false);
+	            	manager.paintScene("PatientInfo");
 	            }
 	        });
 			
 			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	            	manager.paintScene("patInfo", false);
+	            	manager.setStateBool(false);
+	            	manager.paintScene("PatientInfo");
 	            }
 	        });
 			

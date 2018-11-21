@@ -84,8 +84,9 @@ public class PreviousPatientScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
+					manager.setPatient((Patient)patientTable.getSelectionModel().getSelectedItem());
 					manager.getSceneStack().push(manager.getSceneID());
-					manager.paintScene("patInfo", (Patient)patientTable.getSelectionModel().getSelectedItem());
+					manager.paintScene("PatientInfo");
 				}
 			}
 		});

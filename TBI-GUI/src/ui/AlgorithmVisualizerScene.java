@@ -46,7 +46,7 @@ public class AlgorithmVisualizerScene {
 		return points;
 	}
 	
-	public static LineChart<Number, Number> getChart(boolean displayFull) {
+	public static LineChart<Number, Number> getChart(boolean displayRecent) {
 		LinkedList<Point> displayPoints = importData();
 		int numFiles = displayPoints.getLast().num;
 		
@@ -56,7 +56,7 @@ public class AlgorithmVisualizerScene {
 		XYChart.Series series = new XYChart.Series();
 		series.setName("Specific Data Points");
         
-		if (displayFull) {
+		if (!displayRecent) {
         	resChart.setTitle("Percent Accuracy Increase with More Files Analyzed");
 			for (int i = 0; i < displayPoints.size(); ++i) {
 				series.getData().add(new XYChart.Data<Integer, Double>(displayPoints.get(i).num, displayPoints.get(i).percent));
@@ -76,11 +76,11 @@ public class AlgorithmVisualizerScene {
 		return resChart;
 	}
 	
-	public static Scene initializeScene(StateManager manager, boolean displayFull) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
-		LineChart<Number, Number> chart = getChart(displayFull);
+		LineChart<Number, Number> chart = getChart(manager.getStateBool());
 				
 		//Construct content grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
