@@ -22,7 +22,7 @@ import java.util.LinkedList;
 
 public class LandingScene {
 	
-	public static boolean debug = false; //Manually change this value
+	public static boolean debug = true; //Manually change this value
 	private final static String BACKGROUND_COLOR = "-fx-background-color: #455357";
 	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
 			"    -fx-background-radius: 5;" + 
@@ -51,7 +51,7 @@ public class LandingScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("newPat");
+				manager.paintScene("PatientInfoEntry");
 			}
 		});
 		String newPatTT = "Input information and a scan for a new patient.";
@@ -64,7 +64,7 @@ public class LandingScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("prevPat");
+				manager.paintScene("PreviousPatient");
 			}
 		});
 		String prevPatTT = "View/edit information and scans of patients already in the system.";
@@ -106,8 +106,9 @@ public class LandingScene {
 						);
 				patient.setScans(scans);
 				
+				manager.setPatient(patient);
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("viewScan", patient);
+				manager.paintScene("ScanVisualizer");
 			}
 		});
 		GridPane.setConstraints(viewScanBtn, 0,0,1,1);
@@ -117,7 +118,7 @@ public class LandingScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("likelyTrauma");
+				manager.paintScene("LikelyTraumaAreas");
 			}
 		});
 		GridPane.setConstraints(likelyTraumaBtn, 0, 1, 1, 1);

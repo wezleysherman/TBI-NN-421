@@ -160,7 +160,7 @@ public class VerticalSideMenu {
 						manager.paintScene(manager.getSceneStack().pop());
 				}
 				catch (EmptyStackException ex) {
-					manager.paintScene("landing");
+					manager.paintScene("Landing");
 					System.out.println(ex + " Something wrong with stack implementation, returning to landing page.");
 				}
 			}
@@ -179,7 +179,7 @@ public class VerticalSideMenu {
 				homeWarning.showAndWait();
 				if (homeWarning.getResult().getButtonData().equals(ButtonData.YES)) {
 					manager.getSceneStack().clear();
-					manager.paintScene("landing");
+					manager.paintScene("Landing");
 				}
 			}
 		});
@@ -194,32 +194,33 @@ public class VerticalSideMenu {
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (!manager.getSceneID().equals("algoVis")) {
+				if (!manager.getSceneID().equals("AlgorithmVisualizer")) {
 					manager.getSceneStack().push(manager.getSceneID());
 				}
-				else if (manager.getSceneID().equals("algoVis")) {
+				else if (manager.getSceneID().equals("AlgorithmVisualizer")) {
 					manager.getSceneStack().pop();
 				}
-				manager.paintScene("algoVis");
+				manager.setStateBool(false);
+				manager.paintScene("AlgorithmVisualizer");
 			}
 		});
 		GridPane.setConstraints(algoVisBtn, 0, 2, 2, 1, HPos.CENTER, VPos.CENTER);
 		contentGrid.getChildren().add(algoVisBtn);
 		
 		//Side bar for different pages---------------------------------------------------------------------------------------------------------------
-		if (manager.getSceneID().equals("newPat")) {
+		if (manager.getSceneID().equals("PatientInfoEntry")) {
 			//TODO
 		}
-		else if (manager.getSceneID().equals("likelyTrauma")) {
+		else if (manager.getSceneID().equals("LikelyTraumaAreas")) {
 			makeLTA(contentGrid);
 		}
-		else if (manager.getSceneID().equals("viewCNN")) {
+		else if (manager.getSceneID().equals("CNNVisualizer")) {
 			makeCNN(contentGrid);
 		}
-		else if (manager.getSceneID().equals("prevPat")) {
+		else if (manager.getSceneID().equals("PreviousPatient")) {
 			//TODO
 		}
-		else if (manager.getSceneID().equals("algoVis")) {
+		else if (manager.getSceneID().equals("AlgorithmVisualizer")) {
 			Label sceneLabel = new Label("Algorithm Visualizer");
 			styleLabel(sceneLabel);
 			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -235,13 +236,14 @@ public class VerticalSideMenu {
 					if (!manager.getSceneStack().peek().equals("algoVis")) {
 						manager.getSceneStack().push("algoVis");
 					}
-					manager.paintScene("algoVis", false);
+					manager.setStateBool(true);
+					manager.paintScene("AlgorithmVisualizer");
 				}
 			});
 			
 			contentGrid.getChildren().addAll(sceneLabel, recentBtn);
 		}
-		else if (manager.getSceneID().equals("patInfo")) {
+		else if (manager.getSceneID().equals("PatientInfo")) {
 			Label sceneLabel = new Label("Patient Info");
 			styleLabel(sceneLabel);
 			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -254,13 +256,14 @@ public class VerticalSideMenu {
 			editBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					manager.paintScene("patInfo", true);
+					manager.setStateBool(true);
+					manager.paintScene("PatientInfo");
 				}
 			});
 			
 			contentGrid.getChildren().addAll(sceneLabel, editBtn);
 		}
-		else if (manager.getSceneID().equals("viewScan")) {
+		else if (manager.getSceneID().equals("ScanVisualizer")) {
 			ColumnConstraints column2 = new ColumnConstraints();
 			column2.setPercentWidth(50);
 			ColumnConstraints column3 = new ColumnConstraints();

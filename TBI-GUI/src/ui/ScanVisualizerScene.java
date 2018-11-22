@@ -160,7 +160,7 @@ public class ScanVisualizerScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("viewCNN");
+				manager.paintScene("CNNVisualizer");
 			}
 		});
 		String viewCNNTT = "View the Convolutional Neural Network Visualizer.";
@@ -171,7 +171,7 @@ public class ScanVisualizerScene {
 			@Override
 			public void handle(final ActionEvent e) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("likelyTrauma");
+				manager.paintScene("LikelyTraumaAreas");
 			}
 		});
 		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
@@ -182,7 +182,7 @@ public class ScanVisualizerScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("algoVis");
+				manager.paintScene("AlgorithmVisualizer");
 			}
 		});
 		String algoVisTT = "View the Algorithm Visualizer.";
