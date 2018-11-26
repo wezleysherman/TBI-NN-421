@@ -15,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
 /**
@@ -23,41 +22,6 @@ import javafx.stage.FileChooser;
  * @author Ty Chase
  */
 public class PatientInfoScene {
-	
-	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	
-	private static void styleButton(Button button) {
-		button.setStyle(BUTTON_DEFAULT);
-		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_ENTERED);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_PRESSED);
-			}
-		});
-	}
 	
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
@@ -122,9 +86,9 @@ public class PatientInfoScene {
 			Button fileBtn = new Button("Add Scan");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
-			styleButton(fileBtn);
-			styleButton(saveBtn);
-			styleButton(cancelBtn);
+			Style.styleButton(fileBtn);
+			Style.styleButton(saveBtn);
+			Style.styleButton(cancelBtn);
 			fileBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			cancelBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
