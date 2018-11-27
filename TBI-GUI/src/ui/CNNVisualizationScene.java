@@ -7,7 +7,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -18,10 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 public class CNNVisualizationScene {
-	
-	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
-	final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
-	final static String SIDE_TEXT_AREA_COLOR = "-fx-control-inner-background: #455357";
 
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
@@ -55,7 +50,7 @@ public class CNNVisualizationScene {
 		GridPane scrollGrid = new GridPane();
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		scrollPane.setStyle(VERTICAL_MENU_COLOR);
+		Style.styleScrollPane(scrollPane);
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
 		scrollGrid.getColumnConstraints().add(scrollGridCols);
@@ -78,8 +73,7 @@ public class CNNVisualizationScene {
 		}
 		
 		//Set up text area
-		docNotesField.setStyle(SIDE_TEXT_AREA_COLOR);
-		docNotesField.setWrapText(true);
+		Style.styleTextArea(docNotesField);
 		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
 		
 		//Add elements to sideBar
@@ -93,7 +87,7 @@ public class CNNVisualizationScene {
 		//Add contentGrid to main grid
 		mainGrid.getChildren().add(contentGrid);
 		
-		layout.setStyle(BACKGROUND_COLOR);
+		Style.styleBorderPane(layout);
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene

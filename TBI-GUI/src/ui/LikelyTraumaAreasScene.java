@@ -8,21 +8,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-/* potential use for these with future functionality
-
-import java.io.File;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-*/
 
 /**
  * This page will allow for the user to view likely trauma areas within the selected CT scan image
  * @author Canyon Schubert
- *
  */
 public class LikelyTraumaAreasScene {
-		//TODO: File input from the viewScan page
+	//TODO: File input from the viewScan page
 	public static Scene initializeScene(StateManager manager/*, File in*/) {
 		
 		// declaration of UI elements

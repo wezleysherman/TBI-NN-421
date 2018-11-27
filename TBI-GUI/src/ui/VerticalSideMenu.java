@@ -8,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -26,48 +25,7 @@ import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 public class VerticalSideMenu {
-	
-	final static String SIDE_TEXT_AREA_COLOR = "-fx-control-inner-background: #455357";
-	private final static String VERTICAL_MENU_COLOR = "-fx-background-color: #455357";
-	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	
-	private static void styleButton(Button button) {
-		button.setStyle(BUTTON_DEFAULT);
-		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_ENTERED);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_PRESSED);
-			}
-		});
-	}
-	
-	private static void styleLabel(Label label) {
-		label.setStyle("-fx-text-fill: #f1fafe; -fx-font-size:14px;");
-	}
-	
+		
 	public static GridPane newSideBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
@@ -127,7 +85,7 @@ public class VerticalSideMenu {
 		contentGrid.getColumnConstraints().addAll(column0, column1);
 		
 		//Add elements to content grid
-		styleLabel(appLabel);
+		Style.styleLabel(appLabel);
 		GridPane.setConstraints(appLabel, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
 		contentGrid.getChildren().add(appLabel);
 		
@@ -143,15 +101,14 @@ public class VerticalSideMenu {
 		mainGrid.getColumnConstraints().add(1, columnCon2);
 		
 		//Merge content grid with main grid
-		colorPane.setStyle(VERTICAL_MENU_COLOR);
+		Style.stylePane(colorPane);
 		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
 		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
 		mainGrid.getChildren().addAll(colorPane, contentGrid);
 		
 		//backBtn------------------------------------------------------------------------------------------------------------------------------------
 		Button backBtn = new Button("Back");
-		backBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		styleButton(backBtn);
+		Style.styleButton(backBtn);
 		backBtn.setTooltip(new Tooltip("Return to the previous page (You will lose any information you input on this page)."));
 		backBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -170,8 +127,7 @@ public class VerticalSideMenu {
 		
 		//homeBtn------------------------------------------------------------------------------------------------------------------------------------
 		Button homeBtn = new Button("Home");
-		homeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		styleButton(homeBtn);
+		Style.styleButton(homeBtn);
 		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -188,8 +144,7 @@ public class VerticalSideMenu {
 		
 		//algoVisBtn---------------------------------------------------------------------------------------------------------------------------------
 		Button algoVisBtn = new Button ("Algorithm Visualizer");
-		algoVisBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		styleButton(algoVisBtn);
+		Style.styleButton(algoVisBtn);
 		algoVisBtn.setTooltip(new Tooltip("View the accuracy of the algorithm as a whole."));
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -222,11 +177,10 @@ public class VerticalSideMenu {
 		}
 		else if (manager.getSceneID().equals("AlgorithmVisualizer")) {
 			Label sceneLabel = new Label("Algorithm Visualizer");
-			styleLabel(sceneLabel);
+			Style.styleLabel(sceneLabel);
 			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
 			Button recentBtn = new Button("Last 100 Scans");
-			styleButton(recentBtn);
-			recentBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			Style.styleButton(recentBtn);
 			recentBtn.setTooltip(new Tooltip("View the accuracy of the algorithm in its last 100 uses."));
 			GridPane.setConstraints(recentBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
 			
@@ -245,11 +199,10 @@ public class VerticalSideMenu {
 		}
 		else if (manager.getSceneID().equals("PatientInfo")) {
 			Label sceneLabel = new Label("Patient Info");
-			styleLabel(sceneLabel);
+			Style.styleLabel(sceneLabel);
 			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
 			Button editBtn = new Button("Edit Patient");
-			styleButton(editBtn);
-			editBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			Style.styleButton(editBtn);
 			editBtn.setTooltip(new Tooltip("Edit this patient's data."));
 			GridPane.setConstraints(editBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
 			
@@ -276,13 +229,13 @@ public class VerticalSideMenu {
 			GridPane.setConstraints(algoVisBtn, 0, 2, 4, 1, HPos.CENTER, VPos.CENTER);
 			
 			Label patientLabel = new Label(manager.getPatient().getFirstName() + " " + manager.getPatient().getLastName());
-			styleLabel(patientLabel);
+			Style.styleLabel(patientLabel);
 			GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
 			Label dateLabel = new Label(manager.getPatient().getDate().toString());
-			styleLabel(dateLabel);
+			Style.styleLabel(dateLabel);
 			GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
 			Label recentLabel = new Label("Other Recent Scans:");
-			styleLabel(recentLabel);
+			Style.styleLabel(recentLabel);
 			GridPane.setConstraints(recentLabel, 0, 9, 4, 1, HPos.CENTER, VPos.CENTER);
 			
 			contentGrid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
@@ -295,10 +248,10 @@ public class VerticalSideMenu {
 				else if (i == manager.getPatient().getNumScans()-1) {
 					newLbl.setText("Oldest:");
 				}
-				styleLabel(newLbl);
+				Style.styleLabel(newLbl);
 				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
 				Button newBtn = new Button(manager.getPatient().getScans().get(i).getDateOfScan().toString());
-				styleButton(newBtn);
+				Style.styleButton(newBtn);
 				GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
 				newBtn.setTooltip(new Tooltip("View this scan."));
 				
@@ -314,7 +267,7 @@ public class VerticalSideMenu {
 			}
 			
 			Button uploadBtn = new Button("Upload New Scan");
-			styleButton(uploadBtn);
+			Style.styleButton(uploadBtn);
 			GridPane.setConstraints(uploadBtn, 1, 11 + manager.getPatient().getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
 			// TODO: Implement this?
 			uploadBtn.setTooltip(new Tooltip("Upload a new scan for this patient."));
@@ -335,7 +288,7 @@ public class VerticalSideMenu {
 			});
 			
 			Label notesLabel = new Label("Doctors Notes: \n" + manager.getPatient().getNotes());
-			styleLabel(notesLabel);
+			Style.styleLabel(notesLabel);
 			notesLabel.setWrapText(true);
 			GridPane.setConstraints(notesLabel, 0, 14 + manager.getPatient().getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
 			
@@ -395,7 +348,7 @@ public class VerticalSideMenu {
 		GridPane scrollGrid = new GridPane();
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		scrollPane.setStyle(VERTICAL_MENU_COLOR);
+		Style.styleScrollPane(scrollPane);
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
 		scrollGrid.getColumnConstraints().add(scrollGridCols);
@@ -419,13 +372,12 @@ public class VerticalSideMenu {
 		}
 		
 		//Set up text area
-		docNotesField.setStyle(SIDE_TEXT_AREA_COLOR);
-		docNotesField.setWrapText(true);
+		Style.styleTextArea(docNotesField);
 		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
 		
 		//Set style labels
-		styleLabel(dateLabel);
-		styleLabel(screenNameLabel);
+		Style.styleLabel(dateLabel);
+		Style.styleLabel(screenNameLabel);
 		
 		//Add elements to sideBar
 		GridPane.setConstraints(dateLabel, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
