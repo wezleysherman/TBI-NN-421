@@ -6,6 +6,14 @@
 	<body>
 		<a href="main.html">Back - Main</a>
 		<h1>BSSCS DICOM-Nifti Conversion Tools</h1>
+		<span>
+			Converting DICOM images to NiFti format was a roadblock, as none of our team members have experience with medical imaging technology. We overcame this through extensive research into both DICOM and NiFti formats. <br>
+			A major part of this research went into selecting an accepted conversion technology that would retain detail and information without overcomplicating the process. <br>
+			We chose to use an external package due to our inexperience with the content area, but made sure to gain an understanding of the inner workings of conversion technology so that we could make an educated decision. <br>
+			We considered packages listed <a href="https://www.nitrc.org/plugins/mwiki/index.php/dcm2nii:MainPage">here</a>, based on resources provided by the sponsor. The packages we saw as the most likely candidates were dcm2niix, dicom2nifti, and dcmstack. <br>
+			We eventually landed on dicom2nifti as the best choice, as it is written in Python, uses packages already necessary for other functions in the framework, and has more extensive documentation than the other choices. <br>
+			This requires us to manually decompress any compressed images before they are converted, but we accomplished that through an additional Python script.
+		</span><br>
 		<h3>class prepare_scans</h3>
 		<span>
 			For public access. Pulls together other methods and handles common errors.
