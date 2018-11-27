@@ -56,16 +56,17 @@ public class ScanVisualizerScene {
 		Button algoVisBtn = new Button();
 		Button viewCNNBtn = new Button();
 		
-		Image filterImage = new Image("resources/TestImage1.jpg");
-		ImageView displayCNNImage = new ImageView();
-		displayCNNImage.setImage(filterImage);
-		ImageView displayLTAImage = new ImageView();
-		displayLTAImage.setImage(filterImage);
-		
-		// TODO: Align Buttons Properly
+		//Make grid for three of the quadrants of the view scan page
 		GridPane cnnBtnGrid = new GridPane();
 		GridPane ltaBtnGrid = new GridPane();
 		GridPane algoBtnGrid = new GridPane();
+		
+		//Add panes to the grids so the elements can fully fill the grid
+		BorderPane cnnBPane = new BorderPane();
+		Pane cnnPane = new Pane();
+		Pane likelyTraumaPane = new Pane();
+		BorderPane likelyTraumaBPane = new BorderPane();
+		BorderPane algoVisBPane = new BorderPane();
 		
 		//Temp Chart for proof of concept with dummy data
 		LineChart<Number, Number> chart1 = null;
@@ -85,14 +86,7 @@ public class ScanVisualizerScene {
 		chart1.getData().add(series1);
 		chart1.setMaxWidth(Double.MAX_VALUE);
 		
-		//Add more information in the 4 quadrants via pictures/charts
-		BorderPane cnnBPane = new BorderPane();
-		Pane cnnPane = new Pane();
-		Pane likelyTraumaPane = new Pane();
-		BorderPane likelyTraumaBPane = new BorderPane();
-		BorderPane algoVisBPane = new BorderPane();
-		Pane algoVisPane = new Pane();
-		
+		//###ADD ELEMENTS TO THEIR GRID LOCATION###
 		//Algorithm Cell setup
 		algoVisBPane.prefWidthProperty().bind(contentGrid.widthProperty());
 		algoVisBtn.setMaxWidth(Double.MAX_VALUE);
@@ -106,6 +100,13 @@ public class ScanVisualizerScene {
 		algoBtnGrid.getColumnConstraints().add(columnConQuads);
 		algoBtnGrid.getChildren().add(algoVisBtn);
 		algoVisBPane.setBottom(algoBtnGrid);
+		
+		//Get dummy image to fill into the grid
+		Image filterImage = new Image("resources/TestImage1.jpg");
+		ImageView displayCNNImage = new ImageView();
+		displayCNNImage.setImage(filterImage);
+		ImageView displayLTAImage = new ImageView();
+		displayLTAImage.setImage(filterImage);
 		
 		//Likely Trauma Area cell setup
 		displayLTAImage.fitWidthProperty().bind(likelyTraumaPane.widthProperty());
@@ -144,7 +145,7 @@ public class ScanVisualizerScene {
                 new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
             );
 		
-		// button actions and tooltips
+		//Button actions and tooltips
 		fileChoiceBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent e) {
@@ -155,6 +156,7 @@ public class ScanVisualizerScene {
             }
         });
 		
+		//Style CNN Button
 		styleButton(viewCNNBtn);
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -166,6 +168,7 @@ public class ScanVisualizerScene {
 		String viewCNNTT = "View the Convolutional Neural Network Visualizer.";
 		viewCNNBtn.setTooltip(new Tooltip(viewCNNTT));
 		
+		//Style LTA button
 		styleButton(likelyTraumaBtn);
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -177,6 +180,7 @@ public class ScanVisualizerScene {
 		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
 		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
 		
+		//Style Algorithm Visualizer button
 		styleButton(algoVisBtn);
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
