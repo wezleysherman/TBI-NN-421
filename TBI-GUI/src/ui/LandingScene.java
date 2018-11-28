@@ -10,33 +10,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 
 public class LandingScene {
 	
-	public static boolean debug = false; //Manually change this value
-	private final static String BACKGROUND_COLOR = "-fx-background-color: #455357";
-	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	// old colors: cfd8dc, b1babe, c5ced2
+	public static boolean debug = true; //Manually change this value
 			
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
@@ -45,41 +28,49 @@ public class LandingScene {
 		Button newPatBtn = new Button();
 		Button prevPatBtn = new Button();
 		
+		Style.styleLabel(orLabel);
+		
 		//Button Setup/Styling/Tooltips
 		newPatBtn.setText("Start New Patient");
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("newPat");
+				manager.paintScene("PatientInfoEntry");
 			}
 		});
-		String newPatTT = "Input information and a scan for a new patient.";
-		newPatBtn.setTooltip(new Tooltip(newPatTT)); 
+		newPatBtn.setTooltip(new Tooltip("Input information and a scan for a new patient.")); 
 		
-		styleButton(newPatBtn);	
+		Style.styleButton(newPatBtn);	
 		
 		prevPatBtn.setText("Find Previous Patient");
 		prevPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("prevPat");
+				manager.paintScene("PreviousPatient");
 			}
 		});
-		String prevPatTT = "View/edit information and scans of patients already in the system.";
-		prevPatBtn.setTooltip(new Tooltip(prevPatTT));
+		prevPatBtn.setTooltip(new Tooltip("View/edit information and scans of patients already in the system."));
 		
-		styleButton(prevPatBtn);
+		Style.styleButton(prevPatBtn);
 		
-		//Construct Grid
+		//Construct Grid		
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setVgap(15);
 		grid.setHgap(10);
 		
-		GridPane.setConstraints(newPatBtn, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(orLabel, 0, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(prevPatBtn, 0, 5, 1, 1, HPos.CENTER, VPos.CENTER);
+		ColumnConstraints column0 = new ColumnConstraints();
+		column0.setPercentWidth(30);
+		ColumnConstraints column1 = new ColumnConstraints();
+		column1.setPercentWidth(40);
+		ColumnConstraints column2 = new ColumnConstraints();
+		column2.setPercentWidth(30);
+		grid.getColumnConstraints().addAll(column0, column1, column2);
+		
+		GridPane.setConstraints(newPatBtn, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(orLabel, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(prevPatBtn, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		grid.getChildren().addAll(newPatBtn, orLabel, prevPatBtn);
 		
@@ -106,60 +97,32 @@ public class LandingScene {
 						);
 				patient.setScans(scans);
 				
+				manager.setPatient(patient);
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("viewScan", patient);
+				manager.paintScene("ScanVisualizer");
 			}
 		});
-		GridPane.setConstraints(viewScanBtn, 0,0,1,1);
+		GridPane.setConstraints(viewScanBtn, 0, 0, 1, 1);
 		
 		Button likelyTraumaBtn = new Button("Trauma Areas Visualizer <DEBUG>");
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("likelyTrauma");
+				manager.paintScene("LikelyTraumaAreas");
 			}
 		});
 		GridPane.setConstraints(likelyTraumaBtn, 0, 1, 1, 1);
 		
 		// add button to whichever page you are working on and turn debug on (remember to turn it off before merging)
 		if (debug) grid.getChildren().addAll(viewScanBtn/*, likelyTraumaBtn*/);
-			
-		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100/11);
-		grid.getRowConstraints().add(rowCon);
-		ColumnConstraints columnCon = new ColumnConstraints();
-		columnCon.setPercentWidth(100);
-		grid.getColumnConstraints().add(columnCon);
 		
 		//Add Grid and layout to scene
-		layout.setStyle(BACKGROUND_COLOR);
+		Style.styleLandingBorderPane(layout);
 		layout.setCenter(grid);
 		
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 	
-	//Styles Buttons to make layout and style of page
-	private static void styleButton(Button button) {
-		button.setStyle(BUTTON_DEFAULT);
-		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_ENTERED);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_PRESSED);
-			}
-		});
-	}
 }

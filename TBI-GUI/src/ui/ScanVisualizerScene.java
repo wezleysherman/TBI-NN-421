@@ -14,14 +14,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 
 /**
@@ -30,21 +28,7 @@ import javafx.stage.FileChooser;
  * REFERENCES: https://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm
  */
 public class ScanVisualizerScene {
-	
-	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
-	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	
+		
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -157,36 +141,36 @@ public class ScanVisualizerScene {
         });
 		
 		//Style CNN Button
-		styleButton(viewCNNBtn);
+		Style.styleButton(viewCNNBtn);
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("viewCNN");
+				manager.paintScene("CNNVisualizer");
 			}
 		});
 		String viewCNNTT = "View the Convolutional Neural Network Visualizer.";
 		viewCNNBtn.setTooltip(new Tooltip(viewCNNTT));
 		
 		//Style LTA button
-		styleButton(likelyTraumaBtn);
+		Style.styleButton(likelyTraumaBtn);
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("likelyTrauma");
+				manager.paintScene("LikelyTraumaAreas");
 			}
 		});
 		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
 		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
 		
 		//Style Algorithm Visualizer button
-		styleButton(algoVisBtn);
+		Style.styleButton(algoVisBtn);
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("algoVis");
+				manager.paintScene("AlgorithmVisualizer");
 			}
 		});
 		String algoVisTT = "View the Algorithm Visualizer.";
@@ -236,33 +220,10 @@ public class ScanVisualizerScene {
 
 		mainGrid.getChildren().add(contentGrid);
 		
-		layout.setStyle(BACKGROUND_COLOR);
+		Style.styleBorderPane(layout);
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
-	}
-	
-	//Styles Buttons to make layout and style of page
-	private static void styleButton(Button button) {
-		button.setStyle(BUTTON_DEFAULT);
-		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_ENTERED);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_PRESSED);
-			}
-		});
 	}
 }

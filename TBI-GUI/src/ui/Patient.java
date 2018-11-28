@@ -22,7 +22,7 @@ import javax.crypto.NoSuchPaddingException;
 import utils.PatientManagement;
 
 //Class for saving patient information
-public class Patient implements Serializable{
+public class Patient implements Serializable {
 
 	private static final String basePath = buildDefaultPath();
 	private String firstName;
@@ -108,7 +108,7 @@ public class Patient implements Serializable{
 		this.notes = notes;
 	}
 
-	public String getFile(){
+	public String getFile() {
 		return file;
 	}
 

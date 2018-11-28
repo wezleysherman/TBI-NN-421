@@ -1,8 +1,6 @@
 package ui;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -20,7 +18,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -31,19 +28,6 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
 
 public class PatientInfoEntryScene {
-	final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
-	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
 	static boolean analyzeFailed = false;
 	
 	public static Scene initializeScene(StateManager manager) {
@@ -99,7 +83,7 @@ public class PatientInfoEntryScene {
 		//Analyze button Setup/Styling/Tooltips
 		analyze.setText("Analyze");
 		
-		styleButton(analyze);
+		Style.styleButton(analyze);
 		
 		analyze.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -132,8 +116,9 @@ public class PatientInfoEntryScene {
 					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
 					Date date = Date.from(instant);
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), date, notesField.getText());
+					manager.setPatient(patient);
 					manager.getSceneStack().push(manager.getSceneID());
-					manager.paintScene("viewScan", patient);
+					manager.paintScene("ScanVisualizer");
 				}
 			}
 			
@@ -210,7 +195,7 @@ public class PatientInfoEntryScene {
 
 		mainGrid.getChildren().add(contentGrid);
 		
-		layout.setStyle(BACKGROUND_COLOR);
+		Style.styleBorderPane(layout);
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene
@@ -229,28 +214,5 @@ public class PatientInfoEntryScene {
 		Label dialogLabel = new Label("This Field is Required");
 		stackPane.getChildren().addAll(svg, dialogLabel);
 		return stackPane;
-	}
-	
-	//Styles Buttons to make layout and style of page
-	private static void styleButton(Button button) {
-		button.setStyle(BUTTON_DEFAULT);
-		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_ENTERED);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_PRESSED);
-			}
-		});
 	}
 }
