@@ -24,32 +24,33 @@ import javax.crypto.SealedObject;
 
 import ui.Patient;
 
+//for documentation, see TBI-GUI\GUI_DOCS\patientManagementDoc.html
 public class PatientManagement {
 
 	private static final String defaultPath = buildDefaultPath();
 	private static Hashtable <String, PatientEntry> patientList;
-	
+
 	private static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
 		f = new File(f.getAbsolutePath(), "patients");
 		return f.getAbsolutePath();
 	}
-	
+
 	public static String getDefaultPath() {
 		return defaultPath;
 	}
-	
+
 	public static boolean exportPatient(Patient patient) throws IOException {
 		if(patientList == null) {
 			importPatientList();
 		}
-		
+
 		Key key = null;
 		if(patientList.contains(patient.getUID())) {
 			key = patientList.get(patient.getUID()).key;
 		}
-		
+
 		File f = new File(patient.getFile());
 		f.mkdirs();
 		f = new File(f.getAbsolutePath(), "data.enc");
@@ -108,7 +109,7 @@ public class PatientManagement {
 			bin.close();
 			return null;
 		}
-		
+
 		try {
 			// setup cipher
 			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -161,14 +162,14 @@ public class PatientManagement {
 		// create file stream
 		f.createNewFile();
 		FileOutputStream fout = new FileOutputStream(f.getAbsoluteFile());
-	
+
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 
 		// write object
 		oos.writeObject(patientList);
 		oos.close();
 	}
-	
+
 	public static Hashtable <String, PatientEntry> importPatientList() throws IOException{
 		File f = new File(defaultPath);
 		f.mkdirs();
