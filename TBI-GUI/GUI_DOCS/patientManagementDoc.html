@@ -12,6 +12,20 @@
 					The purpose of this static class is to manage patient storage and encryption and provide
 					an easy mechanism for saving and refreshing data.
 				</p>
+				<p>
+					Creating a storage system for patient data required us to consider <a href="https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html">
+						HIPAA</a> regulations for storage of identifiable patient records. <br><br>
+					We addressed each of the HIPAA required technical safeguards in the following ways:<br>
+
+					- Access Control: This program will be on PCH computers that require a valid login in order to use.
+						Therefore, there is no reason to password-protect the program.<br>
+					- Audit Controls: This program will be covered by the access logging systems already implemented on PCH systems.<br>
+					- Integrity Controls: Patient health information used by this system is stored in an encrypted and serialized format.
+						We have selected <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+						as our encryption standard, as it is one of the strongest currently available and is used worldwide.
+						Users will not be able to access, modify, or destroy the data through improper channels.<br>
+					- Transmission Security: This program does not transmit information over any network.<br>
+				</p>
 			</span><br>
 
       <b><code>String buildDefaultPath()</code></b>
