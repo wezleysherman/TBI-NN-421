@@ -11,7 +11,8 @@
 # https://www.tensorflow.org/api_docs/python/tf/train/Optimizer
 # Python Enum documentation:
 # https://docs.python.org/3/library/enum.html
-
+#
+# BSSCS Docs Autoencoder location: BSSCS_DOCS/auto.html
 import config
 import tensorflow as tf
 import math
