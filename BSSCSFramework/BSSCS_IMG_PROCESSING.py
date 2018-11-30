@@ -3,7 +3,8 @@
 # Reference Attributes: 
 # PIL Documentation:
 # https://pillow.readthedocs.io/en/3.0.x/reference/
-
+#
+# BSSCS Docs Img Proc location: BSSCS_DOCS/doc.html
 import numpy as np
 from PIL import ImageEnhance, Image
 import math

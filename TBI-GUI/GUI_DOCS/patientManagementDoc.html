@@ -1,0 +1,142 @@
+<html>
+	<head>
+		<title>Patient Management Documentation</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+
+		<h1>Patient Management</h1>
+		<div style="width:500px">
+			<span>
+      <p>
+        The purpose of this static class is to manage patient storage and encryption and provide
+        an easy mechanism for saving and refreshing data. Code can be found on
+        <a href="https://github.com/wezleysherman/TBI-NN-421/blob/master/TBI-GUI/src/utils/PatientManagement.java">Github</a>.
+      </p>
+      <p>
+        Creating a storage system for patient data required us to consider <a href="https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html">
+        HIPAA</a> regulations for storage of identifiable patient records. <br><br>
+        We addressed each of the HIPAA required technical safeguards in the following ways:<br>
+
+        - Access Control: This program will be on PCH computers that require a valid login in order to use.
+        Therefore, there is no reason to password-protect the program.<br>
+        - Audit Controls: This program will be covered by the access logging systems already implemented on PCH systems.<br>
+        - Integrity Controls: Patient health information used by this system is stored in an encrypted and serialized format.
+        We have selected <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+        as our encryption standard, as it is one of the strongest currently available and is used worldwide.
+        Users will not be able to access, modify, or destroy the data through improper channels.<br>
+        - Transmission Security: This program does not transmit information over any network.<br>
+			</p>
+			</span><br>
+
+			<b><code>String buildDefaultPath()</code></b>
+			<br>
+			<span>
+			Creates the default path for the patient storage directory
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- The full path to the program directory <code>src/resources/patients</code></p>
+			</span>
+
+			<b><code>String getDefaultPath()</code></b>
+			<br>
+			<span>
+			Returns the current default path for the patient storage directory
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- The current default path</p>
+			</span>
+
+			<b><code>boolean exportPatient(Patient patient)</code></b>
+			<br>
+			<span>
+			Encrypts and saves a patient to the default path. Creates a new entry in storage
+			if the patient has not been saved before or overwrites previous data if the patient
+			already exists.
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- patient: The Patient object to be saved</p>
+			<p>Returns:</p>
+			<p>- A boolean indicating whether the export was successful</p>
+			<p>Throws:</p>
+			<p>- IOException if the write fails</p>
+			</span>
+
+			<b><code>Patient importPatient(String path, String uid)</code></b>
+			<br>
+			<span>
+			Decrypts and loads a patient from the provided path.
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- path: The path that the patient's directory is stored at</p>
+			<p>- uid: The patient's UID</p>
+			<p>Returns:</p>
+			<p>- The patient loaded from memory</p>
+			<p>Throws:</p>
+			<p>- IOException if the read fails</p>
+			</span>
+
+			<b><code>void addPatient(PatientEntry p)</code></b>
+			<br>
+			<span>
+			Adds a new patient entry to storage
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- p: The patient entry that will be added</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			<p>Throws:</p>
+			<p>- IOException if the write fails</p>
+			</span>
+
+			<b><code>void exportPatientList()</code></b>
+			<br>
+			<span>
+			Writes the current list of patient entries to storage
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			<p>Throws:</p>
+			<p>- IOException if the write fails</p>
+			</span>
+
+			<b><code>Hashtable importPatientList()</code></b>
+			<br>
+			<span>
+			Updates and returns the currently stored list of patients
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- Hashtable with list of all patients stored (key=uid,value=PatientEntry)</p>
+			<p>Throws:</p>
+			<p>- IOException if the read fails</p>
+			</span>
+
+			<b><code>Hashtable getPatientList()</code></b>
+			<br>
+			<span>
+			Gets the list of patients currently loaded into memory
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- Hashtable with list of all patients stored (key=uid,value=PatientEntry)</p>
+			</span>
+		</div>
+	</body>
+</html>

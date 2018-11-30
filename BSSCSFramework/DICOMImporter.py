@@ -6,6 +6,7 @@
 #
 # This class is a part of the BSSCS Net Framework to import DICOM images
 #
+# BSSCS Docs Importer location: BSSCS_DOCS/dicom.html
 
 import pydicom
 import glob

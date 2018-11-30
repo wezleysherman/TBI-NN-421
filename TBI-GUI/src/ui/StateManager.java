@@ -5,21 +5,43 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-// TODO: find better way to implement state manager
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
- * @author Canyon Schubert
- *
+ * @author Canyon Schubert & Ty Chase
  */
 public class StateManager {
-	StackPane root = new StackPane();
+	private StackPane root = new StackPane();
+	private Scene scene = new Scene(root, 960, 540);
+	private Stage stage;
+	private Stack<String> sceneStack;
+	private String sceneID = "Landing";
+	private Patient patient = null;
+	private boolean stateBool = false;
 	
-	// variables to be used in other classes
-	Scene scene = new Scene(root, 960, 540);
-	Stage stage;
-	Stack<String> sceneStack;
-	String sceneID = "landing";
-	Patient patient = null;
+	public Stage getStage() {
+		return stage;
+	}
+	public Stack<String> getSceneStack() {
+		return sceneStack;
+	}
+	public void setSceneID(String sceneID) {
+		this.sceneID = sceneID;
+	}
+	public String getSceneID() {
+		return sceneID;
+	}
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+	public Patient getPatient() {
+		return patient;
+	}
+	public void setStateBool(boolean stateBool) {
+		this.stateBool = stateBool;
+	}
+	public boolean getStateBool() {
+		return stateBool;
+	}
 	
 	// constructor (mostly just the app start)
 	public StateManager(Stage inStage) {
@@ -31,7 +53,7 @@ public class StateManager {
 		stage.setMinWidth(960);
 		stage.setMinHeight(540);
 		
-		this.paintScene(sceneID);
+		paintScene(sceneID);
 		
 		stage.show();
 	}
@@ -42,65 +64,34 @@ public class StateManager {
 	 */
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID) {			
-		sceneID = newSceneID; // current scene being displayed(added onto sceneStack when changed)
+		this.sceneID = newSceneID; // current scene being displayed(added onto sceneStack when changed)
 		
-	//TODO: Add key and scene when more scenes are added (keys are the names of corresponding buttons)	
-		if (sceneID.equals("landing")) {
-			patient = null;
+		if (sceneID.equals("Landing")) {
+			this.patient = null;
 			scene = new LandingScene().initializeScene(this);
 		}
-		else if (sceneID.equals("newPat")) {
-			patient = null;
+		else if (sceneID.equals("PatientInfoEntry")) {
+			this.patient = null;
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
-		else if (sceneID.equals("likelyTrauma"))
+		else if (sceneID.equals("LikelyTraumaAreas"))
 			scene = new LikelyTraumaAreasScene().initializeScene(this);
-		else if (sceneID.equals("viewCNN"))
+		else if (sceneID.equals("CNNVisualizer"))
 			scene = new CNNVisualizationScene().initializeScene(this);
-		else if (sceneID.equals("prevPat"))
+		else if (sceneID.equals("PreviousPatient"))
 			scene = new PreviousPatientScene().initializeScene(this);
-		else if (sceneID.equals("algoVis"))
-			scene = new AlgorithmVisualizerScene().initializeScene(this, true);
-		else if (sceneID.equals("viewScan"))
+		else if (sceneID.equals("AlgorithmVisualizer"))
+			scene = new AlgorithmVisualizerScene().initializeScene(this);
+		else if (sceneID.equals("ScanVisualizer"))
 			scene = new ScanVisualizerScene().initializeScene(this);
-		
-		stage.setScene(scene);
-		
-		debugStack();
-	}
-	
-	// paintScene with other params (can probably refactor this out)
-	@SuppressWarnings("static-access")
-	public void paintScene(String newSceneID, Patient patient) {			
-		sceneID = newSceneID;
-		if (sceneID.equals("patInfo")) {
-			this.patient = patient;
-			scene = new PatientInfoScene().initializeScene(this, patient, false);
-		}
-		else if (sceneID.equals("viewScan")) {
-			this.patient = patient;
-			scene = new ScanVisualizerScene().initializeScene(this);
+		else if (sceneID.equals("PatientInfo")) {
+			scene = new PatientInfoScene().initializeScene(this);
 		}
 		
 		stage.setScene(scene);
 		
 		debugStack();
 	}
-	
-	//paintScene with different params (can probably refactor this out)
-	@SuppressWarnings("static-access")
-	public void paintScene(String newSceneID, boolean isTrue) {			
-		sceneID = newSceneID;
-		if (sceneID.equals("algoVis"))
-			scene = new AlgorithmVisualizerScene().initializeScene(this, isTrue); //display recent graph
-		else if (sceneID.equals("patInfo"))
-			scene = new PatientInfoScene().initializeScene(this, this.patient, isTrue); //allow edits
-		
-		stage.setScene(scene);
-		
-		debugStack();
-	}
-	
 	/* DEBUG CONSOLE OUTPUTS*/
 	public void debugStack() {
 		System.out.println(sceneID);

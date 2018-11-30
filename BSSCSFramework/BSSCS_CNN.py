@@ -5,7 +5,8 @@
 # https://www.tensorflow.org/api_docs/python/tf/layers/conv2d
 # TF Max pooling documentation:
 # https://www.tensorflow.org/api_docs/python/tf/layers/max_pooling2d
-
+#
+# BSSCS Docs CNN location: BSSCS_DOCS/conv.html
 import tensorflow as tf
 import numpy as np
 

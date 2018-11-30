@@ -1,0 +1,123 @@
+<html>
+	<head>
+		<title>BSSCS Autoencoder Docs</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+		<h1>BSSCS Convolutional Neural Network</h1>
+		<div> <!-- Constructor -->
+			<b>__init__ (self, l2_reg, learning_rate, steps, batch_size, activation)</b>
+			<br>
+			<span><p>Constructor for the BSSCS autoencoder object</p>
+			
+			<p>The purpose of this is to set initial hyperparameters on the creation</p>
+			<p>of an autoencoder. </p>
+
+			<p>l2 reg and learning rate should be easy to adjust during the training</p> process for the nueral network.</p>
+			</span><br>
+			<span>
+				<p>Inputs:</p>
+				<p> - l2_reg: The l2 Regularizer function we want to assign </p>
+				<p> - learning_rate: Initial learning rate of the autoencoder </p>
+				<p> - steps: The number of training steps for the autoencoder </p>
+				<p> - batch_size: The initial batch size for autoencoder (number of inputs)</p>
+				<p> - activation: The initial activation function for the autoencoder</p>
+			</span>
+		</div>
+		
+		<div> <!-- Connect Conv Net -->
+			<b>connect_conv_net(self, conv_graph)</b>
+			<br>
+			<span>Handles connecting the autoencoder to the conv network input.
+			Fancy way of handling array creation?</span><br>
+			<span>
+			<p>Inputs:</p>
+				<p>- conv_graph: A graph of tensor objects for the convolutional neural</p> 
+				<p>network</p>
+
+			<p>Returns:</p>
+				<p>- Array containing both a graph for the conv network and autoencoder</p>
+					<p>[Conv_net, Autoencoder]</p>
+			</span>
+		</div>
+		
+		<div> <!-- Create Loss -->
+			<b>create_loss_function(input, labels, loss=config.Loss_Functions.SIGMOID)</b>
+			<br>
+			<span>Default loss function will be sigmoid cross entropy</span><br>
+			<span>
+			<p>Inputs:</p>
+				<p>- loss: Loss function to use from enum Loss_Functions in config.py</p>
+				<p>- input: Input tensor of the final output from NN</p>
+				<p>- labels: Associated labels to the input data</p>
+
+			<p>Returns:</p>
+				<p>- Instance of softmax_cross_entropy_with_logits_v2 loss function</p>
+
+			<p>TensorFlow documentation: </p>
+				<p>Softmax v2:</p>
+				<a href="https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits_v2"><p>https://www.tensorflow.org/api_docs/python/tf/nn/</p><p>softmax_cross_entropy_with_logits_v2</p></a>
+
+				<p>Sigmoid:</p>
+				<a href="https://www.tensorflow.org/api_docs/python/tf/nn/sigmoid_cross_entropy_with_logits"><p>https://www.tensorflow.org/api_docs/python/tf/nn/</p><p>sigmoid_cross_entropy_with_logits</p></a>
+			</span>
+		</div>
+		
+		<div> <!-- Create Optimizer -->
+			<b>create_optimizer(optimizer=config.Optimizers.ADAM)</b>
+			<br>
+			<span>Default optimizer will be AdamOptmizer</span><br>
+			<span>
+			<p>Returns:</p>
+				<p>- Instance of AdamOptimizer with learning rate set</p>
+
+			<p>TensorFlow documentation:</p> 
+
+				<p>Adam:</p>
+				<a href="https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizer"><p>https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizer</p></a>
+
+				<p>Gradient Descent:</p>
+				<a href="https://www.tensorflow.org/api_docs/python/tf/train/GradientDescentOptimizer"><p>https://www.tensorflow.org/api_docs/python/tf/train/</p><p>GradientDescentOptimizer</p></a>
+			</span>
+		</div>
+		
+		<div> <!-- Create Layer -->
+			<b>create_layer(self, neurons, input=None)</b>
+			<br>
+			<span>Handles creating a single dense layer for the autoencoder</span><br>
+			<span>
+			<p>Inputs:</p>
+				<p>- neurons: an int containing the number of neurons we want the layer</p> <p>to contain</p>
+				<p>- input: Takes a tensor object for an input (should probably be a</p> <p>placeholder)</p>
+
+			<p>Returns:</p>
+				<p>- A single tensor object for the layer</p>
+			</span>
+		</div>
+		
+		<div> <!-- Get Partial -->
+			<b>get_partial(self)</b>
+			<br>
+			<span>Handles retreiving the middle layer of the autoencoder (most condensed representation)</span><br>
+			<span>
+			<p>Returns:</p>
+				<p>- Single tensor for the middle layer of the autoencoder</p>
+			</span>
+		</div>
+		
+		<div> <!-- Create Autoencoder -->
+			<b>create_autoencoder(self, neurons, input=None):</b>
+			<br>
+			<span>Handles creating a full autoencoder graph to train a model</span><br>
+			<span>
+			<p>Inputs:</p>
+				<p>- neurons: an array containing the sizes for each layer (eg. [512,</p> <p>256, 128, 256, 512] is an autoencoder with 5 layers)</p>
+				<p>- input: Takes in a tensor object for an input (should probably be a</p> <p>placeholder)</p>
+
+			<p>Returns:</p>
+				<p>- Array continaing all layers within the TF graph. (Neural Network)</p>
+			</span>
+		</div>
+	</body>
+</html>
+

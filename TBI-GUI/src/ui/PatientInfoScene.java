@@ -15,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
 /**
@@ -24,42 +23,7 @@ import javafx.stage.FileChooser;
  */
 public class PatientInfoScene {
 	
-	private final static String BUTTON_DEFAULT = " -fx-background-color: #f1fafe;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_ENTERED = " -fx-background-color: #c1cace;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	private final static String BUTTON_PRESSED = " -fx-background-color: #919a9e;" + 
-			"    -fx-background-radius: 5;" + 
-			"    -fx-background-insets: 0,1,2;" + 
-			"    -fx-text-fill: black;";
-	
-	private static void styleButton(Button button) {
-		button.setStyle(BUTTON_DEFAULT);
-		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_ENTERED);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_DEFAULT);
-			}
-		});
-		button.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				button.setStyle(BUTTON_PRESSED);
-			}
-		});
-	}
-	
-	public static Scene initializeScene(StateManager manager, Patient patient, boolean edit) {
+	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -92,15 +56,15 @@ public class PatientInfoScene {
 			);
 		
 		
-		if (!edit) {
+		if (!manager.getStateBool()) {
 			//Create elements
-			Label firstName = new Label(patient.getFirstName());
-			Label lastName = new Label(patient.getLastName());
-			Label notes = new Label(patient.getNotes());
+			Label firstName = new Label(manager.getPatient().getFirstName());
+			Label lastName = new Label(manager.getPatient().getLastName());
+			Label notes = new Label(manager.getPatient().getNotes());
 			
 			ImageView displayImg = new ImageView();
-			if (patient.getNumScans() > 0) {
-				displayImg.setImage(patient.getScans().get(0).getScan());
+			if (manager.getPatient().getNumScans() > 0) {
+				displayImg.setImage(manager.getPatient().getScans().get(0).getScan());
 			}
 			displayImg.fitWidthProperty().bind(contentGrid.widthProperty().divide(3));
 			displayImg.fitHeightProperty().bind(contentGrid.heightProperty().divide(3));
@@ -116,15 +80,15 @@ public class PatientInfoScene {
 		}
 		else {
 			//Create elements
-			TextField firstField = new TextField(patient.getFirstName());
-			TextField lastField = new TextField(patient.getLastName());
-			TextArea notesArea = new TextArea(patient.getNotes());
+			TextField firstField = new TextField(manager.getPatient().getFirstName());
+			TextField lastField = new TextField(manager.getPatient().getLastName());
+			TextArea notesArea = new TextArea(manager.getPatient().getNotes());
 			Button fileBtn = new Button("Add Scan");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
-			styleButton(fileBtn);
-			styleButton(saveBtn);
-			styleButton(cancelBtn);
+			Style.styleButton(fileBtn);
+			Style.styleButton(saveBtn);
+			Style.styleButton(cancelBtn);
 			fileBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			cancelBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -132,18 +96,21 @@ public class PatientInfoScene {
 			saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	            	patient.setFirstName(firstField.getText());
-	            	patient.setLastName(lastField.getText());
-	            	patient.setNotes(notesArea.getText());
+	            	manager.getPatient().setFirstName(firstField.getText());
+	            	manager.getPatient().setLastName(lastField.getText());
+	            	manager.getPatient().setNotes(notesArea.getText());
 	            	
-	            	manager.paintScene("patInfo", patient);
+	            	manager.setPatient(manager.getPatient());
+	            	manager.setStateBool(false);
+	            	manager.paintScene("PatientInfo");
 	            }
 	        });
 			
 			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	            	manager.paintScene("patInfo", false);
+	            	manager.setStateBool(false);
+	            	manager.paintScene("PatientInfo");
 	            }
 	        });
 			
@@ -155,7 +122,7 @@ public class PatientInfoScene {
 			fileBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	                File file = fileChooser.showOpenDialog(manager.stage);
+	                File file = fileChooser.showOpenDialog(manager.getStage());
 	                if (file != null) {
 	                    //TODO patient.addSacn
 	                }
@@ -181,6 +148,6 @@ public class PatientInfoScene {
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene
-		return new Scene(layout, manager.stage.getWidth(), manager.stage.getHeight());
+		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
 }

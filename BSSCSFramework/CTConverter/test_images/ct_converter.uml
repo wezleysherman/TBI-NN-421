@@ -1,0 +1,23 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class prepare_scans {
+ +decompress_and_convert(compressed_path): String
+ +convert(input_path): String
+ +decompress(input_path): String
+}
+
+class DICOM_2_NIFTI {
+ +convert_dicom_series(input_path): String
+ +get_nifti_array(nifti_path): NumPy Array
+}
+
+class decompress_DICOM {
+ +decompress_series(input_path): String
+ +decompress_single(dicom_path): String
+}
+
+prepare_scans - DICOM_2_NIFTI: executes >
+prepare_scans - decompress_DICOM: executes >
+
+@enduml

@@ -32,6 +32,13 @@ compileJava.doLast {
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets {
+	main {
+		resources {
+			srcDirs = ['src']
+		}
+	}
+}
+sourceSets {
 	test {
 		java {
 			srcDirs = ['src/tests']
