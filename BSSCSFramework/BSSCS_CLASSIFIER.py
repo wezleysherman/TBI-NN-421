@@ -7,6 +7,8 @@
 # https://www.tensorflow.org/api_docs/python/tf/contrib/layers/l2_regularizer
 # Tensorflow Relu activation:
 # https://www.tensorflow.org/api_docs/python/tf/nn/relu
+#
+# BSSCS Docs Classifier location: BSSCS_DOCS/class.html
 import tensorflow as tf
 
 class BSSCS_CLASSIFIER:
