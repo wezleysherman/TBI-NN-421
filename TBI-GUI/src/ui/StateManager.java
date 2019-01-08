@@ -16,6 +16,7 @@ public class StateManager {
 	private Stack<String> sceneStack;
 	private String sceneID = "Landing";
 	private Patient patient = null;
+	private Scan scan = null;
 	private boolean stateBool = false;
 	
 	public Stage getStage() {
@@ -35,6 +36,12 @@ public class StateManager {
 	}
 	public Patient getPatient() {
 		return patient;
+	}
+	public void setScan(Scan scan) {
+		this.scan = scan;
+	}
+	public Scan getScan() {
+		return scan;
 	}
 	public void setStateBool(boolean stateBool) {
 		this.stateBool = stateBool;

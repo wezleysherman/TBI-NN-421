@@ -28,26 +28,25 @@ public class PreviousPatientScene {
 		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
-		TableView patientTable = new TableView();
-		Button retrieveBtn = new Button();
+		TableView<Patient> patientTable = new TableView<Patient>();
 		
-		//TODO remove test patients
-		// test patients --------------------------------------------------------------------------------------
+		/*// TODO test patients ---------------------------------------------------------------------------------
 		LinkedList<Scan> johnScans = new LinkedList<Scan>();
 		johnScans.push(new Scan(new Date(), new Image("resources/TestImage1.jpg")));
 		ObservableList<Patient> patientList = FXCollections.observableArrayList(
 				new Patient("John", "Doe", new Date(), "notes", johnScans),
 				new Patient("Jane", "Doe", new Date(), "More notes than last time"));
-		// ----------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------*/
+		ObservableList<Patient> patientList = FXCollections.observableArrayList();
 		
 		//Retrieve button Setup/Styling
-		retrieveBtn.setText("Retrieve");
+		Button retrieveBtn = new Button("Retrieve");
 		Style.styleButton(retrieveBtn);
 		retrieveBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
-					manager.setPatient((Patient)patientTable.getSelectionModel().getSelectedItem());
+					manager.setPatient(patientTable.getSelectionModel().getSelectedItem());
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PatientInfo");
 				}
