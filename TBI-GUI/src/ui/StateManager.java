@@ -1,9 +1,17 @@
 package ui;
 
 import java.util.Stack;
+
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
@@ -92,6 +100,36 @@ public class StateManager {
 		
 		debugStack();
 	}
+	
+	/**
+	 * Raises a dialog box with a message for the user
+	 * @param dialogTitle: title of the dialog box
+	 * @param message: a message to the user
+	 */
+	public void makeDialog(String dialogTitle, String message) {
+		Stage dialogStage = new Stage();
+		dialogStage.initModality(Modality.APPLICATION_MODAL);
+		dialogStage.initStyle(StageStyle.UNDECORATED);
+		dialogStage.setTitle(dialogTitle);
+		dialogStage.setHeight(150);
+		dialogStage.setWidth(300);
+		dialogStage.setResizable(false);
+		
+		Label messLabel = new Label(message);
+		Button close = new Button("Okay");
+		close.setOnAction(e -> dialogStage.close());
+		
+		VBox dialogLayout = new VBox(5);
+		dialogLayout.getChildren().addAll(messLabel, close);
+		dialogLayout.setAlignment(Pos.CENTER);
+		dialogLayout.setStyle(" -fx-background-color: #c1cace;");
+		
+		Scene dialogScene = new Scene(dialogLayout);
+		dialogStage.setScene(dialogScene);
+		dialogStage.showAndWait();
+		
+	}
+	
 	/* DEBUG CONSOLE OUTPUTS*/
 	public void debugStack() {
 		System.out.println(sceneID);

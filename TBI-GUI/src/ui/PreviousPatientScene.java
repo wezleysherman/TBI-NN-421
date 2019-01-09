@@ -1,7 +1,10 @@
 package ui;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +23,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import utils.PatientEntry;
+import utils.PatientManagement;
 
 public class PreviousPatientScene {
 	
@@ -31,14 +36,15 @@ public class PreviousPatientScene {
 		TableView patientTable = new TableView();
 		Button retrieveBtn = new Button();
 		
-		//TODO remove test patients
-		// test patients --------------------------------------------------------------------------------------
-		LinkedList<Scan> johnScans = new LinkedList<Scan>();
-		johnScans.push(new Scan(new Date(), new Image("resources/TestImage1.jpg")));
-		ObservableList<Patient> patientList = FXCollections.observableArrayList(
-				new Patient("John", "Doe", new Date(), "notes", johnScans),
-				new Patient("Jane", "Doe", new Date(), "More notes than last time"));
-		// ----------------------------------------------------------------------------------------------------
+		//Fill the table with information from the database
+		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
+		Set<String> keySet = patients.keySet();
+		ObservableList<Patient> patientList = FXCollections.observableArrayList();
+        for(String key: keySet){
+        	patientList.add(new Patient("Johnnnnnnnnnnnnn", "Doe", new Date(), "notes"));
+        	PatientEntry entry = patients.get(key);
+        	patientList.add(new Patient(entry.name, entry.name, new Date(), "notesss"));
+        }
 		
 		//Retrieve button Setup/Styling
 		retrieveBtn.setText("Retrieve");
@@ -50,6 +56,8 @@ public class PreviousPatientScene {
 					manager.setPatient((Patient)patientTable.getSelectionModel().getSelectedItem());
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PatientInfo");
+				} else {
+					manager.makeDialog("Error", "No patient was selected!");
 				}
 			}
 		});
