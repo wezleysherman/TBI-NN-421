@@ -8,6 +8,7 @@
 #
 # BSSCS Docs Importer location: BSSCS_DOCS/dicom.html
 from DICOMImporter import DICOMImporter
+import pandas as pd
 
 class UNET_DATA:
 	def __init__(self, labels_arr=None, image_arr=None):
@@ -29,17 +30,33 @@ class UNET_DATA:
 		image_batch = self.images[start_pos:end_pos]
 		return label_batch, image_batch
 		
-	def fetch_data(self, path_to_images, path_to_csv):
+	def fetch_data(self, path_to_csv):
 		''' Handles fetching the data from the DICOM Importer
 		
 			Assigns:
 				self.labels
 				self.images
 		'''
-		images_arr = DICOMImporter.open_dicom_from_folder(path_to_images)
-		labels_arr = import_labels_from_csv(path_to_csv)
+		images_arr, labels_arr = self.import_labels_from_csv(path_to_csv)
 		self.images = images_arr
 		self.labels = labels_arr
 		
-	def import_labels_from_csv(path):
-		return None
+	def import_labels_from_csv(self, path):
+		''' Handles opening a CSV of data and reading in the information to match
+			The image with the label.
+			
+			Input: 
+				- path: String -- path to the CSV
+			
+			Returns:
+				- images: list -- list of image file names
+				- labels: list -- list of boolean labels
+		'''
+		csv_dataframe = pd.read_csv(path)
+		images = list(csv_dataframe['file_name'])
+		labels = list(csv_dataframe['has_tbi'])
+		return images, labels
+		
+unet = UNET_DATA()
+print(unet.import_labels_from_csv("test_csv.csv")[1])
+print(unet.fetch_data("test_csv.csv"))
