@@ -153,6 +153,15 @@ public class PatientManagement {
 		patientList.put(p.uid, p);
 		exportPatientList();
 	}
+	
+	public static void remPatient(PatientEntry p) throws IOException{
+		if(patientList == null) {
+			patientList = importPatientList();
+		}
+		
+		patientList.remove(p.uid);
+		exportPatientList();
+	}
 
 	public static void exportPatientList() throws IOException{
 		File f = new File(defaultPath);
