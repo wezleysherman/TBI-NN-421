@@ -34,7 +34,6 @@ public class PreviousPatientScene {
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
 		TableView<PatientEntry> patientTable = new TableView();
-		Button retrieveBtn = new Button();
 		
 		//Fill the table with information from the database
 		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();

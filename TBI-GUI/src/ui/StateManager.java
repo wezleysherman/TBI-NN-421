@@ -30,6 +30,7 @@ public class StateManager {
 	private Stack<String> sceneStack;
 	private String sceneID = "Landing";
 	private PatientEntry patient = null;
+	private Scan scan = null;
 	private boolean stateBool = false;
 	
 	public Stage getStage() {
