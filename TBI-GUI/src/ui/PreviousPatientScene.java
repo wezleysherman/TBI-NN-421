@@ -46,7 +46,7 @@ public class PreviousPatientScene {
         }
 		
 		//Retrieve button Setup/Styling
-		retrieveBtn.setText("Retrieve");
+		Button retrieveBtn = new Button("Retrieve");
 		Style.styleButton(retrieveBtn);
 		retrieveBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

@@ -1,6 +1,8 @@
 package ui;
 
 import java.io.File;
+import java.util.ArrayList;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -9,6 +11,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -62,20 +65,39 @@ public class PatientInfoScene {
 			Label lastName = new Label(manager.getPatient().getLastName());
 			Label notes = new Label(manager.getPatient().getNotes());
 			
-			ImageView displayImg = new ImageView();
-			if (manager.getPatient().getNumScans() > 0) {
-				displayImg.setImage(manager.getPatient().getScans().get(0).getScan());
+			GridPane scrollGrid = new GridPane();
+			ScrollPane scrollPane = new ScrollPane(scrollGrid);
+			Style.styleScrollPane(scrollPane);
+			ColumnConstraints scrollGridCols = new ColumnConstraints();
+			scrollGridCols.setPercentWidth(100);
+			scrollGrid.getColumnConstraints().add(scrollGridCols);
+			scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
+			
+			for (int i = 0; i < manager.getPatient().getNumScans(); ++i) {
+				Button scanBtn = new Button("Scan " + (i+1));
+				Style.styleButton(scanBtn);
+				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						//i is out of scope, so get scan num from button text
+						int scanNum = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length()-1))-1;
+						manager.setScan(manager.getPatient().getScans().get(scanNum));
+						manager.getSceneStack().push(manager.getSceneID());
+						manager.paintScene("ScanVisualizer");
+					}
+				});
+				
+				GridPane.setConstraints(scanBtn, 0, i, 2, 1, HPos.CENTER, VPos.CENTER);
+				scrollGrid.getChildren().add(scanBtn);
 			}
-			displayImg.fitWidthProperty().bind(contentGrid.widthProperty().divide(3));
-			displayImg.fitHeightProperty().bind(contentGrid.heightProperty().divide(3));
 			
 			//Add elements to content grid
 			GridPane.setConstraints(firstName, 1, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(lastName, 1, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(notes, 1, 3, 1, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(displayImg, 1, 4, 1, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(scrollPane, 1, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 			contentGrid.getChildren().addAll(
-					firstName, lastName, notes, displayImg
+					firstName, lastName, notes, scrollPane
 				);
 		}
 		else {

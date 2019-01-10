@@ -37,6 +37,7 @@ public class Style {
 	private final static String SIDE_TEXT_AREA_COLOR = "-fx-control-inner-background: #455357";
 	private final static String BACKGROUND_COLOR = "-fx-background-color: #cfd8dc";
 	private final static String LANDING_BACKGROUND_COLOR = "-fx-background-color: #455357";
+	private final static String SCROLLPANE_BORDER = "-fx-background-color:transparent;";
 	
 	//Methods--------------------------------------------------------------------------------------
 	
@@ -69,7 +70,8 @@ public class Style {
 	}
 	
 	public static void styleScrollPane(ScrollPane scrollPane) {
-		scrollPane.setStyle(VERTICAL_MENU_COLOR);
+		scrollPane.setStyle(SCROLLPANE_BORDER);
+		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	}
 	
 	public static void styleTextArea(TextArea textArea) {
@@ -88,5 +90,4 @@ public class Style {
 	public static void styleLabel(Label label) {
 		label.setStyle(LABEL_STYLE);
 	}
-	
 }

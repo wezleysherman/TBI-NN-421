@@ -50,6 +50,12 @@ public class StateManager {
 	public PatientEntry getPatient() {
 		return patient;
 	}
+	public void setScan(Scan scan) {
+		this.scan = scan;
+	}
+	public Scan getScan() {
+		return scan;
+	}
 	public void setStateBool(boolean stateBool) {
 		this.stateBool = stateBool;
 	}
