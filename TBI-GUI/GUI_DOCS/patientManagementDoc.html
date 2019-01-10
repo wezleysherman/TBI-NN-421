@@ -84,6 +84,21 @@
 			<p>- IOException if the read fails</p>
 			</span>
 
+			<b><code>void deletePatient(String path, String uid)</code></b>
+			<br>
+			<span>
+			Deletes all patient data at the provided path
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- path: The path that the patient's directory is stored at</p>
+			<p>- uid: The patient's UID</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			<p>Throws:</p>
+			<p>- IOException if the write to patientList fails</p>
+			</span>
+
 			<b><code>void addPatient(PatientEntry p)</code></b>
 			<br>
 			<span>
@@ -92,6 +107,20 @@
 			<span>
 			<p>Inputs:</p>
 			<p>- p: The patient entry that will be added</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			<p>Throws:</p>
+			<p>- IOException if the write fails</p>
+			</span>
+
+			<b><code>void remPatient(String uid)</code></b>
+			<br>
+			<span>
+			Removes a patient entry from storage
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- uid: The uid of the patient to be deleted</p>
 			<p>Returns:</p>
 			<p>- None</p>
 			<p>Throws:</p>

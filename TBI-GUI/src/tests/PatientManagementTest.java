@@ -63,6 +63,7 @@ public class PatientManagementTest {
 		PatientManagement.deletePatient(PatientManagement.getDefaultPath(), uid);
 		File f = new File(PatientManagement.getDefaultPath(), uid);
 		assertTrue(!f.exists());
+		assertTrue(!PatientManagement.getPatientList().containsKey(uid));
 	}
 	
 	@Test
@@ -73,10 +74,6 @@ public class PatientManagementTest {
 		assertEquals(temp.name, patient.getFirstName() + " " + patient.getLastName());
 		temp = (PatientEntry)patientList.get(patient2.getUID());
 		assertEquals(temp.name, patient2.getFirstName() + " " + patient2.getLastName());
-		
-		//test patientlist remove
-		PatientManagement.remPatient(temp);
-		assertTrue(!PatientManagement.getPatientList().containsKey(temp.uid));
 	}
 
 }

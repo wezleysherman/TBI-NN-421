@@ -146,11 +146,13 @@ public class PatientManagement {
 		}
 	}
 	
-	public static void deletePatient(String path, String uid) {
+	public static void deletePatient(String path, String uid) throws IOException{
 		File top = new File(path, uid);
 		File data = new File(top.getAbsolutePath(), "data.enc");
 		data.delete();
 		top.delete();
+		
+		remPatient(uid);
 	}
 
 	public static void addPatient(PatientEntry p) throws IOException{
@@ -161,12 +163,12 @@ public class PatientManagement {
 		exportPatientList();
 	}
 	
-	public static void remPatient(PatientEntry p) throws IOException{
+	public static void remPatient(String uid) throws IOException{
 		if(patientList == null) {
 			patientList = importPatientList();
 		}
 		
-		patientList.remove(p.uid);
+		patientList.remove(uid);
 		exportPatientList();
 	}
 
