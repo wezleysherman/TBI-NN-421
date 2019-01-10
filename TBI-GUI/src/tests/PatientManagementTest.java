@@ -55,6 +55,17 @@ public class PatientManagementTest {
 	}
 	
 	@Test
+	public void testDelete() throws Exception {
+		Patient temp = new Patient("To", "Delete", testDate, "Some notes");
+		String uid = temp.getUID();
+		PatientManagement.exportPatient(temp);
+		
+		PatientManagement.deletePatient(PatientManagement.getDefaultPath(), uid);
+		File f = new File(PatientManagement.getDefaultPath(), uid);
+		assertTrue(!f.exists());
+	}
+	
+	@Test
 	public void testPatientList() throws Exception {
 		Hashtable patientList = PatientManagement.getPatientList();
 		
