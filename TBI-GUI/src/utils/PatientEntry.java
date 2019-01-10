@@ -13,4 +13,12 @@ public class PatientEntry implements Serializable{
 		uid = u;
 		key = k;
 	}
+
+	public final String getName() {
+		return name;
+	}
+
+	public final String getUid() {
+		return uid;
+	}
 }

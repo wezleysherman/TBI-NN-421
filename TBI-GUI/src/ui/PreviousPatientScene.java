@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Hashtable;
@@ -13,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,17 +33,16 @@ public class PreviousPatientScene {
 		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
-		TableView patientTable = new TableView();
+		TableView<PatientEntry> patientTable = new TableView();
 		Button retrieveBtn = new Button();
 		
 		//Fill the table with information from the database
 		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
 		Set<String> keySet = patients.keySet();
-		ObservableList<Patient> patientList = FXCollections.observableArrayList();
+		ObservableList<PatientEntry> patientList = FXCollections.observableArrayList();
         for(String key: keySet){
-        	patientList.add(new Patient("Johnnnnnnnnnnnnn", "Doe", new Date(), "notes"));
         	PatientEntry entry = patients.get(key);
-        	patientList.add(new Patient(entry.name, entry.name, new Date(), "notesss"));
+        	patientList.add(entry);
         }
 		
 		//Retrieve button Setup/Styling
@@ -53,11 +52,11 @@ public class PreviousPatientScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
-					manager.setPatient((Patient)patientTable.getSelectionModel().getSelectedItem());
+					manager.setPatient((PatientEntry)patientTable.getSelectionModel().getSelectedItem());
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PatientInfo");
 				} else {
-					manager.makeDialog("Error", "No patient was selected!");
+					manager.makeDialog("No patient was selected!");
 				}
 			}
 		});
@@ -67,24 +66,14 @@ public class PreviousPatientScene {
 		//Setup table
 		patientTable.setEditable(false);
 		
-		TableColumn firstNameCol = new TableColumn("First Name");
-		firstNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
+		TableColumn nameCol = new TableColumn("Name");
+		nameCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("name"));
 		
-		TableColumn lastNameCol = new TableColumn("Last Name");
-		lastNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastName"));
+		TableColumn uidCol = new TableColumn("UID");
+		uidCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("uid"));
 		
-		// TODO: figure out how to do number of scans or last scan date or something here
-		TableColumn fileCol = new TableColumn("# of Scans");
-		fileCol.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("numScans"));
+		patientTable.getColumns().addAll(nameCol, uidCol);
 		
-		TableColumn dateCol = new TableColumn("Date");
-		dateCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("date"));
-		
-		TableColumn notesCol = new TableColumn("Notes");
-		notesCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("notes"));
-		
-		patientTable.getColumns().addAll(firstNameCol, lastNameCol, fileCol, dateCol, notesCol);
-				
 		patientTable.setItems(patientList);
 		
 		//Construct Grid		

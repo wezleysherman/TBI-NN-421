@@ -56,7 +56,7 @@ public class PatientInfoScene {
 			);
 		
 		
-		if (!manager.getStateBool()) {
+		/*if (!manager.getStateBool()) {
 			//Create elements
 			Label firstName = new Label(manager.getPatient().getFirstName());
 			Label lastName = new Label(manager.getPatient().getLastName());
@@ -139,7 +139,7 @@ public class PatientInfoScene {
 			contentGrid.getChildren().addAll(
 					firstField, lastField, notesArea, fileBtn, saveBtn, cancelBtn
 				);
-		}
+		}*/
 
 		//Merge content grid with left nav
 		mainGrid = VerticalSideMenu.newSideBar(manager);

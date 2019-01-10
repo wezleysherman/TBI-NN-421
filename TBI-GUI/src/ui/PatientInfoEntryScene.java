@@ -116,7 +116,7 @@ public class PatientInfoEntryScene {
 					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
 					Date date = Date.from(instant);
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), date, notesField.getText());
-					manager.setPatient(patient);
+					//TODO manager.setPatient(patient);
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("ScanVisualizer");
 				}

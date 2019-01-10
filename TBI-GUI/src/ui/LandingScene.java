@@ -97,7 +97,7 @@ public class LandingScene {
 						);
 				patient.setScans(scans);
 				
-				manager.setPatient(patient);
+				//TODO manager.setPatient(patient);
 				manager.getSceneStack().push(manager.getSceneID());
 				manager.paintScene("ScanVisualizer");
 			}
