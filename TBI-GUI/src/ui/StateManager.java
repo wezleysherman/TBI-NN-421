@@ -1,9 +1,23 @@
 package ui;
 
 import java.util.Stack;
+
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import utils.PatientEntry;
 
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
@@ -15,7 +29,7 @@ public class StateManager {
 	private Stage stage;
 	private Stack<String> sceneStack;
 	private String sceneID = "Landing";
-	private Patient patient = null;
+	private PatientEntry patient = null;
 	private Scan scan = null;
 	private boolean stateBool = false;
 	
@@ -31,10 +45,10 @@ public class StateManager {
 	public String getSceneID() {
 		return sceneID;
 	}
-	public void setPatient(Patient patient) {
+	public void setPatient(PatientEntry patient) {
 		this.patient = patient;
 	}
-	public Patient getPatient() {
+	public PatientEntry getPatient() {
 		return patient;
 	}
 	public void setScan(Scan scan) {
@@ -99,13 +113,49 @@ public class StateManager {
 		
 		debugStack();
 	}
+	
+	/**
+	 * Raises a dialog box with a message for the user
+	 * @param dialogTitle: title of the dialog box
+	 * @param message: a message to the user
+	 */
+	public void makeDialog(String message) {
+		Stage dialogStage = new Stage();
+		dialogStage.initModality(Modality.APPLICATION_MODAL);
+		dialogStage.initStyle(StageStyle.UNDECORATED);
+		dialogStage.setHeight(150);
+		dialogStage.setWidth(300);
+		dialogStage.setResizable(false);
+		
+		Label messLabel = new Label(message);
+		Button close = new Button("Okay");
+		close.setOnAction(e -> dialogStage.close());
+		Style.styleButton(close);
+		
+		VBox dialogLayout = new VBox(5);
+		GridPane buttonGrid = new GridPane();
+		ColumnConstraints columnCon = new ColumnConstraints();
+		columnCon.setPercentWidth(100/3);
+		buttonGrid.getColumnConstraints().addAll(columnCon, columnCon, columnCon);
+		GridPane.setConstraints(close, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		buttonGrid.getChildren().addAll(close);
+		dialogLayout.getChildren().addAll(messLabel, buttonGrid);
+		dialogLayout.setAlignment(Pos.CENTER);
+		dialogLayout.setStyle("-fx-background-color: #cfd8dc;");
+		
+		Scene dialogScene = new Scene(dialogLayout);
+		dialogStage.setScene(dialogScene);
+		dialogStage.showAndWait();
+		
+	}
+	
 	/* DEBUG CONSOLE OUTPUTS*/
 	public void debugStack() {
 		System.out.println(sceneID);
 		System.out.println(sceneStack.size());
 		System.out.println(sceneStack.toString());
 		try {
-			System.out.println(patient.getFirstName() + " " + patient.getLastName());
+			System.out.println(patient.getName() + " " + patient.getUid());
 		}
 		catch (Exception e) {
 			System.out.println(patient);

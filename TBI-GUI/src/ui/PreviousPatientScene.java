@@ -1,7 +1,11 @@
 package ui;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,6 +23,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import utils.PatientEntry;
+import utils.PatientManagement;
 
 public class PreviousPatientScene {
 	
@@ -28,16 +33,16 @@ public class PreviousPatientScene {
 		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
-		TableView<Patient> patientTable = new TableView<Patient>();
+		TableView<PatientEntry> patientTable = new TableView();
 		
-		/*// TODO test patients ---------------------------------------------------------------------------------
-		LinkedList<Scan> johnScans = new LinkedList<Scan>();
-		johnScans.push(new Scan(new Date(), new Image("resources/TestImage1.jpg")));
-		ObservableList<Patient> patientList = FXCollections.observableArrayList(
-				new Patient("John", "Doe", new Date(), "notes", johnScans),
-				new Patient("Jane", "Doe", new Date(), "More notes than last time"));
-		// ----------------------------------------------------------------------------------------------------*/
-		ObservableList<Patient> patientList = FXCollections.observableArrayList();
+		//Fill the table with information from the database
+		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
+		Set<String> keySet = patients.keySet();
+		ObservableList<PatientEntry> patientList = FXCollections.observableArrayList();
+        for(String key: keySet){
+        	PatientEntry entry = patients.get(key);
+        	patientList.add(entry);
+        }
 		
 		//Retrieve button Setup/Styling
 		Button retrieveBtn = new Button("Retrieve");
@@ -46,9 +51,11 @@ public class PreviousPatientScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
-					manager.setPatient(patientTable.getSelectionModel().getSelectedItem());
+					manager.setPatient((PatientEntry)patientTable.getSelectionModel().getSelectedItem());
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PatientInfo");
+				} else {
+					manager.makeDialog("No patient was selected!");
 				}
 			}
 		});
@@ -58,24 +65,14 @@ public class PreviousPatientScene {
 		//Setup table
 		patientTable.setEditable(false);
 		
-		TableColumn firstNameCol = new TableColumn("First Name");
-		firstNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
+		TableColumn nameCol = new TableColumn("Name");
+		nameCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("name"));
 		
-		TableColumn lastNameCol = new TableColumn("Last Name");
-		lastNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastName"));
+		TableColumn uidCol = new TableColumn("UID");
+		uidCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("uid"));
 		
-		// TODO: figure out how to do number of scans or last scan date or something here
-		TableColumn fileCol = new TableColumn("# of Scans");
-		fileCol.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("numScans"));
+		patientTable.getColumns().addAll(nameCol, uidCol);
 		
-		TableColumn dateCol = new TableColumn("Date");
-		dateCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("date"));
-		
-		TableColumn notesCol = new TableColumn("Notes");
-		notesCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("notes"));
-		
-		patientTable.getColumns().addAll(firstNameCol, lastNameCol, fileCol, dateCol, notesCol);
-				
 		patientTable.setItems(patientList);
 		
 		//Construct Grid		

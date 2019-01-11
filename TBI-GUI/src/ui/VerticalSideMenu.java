@@ -228,10 +228,11 @@ public class VerticalSideMenu {
 			GridPane.setConstraints(homeBtn,  2, 1, 2, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(algoVisBtn, 0, 2, 4, 1, HPos.CENTER, VPos.CENTER);
 			
-			Label patientLabel = new Label(manager.getPatient().getFirstName() + " " + manager.getPatient().getLastName());
+			//TODO Make it take the patient entry. This page should be able to be gotten to without having a patient
+			Label patientLabel = new Label("PLACEHOLDER1");
 			Style.styleLabel(patientLabel);
 			GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
-			Label dateLabel = new Label(manager.getPatient().getDate().toString());
+			Label dateLabel = new Label("PlaceHolder");//manager.getPatient().getDate().toString());
 			Style.styleLabel(dateLabel);
 			GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
 			Label recentLabel = new Label("Other Recent Scans:");
@@ -240,7 +241,7 @@ public class VerticalSideMenu {
 			
 			contentGrid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
 			
-			for (int i = 0; i < manager.getPatient().getNumScans(); ++i) {
+			/* TODO for (int i = 0; i < manager.getPatient().getNumScans(); ++i) {
 				Label newLbl = new Label("");
 				if (i == 0) {
 					newLbl.setText("Latest:");
@@ -265,10 +266,11 @@ public class VerticalSideMenu {
 				
 				contentGrid.getChildren().addAll(newLbl, newBtn);
 			}
-			
+			*/
 			Button uploadBtn = new Button("Upload New Scan");
 			Style.styleButton(uploadBtn);
-			GridPane.setConstraints(uploadBtn, 1, 11 + manager.getPatient().getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
+			//TODO needs to take into account the number of scans when placing things in the proper row...for some reason...this will change
+			GridPane.setConstraints(uploadBtn, 1, 11 + 0, 3, 1, HPos.CENTER, VPos.CENTER);
 			// TODO: Implement this?
 			uploadBtn.setTooltip(new Tooltip("Upload a new scan for this patient."));
 			
@@ -287,10 +289,11 @@ public class VerticalSideMenu {
 				}
 			});
 			
-			Label notesLabel = new Label("Doctors Notes: \n" + manager.getPatient().getNotes());
+			Label notesLabel = new Label("PLACEHOLDER2"); //TODO "Doctors Notes: \n" + manager.getPatient().getNotes());
 			Style.styleLabel(notesLabel);
 			notesLabel.setWrapText(true);
-			GridPane.setConstraints(notesLabel, 0, 14 + manager.getPatient().getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
+			//TODO fix how things are laid out for this entire sidebar
+			GridPane.setConstraints(notesLabel, 0, 14 + 0, 4, 1, HPos.CENTER, VPos.CENTER);
 			
 			contentGrid.getChildren().addAll(uploadBtn, notesLabel);
 		}
