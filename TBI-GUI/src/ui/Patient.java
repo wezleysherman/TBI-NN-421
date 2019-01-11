@@ -36,6 +36,19 @@ public class Patient implements Serializable {
 	private Integer numScans;
 	private UUID uid;
 
+	// constructor for blank patient
+		public Patient() {
+			this.setFirstName("");
+			this.setLastName("");
+			this.setDate(new Date());
+			this.setNotes("");
+			this.uid = UUID.nameUUIDFromBytes((" ").getBytes());
+			this.file = new File(basePath, uid.toString()).getAbsolutePath();
+			this.setLastScanDate(new Date());
+			this.numScans = scans.size();
+		}
+
+	
 	// constructor for fresh patient with no scans (needs UID generated)
 	public Patient(String fName, String lName, Date pDate, String pNotes) {
 		this.setFirstName(fName);

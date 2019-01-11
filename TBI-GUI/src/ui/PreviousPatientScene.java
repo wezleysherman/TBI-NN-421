@@ -1,10 +1,6 @@
 package ui;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Set;
 
 import javafx.collections.FXCollections;
@@ -33,7 +29,7 @@ public class PreviousPatientScene {
 		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
-		TableView<PatientEntry> patientTable = new TableView();
+		TableView<PatientEntry> patientTable = new TableView<PatientEntry>();
 		
 		//Fill the table with information from the database
 		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
@@ -51,7 +47,7 @@ public class PreviousPatientScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
-					manager.setPatient((PatientEntry)patientTable.getSelectionModel().getSelectedItem());
+					manager.setPatient(patientTable.getSelectionModel().getSelectedItem());
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PatientInfo");
 				} else {
