@@ -145,12 +145,30 @@ public class PatientManagement {
 			throw new IOException("Invalid padding on algorithm. Read failed");
 		}
 	}
+	
+	public static void deletePatient(String path, String uid) throws IOException{
+		File top = new File(path, uid);
+		File data = new File(top.getAbsolutePath(), "data.enc");
+		data.delete();
+		top.delete();
+		
+		remPatient(uid);
+	}
 
 	public static void addPatient(PatientEntry p) throws IOException{
 		if(patientList == null) {
 			patientList = importPatientList();
 		}
 		patientList.put(p.uid, p);
+		exportPatientList();
+	}
+	
+	public static void remPatient(String uid) throws IOException{
+		if(patientList == null) {
+			patientList = importPatientList();
+		}
+		
+		patientList.remove(uid);
 		exportPatientList();
 	}
 
