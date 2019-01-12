@@ -17,10 +17,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
+import utils.PatientManagement;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
@@ -241,32 +243,36 @@ public class VerticalSideMenu {
 			
 			contentGrid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
 			
-			/* TODO for (int i = 0; i < manager.getPatient().getNumScans(); ++i) {
-				Label newLbl = new Label("");
-				if (i == 0) {
-					newLbl.setText("Latest:");
-				}
-				else if (i == manager.getPatient().getNumScans()-1) {
-					newLbl.setText("Oldest:");
-				}
-				Style.styleLabel(newLbl);
-				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
-				Button newBtn = new Button(manager.getPatient().getScans().get(i).getDateOfScan().toString());
-				Style.styleButton(newBtn);
-				GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
-				newBtn.setTooltip(new Tooltip("View this scan."));
-				
-				// TODO: Implement this?
-				newBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						
+			try {
+				Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+				for (int i = 0; i < patient.getNumScans(); ++i) {
+					Label newLbl = new Label("");
+					if (i == 0) {
+						newLbl.setText("Latest:");
 					}
-				});
-				
-				contentGrid.getChildren().addAll(newLbl, newBtn);
+					else if (i == patient.getNumScans()-1) {
+						newLbl.setText("Oldest:");
+					}
+					Style.styleLabel(newLbl);
+					GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
+					Button newBtn = new Button(patient.getScans().get(i).getDateOfScan().toString());
+					Style.styleButton(newBtn);
+					GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
+					newBtn.setTooltip(new Tooltip("View this scan."));
+					
+					newBtn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							// TODO: Implement this?
+						}
+					});
+					
+					contentGrid.getChildren().addAll(newLbl, newBtn);
+				}
+			} catch (IOException e) {
+				manager.makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
 			}
-			*/
+
 			Button uploadBtn = new Button("Upload New Scan");
 			Style.styleButton(uploadBtn);
 			//TODO needs to take into account the number of scans when placing things in the proper row...for some reason...this will change
@@ -358,7 +364,7 @@ public class VerticalSideMenu {
 		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 		
 		//Dummy Data for testing purposes
-		ArrayList regionList = new ArrayList();
+		ArrayList<String> regionList = new ArrayList<String>();
 		for(int i = 0; i < 10; i++) {
 			regionList.add("Region " + i);
 		}

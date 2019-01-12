@@ -22,6 +22,7 @@ import utils.PatientEntry;
  * @author Canyon Schubert & Ty Chase
  */
 public class StateManager {
+	private boolean debug = false; //Manually change this value 
 	private StackPane root = new StackPane();
 	private Scene scene = new Scene(root, 960, 540);
 	private Stage stage;
@@ -111,9 +112,10 @@ public class StateManager {
 			
 			stage.setScene(scene);
 			
-			debugStack();
+			if (debug)
+				debugStack();
 		} catch (Exception e) {
-			makeDialog(e.getStackTrace().toString()); //TODO make a better message
+			makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
 		}
 	}
 	

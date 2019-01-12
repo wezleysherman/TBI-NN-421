@@ -4,24 +4,12 @@ import java.util.Date;
 import java.util.LinkedList;
 import javafx.scene.image.Image;
 import java.util.UUID;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.Cipher;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
 import utils.PatientManagement;
 
 //Class for saving patient information
+@SuppressWarnings("serial")
 public class Patient implements Serializable {
 
 	private static final String basePath = buildDefaultPath();

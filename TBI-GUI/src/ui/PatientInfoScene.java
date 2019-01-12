@@ -26,6 +26,7 @@ import utils.PatientManagement;
 public class PatientInfoScene {
 	
 	public static Scene initializeScene(StateManager manager) throws IOException {
+		//Load Patient info from the database
 		Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
 		
 		BorderPane layout = new BorderPane();
@@ -123,7 +124,11 @@ public class PatientInfoScene {
 	            	patient.setLastName(lastField.getText());
 	            	patient.setNotes(notesArea.getText());
 	            	
-	            	//TODO manager.setPatient(patient); //TODO export to database
+	            	try {
+	            		PatientManagement.exportPatient(patient);
+	            	} catch (Exception ex) {
+	            		manager.makeDialog("Edit operation failed. Voiding changes.");
+	            	}
 	            	manager.setStateBool(false);
 	            	manager.paintScene("PatientInfo");
 	            }

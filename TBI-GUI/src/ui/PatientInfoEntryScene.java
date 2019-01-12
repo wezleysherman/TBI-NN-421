@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
+import utils.PatientManagement;
 
 public class PatientInfoEntryScene {
 	static boolean analyzeFailed = false;
@@ -116,15 +117,18 @@ public class PatientInfoEntryScene {
 					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
 					Date date = Date.from(instant);
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), date, notesField.getText());
-					//TODO manager.setPatient(patient);
+					try {
+						PatientManagement.exportPatient(patient);
+					} catch (Exception ex) {
+						manager.makeDialog("Creating new patient failed.");
+					}
 					manager.getSceneStack().push(manager.getSceneID());
-					manager.paintScene("ScanVisualizer");
+					manager.paintScene("PreviousPatient");
 				}
 			}
 			
 		});
-		String analyzeTT = "Save patient information and analyze the selected scan (displays %chance of abuse and links to more information).";
-		analyze.setTooltip(new Tooltip(analyzeTT));
+		analyze.setTooltip(new Tooltip("Save patient information and analyze the selected scan (displays %chance of abuse and links to more information)."));
 				
 		//Construct Grid
 		contentGrid.setVgap(15);
