@@ -1,0 +1,2 @@
+Python Version 3.6.8
+PyQt5 Version 5.9.2
