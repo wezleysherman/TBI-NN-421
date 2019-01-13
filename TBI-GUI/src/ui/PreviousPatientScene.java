@@ -66,14 +66,18 @@ public class PreviousPatientScene {
 		patientTable.setEditable(false);
 		
 		TableColumn nameCol = new TableColumn("Name");
+		nameCol.prefWidthProperty().bind(patientTable.widthProperty().multiply(.5));
 		nameCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("name"));
 		
 		TableColumn uidCol = new TableColumn("UID");
+		uidCol.prefWidthProperty().bind(patientTable.widthProperty().multiply(.5));
 		uidCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("uid"));
 		
+		patientTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		patientTable.getColumns().addAll(nameCol, uidCol);
 		
 		patientTable.setItems(patientList);
+		patientTable.getStyleClass().add("tableview");
 		
 		//Construct Grid		
 		RowConstraints rowCon = new RowConstraints();

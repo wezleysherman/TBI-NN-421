@@ -108,8 +108,9 @@ public class StateManager {
 		else if (sceneID.equals("PatientInfo")) {
 			scene = new PatientInfoScene().initializeScene(this);
 		}
-		
+
 		stage.setScene(scene);
+		stage.getScene().getStylesheets().add(getClass().getResource("darkTheme.css").toExternalForm());
 		
 		debugStack();
 	}
