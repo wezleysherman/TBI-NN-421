@@ -1,8 +1,7 @@
 package ui;
 
 import java.io.File;
-import java.util.ArrayList;
-
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -17,8 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import utils.PatientManagement;
 
 /**
  * This page displays all the info associated with a chosen patient
@@ -26,7 +25,10 @@ import javafx.stage.FileChooser;
  */
 public class PatientInfoScene {
 	
-	public static Scene initializeScene(StateManager manager) {
+	public static Scene initializeScene(StateManager manager) throws IOException {
+		//Load Patient info from the database
+		Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+		
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
@@ -58,12 +60,12 @@ public class PatientInfoScene {
 				firstNameLabel, lastNameLabel, notesLabel, scansLabel
 			);
 		
-		
-		/*if (!manager.getStateBool()) {
+		//Check if edit was pressed
+		if (!manager.getStateBool()) {
 			//Create elements
-			Label firstName = new Label(manager.getPatient().getFirstName());
-			Label lastName = new Label(manager.getPatient().getLastName());
-			Label notes = new Label(manager.getPatient().getNotes());
+			Label firstName = new Label(patient.getFirstName());
+			Label lastName = new Label(patient.getLastName());
+			Label notes = new Label(patient.getNotes());
 			
 			GridPane scrollGrid = new GridPane();
 			ScrollPane scrollPane = new ScrollPane(scrollGrid);
@@ -73,7 +75,7 @@ public class PatientInfoScene {
 			scrollGrid.getColumnConstraints().add(scrollGridCols);
 			scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 			
-			for (int i = 0; i < manager.getPatient().getNumScans(); ++i) {
+			for (int i = 0; i < patient.getNumScans(); ++i) {
 				Button scanBtn = new Button("Scan " + (i+1));
 				Style.styleButton(scanBtn);
 				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -81,7 +83,7 @@ public class PatientInfoScene {
 					public void handle(ActionEvent arg0) {
 						//i is out of scope, so get scan num from button text
 						int scanNum = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length()-1))-1;
-						manager.setScan(manager.getPatient().getScans().get(scanNum));
+						manager.setScan(patient.getScans().get(scanNum));
 						manager.getSceneStack().push(manager.getSceneID());
 						manager.paintScene("ScanVisualizer");
 					}
@@ -102,9 +104,9 @@ public class PatientInfoScene {
 		}
 		else {
 			//Create elements
-			TextField firstField = new TextField(manager.getPatient().getFirstName());
-			TextField lastField = new TextField(manager.getPatient().getLastName());
-			TextArea notesArea = new TextArea(manager.getPatient().getNotes());
+			TextField firstField = new TextField(patient.getFirstName());
+			TextField lastField = new TextField(patient.getLastName());
+			TextArea notesArea = new TextArea(patient.getNotes());
 			Button fileBtn = new Button("Add Scan");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
@@ -118,11 +120,15 @@ public class PatientInfoScene {
 			saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	            	manager.getPatient().setFirstName(firstField.getText());
-	            	manager.getPatient().setLastName(lastField.getText());
-	            	manager.getPatient().setNotes(notesArea.getText());
+	            	patient.setFirstName(firstField.getText());
+	            	patient.setLastName(lastField.getText());
+	            	patient.setNotes(notesArea.getText());
 	            	
-	            	manager.setPatient(manager.getPatient());
+	            	try {
+	            		PatientManagement.exportPatient(patient);
+	            	} catch (Exception ex) {
+	            		manager.makeDialog("Edit operation failed. Voiding changes.");
+	            	}
 	            	manager.setStateBool(false);
 	            	manager.paintScene("PatientInfo");
 	            }
@@ -161,7 +167,7 @@ public class PatientInfoScene {
 			contentGrid.getChildren().addAll(
 					firstField, lastField, notesArea, fileBtn, saveBtn, cancelBtn
 				);
-		}*/
+		}
 
 		//Merge content grid with left nav
 		mainGrid = VerticalSideMenu.newSideBar(manager);

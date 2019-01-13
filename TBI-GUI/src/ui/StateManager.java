@@ -1,7 +1,7 @@
 package ui;
 
+import java.io.IOException;
 import java.util.Stack;
-
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -10,10 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,6 +22,7 @@ import utils.PatientEntry;
  * @author Canyon Schubert & Ty Chase
  */
 public class StateManager {
+	private boolean debug = false; //Manually change this value 
 	private StackPane root = new StackPane();
 	private Scene scene = new Scene(root, 960, 540);
 	private Stage stage;
@@ -82,31 +81,41 @@ public class StateManager {
 	/**
 	 * Determines which scene to paint to the stage
 	 * @param newSceneID :is currently a distinct string indicating which scene will be displayed, it is different than sceneID for stack pushing purposes
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID) {			
 		this.sceneID = newSceneID; // current scene being displayed(added onto sceneStack when changed)
 		
-		if (sceneID.equals("Landing")) {
-			this.patient = null;
-			scene = new LandingScene().initializeScene(this);
-		}
-		else if (sceneID.equals("PatientInfoEntry")) {
-			this.patient = null;
-			scene = new PatientInfoEntryScene().initializeScene(this);
-		}
-		else if (sceneID.equals("LikelyTraumaAreas"))
-			scene = new LikelyTraumaAreasScene().initializeScene(this);
-		else if (sceneID.equals("CNNVisualizer"))
-			scene = new CNNVisualizationScene().initializeScene(this);
-		else if (sceneID.equals("PreviousPatient"))
-			scene = new PreviousPatientScene().initializeScene(this);
-		else if (sceneID.equals("AlgorithmVisualizer"))
-			scene = new AlgorithmVisualizerScene().initializeScene(this);
-		else if (sceneID.equals("ScanVisualizer"))
-			scene = new ScanVisualizerScene().initializeScene(this);
-		else if (sceneID.equals("PatientInfo")) {
-			scene = new PatientInfoScene().initializeScene(this);
+		try {
+			if (sceneID.equals("Landing")) {
+				this.patient = null;
+				scene = new LandingScene().initializeScene(this);
+			}
+			else if (sceneID.equals("PatientInfoEntry")) {
+				this.patient = null;
+				scene = new PatientInfoEntryScene().initializeScene(this);
+			}
+			else if (sceneID.equals("LikelyTraumaAreas"))
+				scene = new LikelyTraumaAreasScene().initializeScene(this);
+			else if (sceneID.equals("CNNVisualizer"))
+				scene = new CNNVisualizationScene().initializeScene(this);
+			else if (sceneID.equals("PreviousPatient"))
+				scene = new PreviousPatientScene().initializeScene(this);
+			else if (sceneID.equals("AlgorithmVisualizer"))
+				scene = new AlgorithmVisualizerScene().initializeScene(this);
+			else if (sceneID.equals("ScanVisualizer"))
+				scene = new ScanVisualizerScene().initializeScene(this);
+			else if (sceneID.equals("PatientInfo")) {
+				scene = new PatientInfoScene().initializeScene(this);
+			}
+			
+			stage.setScene(scene);
+			
+			if (debug)
+				debugStack();
+		} catch (Exception e) {
+			makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
 		}
 
 		stage.setScene(scene);
