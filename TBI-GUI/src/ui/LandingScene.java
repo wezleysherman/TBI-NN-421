@@ -19,7 +19,7 @@ import java.util.LinkedList;
 
 public class LandingScene {
 	
-	public static boolean debug = true; //Manually change this value
+	public static boolean debug = false; //Manually change this value TODO remove all the debug stuff from this class
 			
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();

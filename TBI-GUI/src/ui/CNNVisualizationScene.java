@@ -57,7 +57,7 @@ public class CNNVisualizationScene {
 		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 		
 		//Dummy Data for testing purposes
-		ArrayList layerList = new ArrayList();
+		ArrayList<String> layerList = new ArrayList<String>();
 		for(int i = 0; i < 10; i++) {
 			layerList.add("Layer " + i);
 		}
