@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import utils.PatientEntry;
+import utils.Scan;
 
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage

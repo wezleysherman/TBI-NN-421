@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
+import utils.Patient;
 import utils.PatientManagement;
 
 public class PatientInfoEntryScene {

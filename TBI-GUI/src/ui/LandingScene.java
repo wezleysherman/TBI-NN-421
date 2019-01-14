@@ -13,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import utils.Patient;
+import utils.Scan;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -73,50 +75,7 @@ public class LandingScene {
 		GridPane.setConstraints(prevPatBtn, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		grid.getChildren().addAll(newPatBtn, orLabel, prevPatBtn);
-		
-		// DEBUG BUTTONS
-		
-		Button viewScanBtn = new Button("View Scan <DEBUG>");
-		viewScanBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				LinkedList<Scan> scans = new LinkedList<Scan>();
-				Image img = new Image("/resources/TestImage1.jpg");
-				Image img2 = new Image("/resources/TestImage1.jpg");
-				Image img3 = new Image("/resources/TestImage1.jpg");
-				Image img4 = new Image("/resources/TestImage1.jpg");
-				scans.push(new Scan(new Date(115, 3, 12), img));
-				scans.push(new Scan(new Date(116, 4, 2), img2));
-				scans.push(new Scan(new Date(117, 8, 11), img3));
-				scans.push(new Scan(new Date(), img4));
-				Patient patient = new Patient("John", "Doe", new Date(), 
-						"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-						+ "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure "
-						+ "dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
-						+ "proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-						);
-				patient.setScans(scans);
 				
-				//TODO manager.setPatient(patient);
-				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("ScanVisualizer");
-			}
-		});
-		GridPane.setConstraints(viewScanBtn, 0, 0, 1, 1);
-		
-		Button likelyTraumaBtn = new Button("Trauma Areas Visualizer <DEBUG>");
-		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("LikelyTraumaAreas");
-			}
-		});
-		GridPane.setConstraints(likelyTraumaBtn, 0, 1, 1, 1);
-		
-		// add button to whichever page you are working on and turn debug on (remember to turn it off before merging)
-		if (debug) grid.getChildren().addAll(viewScanBtn/*, likelyTraumaBtn*/);
-		
 		//Add Grid and layout to scene
 		Style.styleLandingBorderPane(layout);
 		layout.setCenter(grid);
