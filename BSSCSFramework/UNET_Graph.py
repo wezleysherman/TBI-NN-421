@@ -1,7 +1,7 @@
 # Authors: Wezley Sherman
 #
 # Reference Attributes: U-Net: Convolutional Networks for Biomedical Image Segmentation
-# By: Olaf Ronneberger, Philipp Fischer, and Thomas Brox
+# Authors: Olaf Ronneberger, Philipp Fischer, and Thomas Brox
 #
 # This class is a part of the BSSCS Net Framework to import DICOM images and batch them for the UNET
 #
@@ -23,17 +23,29 @@ class BSSCS_UNET:
 		''' Handles generating a TF Implementation of a UNET utilizing the architecture discussed in
 		    "U-Net: Convolutional Networks for Biomedical Image Segmentation" by Ronneberger, Fischer, and Brox
 
-		    While the code for the implementation is 100% ours, the architecture for the UNET is not. We are not claiming any ownership for the architecture. 
+		    The architecture for the UNET is not ours and all accrediation goes to Olaf Ronneberger, Philipp Fischer, and Thomas Brox. 
+		    We are not claiming any ownership for the architecture. 
 		    Implementing the UNET arch is comparable to implementing selection sort.
 
 		    tf.layers.conv2d docs: https://www.tensorflow.org/api_docs/python/tf/layers/conv2d
 			tf.layers.conv2d_transpost for up convolutions: https://www.tensorflow.org/api_docs/python/tf/layers/conv2d_transpose
 			tf.concat for the copy and crop methods: https://www.tensorflow.org/api_docs/python/tf/concat
+			tf.slice for cropping the tensors: https://www.tensorflow.org/api_docs/python/tf/slice
 			Hopefully I implemented this correctly  ¯\_(ツ)_/¯
 
-			Notes after implementing: The architecture mentioned a 'copy and crop' -.. I know that with tf.concat we are essentially performing the 'copy'
-			by concatinating the two sets of matricies. However; I'm kinda at a loss as to how the 'crop' is supposed to happen... Actually, the crop
-			is because we are trying to concat matricies of different sizes. This probably wont work without the crop. TO-DO: Figure out the crop.
+			Quick guide on cropping a tensor -..
+
+			So after some research through the doc's I found out that we can't just crop it as if it were an image, because we are dealing with Tensors (matricies of data).
+
+			In order to crop a tensor we must use TensorFlow's slice function (https://www.tensorflow.org/api_docs/python/tf/slice)
+			
+			Here we are cropping the convolutional layer we are upsampling to be the size of the convolutional layer we are concating to. 
+			I'm starting at the base coordinates for the tensor object, and am cropping JUST the images (or filters). Thus why we have [-1, size_x, size_y, -1]. 
+			The '-1' values are there to ensure we are keeping the remaining elements of the dimension (AKA our batch size and number of filters) . 
+			From TF Docs on the -1 values: " If size[i] is -1, all remaining elements in dimension i are included in the slice. In other words, this is equivalent to setting: size[i] = input.dim_size(i) - begin[i]"
+
+			Once the tensor is properly cropped (Where each filter is the same size as the tensor we are copying into), we can concat the tensors. 
+			This allows us to copy in all of the previous filters into the current tensor. The final shape will be: [Batch, Img_X, Img_Y, [Filters_A + Filters_B]]
 		'''
 		# first block in UNET --> Concat with the final block
 		convolution_layer_1 = tf.layers.conv2d(inputs=input, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
@@ -61,35 +73,37 @@ class BSSCS_UNET:
 		convolution_up_1 = tf.layers.conv2d_transpose(inputs=convolution_layer_10, filters=1024, kernel_size=[2, 2], strides=1, padding="SAME")
 		
 		# fourth from last 
-		# Is this how you do it? -- TO-DO: Double check this concat -.. I'm only copying; not cropping here.
-		concat_layer_1 = tf.concat([convolution_up_1, convolution_layer_8], axis=1)
+		convolution_up_1 = tf.slice(convolution_up_1, [0, 0, 0, 0], [-1, convolution_layer_8.shape[1], convolution_layer_8.shape[2], -1])
+		concat_layer_1 = tf.concat([convolution_up_1, convolution_layer_8], axis=3) # Note: Experiment with the axis to ensure it is correct. Are we copying the batches or the filters? -- However; different axis's cause an error.
+		# print(concat_layer_1.shape) # Comes out to be [Batch_Size, Image_X, Image_Y, (Filters_Conv_8 + Filters_Conv_Up_1)]
 		convolution_layer_11 = tf.layers.conv2d(inputs=concat_layer_1, filters=512, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_12 = tf.layers.conv2d(inputs=convolution_layer_11, filters=512, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_2 = tf.layers.conv2d_transpose(inputs=convolution_layer_12, filters=512, kernel_size=[2, 2], strides=1, padding="SAME")
 
+		
 		# third from last
-		# Is this how you do it? -- TO-DO: Double check this concat -.. I'm only copying; not cropping here.
-		concat_layer_1 = tf.concat([convolution_up_2, convolution_layer_6], axis=1)
+		convolution_up_2 = tf.slice(convolution_up_2, [0, 0, 0, 0], [-1, convolution_layer_6.shape[1], convolution_layer_6.shape[2], -1])
+		concat_layer_1 = tf.concat([convolution_up_2, convolution_layer_6], axis=3)
 		convolution_layer_13 = tf.layers.conv2d(inputs=convolution_up_2, filters=256, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_14 = tf.layers.conv2d(inputs=convolution_layer_13, filters=256, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_3 = tf.layers.conv2d_transpose(inputs=convolution_layer_14, filters=256, kernel_size=[2, 2], strides=1, padding="SAME")
 
 		# second from last
-		# Is this how you do it? -- TO-DO: Double check this concat -.. I'm only copying; not cropping here.
-		concat_layer_1 = tf.concat([convolution_up_3, convolution_layer_4], axis=1)
+		convolution_up_3 = tf.slice(convolution_up_3, [0, 0, 0, 0], [-1, convolution_layer_4.shape[1], convolution_layer_4.shape[2], -1])
+		concat_layer_1 = tf.concat([convolution_up_3, convolution_layer_4], axis=3)
 		convolution_layer_15 = tf.layers.conv2d(inputs=convolution_up_3, filters=256, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_16 = tf.layers.conv2d(inputs=convolution_layer_15, filters=128, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_4 = tf.layers.conv2d_transpose(inputs=convolution_layer_16, filters=128, kernel_size=[2, 2], strides=1, padding="SAME")
 
 		# last block
-		# Is this how you do it? -- TO-DO: Double check this concat -.. I'm only copying; not cropping here.
-		concat_layer_1 = tf.concat([convolution_up_4, convolution_layer_2], axis=1)
+		convolution_up_4 = tf.slice(convolution_up_4, [0, 0, 0, 0], [-1, convolution_layer_2.shape[1], convolution_layer_2.shape[2], -1])
+		concat_layer_1 = tf.concat([convolution_up_4, convolution_layer_2], axis=3)
 		convolution_layer_17 = tf.layers.conv2d(inputs=convolution_up_4, filters=128, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_18 = tf.layers.conv2d(inputs=convolution_layer_17, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_19 = tf.layers.conv2d(inputs=convolution_layer_18, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_5 = tf.layers.conv2d_transpose(inputs=convolution_layer_19, filters=2, kernel_size=[1, 1], strides=1, padding="SAME")
-
-		return None
+		print(convolution_up_5.shape)
+		#return None
 
 	def train_unet(self):
 		''' Handles training a UNET based off the data fed to it
