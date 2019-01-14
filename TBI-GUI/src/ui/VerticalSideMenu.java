@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
+import utils.Patient;
 import utils.PatientManagement;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;

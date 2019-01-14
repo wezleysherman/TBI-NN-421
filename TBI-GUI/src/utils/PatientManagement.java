@@ -24,8 +24,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SealedObject;
 
-import ui.Patient;
-
 //for documentation, see TBI-GUI\GUI_DOCS\patientManagementDoc.html
 public class PatientManagement {
 
