@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -24,7 +26,7 @@ import javax.crypto.SealedObject;
 //for documentation, see TBI-GUI\GUI_DOCS\patientManagementDoc.html
 public class PatientManagement {
 
-	private static final String defaultPath = buildDefaultPath();
+	private static String defaultPath = buildDefaultPath();
 	private static Hashtable <String, PatientEntry> patientList;
 
 	private static String buildDefaultPath() {
@@ -36,6 +38,10 @@ public class PatientManagement {
 
 	public static String getDefaultPath() {
 		return defaultPath;
+	}
+	
+	public static void setDefaultPath(String dp) {
+		defaultPath = dp;
 	}
 
 	public static boolean exportPatient(Patient patient) throws IOException {
@@ -128,6 +134,9 @@ public class PatientManagement {
 		} catch (NoSuchPaddingException e) {
 			fin.close();
 			throw new IOException("Invalid padding on algorithm. Read failed.");
+		} catch (StreamCorruptedException e) {
+			fin.close();
+			throw new IOException("Invalid key. Read failed.");
 		} catch (InvalidKeyException e) {
 			fin.close();
 			throw new IOException("Invalid key. Read failed.");
@@ -140,6 +149,9 @@ public class PatientManagement {
 		} catch (BadPaddingException e) {
 			fin.close();
 			throw new IOException("Invalid padding on algorithm. Read failed");
+		} catch (InvalidClassException e) {
+			fin.close();
+			throw new IOException("You are attempting to access a previous version of the Patient class. Read failed.");
 		}
 	}
 	

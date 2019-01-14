@@ -119,6 +119,11 @@ public class StateManager {
 			//makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
 			e.printStackTrace();
 		}
+
+		stage.setScene(scene);
+		stage.getScene().getStylesheets().add(getClass().getResource("darkTheme.css").toExternalForm());
+		
+		debugStack();
 	}
 	
 	/**
