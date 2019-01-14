@@ -3,6 +3,11 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.ObjectInputStream;
+import java.io.StreamCorruptedException;
 import java.util.Date;
 import java.util.Hashtable;
 import org.junit.Before;
@@ -75,5 +80,43 @@ public class PatientManagementTest {
 		temp = (PatientEntry)patientList.get(patient2.getUID());
 		assertEquals(temp.name, patient2.getFirstName() + " " + patient2.getLastName());
 	}
-
+	
+	@Test
+	public void testCatchBadKey() throws Exception {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "tests");
+		f = new File(f.getAbsolutePath(), "patients");
+		
+		try {
+			PatientManagement.importPatient(f.getAbsolutePath(), patient.getUID());
+		} catch (Exception e) {
+			if(e.getClass().equals(IOException.class)) {
+				assertEquals(e.getMessage(),"Invalid key. Read failed.");
+			} else {
+				throw e;
+			}
+		}
+	}
+	
+	@Test
+	public void testCatchSerialization() throws Exception {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "tests");
+		f = new File(f.getAbsolutePath(), "patients");
+		PatientManagement.setDefaultPath(f.getAbsolutePath());
+		PatientManagement.importPatientList();
+		
+		try {
+			PatientManagement.importPatient(f.getAbsolutePath(), patient.getUID());
+		} catch (Exception e) {
+			if(e.getClass().equals(IOException.class)) {
+				assertEquals(e.getMessage(),"You are attempting to access a previous version of the Patient class. Read failed.");
+			} else {
+				throw e;
+			}
+		}
+		
+		PatientManagement.setDefaultPath(PatientManagement.getDefaultPath());
+		PatientManagement.importPatientList();
+	}
 }
