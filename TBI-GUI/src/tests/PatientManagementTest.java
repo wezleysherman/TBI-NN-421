@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import org.junit.Before;
 import org.junit.Test;
 
-import ui.Patient;
+import utils.Patient;
 import utils.PatientEntry;
 import utils.PatientManagement;
 

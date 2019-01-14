@@ -1,7 +1,12 @@
 package ui;
 
+import utils.Patient;
+import utils.PatientManagement;
+import utils.Scan;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -9,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -17,7 +23,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import utils.PatientManagement;
 
 /**
  * This page displays all the info associated with a chosen patient
@@ -48,8 +53,12 @@ public class PatientInfoScene {
 		ColumnConstraints column0 = new ColumnConstraints();
 		column0.setPercentWidth(25);
 		ColumnConstraints column1 = new ColumnConstraints();
-		column1.setPercentWidth(75);
-		contentGrid.getColumnConstraints().addAll(column0, column1);
+		column1.setPercentWidth(25);
+		ColumnConstraints column2 = new ColumnConstraints();
+		column2.setPercentWidth(25);
+		ColumnConstraints column3 = new ColumnConstraints();
+		column3.setPercentWidth(25);
+		contentGrid.getColumnConstraints().addAll(column0, column1, column2, column3);
 		
 		//Add elements to content grid
 		GridPane.setConstraints(firstNameLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
@@ -107,30 +116,43 @@ public class PatientInfoScene {
 			TextField firstField = new TextField(patient.getFirstName());
 			TextField lastField = new TextField(patient.getLastName());
 			TextArea notesArea = new TextArea(patient.getNotes());
-			Button fileBtn = new Button("Add Scan");
+			Label scanLabel = new Label("Add a New Scan:");
+			Button fileBtn = new Button("Select File");
+			DatePicker datePicker = new DatePicker();
+			datePicker.setPromptText("Date of Scan");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
 			Style.styleButton(fileBtn);
 			Style.styleButton(saveBtn);
 			Style.styleButton(cancelBtn);
-			fileBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			cancelBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			datePicker.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			
+			Scan newScan = new Scan();
 			
 			saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
-	            	patient.setFirstName(firstField.getText());
-	            	patient.setLastName(lastField.getText());
-	            	patient.setNotes(notesArea.getText());
-	            	
 	            	try {
-	            		PatientManagement.exportPatient(patient);
+    	            	if (newScan.getDateOfScan() == null && newScan.getScan() != null) {
+    	            		manager.makeDialog("Please select a date for the new scan.");
+    	            	}
+    	            	else if (newScan.getDateOfScan() != null && newScan.getScan() == null){
+    	            		manager.makeDialog("Please select a file for the new scan.");
+    	            	}
+    	            	else {
+    	            		patient.setFirstName(firstField.getText());
+        	            	patient.setLastName(lastField.getText());
+        	            	patient.setNotes(notesArea.getText());
+    	            		if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
+    	            			patient.addScan(newScan);
+    	            		}
+    	            		patient.savePatient();
+    	            		manager.setStateBool(false);
+        	            	manager.paintScene("PatientInfo");
+    	            	}
 	            	} catch (Exception ex) {
 	            		manager.makeDialog("Edit operation failed. Voiding changes.");
 	            	}
-	            	manager.setStateBool(false);
-	            	manager.paintScene("PatientInfo");
 	            }
 	        });
 			
@@ -144,28 +166,37 @@ public class PatientInfoScene {
 			
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.getExtensionFilters().addAll(
-	                new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
-	                new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
+					new FileChooser.ExtensionFilter("NIFTI", "*.nii"),
+	                new FileChooser.ExtensionFilter("NIFTI Full", "*.nifti")
 	            );
 			fileBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
 	                File file = fileChooser.showOpenDialog(manager.getStage());
 	                if (file != null) {
-	                    //TODO patient.addSacn
+	                    newScan.setScan(file);
 	                }
 	            }
 	        });
 			
+			datePicker.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					newScan.setDateOfScan(java.sql.Date.valueOf(datePicker.getValue()));;
+				}
+			});
+			
 			//Add elements to content grid
-			GridPane.setConstraints(firstField, 1, 1, 1, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(lastField, 1, 2, 1, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(notesArea, 1, 3, 1, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(fileBtn, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(saveBtn, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(cancelBtn, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(firstField, 1, 1, 3, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(lastField, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(notesArea, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(scanLabel, 1, 4, 1, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(fileBtn, 2, 4, 1, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(datePicker, 3, 4, 1, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(saveBtn, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(cancelBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
 			contentGrid.getChildren().addAll(
-					firstField, lastField, notesArea, fileBtn, saveBtn, cancelBtn
+					firstField, lastField, notesArea, scanLabel, fileBtn, datePicker, saveBtn, cancelBtn
 				);
 		}
 

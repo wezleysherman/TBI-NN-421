@@ -1,5 +1,7 @@
 package ui;
 
+import utils.PatientEntry;
+import utils.Scan;
 import java.io.IOException;
 import java.util.Stack;
 import javafx.geometry.HPos;
@@ -15,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import utils.PatientEntry;
 
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
@@ -115,7 +116,8 @@ public class StateManager {
 			if (debug)
 				debugStack();
 		} catch (Exception e) {
-			makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
+			//makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
+			e.printStackTrace();
 		}
 	}
 	

@@ -1,5 +1,11 @@
 package ui;
 
+import utils.Patient;
+import utils.PatientManagement;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EmptyStackException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -17,14 +23,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
-import utils.PatientManagement;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EmptyStackException;
 
 public class VerticalSideMenu {
 		

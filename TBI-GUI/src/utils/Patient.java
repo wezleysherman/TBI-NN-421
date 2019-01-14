@@ -1,12 +1,10 @@
-package ui;
+package utils;
 
 import java.util.Date;
 import java.util.LinkedList;
-import javafx.scene.image.Image;
 import java.util.UUID;
 import java.io.File;
 import java.io.Serializable;
-import utils.PatientManagement;
 
 //Class for saving patient information
 @SuppressWarnings("serial")
@@ -35,7 +33,6 @@ public class Patient implements Serializable {
 			this.setLastScanDate(new Date());
 			this.numScans = scans.size();
 		}
-
 	
 	// constructor for fresh patient with no scans (needs UID generated)
 	public Patient(String fName, String lName, Date pDate, String pNotes) {
@@ -51,7 +48,7 @@ public class Patient implements Serializable {
 	}
 
 	// constructor for patient with only one scan being entered
-	public Patient(String fName, String lName, Date pDate, String pNotes, Image pScan) {
+	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan) {
 		this.setFirstName(fName);
 		this.setLastName(lName);
 		this.setDate(pDate);

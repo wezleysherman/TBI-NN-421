@@ -1,11 +1,11 @@
 package tests;
 
-import ui.Patient;
-
 import java.io.File;
 import java.util.Date;
 
 import org.junit.Test;
+
+import utils.Patient;
 
 import static org.junit.Assert.*;
 

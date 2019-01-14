@@ -1,11 +1,12 @@
 package ui;
 
+import utils.Patient;
+import utils.PatientManagement;
 import java.io.File;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,7 +27,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
-import utils.PatientManagement;
 
 public class PatientInfoEntryScene {
 	static boolean analyzeFailed = false;
@@ -160,9 +160,7 @@ public class PatientInfoEntryScene {
 				
 		//File Chooser Setup
 		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("DICOM", "*.dcm"),
 				new FileChooser.ExtensionFilter("NIFTI", "*.nii"),
-                new FileChooser.ExtensionFilter("DICOM Full", "*.dicom"),
                 new FileChooser.ExtensionFilter("NIFTI Full", "*.nifti")
             );
 		

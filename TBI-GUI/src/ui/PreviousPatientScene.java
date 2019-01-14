@@ -1,8 +1,9 @@
 package ui;
 
+import utils.PatientEntry;
+import utils.PatientManagement;
 import java.util.Hashtable;
 import java.util.Set;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,8 +20,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import utils.PatientEntry;
-import utils.PatientManagement;
 
 public class PreviousPatientScene {
 	
