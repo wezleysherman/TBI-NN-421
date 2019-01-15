@@ -120,7 +120,7 @@ public class StateManager {
 		}
 
 		stage.setScene(scene);
-		stage.getScene().getStylesheets().add(getClass().getResource("darkTheme.css").toExternalForm());
+		stage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
 		
 		debugStack();
 	}
