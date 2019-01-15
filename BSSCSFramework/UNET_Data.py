@@ -14,6 +14,7 @@ class UNET_DATA:
 	def __init__(self, labels_arr=None, image_arr=None):
 		self.current_batch = 0
 		self.batch_size = 0
+		self.total_batches = 0
 		self.labels = labels_arr
 		self.images = image_arr
 	
@@ -28,6 +29,12 @@ class UNET_DATA:
 		end_pos =  (self.batch_size * self.current_batch+1)
 		label_batch = self.labels[start_pos:end_pos]
 		image_batch = self.images[start_pos:end_pos]
+
+		# Reset the current batch once we've iterated through all of our data
+		self.current_batch += 1
+		if(self.current_batch >= self.total_batches):
+			self.current_batch = 0
+
 		return label_batch, image_batch
 		
 	def fetch_data(self, path_to_csv):

@@ -14,10 +14,14 @@
 # Site:
 # https://arxiv.org/pdf/1505.04597.pdf
 import tensorflow as tf
+from UNET_Data import UNET_DATA
 
 class BSSCS_UNET:
-	def __init__(self, learning_rate=0.001):
+	def __init__(self, iterations, batch_size, data_class, learning_rate=0.001):
 		self.learning_rate = learning_rate
+		self.iterations = iterations
+		self.batch_size = batch_size
+		self.data_class = data_class
 
 	def generate_unet_arch(self, input):
 		''' Handles generating a TF Implementation of a UNET utilizing the architecture discussed in
@@ -103,30 +107,64 @@ class BSSCS_UNET:
 		convolution_layer_19 = tf.layers.conv2d(inputs=convolution_layer_18, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_5 = tf.layers.conv2d_transpose(inputs=convolution_layer_19, filters=2, kernel_size=[1, 1], strides=1, padding="SAME")
 		print(convolution_up_5.shape)
-		#return None
+		return convolution_up_5
 
 	def train_unet(self):
 		''' Handles training a UNET based off the data fed to it
 		'''
-		return None
 
-	def test_unet(self):
+		# This is where I would put my loss and optimization functions -..
+		# ..
+		# ..
+		# IF I HAD ONE!
+		#
+		# Meme Reference: https://www.youtube.com/watch?v=ciWPFvLS5IY
+		#
+		# On a serious note -.. Here is where we will plug in the deep regressor once that's built.
+		# After a UNET run the image will be passed to the deep regressor.
+		# The regressor will contain the loss function we are optimizing to.
+		input_ph = tf.placeholder(tf.float32, shape=[None, 572, 572, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
+		conv_input = self.generate_unet_arch(input_ph)
+		with tf.Session() as session:
+			for iteration in range(0, self.iterations): # counts for epochs -- or how many times we go through our data
+				for batch in range(0, self.batch_size):
+					y_b, X_b = self.data_class.get_next_batch()
+					session.run(conv_input, feed_dict={input:X_b})
+
+				if iteration % 500 == 0:
+					# Evaluate mse loss here and print the value
+					print("Passed 500 iterations with mse: ")
+		
+
+	def test_unet(self, graph_out, input_x):
 		''' Runs a trained UNET through an evaluation/test phase to detect errors
+
+			Parameters:
+				- graph_out: conv2d_tranpose tensor - The last layer in the graph
+				- input_x: image_arr  - Image array of shape [None, x, y, 1]
+
+			Returns:
+				- output: Returns the output of the unet graph
 		'''
-		return None
+		with tf.Session() as session:
+			output = session.run(graph_out, feed_dict={input:input_x})
+
+		return output
 
 	def save_graph(self):
 		''' Saves a UNET graph
 		'''
+		# To-Do: Implement when deep regressor is finished
 		return None
 
 	def load_graph(self):
 		''' Loads a UNET graph
 		'''
+		# To-Do: Implement when deep regressor is finished
 		return None
 
+bsscs_data = UNET_DATA([1, 2, 3], [1, 2, 3])
 # quick test for errors
-bsscs = BSSCS_UNET()
-input_ph = tf.placeholder(tf.float32, shape=[None, 572, 572, 1])
+bsscs = BSSCS_UNET(1, 1, bsscs_data)
 # Oh boy, this is scary
-bsscs.generate_unet_arch(input_ph)
+bsscs.train_unet()
