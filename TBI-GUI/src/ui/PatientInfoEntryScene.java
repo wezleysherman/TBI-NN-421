@@ -1,9 +1,7 @@
 package ui;
 
 import java.io.File;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 import javafx.beans.value.ChangeListener;
@@ -28,6 +26,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
 import utils.Patient;
 import utils.PatientManagement;
+import utils.Scan;
 
 public class PatientInfoEntryScene {
 	static boolean analyzeFailed = false;
@@ -43,7 +42,7 @@ public class PatientInfoEntryScene {
 		TextField notesField = new TextField();
 		FileChooser fileChooser = new FileChooser();
 		DatePicker datePicker = new DatePicker();
-		Button analyze = new Button();
+		Button finishBtn = new Button("Finish");
 		
 		//Text fields set up and design
 		patFNameField.setMaxSize(200, 10);
@@ -82,55 +81,6 @@ public class PatientInfoEntryScene {
 		fileStackPane.setVisible(false);
 		dateStackPane.setVisible(false);
 		
-		//Analyze button Setup/Styling/Tooltips
-		analyze.setText("Analyze");
-		
-		Style.styleButton(analyze);
-		
-		analyze.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-
-				boolean complete = true;
-				if(patFNameField.getText().equals("")) {
-					complete = false;
-					fNameStackPane.setVisible(true);
-				} else {
-					fNameStackPane.setVisible(false);
-				}	
-				if(patLNameField.getText().equals("")) {
-					complete = false;
-					lNameStackPane.setVisible(true);
-				} else {
-					lNameStackPane.setVisible(false);
-				}
-				if(datePicker.getValue() == null) {
-					complete = false;
-					dateStackPane.setVisible(true);
-				} else {
-					dateStackPane.setVisible(false);
-				}
-				
-				//Switch to proper scene
-				if(complete) {
-					// TODO: this sets the time to midnight, find a way to get correct date/time
-					Instant instant = Instant.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()));
-					Date date = Date.from(instant);
-					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), date, notesField.getText());
-					try {
-						PatientManagement.exportPatient(patient);
-					} catch (Exception ex) {
-						manager.makeDialog("Creating new patient failed.");
-					}
-					manager.getSceneStack().push(manager.getSceneID());
-					manager.paintScene("PreviousPatient");
-				}
-			}
-			
-		});
-		analyze.setTooltip(new Tooltip("Save patient information and analyze the selected scan (displays %chance of abuse and links to more information)."));
-				
 		//Construct Grid
 		contentGrid.setVgap(15);
 		pointerGrid.setVgap(15);
@@ -140,9 +90,9 @@ public class PatientInfoEntryScene {
 		GridPane.setConstraints(fileField, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(datePicker, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(notesField, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(analyze, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(finishBtn, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(pointerGrid, 2, 2, 2, 4, HPos.LEFT, VPos.CENTER);
-		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, datePicker, notesField, analyze, pointerGrid);
+		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, datePicker, notesField, finishBtn, pointerGrid);
 		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100.0/11);
@@ -159,47 +109,93 @@ public class PatientInfoEntryScene {
 		columnCon.setPercentWidth(100);
 		pointerGrid.getColumnConstraints().add(columnCon);
 				
-		//File Chooser Setup
-		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("DICOM", "*.dcm"),
-				new FileChooser.ExtensionFilter("NIFTI", "*.nii"),
-                new FileChooser.ExtensionFilter("DICOM Full", "*.dicom"),
-                new FileChooser.ExtensionFilter("NIFTI Full", "*.nifti")
-            );
+		Scan newScan = new Scan();
 		
-		//Use File Chooser on file select
+		//File Chooser Setup
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt")); //TODO remove .txt
 		fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 				if(arg2) {
 					File file = fileChooser.showOpenDialog(manager.getStage());
 		            if (file != null) {
-		                //TODO
+		            	fileField.setText(file.getName());
+		            	newScan.setScan(file);
 		            }
 				}
 	            datePicker.requestFocus();
 			}
 		});
 		
-		//Set up date picker
+		//Date Picker Setup
 		datePicker.setMaxSize(198, 10);
 		datePicker.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
-				//TODO: use date somewhere and remove suppression
-				@SuppressWarnings("unused")
-				LocalDate date = datePicker.getValue();
+				newScan.setDateOfScan(java.sql.Date.valueOf(datePicker.getValue()));;
 			}
 		});
+		
+		//Finish Button Setup
+		Style.styleButton(finishBtn);
+		
+		finishBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+
+				boolean complete = true;
+				if(patFNameField.getText().equals("")) {
+					complete = false;
+					fNameStackPane.setVisible(true);
+				} else {
+					fNameStackPane.setVisible(false);
+				}	
+				if(patLNameField.getText().equals("")) {
+					complete = false;
+					lNameStackPane.setVisible(true);
+				} else {
+					lNameStackPane.setVisible(false);
+				}
+				
+				//File needs date or date needs file
+				if (newScan.getDateOfScan() != null && newScan.getScan() == null) {
+					complete = false;
+					fileStackPane.setVisible(true);
+				} else {
+					fileStackPane.setVisible(false);
+				}
+				
+				if (newScan.getDateOfScan() == null && newScan.getScan() != null) {
+					complete = false;
+					dateStackPane.setVisible(true);
+				} else {
+					dateStackPane.setVisible(false);
+				}
+				
+				//Switch to proper scene
+				if(complete) {
+					Date dateCreated = java.sql.Date.valueOf(LocalDate.now()); //get current date
+					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), dateCreated, notesField.getText());
+					if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
+						patient.addScan(newScan);
+					}
+					try {
+						PatientManagement.exportPatient(patient);
+					} catch (Exception ex) {
+						manager.makeDialog("Creating new patient failed.");
+					}
+					manager.getSceneStack().push(manager.getSceneID());
+					manager.paintScene("PreviousPatient");
+				}
+			}
+			
+		});
+		finishBtn.setTooltip(new Tooltip("Create a new patient in the system."));
 		
 		//Merge Vertical Side Menu and Content
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-
 		mainGrid.getChildren().add(contentGrid);
-		
 		Style.styleBorderPane(layout);
 		layout.setCenter(mainGrid);
 		

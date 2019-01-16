@@ -23,7 +23,7 @@ import utils.Scan;
  * @author Canyon Schubert & Ty Chase
  */
 public class StateManager {
-	private boolean debug = false; //Manually change this value 
+	private final boolean DEBUG = false; //Manually change this value 
 	private StackPane root = new StackPane();
 	private Scene scene = new Scene(root, 960, 540);
 	private Stage stage;
@@ -112,9 +112,6 @@ public class StateManager {
 			}
 			
 			stage.setScene(scene);
-			
-			if (debug)
-				debugStack();
 		} catch (Exception e) {
 			makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
 		}
@@ -122,7 +119,9 @@ public class StateManager {
 		stage.setScene(scene);
 		stage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
 		
-		debugStack();
+		if (DEBUG) {
+			debugStack();
+		}
 	}
 	
 	/**

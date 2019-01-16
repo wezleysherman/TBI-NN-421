@@ -9,19 +9,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import utils.Patient;
-import utils.Scan;
-
-import java.util.Date;
-import java.util.LinkedList;
 
 public class LandingScene {
-	
-	public static boolean debug = false; //Manually change this value TODO remove all the debug stuff from this class
 			
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
