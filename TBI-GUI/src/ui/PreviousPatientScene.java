@@ -8,17 +8,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import utils.PatientEntry;
 import utils.PatientManagement;
 
@@ -30,9 +36,10 @@ public class PreviousPatientScene {
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
 		TableView<PatientEntry> patientTable = new TableView<PatientEntry>();
+		TitledPane titledPane = new TitledPane();
+		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
 		
 		//Fill the table with information from the database
-		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
 		Set<String> keySet = patients.keySet();
 		ObservableList<PatientEntry> patientList = FXCollections.observableArrayList();
         for(String key: keySet){
@@ -75,10 +82,27 @@ public class PreviousPatientScene {
 		patientTable.setItems(patientList);
 		patientTable.getStyleClass().add("tableview");
 		
+		//Construct titled view
+		VBox vbox = new VBox();
+		HBox hbox1 = new HBox();
+		Label nameLabel = new Label("Name Search: ");
+		TextField searchEntry = new TextField();
+		
+		searchEntry.textProperty().addListener((observable, old, newVal) -> {
+			System.out.println(newVal);
+		});
+		
+		titledPane.setText("Filter");
+		titledPane.setExpanded(false);
+		hbox1.setAlignment(Pos.CENTER_LEFT);
+		hbox1.getChildren().addAll(nameLabel, searchEntry);
+		vbox.getChildren().add(hbox1);
+		titledPane.setContent(vbox);
+		
 		//Construct Grid		
-		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100);
-		contentGrid.getRowConstraints().add(rowCon);
+		RowConstraints rowCon1 = new RowConstraints();
+		rowCon1.setPercentHeight(100);
+		contentGrid.getRowConstraints().addAll(rowCon1);
 		ColumnConstraints columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100);
 		contentGrid.getColumnConstraints().add(columnCon);
@@ -92,6 +116,7 @@ public class PreviousPatientScene {
 
 		mainGrid.getChildren().add(innerLayout);
 		
+		innerLayout.setTop(titledPane);
 		innerLayout.setCenter(contentGrid);
 		innerLayout.setBottom(retrieveBtn);
 		layout.setCenter(mainGrid);
