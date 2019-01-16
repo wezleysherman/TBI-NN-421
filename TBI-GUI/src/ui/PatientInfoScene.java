@@ -163,10 +163,7 @@ public class PatientInfoScene {
 	        });
 			
 			FileChooser fileChooser = new FileChooser();
-			fileChooser.getExtensionFilters().addAll(
-	                new FileChooser.ExtensionFilter("NIFTI", "*.nii"),
-	                new FileChooser.ExtensionFilter("NIFTI Full", "*.nifti")
-	            );
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti"));
 			fileBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
