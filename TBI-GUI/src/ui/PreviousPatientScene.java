@@ -37,9 +37,9 @@ public class PreviousPatientScene {
 		GridPane mainGrid;
 		TableView<PatientEntry> patientTable = new TableView<PatientEntry>();
 		TitledPane titledPane = new TitledPane();
-		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
 		
 		//Fill the table with information from the database
+		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
 		Set<String> keySet = patients.keySet();
 		ObservableList<PatientEntry> patientList = FXCollections.observableArrayList();
         for(String key: keySet){
@@ -80,22 +80,27 @@ public class PreviousPatientScene {
 		patientTable.getColumns().addAll(nameCol, uidCol);
 		
 		patientTable.setItems(patientList);
-		patientTable.getStyleClass().add("tableview");
 		
-		//Construct titled view
+		//Construct titled view for filtering
 		VBox vbox = new VBox();
 		HBox hbox1 = new HBox();
 		Label nameLabel = new Label("Name Search: ");
-		TextField searchEntry = new TextField();
+		TextField searchName = new TextField();
 		
-		searchEntry.textProperty().addListener((observable, old, newVal) -> {
-			System.out.println(newVal);
+		searchName.textProperty().addListener((observable, oldVal, newVal) -> {
+			patientList.clear();
+	        for(String key: keySet){
+	        	PatientEntry entry = patients.get(key);
+	        	if(entry.name.toLowerCase().contains(newVal.toLowerCase())) {
+	        		patientList.add(entry);
+	        	}
+	        }
 		});
 		
 		titledPane.setText("Filter");
 		titledPane.setExpanded(false);
 		hbox1.setAlignment(Pos.CENTER_LEFT);
-		hbox1.getChildren().addAll(nameLabel, searchEntry);
+		hbox1.getChildren().addAll(nameLabel, searchName);
 		vbox.getChildren().add(hbox1);
 		titledPane.setContent(vbox);
 		

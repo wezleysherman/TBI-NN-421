@@ -2,7 +2,11 @@
 --landing-background: #455357;
 
 .root{
-    -fx-background-color: var(--table-color);
+    -fx-background-color: #cfd8dc;
+}
+
+.vbox-dialog-box{
+	-fx-background-color: cfd8dc;
 }
 
 .table-view{
@@ -52,4 +56,20 @@
 
 .table-view .column-header {
     -fx-background-color: transparent;
+}
+
+.titled-pane{
+	-fx-text-fill: black;
+}
+
+.titled-pane .title{
+	-fx-background-color: #cfd8dc;
+}
+
+.titled-pane .content{
+	-fx-background-color: #c1cace;
+}
+
+.label{
+	-fx-text-fill: black;
 }
