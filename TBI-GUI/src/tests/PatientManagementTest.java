@@ -20,6 +20,7 @@ import utils.PatientManagement;
 public class PatientManagementTest {
 	private Patient patient;
 	private Patient patient2;
+	private Patient patientEdit;
 	private String uid;
 	Date testDate;
 
@@ -35,6 +36,10 @@ public class PatientManagementTest {
 			patient2 = new Patient("Bob", "Smith", testDate, "Some notes");
 			uid = patient2.getUID();
 			PatientManagement.exportPatient(patient2);
+			
+			patientEdit = new Patient("Jack", "Doe", testDate, "Some notes");
+			uid = patientEdit.getUID();
+			PatientManagement.exportPatient(patientEdit);
 		} catch(Exception e){
 			e.printStackTrace();
 		}
@@ -72,6 +77,38 @@ public class PatientManagementTest {
 	}
 	
 	@Test
+	public void testEdit() throws Exception {
+		patientEdit = (Patient)PatientManagement.importPatient(PatientManagement.getDefaultPath(), patientEdit.getUID());
+		assertEquals(patientEdit.getDate(), testDate);
+		assertEquals(patientEdit.getFirstName(), "Jack");
+		assertEquals(patientEdit.getLastName(), "Doe");
+		assertEquals(patientEdit.getFile(), new File(PatientManagement.getDefaultPath(), patientEdit.getUID()).getAbsolutePath());
+		assertEquals(patientEdit.getNotes(), "Some notes");
+		assertEquals(36, patientEdit.getUID().length());
+		
+		patientEdit.setFirstName("Edited First");
+		patientEdit.setLastName("Edited Last");
+		
+		PatientManagement.exportPatient(patientEdit);
+		patientEdit = PatientManagement.importPatient(PatientManagement.getDefaultPath(), patientEdit.getUID());
+		
+		assertEquals(patientEdit.getFirstName(), "Edited First");
+		assertEquals(patientEdit.getLastName(), "Edited Last");
+	}
+	
+	@Test
+	public void testSpecialCharacters() throws Exception{
+		patientEdit.setFirstName("!@#$%^&*()_+-=  ");
+		patientEdit.setLastName("~`<>,.?:;'{}[]/\"\\|");
+		
+		PatientManagement.exportPatient(patientEdit);
+		patientEdit = PatientManagement.importPatient(PatientManagement.getDefaultPath(), patientEdit.getUID());
+		
+		assertEquals(patientEdit.getFirstName(), "!@#$%^&*()_+-=  ");
+		assertEquals(patientEdit.getLastName(), "~`<>,.?:;'{}[]/\"\\|");
+	}
+	
+	@Test
 	public void testPatientList() throws Exception {
 		Hashtable patientList = PatientManagement.getPatientList();
 		
@@ -92,6 +129,19 @@ public class PatientManagementTest {
 		} catch (Exception e) {
 			if(e.getClass().equals(IOException.class)) {
 				assertEquals(e.getMessage(),"Invalid key. Read failed.");
+			} else {
+				throw e;
+			}
+		}
+	}
+	
+	@Test
+	public void testPatientDNE() throws Exception {
+		try {
+			PatientManagement.importPatient(PatientManagement.getDefaultPath(), "12");
+		} catch (Exception e) {
+			if(e.getClass().equals(IOException.class)) {
+				assertEquals(e.getMessage(), "The UID you are trying to access does not exist. Read failed.");
 			} else {
 				throw e;
 			}
