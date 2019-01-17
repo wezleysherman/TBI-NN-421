@@ -21,7 +21,7 @@ def fetch_dicoms(directory):
 			- Array of dicom images
 	'''
 	dicoms = []
-	for file in glob.glob(directory + '/*.dcm'):
+	for file in glob.glob(directory + '/*/*/*/*/*/*', recursive=True):
 		dicoms.append(pydicom.dcmread(file))
 	return dicoms
 
@@ -41,6 +41,7 @@ def anonimize_dicoms(dicom_files):
 		anon_com.PatientID = ''
 		anon_com.PatientAge = ''
 		anon_com.PatientBirthDate = ''
+		anon_com.StudyID = ''
 		anon_dicoms.append(anon_com)
 	return anon_dicoms
 
