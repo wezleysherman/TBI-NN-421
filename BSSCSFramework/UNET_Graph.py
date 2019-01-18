@@ -77,7 +77,7 @@ class BSSCS_UNET:
 		convolution_up_1 = tf.layers.conv2d_transpose(inputs=convolution_layer_10, filters=1024, kernel_size=[2, 2], strides=1, padding="SAME")
 		
 		# fourth from last 
-		convolution_up_1 = tf.slice(convolution_up_1, [0, 0, 0, 0], [-1, convolution_layer_8.shape[1], convolution_layer_8.shape[2], -1])
+		convolution_layer_8 = tf.slice(convolution_layer_8, [0, 0, 0, 0], [-1, convolution_up_1.shape[1], convolution_up_1.shape[2], -1])
 		concat_layer_1 = tf.concat([convolution_up_1, convolution_layer_8], axis=3) # Note: Experiment with the axis to ensure it is correct. Are we copying the batches or the filters? -- However; different axis's cause an error.
 		# print(concat_layer_1.shape) # Comes out to be [Batch_Size, Image_X, Image_Y, (Filters_Conv_8 + Filters_Conv_Up_1)]
 		convolution_layer_11 = tf.layers.conv2d(inputs=concat_layer_1, filters=512, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
@@ -86,21 +86,21 @@ class BSSCS_UNET:
 
 		
 		# third from last
-		convolution_up_2 = tf.slice(convolution_up_2, [0, 0, 0, 0], [-1, convolution_layer_6.shape[1], convolution_layer_6.shape[2], -1])
+		convolution_layer_6 = tf.slice(convolution_layer_6, [0, 0, 0, 0], [-1, convolution_up_2.shape[1], convolution_up_2.shape[2], -1])
 		concat_layer_1 = tf.concat([convolution_up_2, convolution_layer_6], axis=3)
 		convolution_layer_13 = tf.layers.conv2d(inputs=convolution_up_2, filters=256, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_14 = tf.layers.conv2d(inputs=convolution_layer_13, filters=256, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_3 = tf.layers.conv2d_transpose(inputs=convolution_layer_14, filters=256, kernel_size=[2, 2], strides=1, padding="SAME")
 
 		# second from last
-		convolution_up_3 = tf.slice(convolution_up_3, [0, 0, 0, 0], [-1, convolution_layer_4.shape[1], convolution_layer_4.shape[2], -1])
+		convolution_layer_4 = tf.slice(convolution_layer_4, [0, 0, 0, 0], [-1, convolution_up_3.shape[1], convolution_up_3.shape[2], -1])
 		concat_layer_1 = tf.concat([convolution_up_3, convolution_layer_4], axis=3)
 		convolution_layer_15 = tf.layers.conv2d(inputs=convolution_up_3, filters=256, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_16 = tf.layers.conv2d(inputs=convolution_layer_15, filters=128, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_4 = tf.layers.conv2d_transpose(inputs=convolution_layer_16, filters=128, kernel_size=[2, 2], strides=1, padding="SAME")
 
 		# last block
-		convolution_up_4 = tf.slice(convolution_up_4, [0, 0, 0, 0], [-1, convolution_layer_2.shape[1], convolution_layer_2.shape[2], -1])
+		convolution_layer_2 = tf.slice(convolution_layer_2, [0, 0, 0, 0], [-1, convolution_up_4.shape[1], convolution_up_4.shape[2], -1])
 		concat_layer_1 = tf.concat([convolution_up_4, convolution_layer_2], axis=3)
 		convolution_layer_17 = tf.layers.conv2d(inputs=convolution_up_4, filters=128, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_18 = tf.layers.conv2d(inputs=convolution_layer_17, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
