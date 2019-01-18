@@ -64,6 +64,6 @@ class UNET_DATA:
 		labels = list(csv_dataframe['has_tbi'])
 		return images, labels
 		
-unet = UNET_DATA()
-print(unet.import_labels_from_csv("test_csv.csv")[1])
-print(unet.fetch_data("test_csv.csv"))
+#unet = UNET_DATA()
+#print(unet.import_labels_from_csv("test_csv.csv")[1])
+#print(unet.fetch_data("test_csv.csv"))

@@ -163,8 +163,8 @@ class BSSCS_UNET:
 		# To-Do: Implement when deep regressor is finished
 		return None
 
-bsscs_data = UNET_DATA([1, 2, 3], [1, 2, 3])
+#bsscs_data = UNET_DATA([1, 2, 3], [1, 2, 3])
 # quick test for errors
-bsscs = BSSCS_UNET(1, 1, bsscs_data)
+#bsscs = BSSCS_UNET(1, 1, bsscs_data)
 # Oh boy, this is scary
-bsscs.train_unet()
+#bsscs.train_unet()
