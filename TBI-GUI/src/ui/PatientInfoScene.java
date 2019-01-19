@@ -90,7 +90,7 @@ public class PatientInfoScene {
 					public void handle(ActionEvent arg0) {
 						//i is out of scope, so get scan num from button text
 						int scanNum = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length()-1))-1;
-						manager.setScan(patient.getScans().get(scanNum));
+						manager.setScan(patient.getRawScans().get(scanNum));
 						manager.getSceneStack().push(manager.getSceneID());
 						manager.paintScene("ScanVisualizer");
 					}

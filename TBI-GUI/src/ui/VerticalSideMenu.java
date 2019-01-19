@@ -256,7 +256,7 @@ public class VerticalSideMenu {
 					}
 					Style.styleLabel(newLbl);
 					GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
-					Button newBtn = new Button(patient.getScans().get(i).getDateOfScan().toString());
+					Button newBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
 					Style.styleButton(newBtn);
 					GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
 					newBtn.setTooltip(new Tooltip("View this scan."));
