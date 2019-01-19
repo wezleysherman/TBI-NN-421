@@ -203,6 +203,7 @@ public class StateManager {
 		TextArea textArea = new TextArea();
 		textArea.setText(stack);
 		textArea.setPrefSize(260, 300);
+		textArea.setEditable(false);
 		vbox.getChildren().add(textArea);
 		titledPane.setContent(vbox);
 		
