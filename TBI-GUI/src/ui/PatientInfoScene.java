@@ -170,7 +170,7 @@ public class PatientInfoScene {
         	            	patient.setLastName(lastField.getText());
         	            	patient.setNotes(notesArea.getText());
     	            		if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
-    	            			patient.addScan(newScan);
+    	            			patient.addRawScan(newScan);
     	            		}
     	            		patient.savePatient();
     	            		manager.setStateBool(false);

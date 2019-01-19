@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
@@ -100,59 +101,64 @@ public class PatientManagement {
 	}
 
 	public static Patient importPatient(String path, String uid) throws IOException {
-		// setup output file
-		File f = new File(path, uid);
-		f = new File(f.getAbsolutePath(), "data.enc");
-		FileInputStream fin = new FileInputStream(f.getAbsolutePath());
-		BufferedInputStream bin = new BufferedInputStream(fin);
-
-		Key key = null;
-		if(patientList.containsKey(uid)){
-			key = patientList.get(uid).key;
-		} else {
-			bin.close();
-			return null;
-		}
-
 		try {
-			// setup cipher
-			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-			cipher.init(Cipher.DECRYPT_MODE, key);
+			// setup output file
+			File f = new File(path, uid);
+			f = new File(f.getAbsolutePath(), "data.enc");
+			FileInputStream fin = new FileInputStream(f.getAbsolutePath());
+			
+			BufferedInputStream bin = new BufferedInputStream(fin);
+	
+			Key key = null;
+			if(patientList.containsKey(uid)){
+				key = patientList.get(uid).key;
+			} else {
+				bin.close();
+				return null;
+			}
 
-			// setup decryption
-			CipherInputStream cin = new CipherInputStream(bin, cipher);
-			ObjectInputStream oin = new ObjectInputStream(cin);
-
-			// read and unseal object
-			SealedObject sobj = (SealedObject) oin.readObject();
-			oin.close();
-
-			// return patient
-			return (Patient) sobj.getObject(cipher);
-		} catch (ClassNotFoundException e) {
-			fin.close();
-			throw new IOException("Could not parse write as patient. Read failed.");
-		} catch (NoSuchPaddingException e) {
-			fin.close();
-			throw new IOException("Invalid padding on algorithm. Read failed.");
-		} catch (StreamCorruptedException e) {
-			fin.close();
-			throw new IOException("Invalid key. Read failed.");
-		} catch (InvalidKeyException e) {
-			fin.close();
-			throw new IOException("Invalid key. Read failed.");
-		} catch (NoSuchAlgorithmException e) {
-			fin.close();
-			throw new IOException("Invalid algorithm. Read failed.");
-		} catch (IllegalBlockSizeException e) {
-			fin.close();
-			throw new IOException("Could not unseal sealed patient. Read failed");
-		} catch (BadPaddingException e) {
-			fin.close();
-			throw new IOException("Invalid padding on algorithm. Read failed");
-		} catch (InvalidClassException e) {
-			fin.close();
-			throw new IOException("You are attempting to access a previous version of the Patient class. Read failed.");
+			try {
+				// setup cipher
+				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+				cipher.init(Cipher.DECRYPT_MODE, key);
+	
+				// setup decryption
+				CipherInputStream cin = new CipherInputStream(bin, cipher);
+				ObjectInputStream oin = new ObjectInputStream(cin);
+	
+				// read and unseal object
+				SealedObject sobj = (SealedObject) oin.readObject();
+				oin.close();
+	
+				// return patient
+				return (Patient) sobj.getObject(cipher);
+			} catch (ClassNotFoundException e) {
+				fin.close();
+				throw new IOException("Could not parse write as patient. Read failed.");
+			} catch (NoSuchPaddingException e) {
+				fin.close();
+				throw new IOException("Invalid padding on algorithm. Read failed.");
+			} catch (StreamCorruptedException e) {
+				fin.close();
+				throw new IOException("Invalid key. Read failed.");
+			} catch (InvalidKeyException e) {
+				fin.close();
+				throw new IOException("Invalid key. Read failed.");
+			} catch (NoSuchAlgorithmException e) {
+				fin.close();
+				throw new IOException("Invalid algorithm. Read failed.");
+			} catch (IllegalBlockSizeException e) {
+				fin.close();
+				throw new IOException("Could not unseal sealed patient. Read failed");
+			} catch (BadPaddingException e) {
+				fin.close();
+				throw new IOException("Invalid padding on algorithm. Read failed");
+			} catch (InvalidClassException e) {
+				fin.close();
+				throw new IOException("You are attempting to access a previous version of the Patient class. Read failed.");
+			} 
+		} catch (FileNotFoundException e) {
+			throw new IOException("The UID you are trying to access does not exist. Read failed.");
 		}
 	}
 	
