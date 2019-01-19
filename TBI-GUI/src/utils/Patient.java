@@ -18,61 +18,50 @@ public class Patient implements Serializable {
 	private Date lastScanDate;
 	private String notes;
 	//TODO: clean up linkedList implementation (size tracker, adding/removing scans, etc)
-	private LinkedList<Scan> scans = new LinkedList<Scan>();
-	private Integer numScans;
+	private LinkedList<Scan> rawScans;
+	private LinkedList<Scan> procScans;
+	private Integer numRawScans;
+	private Integer numProcScans;
 	private UUID uid;
-
-	// constructor for blank patient
-		public Patient() {
-			this.setFirstName("");
-			this.setLastName("");
-			this.setDate(new Date());
-			this.setNotes("");
-			this.uid = UUID.nameUUIDFromBytes((" ").getBytes());
-			this.file = new File(basePath, uid.toString()).getAbsolutePath();
-			this.setLastScanDate(new Date());
-			this.numScans = scans.size();
-		}
-
 	
-	// constructor for fresh patient with no scans (needs UID generated)
+	//constructor for blank patient
+	public Patient() {
+		this("", "", new Date(), "");
+	}
+	
+	//constructor for fresh patient with no scans
 	public Patient(String fName, String lName, Date pDate, String pNotes) {
-		this.setFirstName(fName);
-		this.setLastName(lName);
-		this.setDate(pDate);
-		this.setNotes(pNotes);
-		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
-		this.file = new File(basePath, uid.toString()).getAbsolutePath();
-		//System.out.println(file);
-		this.setLastScanDate(pDate);
-		this.numScans = scans.size();
+		this(fName, lName, pDate, pNotes, wrapScan(pDate, null));
 	}
-
-	// constructor for patient with only one scan being entered
+	
+	//constructor for fresh patient with 1 scan
 	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan) {
-		this.setFirstName(fName);
-		this.setLastName(lName);
-		this.setDate(pDate);
-		this.setNotes(pNotes);
-		Scan newScan = new Scan(pDate, pScan);
-		this.scans.push(newScan);
-		this.setLastScanDate(pDate);
-		this.numScans = scans.size();
-		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
-		this.file = basePath + uid;
+		this(fName, lName, pDate, pNotes, wrapScan(pDate, pScan));
 	}
 
-	// constructor for patient with multiple scans being entered
+	// constructor for fresh patient with multiple scans (main constructor)
 	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans) {
 		this.setFirstName(fName);
 		this.setLastName(lName);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
-		this.setScans(pScans);
+		this.setRawScans(pScans);
+		this.procScans = new LinkedList<Scan>();
 		this.setLastScanDate(pDate);
-		this.numScans = scans.size();
+		this.numRawScans = rawScans.size();
 		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
-		this.file = basePath + uid;
+		this.file = new File(basePath, uid.toString()).getAbsolutePath();
+	}
+	
+	public static LinkedList<Scan> wrapScan(Date pDate, File pScan){
+		if(pScan == null) {
+			return new LinkedList<Scan>();
+		}
+		
+		Scan newScan = new Scan(pDate, pScan);
+		LinkedList<Scan> pScans = new LinkedList<Scan>();
+		pScans.push(newScan);
+		return pScans;
 	}
 
 	public String getFirstName() {
@@ -115,18 +104,32 @@ public class Patient implements Serializable {
 		return uid.toString();
 	}
 
-	public LinkedList<Scan> getScans() {
-		this.numScans = scans.size();
-		return scans;
+	public LinkedList<Scan> getRawScans() {
+		this.numRawScans = rawScans.size();
+		return rawScans;
 	}
 
-	public void setScans(LinkedList<Scan> scans) {
-		this.numScans = scans.size();
-		this.scans = scans;
+	public void setRawScans(LinkedList<Scan> scans) {
+		this.numRawScans = scans.size();
+		this.rawScans = scans;
+	}
+	
+	public LinkedList<Scan> getProcScans() {
+		this.numProcScans = procScans.size();
+		return procScans;
 	}
 
-	public Integer getNumScans() {
-		return this.numScans;
+	public void setProcScans(LinkedList<Scan> scans) {
+		this.numProcScans = scans.size();
+		this.procScans = scans;
+	}
+
+	public Integer getNumRawScans() {
+		return this.numRawScans;
+	}
+	
+	public Integer getNumProcScans() {
+		return this.numProcScans;
 	}
 
 	public void setLastScanDate(Date date) {
@@ -137,25 +140,46 @@ public class Patient implements Serializable {
 		return this.lastScanDate;
 	}
 
-	public void addScan(Scan scan) {
+	public void addRawScan(Scan scan) {
 		/* Handles adding a new scan to the patient's linked list.
 		 *
 		 *	Input:
 		 * 		- scan: A dicom scan object conainting the patient's scan image
 		 */
-		this.numScans ++;
-		this.scans.add(scan);
+		this.numRawScans ++;
+		this.rawScans.add(scan);
 		Date scanDate = scan.getDateOfScan();
 		this.setLastScanDate(scanDate);
 	}
 
-	public Scan getScan(int idx) {
+	public Scan getRawScan(int idx) {
 		/* Handles getting a scan of a specific index from the linked list
 		 *
 		 *	Input:
 		 * 		- idx: index of scan we want to return
 		 */
-		Scan returnScan = this.scans.get(idx);
+		Scan returnScan = this.rawScans.get(idx);
+		return returnScan;
+	}
+	
+	public void addProcScan(Scan scan) {
+		/* Handles adding a new scan to the patient's linked list.
+		 *
+		 *	Input:
+		 * 		- scan: A dicom scan object conainting the patient's scan image
+		 */
+		this.numProcScans ++;
+		this.procScans.add(scan);
+		Date scanDate = scan.getDateOfScan();
+	}
+
+	public Scan getProcScan(int idx) {
+		/* Handles getting a scan of a specific index from the linked list
+		 *
+		 *	Input:
+		 * 		- idx: index of scan we want to return
+		 */
+		Scan returnScan = this.procScans.get(idx);
 		return returnScan;
 	}
 

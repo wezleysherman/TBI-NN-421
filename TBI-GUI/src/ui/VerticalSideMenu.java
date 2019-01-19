@@ -246,17 +246,17 @@ public class VerticalSideMenu {
 			
 			try {
 				Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
-				for (int i = 0; i < patient.getNumScans(); ++i) {
+				for (int i = 0; i < patient.getNumRawScans(); ++i) {
 					Label newLbl = new Label("");
 					if (i == 0) {
 						newLbl.setText("Latest:");
 					}
-					else if (i == patient.getNumScans()-1) {
+					else if (i == patient.getNumRawScans()-1) {
 						newLbl.setText("Oldest:");
 					}
 					Style.styleLabel(newLbl);
 					GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
-					Button newBtn = new Button(patient.getScans().get(i).getDateOfScan().toString());
+					Button newBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
 					Style.styleButton(newBtn);
 					GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
 					newBtn.setTooltip(new Tooltip("View this scan."));

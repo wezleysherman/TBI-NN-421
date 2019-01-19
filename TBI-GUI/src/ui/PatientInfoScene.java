@@ -82,7 +82,7 @@ public class PatientInfoScene {
 			scrollGrid.getColumnConstraints().add(scrollGridCols);
 			scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 			
-			for (int i = 0; i < patient.getNumScans(); ++i) {
+			for (int i = 0; i < patient.getNumRawScans(); ++i) {
 				Button scanBtn = new Button("Scan " + (i+1));
 				Style.styleButton(scanBtn);
 				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -90,7 +90,7 @@ public class PatientInfoScene {
 					public void handle(ActionEvent arg0) {
 						//i is out of scope, so get scan num from button text
 						int scanNum = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length()-1))-1;
-						manager.setScan(patient.getScans().get(scanNum));
+						manager.setScan(patient.getRawScans().get(scanNum));
 						manager.getSceneStack().push(manager.getSceneID());
 						manager.paintScene("ScanVisualizer");
 					}
@@ -142,7 +142,7 @@ public class PatientInfoScene {
         	            	patient.setLastName(lastField.getText());
         	            	patient.setNotes(notesArea.getText());
     	            		if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
-    	            			patient.addScan(newScan);
+    	            			patient.addRawScan(newScan);
     	            		}
     	            		patient.savePatient();
     	            		manager.setStateBool(false);
