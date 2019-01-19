@@ -85,7 +85,7 @@ public class PatientInfoScene {
 			
 			//Set up scan table
 			ObservableList<Scan> scanList = FXCollections.observableArrayList();
-	        for(Scan scan : patient.getScans()) {
+	        for(Scan scan : patient.getRawScans()) { //TODO proc scans too?
 	        	scanList.add(scan);
 	        }
 			
