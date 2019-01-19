@@ -109,26 +109,6 @@ public class PatientInfoScene {
 			
 			scanTable.setItems(scanList);
 			
-			/*
-			for (int i = 0; i < patient.getNumScans(); ++i) {
-				Button scanBtn = new Button("Scan " + (i+1));
-				Style.styleButton(scanBtn);
-				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						//i is out of scope, so get scan num from button text
-						int scanNum = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length()-1))-1;
-						manager.setScan(patient.getScans().get(scanNum));
-						manager.getSceneStack().push(manager.getSceneID());
-						manager.paintScene("ScanVisualizer");
-					}
-				});
-				
-				GridPane.setConstraints(scanBtn, 0, i, 2, 1, HPos.CENTER, VPos.CENTER);
-				scrollGrid.getChildren().add(scanBtn);
-			}
-			*/
-			
 			//Analyze button
 			Button analyzeBtn = new Button("Analyze");
 			analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
