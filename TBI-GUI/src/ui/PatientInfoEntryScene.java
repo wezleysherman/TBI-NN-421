@@ -177,7 +177,7 @@ public class PatientInfoEntryScene {
 					Date dateCreated = java.sql.Date.valueOf(LocalDate.now()); //get current date
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), dateCreated, notesField.getText());
 					if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
-						patient.addScan(newScan);
+						patient.addRawScan(newScan);
 					}
 					try {
 						PatientManagement.exportPatient(patient);

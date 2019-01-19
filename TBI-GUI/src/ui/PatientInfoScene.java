@@ -82,7 +82,7 @@ public class PatientInfoScene {
 			scrollGrid.getColumnConstraints().add(scrollGridCols);
 			scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 			
-			for (int i = 0; i < patient.getNumScans(); ++i) {
+			for (int i = 0; i < patient.getNumRawScans(); ++i) {
 				Button scanBtn = new Button("Scan " + (i+1));
 				Style.styleButton(scanBtn);
 				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -142,7 +142,7 @@ public class PatientInfoScene {
         	            	patient.setLastName(lastField.getText());
         	            	patient.setNotes(notesArea.getText());
     	            		if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
-    	            			patient.addScan(newScan);
+    	            			patient.addRawScan(newScan);
     	            		}
     	            		patient.savePatient();
     	            		manager.setStateBool(false);

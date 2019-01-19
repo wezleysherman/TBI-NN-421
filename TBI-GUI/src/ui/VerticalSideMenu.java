@@ -246,12 +246,12 @@ public class VerticalSideMenu {
 			
 			try {
 				Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
-				for (int i = 0; i < patient.getNumScans(); ++i) {
+				for (int i = 0; i < patient.getNumRawScans(); ++i) {
 					Label newLbl = new Label("");
 					if (i == 0) {
 						newLbl.setText("Latest:");
 					}
-					else if (i == patient.getNumScans()-1) {
+					else if (i == patient.getNumRawScans()-1) {
 						newLbl.setText("Oldest:");
 					}
 					Style.styleLabel(newLbl);

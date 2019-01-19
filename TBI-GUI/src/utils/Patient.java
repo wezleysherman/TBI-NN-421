@@ -23,62 +23,23 @@ public class Patient implements Serializable {
 	private Integer numRawScans;
 	private Integer numProcScans;
 	private UUID uid;
-
-	// constructor for blank patient
-		/*public Patient() {
-			this.setFirstName("");
-			this.setLastName("");
-			this.setDate(new Date());
-			this.setNotes("");
-			this.uid = UUID.nameUUIDFromBytes((" ").getBytes());
-			this.file = new File(basePath, uid.toString()).getAbsolutePath();
-			this.setLastScanDate(new Date());
-			this.numRawScans = rawScans.size();
-			this.numProcScans = procScans.size();
-		}
-
 	
-	// constructor for fresh patient with no scans and no files
-	public Patient(String fName, String lName, Date pDate, String pNotes) {
-		this.setFirstName(fName);
-		this.setLastName(lName);
-		this.setDate(pDate);
-		this.setNotes(pNotes);
-		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
-		this.file = new File(basePath, uid.toString()).getAbsolutePath();
-		this.setLastScanDate(pDate);
-		this.numRawScans = rawScans.size();
-		this.numProcScans = procScans.size();
-	}
-
-	// constructor for fresh patient with only one scan being entered
-	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan) {
-		this.setFirstName(fName);
-		this.setLastName(lName);
-		this.setDate(pDate);
-		this.setNotes(pNotes);
-		Scan newScan = new Scan(pDate, pScan);
-		this.rawScans.push(newScan);
-		this.setLastScanDate(pDate);
-		this.numRawScans = rawScans.size();
-		this.numProcScans = procScans.size();
-		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
-		this.file = basePath + uid;
-	}*/
-	
+	//constructor for blank patient
 	public Patient() {
 		this("", "", new Date(), "");
 	}
-		
+	
+	//constructor for fresh patient with no scans
 	public Patient(String fName, String lName, Date pDate, String pNotes) {
 		this(fName, lName, pDate, pNotes, wrapScan(pDate, null));
 	}
 	
+	//constructor for fresh patient with 1 scan
 	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan) {
 		this(fName, lName, pDate, pNotes, wrapScan(pDate, pScan));
 	}
 
-	// constructor for patient with multiple scans being entered
+	// constructor for fresh patient with multiple scans (main constructor)
 	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans) {
 		this.setFirstName(fName);
 		this.setLastName(lName);
@@ -152,9 +113,23 @@ public class Patient implements Serializable {
 		this.numRawScans = scans.size();
 		this.rawScans = scans;
 	}
+	
+	public LinkedList<Scan> getProcScans() {
+		this.numProcScans = procScans.size();
+		return procScans;
+	}
 
-	public Integer getNumScans() {
+	public void setProcScans(LinkedList<Scan> scans) {
+		this.numProcScans = scans.size();
+		this.procScans = scans;
+	}
+
+	public Integer getNumRawScans() {
 		return this.numRawScans;
+	}
+	
+	public Integer getNumProcScans() {
+		return this.numProcScans;
 	}
 
 	public void setLastScanDate(Date date) {
@@ -165,7 +140,7 @@ public class Patient implements Serializable {
 		return this.lastScanDate;
 	}
 
-	public void addScan(Scan scan) {
+	public void addRawScan(Scan scan) {
 		/* Handles adding a new scan to the patient's linked list.
 		 *
 		 *	Input:
@@ -177,13 +152,34 @@ public class Patient implements Serializable {
 		this.setLastScanDate(scanDate);
 	}
 
-	public Scan getScan(int idx) {
+	public Scan getRawScan(int idx) {
 		/* Handles getting a scan of a specific index from the linked list
 		 *
 		 *	Input:
 		 * 		- idx: index of scan we want to return
 		 */
 		Scan returnScan = this.rawScans.get(idx);
+		return returnScan;
+	}
+	
+	public void addProcScan(Scan scan) {
+		/* Handles adding a new scan to the patient's linked list.
+		 *
+		 *	Input:
+		 * 		- scan: A dicom scan object conainting the patient's scan image
+		 */
+		this.numProcScans ++;
+		this.procScans.add(scan);
+		Date scanDate = scan.getDateOfScan();
+	}
+
+	public Scan getProcScan(int idx) {
+		/* Handles getting a scan of a specific index from the linked list
+		 *
+		 *	Input:
+		 * 		- idx: index of scan we want to return
+		 */
+		Scan returnScan = this.procScans.get(idx);
 		return returnScan;
 	}
 
