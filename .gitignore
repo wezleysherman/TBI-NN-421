@@ -10,8 +10,9 @@ __pycache__/
 /gui/.gradle/
 /TBI-GUI/.gradle/
 /TBI-GUI/build/
+/TBI-GUI/build.number
 /.metadata/
 .metadata/
 .recommenders/
 .gradle
-
+/TBI-GUI/src/resources/patients/

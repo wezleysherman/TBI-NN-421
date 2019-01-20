@@ -1,25 +1,32 @@
 package ui;
 
-import java.util.Date;
-import java.util.LinkedList;
+import java.util.Hashtable;
+import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import utils.PatientEntry;
+import utils.PatientManagement;
 
 public class PreviousPatientScene {
 	
@@ -28,28 +35,29 @@ public class PreviousPatientScene {
 		BorderPane innerLayout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
-		TableView patientTable = new TableView();
-		Button retrieveBtn = new Button();
+		TableView<PatientEntry> patientTable = new TableView<PatientEntry>();
+		TitledPane titledPane = new TitledPane();
 		
-		//TODO remove test patients
-		// test patients --------------------------------------------------------------------------------------
-		LinkedList<Scan> johnScans = new LinkedList<Scan>();
-		johnScans.push(new Scan(new Date(), new Image("resources/TestImage1.jpg")));
-		ObservableList<Patient> patientList = FXCollections.observableArrayList(
-				new Patient("John", "Doe", new Date(), "notes", johnScans),
-				new Patient("Jane", "Doe", new Date(), "More notes than last time"));
-		// ----------------------------------------------------------------------------------------------------
+		//Fill the table with information from the database
+		Hashtable <String, PatientEntry> patients = PatientManagement.getPatientList();
+		Set<String> keySet = patients.keySet();
+		ObservableList<PatientEntry> patientList = FXCollections.observableArrayList();
+        for(String key: keySet){
+        	PatientEntry entry = patients.get(key);
+        	patientList.add(entry);
+        }
 		
 		//Retrieve button Setup/Styling
-		retrieveBtn.setText("Retrieve");
-		Style.styleButton(retrieveBtn);
+		Button retrieveBtn = new Button("Retrieve");
 		retrieveBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
-					manager.setPatient((Patient)patientTable.getSelectionModel().getSelectedItem());
+					manager.setPatient(patientTable.getSelectionModel().getSelectedItem());
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PatientInfo");
+				} else {
+					manager.makeDialog("No patient was selected!");
 				}
 			}
 		});
@@ -59,30 +67,46 @@ public class PreviousPatientScene {
 		//Setup table
 		patientTable.setEditable(false);
 		
-		TableColumn firstNameCol = new TableColumn("First Name");
-		firstNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
+		TableColumn nameCol = new TableColumn("Name");
+		nameCol.prefWidthProperty().bind(patientTable.widthProperty().multiply(.5));
+		nameCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("name"));
 		
-		TableColumn lastNameCol = new TableColumn("Last Name");
-		lastNameCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastName"));
+		TableColumn uidCol = new TableColumn("UID");
+		uidCol.prefWidthProperty().bind(patientTable.widthProperty().multiply(.5));
+		uidCol.setCellValueFactory(new PropertyValueFactory<PatientEntry, String>("uid"));
 		
-		// TODO: figure out how to do number of scans or last scan date or something here
-		TableColumn fileCol = new TableColumn("# of Scans");
-		fileCol.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("numScans"));
+		patientTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		patientTable.getColumns().addAll(nameCol, uidCol);
 		
-		TableColumn dateCol = new TableColumn("Date");
-		dateCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("date"));
-		
-		TableColumn notesCol = new TableColumn("Notes");
-		notesCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("notes"));
-		
-		patientTable.getColumns().addAll(firstNameCol, lastNameCol, fileCol, dateCol, notesCol);
-				
 		patientTable.setItems(patientList);
 		
+		//Construct titled view for filtering
+		VBox vbox = new VBox();
+		HBox hbox1 = new HBox();
+		Label nameLabel = new Label("Name Search: ");
+		TextField searchName = new TextField();
+		
+		searchName.textProperty().addListener((observable, oldVal, newVal) -> {
+			patientList.clear();
+	        for(String key: keySet){
+	        	PatientEntry entry = patients.get(key);
+	        	if(entry.name.toLowerCase().contains(newVal.toLowerCase())) {
+	        		patientList.add(entry);
+	        	}
+	        }
+		});
+		
+		titledPane.setText("Filter");
+		titledPane.setExpanded(false);
+		hbox1.setAlignment(Pos.CENTER_LEFT);
+		hbox1.getChildren().addAll(nameLabel, searchName);
+		vbox.getChildren().add(hbox1);
+		titledPane.setContent(vbox);
+		
 		//Construct Grid		
-		RowConstraints rowCon = new RowConstraints();
-		rowCon.setPercentHeight(100);
-		contentGrid.getRowConstraints().add(rowCon);
+		RowConstraints rowCon1 = new RowConstraints();
+		rowCon1.setPercentHeight(100);
+		contentGrid.getRowConstraints().addAll(rowCon1);
 		ColumnConstraints columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100);
 		contentGrid.getColumnConstraints().add(columnCon);
@@ -96,6 +120,7 @@ public class PreviousPatientScene {
 
 		mainGrid.getChildren().add(innerLayout);
 		
+		innerLayout.setTop(titledPane);
 		innerLayout.setCenter(contentGrid);
 		innerLayout.setBottom(retrieveBtn);
 		layout.setCenter(mainGrid);

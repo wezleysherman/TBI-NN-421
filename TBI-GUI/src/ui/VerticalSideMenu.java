@@ -17,10 +17,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
+import utils.Patient;
+import utils.PatientManagement;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
@@ -228,10 +231,11 @@ public class VerticalSideMenu {
 			GridPane.setConstraints(homeBtn,  2, 1, 2, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(algoVisBtn, 0, 2, 4, 1, HPos.CENTER, VPos.CENTER);
 			
-			Label patientLabel = new Label(manager.getPatient().getFirstName() + " " + manager.getPatient().getLastName());
+			//TODO Make it take the patient entry. This page should be able to be gotten to without having a patient
+			Label patientLabel = new Label("PLACEHOLDER1");
 			Style.styleLabel(patientLabel);
 			GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
-			Label dateLabel = new Label(manager.getPatient().getDate().toString());
+			Label dateLabel = new Label("PlaceHolder");//manager.getPatient().getDate().toString());
 			Style.styleLabel(dateLabel);
 			GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
 			Label recentLabel = new Label("Other Recent Scans:");
@@ -240,35 +244,40 @@ public class VerticalSideMenu {
 			
 			contentGrid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
 			
-			for (int i = 0; i < manager.getPatient().getNumScans(); ++i) {
-				Label newLbl = new Label("");
-				if (i == 0) {
-					newLbl.setText("Latest:");
-				}
-				else if (i == manager.getPatient().getNumScans()-1) {
-					newLbl.setText("Oldest:");
-				}
-				Style.styleLabel(newLbl);
-				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
-				Button newBtn = new Button(manager.getPatient().getScans().get(i).getDateOfScan().toString());
-				Style.styleButton(newBtn);
-				GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
-				newBtn.setTooltip(new Tooltip("View this scan."));
-				
-				// TODO: Implement this?
-				newBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						
+			try {
+				Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+				for (int i = 0; i < patient.getNumRawScans(); ++i) {
+					Label newLbl = new Label("");
+					if (i == 0) {
+						newLbl.setText("Latest:");
 					}
-				});
-				
-				contentGrid.getChildren().addAll(newLbl, newBtn);
+					else if (i == patient.getNumRawScans()-1) {
+						newLbl.setText("Oldest:");
+					}
+					Style.styleLabel(newLbl);
+					GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
+					Button newBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
+					Style.styleButton(newBtn);
+					GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
+					newBtn.setTooltip(new Tooltip("View this scan."));
+					
+					newBtn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							// TODO: Implement this?
+						}
+					});
+					
+					contentGrid.getChildren().addAll(newLbl, newBtn);
+				}
+			} catch (IOException e) {
+				manager.makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
 			}
-			
+
 			Button uploadBtn = new Button("Upload New Scan");
 			Style.styleButton(uploadBtn);
-			GridPane.setConstraints(uploadBtn, 1, 11 + manager.getPatient().getNumScans(), 3, 1, HPos.CENTER, VPos.CENTER);
+			//TODO needs to take into account the number of scans when placing things in the proper row...for some reason...this will change
+			GridPane.setConstraints(uploadBtn, 1, 11 + 0, 3, 1, HPos.CENTER, VPos.CENTER);
 			// TODO: Implement this?
 			uploadBtn.setTooltip(new Tooltip("Upload a new scan for this patient."));
 			
@@ -287,10 +296,11 @@ public class VerticalSideMenu {
 				}
 			});
 			
-			Label notesLabel = new Label("Doctors Notes: \n" + manager.getPatient().getNotes());
+			Label notesLabel = new Label("PLACEHOLDER2"); //TODO "Doctors Notes: \n" + manager.getPatient().getNotes());
 			Style.styleLabel(notesLabel);
 			notesLabel.setWrapText(true);
-			GridPane.setConstraints(notesLabel, 0, 14 + manager.getPatient().getNumScans(), 4, 1, HPos.CENTER, VPos.CENTER);
+			//TODO fix how things are laid out for this entire sidebar
+			GridPane.setConstraints(notesLabel, 0, 14 + 0, 4, 1, HPos.CENTER, VPos.CENTER);
 			
 			contentGrid.getChildren().addAll(uploadBtn, notesLabel);
 		}
@@ -355,7 +365,7 @@ public class VerticalSideMenu {
 		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 		
 		//Dummy Data for testing purposes
-		ArrayList regionList = new ArrayList();
+		ArrayList<String> regionList = new ArrayList<String>();
 		for(int i = 0; i < 10; i++) {
 			regionList.add("Region " + i);
 		}

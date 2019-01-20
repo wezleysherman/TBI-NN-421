@@ -13,7 +13,7 @@ public class App extends Application {
 	
 	@Override
 	public void start(Stage stage) {
-		@SuppressWarnings("unused") //TODO: look into the implications of fixing this warning (low severity)
+		@SuppressWarnings("unused")
 		StateManager manager = new StateManager(stage);
 	}
 	
