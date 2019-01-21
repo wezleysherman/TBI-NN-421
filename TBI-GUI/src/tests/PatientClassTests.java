@@ -1,11 +1,13 @@
 package tests;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
 
 import utils.Patient;
+import utils.Scan;
 
 import static org.junit.Assert.*;
 
@@ -49,6 +51,23 @@ public class PatientClassTests {
 		assertEquals(patient.getLastName(), "McJane");
 		assertEquals(patient.getFile(), new File(buildDefaultPath(),patient.getUID()).getAbsolutePath());
 		assertEquals(patient.getNotes(), "A whole lot of notes.");
+	}
+	
+	@Test
+	public void PatientScanOrderTest() {
+		Date date1 = new Date();
+		Date date2 = new Date(date1.getYear() - 1, 1, 21);
+		Date date3 = new Date(date1.getYear() + 1, 1, 21);
+		Patient patient = new Patient("John", "Doe", new Date(), "Some notes");
+		Scan scan1 = new Scan(date1, new File(buildDefaultPath(), patient.getUID()), "scan 1");
+		Scan scan2 = new Scan(date2, new File(buildDefaultPath(), patient.getUID()), "scan 2");
+		Scan scan3 = new Scan(date3, new File(buildDefaultPath(), patient.getUID()), "scan 3");
+		patient.addRawScan(scan2);
+		patient.addRawScan(scan1);
+		assertEquals(date1, patient.getLastRawScanDate());
+		
+		patient.addRawScan(scan3);
+		assertEquals(date3, patient.getLastRawScanDate());
 	}
 	
 	private static String buildDefaultPath() {
