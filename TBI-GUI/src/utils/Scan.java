@@ -1,9 +1,10 @@
 package utils;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Scan {
+public class Scan implements Serializable{
 
 	private Date dateOfScan;
 	private File scan;
