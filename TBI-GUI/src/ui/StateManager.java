@@ -152,6 +152,7 @@ public class StateManager {
 		messLabel.setMaxSize(300, 500);
 		messLabel.setWrapText(true);
 		messLabel.autosize();
+		messLabel.getStyleClass().add("label-white");
 		Button close = new Button("Okay");
 		close.setOnAction(e -> dialogStage.close());
 		Style.styleButton(close);

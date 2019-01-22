@@ -5,6 +5,19 @@
     -fx-background-color: #cfd8dc;
 }
 
+.side-pane {
+	-fx-background-color: #455357;
+}
+
+.content-pane {
+	-fx-background-color: #cfd8dc;
+	-fx-font-size: 14px;
+}
+
+.label-white {
+	-fx-text-fill: #f1fafe;
+}
+
 .button {
 	-fx-background-color: #f1fafe;
 	-fx-background-radius: 5;
@@ -27,7 +40,7 @@
 }
 
 .vbox-dialog-box{
-	-fx-background-color: cfd8dc;
+	-fx-background-color: #455357;
 }
 
 .table-view{
@@ -88,9 +101,5 @@
 }
 
 .titled-pane .content{
-	-fx-background-color: #c1cace;
-}
-
-.label{
-	-fx-text-fill: black;
+	-fx-background-color: #455357;
 }
