@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -15,13 +16,9 @@ public class Patient implements Serializable {
 	private String lastName;
 	private String file;
 	private Date dateCreated;
-	private Date lastScanDate;
 	private String notes;
-	//TODO: clean up linkedList implementation (size tracker, adding/removing scans, etc)
 	private LinkedList<Scan> rawScans;
 	private LinkedList<Scan> procScans;
-	private Integer numRawScans;
-	private Integer numProcScans;
 	private UUID uid;
 	
 	//constructor for blank patient
@@ -47,8 +44,6 @@ public class Patient implements Serializable {
 		this.setNotes(pNotes);
 		this.setRawScans(pScans);
 		this.procScans = new LinkedList<Scan>();
-		this.setLastScanDate(pDate);
-		this.numRawScans = rawScans.size();
 		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
 		this.file = new File(basePath, uid.toString()).getAbsolutePath();
 	}
@@ -105,82 +100,70 @@ public class Patient implements Serializable {
 	}
 
 	public LinkedList<Scan> getRawScans() {
-		this.numRawScans = rawScans.size();
 		return rawScans;
 	}
 
 	public void setRawScans(LinkedList<Scan> scans) {
-		this.numRawScans = scans.size();
 		this.rawScans = scans;
 	}
 	
 	public LinkedList<Scan> getProcScans() {
-		this.numProcScans = procScans.size();
 		return procScans;
 	}
 
 	public void setProcScans(LinkedList<Scan> scans) {
-		this.numProcScans = scans.size();
 		this.procScans = scans;
 	}
 
 	public Integer getNumRawScans() {
-		return this.numRawScans;
+		return this.rawScans.size();
 	}
 	
 	public Integer getNumProcScans() {
-		return this.numProcScans;
+		return this.procScans.size();
 	}
 
-	public void setLastScanDate(Date date) {
-		this.lastScanDate = date;
-	}
-
-	public Date getLastScanDate() {
-		return this.lastScanDate;
+	public Date getLastRawScanDate() {
+		Scan last = this.rawScans.getFirst();
+		return last.getDateOfScan();
 	}
 
 	public void addRawScan(Scan scan) {
 		/* Handles adding a new scan to the patient's linked list.
 		 *
 		 *	Input:
-		 * 		- scan: A dicom scan object conainting the patient's scan image
+		 * 		- scan: A scan object containing the patient's scan image
 		 */
-		this.numRawScans ++;
 		this.rawScans.add(scan);
-		Date scanDate = scan.getDateOfScan();
-		this.setLastScanDate(scanDate);
+		Collections.sort(rawScans);
 	}
 
-	public Scan getRawScan(int idx) {
+	public Scan getRawScan(int index) {
 		/* Handles getting a scan of a specific index from the linked list
 		 *
 		 *	Input:
-		 * 		- idx: index of scan we want to return
+		 * 		- index: index of scan we want to return
 		 */
-		Scan returnScan = this.rawScans.get(idx);
-		return returnScan;
+		return this.rawScans.get(index);
 	}
 	
 	public void addProcScan(Scan scan) {
 		/* Handles adding a new scan to the patient's linked list.
 		 *
 		 *	Input:
-		 * 		- scan: A dicom scan object conainting the patient's scan image
+		 * 		- scan: A scan object containing the patient's analyzed scan image
 		 */
-		this.numProcScans ++;
 		this.procScans.add(scan);
-		Date scanDate = scan.getDateOfScan();
+		Collections.sort(procScans);
 	}
 
-	public Scan getProcScan(int idx) {
+	public Scan getProcScan(int index) {
 		/* Handles getting a scan of a specific index from the linked list
 		 *
 		 *	Input:
-		 * 		- idx: index of scan we want to return
+		 * 		- index: index of scan we want to return
 		 */
-		Scan returnScan = this.procScans.get(idx);
-		return returnScan;
+		return this.procScans.get(index);
 	}
 
 	public void savePatient() throws Exception {

@@ -137,7 +137,7 @@ public class PatientInfoEntryScene {
 		});
 		
 		//Finish Button Setup
-		Style.styleButton(finishBtn);
+		finishBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		
 		finishBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -196,7 +196,7 @@ public class PatientInfoEntryScene {
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(contentGrid);
-		Style.styleBorderPane(layout);
+		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene

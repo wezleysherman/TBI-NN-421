@@ -21,9 +21,7 @@ public class LandingScene {
 		Label orLabel = new Label("or");
 		Button newPatBtn = new Button();
 		Button prevPatBtn = new Button();
-		
-		Style.styleLabel(orLabel);
-		
+				
 		//Button Setup/Styling/Tooltips
 		newPatBtn.setText("Start New Patient");
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -35,7 +33,7 @@ public class LandingScene {
 		});
 		newPatBtn.setTooltip(new Tooltip("Input information and a scan for a new patient.")); 
 		
-		Style.styleButton(newPatBtn);	
+		newPatBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);	
 		
 		prevPatBtn.setText("Find Previous Patient");
 		prevPatBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -47,7 +45,9 @@ public class LandingScene {
 		});
 		prevPatBtn.setTooltip(new Tooltip("View/edit information and scans of patients already in the system."));
 		
-		Style.styleButton(prevPatBtn);
+		prevPatBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
+		orLabel.getStyleClass().add("label-white");
 		
 		//Construct Grid		
 		grid.setPadding(new Insets(10, 10, 10, 10));
@@ -69,7 +69,7 @@ public class LandingScene {
 		grid.getChildren().addAll(newPatBtn, orLabel, prevPatBtn);
 				
 		//Add Grid and layout to scene
-		Style.styleLandingBorderPane(layout);
+		layout.getStyleClass().add("side-pane");
 		layout.setCenter(grid);
 		
 		//Return constructed scene

@@ -5,6 +5,8 @@ import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -150,6 +152,7 @@ public class StateManager {
 		messLabel.setMaxSize(300, 500);
 		messLabel.setWrapText(true);
 		messLabel.autosize();
+		messLabel.getStyleClass().add("label-white");
 		Button close = new Button("Okay");
 		close.setOnAction(e -> dialogStage.close());
 		Style.styleButton(close);
@@ -232,6 +235,66 @@ public class StateManager {
 		dialogStage.setScene(dialogScene);
 		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
 		dialogStage.showAndWait();
+	}
+	
+	/**
+	 * Raises a dialog box with a question for the user
+	 * @param question: a question to the user
+	 */
+	public boolean makeQuestion(String question) {
+		Stage dialogStage = new Stage();
+		dialogStage.initModality(Modality.APPLICATION_MODAL);
+		dialogStage.initStyle(StageStyle.UNDECORATED);
+		dialogStage.setResizable(false);
+		
+		Label messLabel = new Label(question);
+		messLabel.setMaxSize(300, 500);
+		messLabel.setWrapText(true);
+		messLabel.autosize();
+		Button yesBtn = new Button("Yes");
+		Style.styleButton(yesBtn);
+		Button noBtn = new Button("No");
+		Style.styleButton(noBtn);
+		
+		class ValueHolder {boolean value;}
+		ValueHolder vh = new ValueHolder();
+		
+		yesBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				vh.value = true;
+				dialogStage.close();	
+			}
+		});
+		noBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				vh.value = false;
+				dialogStage.close();	
+			}
+		});
+		
+		VBox dialogLayout = new VBox(5);
+		GridPane buttonGrid = new GridPane();
+		ColumnConstraints columnCon = new ColumnConstraints();
+		columnCon.setPercentWidth(100/5);
+		buttonGrid.getColumnConstraints().addAll(columnCon, columnCon, columnCon, columnCon, columnCon);
+		GridPane.setConstraints(yesBtn, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(noBtn, 3, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		buttonGrid.getChildren().addAll(yesBtn, noBtn);
+		dialogLayout.getChildren().addAll(messLabel, buttonGrid);
+		dialogLayout.setAlignment(Pos.CENTER);
+		dialogLayout.setPadding(new Insets(40, 40, 40, 40));
+		dialogLayout.setSpacing(15);
+		dialogLayout.getStyleClass().add("vbox-dialog-box");
+		
+		Scene dialogScene = new Scene(dialogLayout);
+		dialogStage.sizeToScene();
+		dialogStage.setScene(dialogScene);
+		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		dialogStage.showAndWait();
+		
+		return vh.value;
 	}
 	
 	/**
