@@ -44,6 +44,12 @@ class NNGUI(QWidget):
             #implement here
             print("not yet implemented")
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
+
+        train_button = QPushButton("Train Me!")
+        def train_clicked():
+            #implement here
+            print("not yet implemented")
+        train_button.clicked.connect(train_clicked)
         
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
@@ -51,6 +57,8 @@ class NNGUI(QWidget):
         layout.addWidget(imgfolder_filepath)
         layout.addWidget(imgfolder_dirpick_button)
         layout.addWidget(imgfolder_load_button)
+        layout.addWidget(train_button)
+        
         self.setGeometry(300, 300, 350, 300)
         self.setLayout(layout)
         self.show()
