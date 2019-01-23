@@ -33,17 +33,24 @@ class NNGUI(QWidget):
 
         imgfolder_filepath = QLineEdit("Image Folder Filename Here")
         imgfolder_filepath.setReadOnly(True)
-        imgfolder_button = QPushButton("Choose an Image Folder")
-        def imgfolder_clicked():
+        imgfolder_dirpick_button = QPushButton("Choose an Image Folder")
+        def imgfolder_dirpick_clicked():
             imgfolder_filepicker = QFileDialog.getExistingDirectory(self, "Image Folder File Picker", "")
             imgfolder_filepath.setText(imgfolder_filepicker)
-        imgfolder_button.clicked.connect(imgfolder_clicked)
+        imgfolder_dirpick_button.clicked.connect(imgfolder_dirpick_clicked)
+
+        imgfolder_load_button = QPushButton("Load all Images from Selected Folder")
+        def imgfolder_load_clicked():
+            #implement here
+            print("not yet implemented")
+        imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
         
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
         layout.addWidget(csv_load_button)
         layout.addWidget(imgfolder_filepath)
-        layout.addWidget(imgfolder_button)
+        layout.addWidget(imgfolder_dirpick_button)
+        layout.addWidget(imgfolder_load_button)
         self.setGeometry(300, 300, 350, 300)
         self.setLayout(layout)
         self.show()
