@@ -310,11 +310,10 @@ public class VerticalSideMenu {
 		column3.setPercentWidth(50);
 		grid.getColumnConstraints().addAll(column2, column3);
 		
-		//TODO Make it take the patient entry. This page should be able to be gotten to without having a patient
 		Label patientLabel = new Label("PLACEHOLDER1");
 		Style.styleLabel(patientLabel);
 		GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
-		Label dateLabel = new Label("PlaceHolder");//manager.getPatient().getDate().toString());
+		Label dateLabel = new Label("PlaceHolder");
 		Style.styleLabel(dateLabel);
 		GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
 		Label recentLabel = new Label("Other Recent Scans:");
@@ -333,6 +332,7 @@ public class VerticalSideMenu {
 				else if (i == patient.getNumRawScans()-1) {
 					newLbl.setText("Oldest:");
 				}
+
 				Style.styleLabel(newLbl);
 				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
 				Button newBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());

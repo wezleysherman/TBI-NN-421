@@ -1,10 +1,14 @@
 package ui;
 
 import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -25,6 +29,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import utils.PatientEntry;
+import utils.PatientManagement;
 import utils.Scan;
 
 /**
@@ -204,6 +209,7 @@ public class StateManager {
 		});
 		VBox vbox = new VBox();
 		TextArea textArea = new TextArea();
+		textArea.getStyleClass().add("text-area-dialog");
 		textArea.setText(stack);
 		textArea.setPrefSize(260, 300);
 		textArea.setEditable(false);
@@ -211,13 +217,13 @@ public class StateManager {
 		titledPane.setContent(vbox);
 		
 		Label messLabel = new Label(message);
+		messLabel.getStyleClass().add("label-white");
 		messLabel.setMaxSize(300, 500);
 		messLabel.setWrapText(true);
 		messLabel.autosize();
 		messLabel.setAlignment(Pos.CENTER);
 		Button close = new Button("Okay");
 		close.setOnAction(e -> dialogStage.close());
-		Style.styleButton(close);
 		
 		GridPane buttonGrid = new GridPane();
 		ColumnConstraints columnCon = new ColumnConstraints();
@@ -250,11 +256,10 @@ public class StateManager {
 		Label messLabel = new Label(question);
 		messLabel.setMaxSize(300, 500);
 		messLabel.setWrapText(true);
+		messLabel.getStyleClass().add("label-white");
 		messLabel.autosize();
 		Button yesBtn = new Button("Yes");
-		Style.styleButton(yesBtn);
 		Button noBtn = new Button("No");
-		Style.styleButton(noBtn);
 		
 		class ValueHolder {boolean value;}
 		ValueHolder vh = new ValueHolder();
