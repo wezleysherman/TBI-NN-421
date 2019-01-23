@@ -141,7 +141,6 @@ public class ScanVisualizerScene {
         });
 		
 		//Style CNN Button
-		Style.styleButton(viewCNNBtn);
 		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -153,7 +152,6 @@ public class ScanVisualizerScene {
 		viewCNNBtn.setTooltip(new Tooltip(viewCNNTT));
 		
 		//Style LTA button
-		Style.styleButton(likelyTraumaBtn);
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
@@ -165,7 +163,6 @@ public class ScanVisualizerScene {
 		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
 		
 		//Style Algorithm Visualizer button
-		Style.styleButton(algoVisBtn);
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -220,7 +217,7 @@ public class ScanVisualizerScene {
 
 		mainGrid.getChildren().add(contentGrid);
 		
-		Style.styleBorderPane(layout);
+		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene
