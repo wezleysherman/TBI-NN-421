@@ -176,8 +176,8 @@ public class PatientInfoScene {
     	            		manager.setStateBool(false);
         	            	manager.paintScene("PatientInfo");
     	            	}
-	            	} catch (Exception ex) {
-	            		manager.makeDialog("Edit operation failed. Voiding changes.");
+	            	} catch (Exception e) {
+	            		manager.makeError("Edit operation failed. Voiding changes.", e);
 	            	}
 	            }
 	        });

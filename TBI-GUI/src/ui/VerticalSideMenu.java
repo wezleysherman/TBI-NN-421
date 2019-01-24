@@ -350,7 +350,7 @@ public class VerticalSideMenu {
 				grid.getChildren().addAll(newLbl, newBtn);
 			}
 		} catch (IOException e) {
-			manager.makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
+			manager.makeError("No PatientEntry object set in manager \n", e);
 		}
 
 		Button uploadBtn = new Button("Upload New Scan");
