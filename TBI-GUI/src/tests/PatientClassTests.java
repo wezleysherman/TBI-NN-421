@@ -68,6 +68,9 @@ public class PatientClassTests {
 		
 		patient.addRawScan(scan3);
 		assertEquals(date3, patient.getLastRawScanDate());
+		
+		patient.delRawScan(0);
+		assertEquals(scan1, patient.getRawScan(0));
 	}
 	
 	private static String buildDefaultPath() {
