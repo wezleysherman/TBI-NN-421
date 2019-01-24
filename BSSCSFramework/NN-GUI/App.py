@@ -15,26 +15,50 @@ class NNGUI(QWidget):
 
     def initNNGUI(self):
         layout = QVBoxLayout()
+		
         csv_filepath = QLineEdit(".CSV Filename Here")
         csv_filepath.setReadOnly(True)
-        csv_button = QPushButton("Choose a .CSV File")
-        def csv_clicked():
+        csv_filepick_button = QPushButton("Choose a .CSV File")
+        def csv_filepick_clicked():
             csv_filepicker = QFileDialog.getOpenFileName(self, "CSV File Picker", "", "CSV (*.csv)")
             csv_filepath.setText(csv_filepicker[0])
-        csv_button.clicked.connect(csv_clicked)
+        csv_filepick_button.clicked.connect(csv_filepick_clicked)
+		
+        csv_load_button = QPushButton("Load the Selected .CSV File")
+        def csv_load_clicked():
+            #implement here
+            print("not yet implemented")
+        csv_load_button.clicked.connect(csv_load_clicked)
+        
 
         imgfolder_filepath = QLineEdit("Image Folder Filename Here")
         imgfolder_filepath.setReadOnly(True)
-        imgfolder_button = QPushButton("Choose an Image Folder")
-        def imgfolder_clicked():
+        imgfolder_dirpick_button = QPushButton("Choose an Image Folder")
+        def imgfolder_dirpick_clicked():
             imgfolder_filepicker = QFileDialog.getExistingDirectory(self, "Image Folder File Picker", "")
             imgfolder_filepath.setText(imgfolder_filepicker)
-        imgfolder_button.clicked.connect(imgfolder_clicked)
+        imgfolder_dirpick_button.clicked.connect(imgfolder_dirpick_clicked)
+
+        imgfolder_load_button = QPushButton("Load all Images from Selected Folder")
+        def imgfolder_load_clicked():
+            #implement here
+            print("not yet implemented")
+        imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
+
+        train_button = QPushButton("Train Me!")
+        def train_clicked():
+            #implement here
+            print("not yet implemented")
+        train_button.clicked.connect(train_clicked)
         
         layout.addWidget(csv_filepath)
-        layout.addWidget(csv_button)
+        layout.addWidget(csv_filepick_button)
+        layout.addWidget(csv_load_button)
         layout.addWidget(imgfolder_filepath)
-        layout.addWidget(imgfolder_button)
+        layout.addWidget(imgfolder_dirpick_button)
+        layout.addWidget(imgfolder_load_button)
+        layout.addWidget(train_button)
+        
         self.setGeometry(300, 300, 350, 300)
         self.setLayout(layout)
         self.show()
