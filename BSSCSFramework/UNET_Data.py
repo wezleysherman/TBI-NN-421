@@ -11,26 +11,45 @@ from DICOMImporter import DICOMImporter
 import pandas as pd
 import numpy as np
 from PIL import Image
+from tqdm import tqdm
 
 class UNET_DATA:
-	def __init__(self, labels_arr=None, image_arr=None):
+	def __init__(self, labels_arr=None, image_arr=None, csv_path=None, images_path=None):
 		self.current_batch = 0
 		self.batch_size = 0
 		self.total_batches = 0
 		self.labels = labels_arr
 		self.images = image_arr
+		if csv_path and images_path:
+			data_frame = self.open_csv(csv_path)
+			self.data_dictionary = self.fetch_images_with_csv(images_path, data_frame)
+			self.data_keys = list(self.data_dictionary.keys())
 	
 	def get_next_batch(self):
 		'''	Responsible for batching the data arrays and returning them
+			Will decice which data to use depending on how it's been preprocessed
+
+			If the data is in a single dictionary it'll batch off of that. Otherwise
+			It'll use the self.labels and self.images arrays.
 		
 			Returns: 
 				label_batch: arr -- batch of labels for the associated image
 				image_batch: arr -- batch of images for the associated labels
+
 		'''
+
 		start_pos = (self.batch_size * self.current_batch)
 		end_pos =  (self.batch_size * self.current_batch+1)
-		label_batch = self.labels[start_pos:end_pos]
-		image_batch = self.images[start_pos:end_pos]
+		label_batch = []
+		image_batch = []
+		if not self.data_dictionary:
+			label_batch = self.labels[start_pos:end_pos]
+			image_batch = self.images[start_pos:end_pos]
+		else:
+			label_batch_keys = self.data_keys[start_pos:end_pos]
+			for key in label_batch_keys:
+				image_batch.append(self.data_dictionary[key]['image_arr'])
+				label_batch.append(self.data_dictionary[key]['labels'])
 
 		# Reset the current batch once we've iterated through all of our data
 		self.current_batch += 1
@@ -38,6 +57,7 @@ class UNET_DATA:
 			self.current_batch = 0
 
 		return label_batch, image_batch
+
 		
 	def fetch_data(self, path_to_csv):
 		''' Handles fetching the data from the DICOM Importer
@@ -96,18 +116,22 @@ class UNET_DATA:
 				}
 		'''
 		data_dictionary = {}
-		for row in dataframe.iterrows():
+		count = 0
+		for row in tqdm(dataframe.iterrows()):
 			data_dictionary[row[1][0]] = {}
 			image_path = path +'/' + row[1][0] + '_blue.png'
 			image = list(Image.open(image_path).getdata())
 			data_dictionary[row[1][0]]['image_arr'] = image
 			data_dictionary[row[1][0]]['labels'] = row[1][1]
-			print(data_dictionary)
+			if count == 1000:
+				break
+			count += 1
 		return data_dictionary
 			
 		
-unet = UNET_DATA()
+unet = UNET_DATA(csv_path='Data_right/train.csv', images_path='Data_right/Train/train')
 #print(unet.import_labels_from_csv("test_csv.csv")[1])
 #print(unet.fetch_data("test_csv.csv"))
-data_frame = unet.open_csv('Data_right/train.csv')
-print(unet.fetch_images_with_csv('Data_right/Train/train', data_frame))
+#data_frame = unet.open_csv('Data_right/train.csv')
+#print(unet.fetch_images_with_csv('Data_right/Train/train', data_frame))
+print(unet.get_next_batch())
