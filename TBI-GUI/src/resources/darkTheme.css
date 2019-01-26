@@ -43,6 +43,10 @@
 	-fx-background-color: #455357;
 }
 
+.scroll-pane {
+	-fx-background-color: transparent;
+}
+
 .text-area-sidebar .content {
 	-fx-background-color: #455357;
 }
