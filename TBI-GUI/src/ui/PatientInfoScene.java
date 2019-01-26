@@ -111,8 +111,8 @@ public class PatientInfoScene {
 			
 			//Analyze button
 			Button analyzeBtn = new Button("Analyze");
+			analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
-			Style.styleButton(analyzeBtn);
 			analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
@@ -149,12 +149,11 @@ public class PatientInfoScene {
 			datePicker.setPromptText("Date of Scan");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
-			Style.styleButton(saveBtn);
-			Style.styleButton(cancelBtn);
 			datePicker.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 			Scan newScan = new Scan();
 			
+			saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {	            	
@@ -182,6 +181,7 @@ public class PatientInfoScene {
 	            }
 	        });
 			
+			cancelBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {
