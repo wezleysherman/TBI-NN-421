@@ -155,7 +155,7 @@ public class StateManager {
 		messLabel.getStyleClass().add("label-white");
 		Button close = new Button("Okay");
 		close.setOnAction(e -> dialogStage.close());
-		Style.styleButton(close);
+		close.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		
 		VBox dialogLayout = new VBox(5);
 		GridPane buttonGrid = new GridPane();
