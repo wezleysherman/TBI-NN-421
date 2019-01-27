@@ -17,6 +17,7 @@ matrix:
       - pip install nibabel
       - pip install pandas
       - pip install pillow
+      - pip install tqdm
       #- curl -sL https://github.com/malaterre/GDCM/archive/v2.8.8.tar.gz | tar xz
       #- cd GDCM-2.8.8
       #- mkdir gdcm-build
