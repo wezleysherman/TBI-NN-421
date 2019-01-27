@@ -14,7 +14,10 @@ import java.io.StreamCorruptedException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -82,7 +85,7 @@ public class PatientManagement {
 			// write object
 			oos.writeObject(sobj);
 			oos.close();
-
+			
 			addPatient(new PatientEntry(patient.getFirstName() + " " + patient.getLastName(), patient.getUID(), key));
 			return true;
 		} catch (NoSuchAlgorithmException e) {
@@ -240,6 +243,20 @@ public class PatientManagement {
 			}
 		}
 		return patientList;
+	}
+	
+	public static LinkedList <PatientEntry> dateSortPatients(){
+		if(patientList == null) {
+			try {
+				patientList = importPatientList();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		LinkedList<PatientEntry> l = new LinkedList<PatientEntry>(patientList.values());
+		Collections.sort(l);
+		
+		return l;
 	}
 
 }
