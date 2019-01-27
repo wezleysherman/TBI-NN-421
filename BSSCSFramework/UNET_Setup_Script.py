@@ -5,6 +5,7 @@ from CTConverter.DICOM_operations import DICOM_2_NIFTI, decompress_DICOM, prepar
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+from BSSCS_DATA_PROCESSOR import BSSCS_DATA_PROCESSOR
 
 def convert_dicom_to_nifti(path):
 	''' Responsible for converting DICOM images to nifti Images
