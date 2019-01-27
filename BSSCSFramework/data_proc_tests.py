@@ -4,6 +4,7 @@
 '''
 from DICOMImporter import DICOMImporter
 from BSSCS_IMG_PROCESSING import BSSCS_IMG_PROCESSING
+from UNET_Data import UNET_DATA
 import numpy as np
 import unittest
 
@@ -75,6 +76,18 @@ class DataProcessingTests(unittest.TestCase):
 		self.assertTrue(o_height == (n_height + 200))
 		self.assertNotEqual(n_width, o_width)
 		self.assertNotEqual(n_height, o_height)
+
+	def test_unet_data(self):
+		''' Handles testing the unet dataclass
+	
+			Preconditions: No data has been imported
+			Postconditions: Data has been correctly imported with assigned labels
+		'''
+		unet = UNET_DATA()
+		
+		# various test cases to ensure test data has properly been loaded
+		self.assertNotEqual(unet.import_labels_from_csv("test_csv.csv")[1], "has_tbi")
+		self.assertFalse(unet.fetch_data("test_csv.csv"), None)
 		
 if __name__ == '__main__':
 	unittest.main()

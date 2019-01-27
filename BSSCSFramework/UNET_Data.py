@@ -12,9 +12,10 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 from tqdm import tqdm
+import math
 
 class UNET_DATA:
-	def __init__(self, labels_arr=None, image_arr=None, csv_path=None, images_path=None):
+	def __init__(self, batch_size=0, labels_arr=None, image_arr=None, csv_path=None, images_path=None):
 		self.current_batch = 0
 		self.batch_size = 0
 		self.total_batches = 0
@@ -24,6 +25,30 @@ class UNET_DATA:
 			data_frame = self.open_csv(csv_path)
 			self.data_dictionary = self.fetch_images_with_csv(images_path, data_frame)
 			self.data_keys = list(self.data_dictionary.keys())
+
+	def set_batch_size(self, new_size):
+		''' Responsible for setting a new batch size
+
+			Input:
+				- new_size: int -- corresponds to the new batch size we want to assign
+		'''
+		self.batch_size = new_size
+
+	def get_batch_size(self):
+		''' Responsible for returning the batch size for the class
+
+			Returns:
+				-int -- corresponds to the batch size
+		'''
+		return self.batch_size
+
+	def get_total_batches(self):
+		''' Responsible for returning how many batches of data are in our dataset
+
+			Returns:
+				- int -- corresponds to the number of batches in our dataset
+		'''
+		return math.floor(self.images/batch_size)
 	
 	def get_next_batch(self):
 		'''	Responsible for batching the data arrays and returning them
@@ -127,11 +152,3 @@ class UNET_DATA:
 				break
 			count += 1
 		return data_dictionary
-			
-		
-unet = UNET_DATA(csv_path='Data_right/train.csv', images_path='Data_right/Train/train')
-#print(unet.import_labels_from_csv("test_csv.csv")[1])
-#print(unet.fetch_data("test_csv.csv"))
-#data_frame = unet.open_csv('Data_right/train.csv')
-#print(unet.fetch_images_with_csv('Data_right/Train/train', data_frame))
-print(unet.get_next_batch())
