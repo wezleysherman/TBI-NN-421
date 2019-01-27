@@ -50,7 +50,7 @@ public class CNNVisualizationScene {
 		GridPane scrollGrid = new GridPane();
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		Style.styleScrollPane(scrollPane);
+		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
 		scrollGrid.getColumnConstraints().add(scrollGridCols);
@@ -73,8 +73,9 @@ public class CNNVisualizationScene {
 		}
 		
 		//Set up text area
-		Style.styleTextArea(docNotesField);
 		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
+		docNotesField.setWrapText(true);
+		docNotesField.getStyleClass().add("text-area-sidebar");
 		
 		//Add elements to sideBar
 		GridPane.setConstraints(scrollPane, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -87,7 +88,7 @@ public class CNNVisualizationScene {
 		//Add contentGrid to main grid
 		mainGrid.getChildren().add(contentGrid);
 		
-		Style.styleBorderPane(layout);
+		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene

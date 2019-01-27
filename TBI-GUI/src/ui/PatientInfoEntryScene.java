@@ -181,8 +181,8 @@ public class PatientInfoEntryScene {
 					}
 					try {
 						PatientManagement.exportPatient(patient);
-					} catch (Exception ex) {
-						manager.makeDialog("Creating new patient failed.");
+					} catch (Exception e) {
+						manager.makeError("Creating new patient failed.", e);
 					}
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PreviousPatient");

@@ -17,6 +17,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 import utils.Patient;
 import utils.PatientManagement;
+import utils.Scan;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class VerticalSideMenu {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
 		Label appLabel = new Label("TBI Application");
+		appLabel.getStyleClass().add("label-white");
 		Pane colorPane = new Pane();
 		
 		//Construct content grid
@@ -42,7 +44,6 @@ public class VerticalSideMenu {
 		contentGrid.getColumnConstraints().addAll(column0, column1);
 		
 		//Add elements to content grid
-		Style.styleLabel(appLabel);
 		GridPane.setConstraints(appLabel, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
 		contentGrid.getChildren().add(appLabel);
 		
@@ -58,14 +59,14 @@ public class VerticalSideMenu {
 		mainGrid.getColumnConstraints().add(1, columnCon2);
 		
 		//Merge content grid with main grid
-		Style.stylePane(colorPane);
+		colorPane.getStyleClass().add("side-pane");
 		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
 		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
 		mainGrid.getChildren().addAll(colorPane, contentGrid);
 		
 		//backBtn------------------------------------------------------------------------------------------------------------------------------------
 		Button backBtn = new Button("Back");
-		Style.styleButton(backBtn);
+		backBtn.setMaxWidth(Double.MAX_VALUE);
 		backBtn.setTooltip(new Tooltip("Return to the previous page (You will lose any information you input on this page)."));
 		backBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -84,7 +85,7 @@ public class VerticalSideMenu {
 		
 		//homeBtn------------------------------------------------------------------------------------------------------------------------------------
 		Button homeBtn = new Button("Home");
-		Style.styleButton(homeBtn);
+		homeBtn.setMaxWidth(Double.MAX_VALUE);
 		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
 		
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -102,7 +103,7 @@ public class VerticalSideMenu {
 		
 		//algoVisBtn---------------------------------------------------------------------------------------------------------------------------------
 		Button algoVisBtn = new Button ("Algorithm Visualizer");
-		Style.styleButton(algoVisBtn);
+		algoVisBtn.setMaxWidth(Double.MAX_VALUE);
 		algoVisBtn.setTooltip(new Tooltip("View the accuracy of the algorithm as a whole."));
 		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -198,7 +199,7 @@ public class VerticalSideMenu {
 		GridPane scrollGrid = new GridPane();
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		Style.styleScrollPane(scrollPane);
+		scrollPane.getStyleClass().add("");
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
 		scrollGrid.getColumnConstraints().add(scrollGridCols);
@@ -222,12 +223,12 @@ public class VerticalSideMenu {
 		}
 		
 		//Set up text area
-		Style.styleTextArea(docNotesField);
+		docNotesField.getStyleClass().add("text-area-sidebar");
 		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
 		
 		//Set style labels
-		Style.styleLabel(dateLabel);
-		Style.styleLabel(screenNameLabel);
+		dateLabel.getStyleClass().add("label-white");
+		screenNameLabel.getStyleClass().add("label-white");
 		
 		//Add elements to sideBar
 		GridPane.setConstraints(dateLabel, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -240,13 +241,13 @@ public class VerticalSideMenu {
 	//Add AV Elements to the Main Grid
 	private static void makeAV(GridPane grid, StateManager manager) {
 		Label sceneLabel = new Label("Algorithm Visualizer");
-		Style.styleLabel(sceneLabel);
+		sceneLabel.getStyleClass().add("label-white");
 		GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
 		Button recentBtn = new Button("Last 100 Scans");
-		Style.styleButton(recentBtn);
 		recentBtn.setTooltip(new Tooltip("View the accuracy of the algorithm in its last 100 uses."));
 		GridPane.setConstraints(recentBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
 		
+		recentBtn.setMaxWidth(Double.MAX_VALUE);
 		recentBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -264,17 +265,21 @@ public class VerticalSideMenu {
 	//Add PI Elements to the Main Grid
 	private static void makePI(GridPane grid, StateManager manager) {
 		Label sceneLabel = new Label("Patient Info");
-		Style.styleLabel(sceneLabel);
+		sceneLabel.getStyleClass().add("label-white");
 		GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
 		Button editBtn = new Button("Edit Patient");
-		Style.styleButton(editBtn);
 		editBtn.setTooltip(new Tooltip("Edit this patient's data."));
 		GridPane.setConstraints(editBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
-		Button delBtn = new Button("Delete Patient");
-		Style.styleButton(delBtn);
-		delBtn.setTooltip(new Tooltip("Delete this patient."));
-		GridPane.setConstraints(delBtn, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
+		Button delPatBtn = new Button("Delete Patient");
+		delPatBtn.setMaxWidth(Double.MAX_VALUE);
+		delPatBtn.setTooltip(new Tooltip("Delete this patient."));
+		GridPane.setConstraints(delPatBtn, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
+		Button delScansBtn = new Button("Delete All Scans");
+		delScansBtn.setMaxWidth(Double.MAX_VALUE);
+		delScansBtn.setTooltip(new Tooltip("Delete this patient's scans."));
+		GridPane.setConstraints(delScansBtn, 0, 8, 2, 1, HPos.CENTER, VPos.CENTER);
 		
+		editBtn.setMaxWidth(Double.MAX_VALUE);
 		editBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -283,14 +288,16 @@ public class VerticalSideMenu {
 			}
 		});
 		
-		delBtn.setOnAction(new EventHandler<ActionEvent>() {
+		delPatBtn.setMaxWidth(Double.MAX_VALUE);
+		delPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				boolean yes = manager.makeQuestion("Are you sure you want to delete this patient?");
+				boolean yes = manager.makeQuestion("This will remove all of the data associated with this patient, are you sure you want to continue?");
 				if (yes) {
 					try {
 						PatientManagement.deletePatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
 						manager.setPatient(null);
+						manager.getSceneStack().pop();
 						manager.paintScene("PreviousPatient");
 					} catch (IOException e) {
 						//TODO in error task
@@ -299,89 +306,106 @@ public class VerticalSideMenu {
 			}
 		});
 		
-		grid.getChildren().addAll(sceneLabel, editBtn, delBtn);
-	}
-	
-	//Add SV Elements to the Main Grid
-	private static void makeSV(GridPane grid, StateManager manager) {
-		ColumnConstraints column2 = new ColumnConstraints();
-		column2.setPercentWidth(50);
-		ColumnConstraints column3 = new ColumnConstraints();
-		column3.setPercentWidth(50);
-		grid.getColumnConstraints().addAll(column2, column3);
-		
-		//TODO Make it take the patient entry. This page should be able to be gotten to without having a patient
-		Label patientLabel = new Label("PLACEHOLDER1");
-		Style.styleLabel(patientLabel);
-		GridPane.setConstraints(patientLabel, 0, 6, 4, 1, HPos.CENTER, VPos.CENTER);
-		Label dateLabel = new Label("PlaceHolder");//manager.getPatient().getDate().toString());
-		Style.styleLabel(dateLabel);
-		GridPane.setConstraints(dateLabel, 0, 7, 4, 1, HPos.CENTER, VPos.CENTER);
-		Label recentLabel = new Label("Other Recent Scans:");
-		Style.styleLabel(recentLabel);
-		GridPane.setConstraints(recentLabel, 0, 9, 4, 1, HPos.CENTER, VPos.CENTER);
-		
-		grid.getChildren().addAll(patientLabel, dateLabel, recentLabel);
-		
-		try {
-			Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
-			for (int i = 0; i < patient.getNumRawScans(); ++i) {
-				Label newLbl = new Label("");
-				if (i == 0) {
-					newLbl.setText("Latest:");
-				}
-				else if (i == patient.getNumRawScans()-1) {
-					newLbl.setText("Oldest:");
-				}
-				Style.styleLabel(newLbl);
-				GridPane.setConstraints(newLbl, 0, i + 10, 1, 1, HPos.RIGHT, VPos.CENTER);
-				Button newBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
-				Style.styleButton(newBtn);
-				GridPane.setConstraints(newBtn, 1, i + 10, 3, 1, HPos.CENTER, VPos.CENTER);
-				newBtn.setTooltip(new Tooltip("View this scan."));
-				
-				newBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						// TODO: Implement this?
-					}
-				});
-				
-				grid.getChildren().addAll(newLbl, newBtn);
-			}
-		} catch (IOException e) {
-			manager.makeDialog("No PatientEntry object set in manager \n" + e.getStackTrace());
-		}
-
-		Button uploadBtn = new Button("Upload New Scan");
-		Style.styleButton(uploadBtn);
-		//TODO needs to take into account the number of scans when placing things in the proper row...for some reason...this will change
-		GridPane.setConstraints(uploadBtn, 1, 11 + 0, 3, 1, HPos.CENTER, VPos.CENTER);
-		// TODO: Implement this?
-		uploadBtn.setTooltip(new Tooltip("Upload a new scan for this patient."));
-		
-		uploadBtn.setOnAction(new EventHandler<ActionEvent>() {
+		delScansBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				FileChooser fileChooser = new FileChooser();
-				fileChooser.getExtensionFilters().addAll(
-		                new FileChooser.ExtensionFilter("DICOM", "*.dicom"),
-		                new FileChooser.ExtensionFilter("NIFTI", "*.nifti")
-		            );
-				File file = fileChooser.showOpenDialog(manager.getStage());
-                if (file != null) {
-                    //TODO
-                }
+				boolean yes = manager.makeQuestion("This will remove all of the scans associated with this patient, are you sure you want to continue?");
+				if (yes) {
+					try {
+						Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+						patient.getRawScans().clear();
+						patient.savePatient();
+						manager.paintScene("PatientInfo");
+					} catch (Exception e) {
+						manager.makeError("Unable to delete scans. An issue with scans in the database occured.", e);
+					}
+				}
 			}
 		});
 		
-		Label notesLabel = new Label("PLACEHOLDER2"); //TODO "Doctors Notes: \n" + manager.getPatient().getNotes());
-		Style.styleLabel(notesLabel);
-		notesLabel.setWrapText(true);
-		//TODO fix how things are laid out for this entire sidebar
-		GridPane.setConstraints(notesLabel, 0, 14 + 0, 4, 1, HPos.CENTER, VPos.CENTER);
-		
-		grid.getChildren().addAll(uploadBtn, notesLabel);
+		grid.getChildren().addAll(sceneLabel, editBtn, delPatBtn, delScansBtn);
 	}
 	
+	//Add SV Elements to the Main Grid
+	private static void makeSV(GridPane grid, StateManager manager) { //TODO everything is sized wrong on this sidebar
+		try {
+			Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+			
+			Label sceneLabel = new Label("Scan Vizualizer");
+			sceneLabel.getStyleClass().add("label-white");
+			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
+			
+			Label patientLabel = new Label("Patient: " + patient.getFirstName() + " " + patient.getLastName());
+			patientLabel.getStyleClass().add("label-white");
+			GridPane.setConstraints(patientLabel, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
+			
+			Label dateLabel = new Label("Scan Date: " + manager.getScan().getDateOfScan().toString());
+			dateLabel.getStyleClass().add("label-white");
+			GridPane.setConstraints(dateLabel, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
+			
+			Label notesLabel = new Label("Scan Notes: " + manager.getScan().getNotes()); //TODO make notes editable
+			notesLabel.getStyleClass().add("label-white");
+			notesLabel.setWrapText(true);
+			GridPane.setConstraints(notesLabel, 0, 8, 2, 1, HPos.CENTER, VPos.CENTER);
+			
+			Button delScanBtn = new Button("Delete Scan");
+			delScanBtn.setMaxWidth(Double.MAX_VALUE);
+			delScanBtn.setTooltip(new Tooltip("Delete this scan."));
+			GridPane.setConstraints(delScanBtn, 0, 9, 2, 1, HPos.CENTER, VPos.CENTER);
+			delScanBtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					boolean yes = manager.makeQuestion("This will remove all of the data associated with this scan, are you sure you want to continue?");
+					if (yes) {
+						for(Scan scan : patient.getRawScans()) {
+				        	if (scan.equals(manager.getScan())) {
+				        		patient.getRawScans().remove(scan);
+				        		break;
+				        	}
+				        }
+						try {
+							patient.savePatient();
+							manager.setScan(null);
+							manager.getSceneStack().pop();
+							manager.paintScene("PatientInfo");
+						} catch (Exception e) {
+							// TODO in error task
+						}
+					}
+				}
+			});
+			
+			Label otherLabel = new Label("Other Scans:");
+			otherLabel.getStyleClass().add("label-white");
+			GridPane.setConstraints(otherLabel, 0, 10, 2, 1, HPos.CENTER, VPos.CENTER);
+			
+			Label newestLabel = new Label("Newest");
+			newestLabel.getStyleClass().add("label-white");
+			GridPane.setConstraints(newestLabel, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
+		
+			for (int i = 0; i < patient.getNumRawScans(); ++i) {
+				Button scanBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
+				scanBtn.setMaxWidth(Double.MAX_VALUE);
+				GridPane.setConstraints(scanBtn, 0, 12 + i, 2, 1, HPos.CENTER, VPos.CENTER);
+				scanBtn.setTooltip(new Tooltip("View this scan."));
+				
+				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						// TODO: Implement this
+					}
+				});
+				
+				grid.getChildren().add(scanBtn);
+			}
+			
+			Label oldestLabel = new Label("Oldest");
+			oldestLabel.getStyleClass().add("label-white");
+			GridPane.setConstraints(oldestLabel, 0, 12 + patient.getNumRawScans(), 2, 1, HPos.CENTER, VPos.CENTER);
+			
+			grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, otherLabel, notesLabel, newestLabel, oldestLabel);
+		} catch (Exception e) {
+			//TODO in error task
+		}
+	}
 }
