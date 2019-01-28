@@ -94,6 +94,7 @@ public class ScanVisualizerScene {
 		cnnBPane.setBottom(viewCNNBtn);
 		cnnPane.getChildren().add(displayCNNImage);
 		
+		//###STYLE AND ADD FUNCTION TO BUTTONS
 		//Setup buttons on the scene
 		viewCNNBtn.setText("CNN Visualizer");
 		likelyTraumaBtn.setText("Trauma Area Visualizer");
@@ -131,20 +132,12 @@ public class ScanVisualizerScene {
 		});
 		String algoVisTT = "View the Algorithm Visualizer.";
 		algoVisBtn.setTooltip(new Tooltip(algoVisTT));
-				
-		//Construct Grid
+		
+		//###LAYOUT CONTENT GRID AND ADD ELEMENTS
+		//Construct Content Grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		contentGrid.setVgap(15);
 		contentGrid.setHgap(10);
-				
-		// Position Elements within the UI
-		GridPane.setConstraints(likelyTraumaBPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		GridPane.setConstraints(algoVisBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		GridPane.setConstraints(cnnBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
-		
-		// add Elements to the scene
-		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane);
 		
 		//Size the Columns
 		ColumnConstraints contentColumn = new ColumnConstraints(200,200,Double.MAX_VALUE);
@@ -156,6 +149,14 @@ public class ScanVisualizerScene {
 		contentRow.setVgrow(Priority.ALWAYS);
 		contentRow.setPercentHeight(50);
 		contentGrid.getRowConstraints().addAll(contentRow, contentRow);
+				
+		// Position Elements within the UI
+		GridPane.setConstraints(likelyTraumaBPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(algoVisBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(cnnBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
+		
+		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane);
 
 		//Merge Vertical Side Menu and Content
 		mainGrid = VerticalSideMenu.newSideBar(manager);
