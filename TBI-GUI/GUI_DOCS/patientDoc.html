@@ -42,7 +42,7 @@
 			<p>- None</p>
 			</span>
 
-			<b><code>PatientString fname, String lname, Date pDate, String pNotes, File pScan)</code></b>
+			<b><code>Patient(String fname, String lname, Date pDate, String pNotes, File pScan)</code></b>
 			<br>
 			<span>
 			Creates a fresh Patient with one scan
@@ -58,7 +58,7 @@
 			<p>- None</p>
 			</span>
 
-			<b><code>PatientString fname, String lname, Date pDate, String pNotes, LinkedList<Scan> pScans)</code></b>
+			<b><code>Patient(String fname, String lname, Date pDate, String pNotes, LinkedList<Scan> pScans)</code></b>
 			<br>
 			<span>
 			Creates a fresh Patient with multiple scans
@@ -97,6 +97,30 @@
 			<p>- Scan scan</p>
 			<p>Returns:</p>
 			<p>- None</p>
+			</span>
+
+			<b><code>Scan delProcScan(int index)</code></b>
+			<br>
+			<span>
+			Deletes a processed scan from the patient's list
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- int index</p>
+			<p>Returns:</p>
+			<p>- Scan</p>
+			</span>
+
+			<b><code>Scan delRrocScan(int index)</code></b>
+			<br>
+			<span>
+			Deletes an unprocessed scan from the patient's list
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- int index</p>
+			<p>Returns:</p>
+			<p>- Scan</p>
 			</span>
 
 			<b><code>Date getDate()</code></b>
@@ -147,7 +171,7 @@
 			<p>- String</p>
 			</span>
 
-			<b><code>Date getLastScanDate()</code></b>
+			<b><code>Date getLastRawScanDate()</code></b>
 			<br>
 			<span>
 			Returns the date of the most recent scan for this Patient

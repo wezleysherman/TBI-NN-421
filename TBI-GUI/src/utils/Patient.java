@@ -124,7 +124,7 @@ public class Patient implements Serializable {
 	}
 
 	public Date getLastRawScanDate() {
-		Scan last = this.rawScans.getFirst();
+		Scan last = this.rawScans.peek();
 		return last.getDateOfScan();
 	}
 
@@ -147,6 +147,15 @@ public class Patient implements Serializable {
 		return this.rawScans.get(index);
 	}
 	
+	public Scan delRawScan(int index) {
+		/* Handles removing a scan of a specific index from the linked list
+		 *
+		 *	Input:
+		 * 		- index: index of scan we want to return
+		 */
+		return this.rawScans.remove(index);
+	}
+	
 	public void addProcScan(Scan scan) {
 		/* Handles adding a new scan to the patient's linked list.
 		 *
@@ -164,6 +173,15 @@ public class Patient implements Serializable {
 		 * 		- index: index of scan we want to return
 		 */
 		return this.procScans.get(index);
+	}
+	
+	public Scan delProcScan(int index) {
+		/* Handles removing a scan of a specific index from the linked list
+		 *
+		 *	Input:
+		 * 		- index: index of scan we want to return
+		 */
+		return this.procScans.remove(index);
 	}
 
 	public void savePatient() throws Exception {
