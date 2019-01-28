@@ -94,41 +94,39 @@ public class StateManager {
 	
 	/**
 	 * Determines which scene to paint to the stage
-	 * @param newSceneID :is currently a distinct string indicating which scene will be displayed, it is different than sceneID for stack pushing purposes
-	 * @throws IOException 
+	 * @param newSceneID: a distinct string indicating which scene will be displayed
 	 */
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID) {			
-		this.sceneID = newSceneID; // current scene being displayed(added onto sceneStack when changed)
+		this.sceneID = newSceneID;
 		
-		try {
-			if (sceneID.equals("Landing")) {
-				this.patient = null;
-				scene = new LandingScene().initializeScene(this);
-			}
-			else if (sceneID.equals("PatientInfoEntry")) {
-				this.patient = null;
-				scene = new PatientInfoEntryScene().initializeScene(this);
-			}
-			else if (sceneID.equals("LikelyTraumaAreas"))
-				scene = new LikelyTraumaAreasScene().initializeScene(this);
-			else if (sceneID.equals("CNNVisualizer"))
-				scene = new CNNVisualizationScene().initializeScene(this);
-			else if (sceneID.equals("PreviousPatient"))
-				scene = new PreviousPatientScene().initializeScene(this);
-			else if (sceneID.equals("AlgorithmVisualizer"))
-				scene = new AlgorithmVisualizerScene().initializeScene(this);
-			else if (sceneID.equals("ScanVisualizer"))
-				scene = new ScanVisualizerScene().initializeScene(this);
-			else if (sceneID.equals("PatientInfo")) {
-				scene = new PatientInfoScene().initializeScene(this);
-			}
-			
-			stage.setScene(scene);
-		} catch (Exception e) {
-			makeError("No PatientEntry object set in manager", e);
+		if (sceneID.equals("Landing")) {
+			this.patient = null;
+			scene = new LandingScene().initializeScene(this);
 		}
-
+		else if (sceneID.equals("PatientInfoEntry")) {
+			this.patient = null;
+			scene = new PatientInfoEntryScene().initializeScene(this);
+		}
+		else if (sceneID.equals("LikelyTraumaAreas")) {
+			scene = new LikelyTraumaAreasScene().initializeScene(this);
+		}
+		else if (sceneID.equals("CNNVisualizer")) {
+			scene = new CNNVisualizationScene().initializeScene(this);
+		}
+		else if (sceneID.equals("PreviousPatient")) {
+			scene = new PreviousPatientScene().initializeScene(this);
+		}
+		else if (sceneID.equals("AlgorithmVisualizer")) {
+			scene = new AlgorithmVisualizerScene().initializeScene(this);
+		}
+		else if (sceneID.equals("ScanVisualizer")) {
+			scene = new ScanVisualizerScene().initializeScene(this);
+		}
+		else if (sceneID.equals("PatientInfo")) {
+			scene = new PatientInfoScene().initializeScene(this);
+		}
+		
 		stage.setScene(scene);
 		stage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
 		
@@ -306,15 +304,15 @@ public class StateManager {
 	 * Write the error and time it occurred to a file
 	 * @param ex: exception
 	 */
-	public void logError(Exception ex) {
+	public void logError(Exception exception) {
 		PrintWriter writer;		
 		try {
 			writer = new PrintWriter(new FileOutputStream(new File("./errorlog.txt"), true));
 			writer.append("----------------------------------------------------------------------------------------------------\n\n");
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
 			writer.append("Error occurred at " + dtf.format(LocalDateTime.now()) + "\n\n");
-			for(int i = 0; i < ex.getStackTrace().length; ++i) {
-				writer.append(ex.getStackTrace()[i] + "\n");
+			for(int i = 0; i < exception.getStackTrace().length; ++i) {
+				writer.append(exception.getStackTrace()[i] + "\n");
 			}
 			writer.append("\n");
 			writer.close();
@@ -356,11 +354,6 @@ public class StateManager {
 		System.out.println(sceneID);
 		System.out.println(sceneStack.size());
 		System.out.println(sceneStack.toString());
-		try {
-			System.out.println(patient.getName() + " " + patient.getUid());
-		}
-		catch (Exception e) {
-			System.out.println(patient);
-		}
+		System.out.println(patient.getName() + " " + patient.getUid());
 	}
 }

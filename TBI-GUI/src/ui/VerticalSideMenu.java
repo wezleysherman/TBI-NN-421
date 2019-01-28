@@ -26,6 +26,8 @@ import java.util.EmptyStackException;
 
 public class VerticalSideMenu {
 		
+	private static Patient patient = new Patient();
+	
 	public static GridPane newSideBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
@@ -72,11 +74,11 @@ public class VerticalSideMenu {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-						manager.paintScene(manager.getSceneStack().pop());
+					manager.paintScene(manager.getSceneStack().pop());
 				}
-				catch (EmptyStackException ex) {
+				catch (EmptyStackException e) {
 					manager.paintScene("Landing");
-					System.out.println(ex + " Something wrong with stack implementation, returning to landing page.");
+					manager.makeError("sceneStack in StateManager is empty and cannot be popped.", e);
 				}
 			}
 		});
@@ -329,83 +331,83 @@ public class VerticalSideMenu {
 	//Add SV Elements to the Main Grid
 	private static void makeSV(GridPane grid, StateManager manager) { //TODO everything is sized wrong on this sidebar
 		try {
-			Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+		} catch (IOException e){
+			manager.makeError("Cannot load a patient. PatientEntry object set in StateManager is null.", e);
+		}
+		
+		Label sceneLabel = new Label("Scan Vizualizer");
+		sceneLabel.getStyleClass().add("label-white");
+		GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
+		
+		Label patientLabel = new Label("Patient: " + patient.getFirstName() + " " + patient.getLastName());
+		patientLabel.getStyleClass().add("label-white");
+		GridPane.setConstraints(patientLabel, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
+		
+		Label dateLabel = new Label("Scan Date: " + manager.getScan().getDateOfScan().toString());
+		dateLabel.getStyleClass().add("label-white");
+		GridPane.setConstraints(dateLabel, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
+		
+		Label notesLabel = new Label("Scan Notes: " + manager.getScan().getNotes()); //TODO make notes editable
+		notesLabel.getStyleClass().add("label-white");
+		notesLabel.setWrapText(true);
+		GridPane.setConstraints(notesLabel, 0, 8, 2, 1, HPos.CENTER, VPos.CENTER);
+		
+		Button delScanBtn = new Button("Delete Scan");
+		delScanBtn.setMaxWidth(Double.MAX_VALUE);
+		delScanBtn.setTooltip(new Tooltip("Delete this scan."));
+		GridPane.setConstraints(delScanBtn, 0, 9, 2, 1, HPos.CENTER, VPos.CENTER);
+		delScanBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				boolean yes = manager.makeQuestion("This will remove all of the data associated with this scan, are you sure you want to continue?");
+				if (yes) {
+					for(Scan scan : patient.getRawScans()) {
+			        	if (scan.equals(manager.getScan())) {
+			        		patient.getRawScans().remove(scan);
+			        		break;
+			        	}
+			        }
+					try {
+						patient.savePatient();
+						manager.setScan(null);
+						manager.getSceneStack().pop();
+						manager.paintScene("PatientInfo");
+					} catch (Exception e) {
+						// TODO in error task
+					}
+				}
+			}
+		});
+		
+		Label otherLabel = new Label("Other Scans:");
+		otherLabel.getStyleClass().add("label-white");
+		GridPane.setConstraints(otherLabel, 0, 10, 2, 1, HPos.CENTER, VPos.CENTER);
+		
+		Label newestLabel = new Label("Newest");
+		newestLabel.getStyleClass().add("label-white");
+		GridPane.setConstraints(newestLabel, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
+	
+		for (int i = 0; i < patient.getNumRawScans(); ++i) {
+			Button scanBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
+			scanBtn.setMaxWidth(Double.MAX_VALUE);
+			GridPane.setConstraints(scanBtn, 0, 12 + i, 2, 1, HPos.CENTER, VPos.CENTER);
+			scanBtn.setTooltip(new Tooltip("View this scan."));
 			
-			Label sceneLabel = new Label("Scan Vizualizer");
-			sceneLabel.getStyleClass().add("label-white");
-			GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
-			
-			Label patientLabel = new Label("Patient: " + patient.getFirstName() + " " + patient.getLastName());
-			patientLabel.getStyleClass().add("label-white");
-			GridPane.setConstraints(patientLabel, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
-			
-			Label dateLabel = new Label("Scan Date: " + manager.getScan().getDateOfScan().toString());
-			dateLabel.getStyleClass().add("label-white");
-			GridPane.setConstraints(dateLabel, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
-			
-			Label notesLabel = new Label("Scan Notes: " + manager.getScan().getNotes()); //TODO make notes editable
-			notesLabel.getStyleClass().add("label-white");
-			notesLabel.setWrapText(true);
-			GridPane.setConstraints(notesLabel, 0, 8, 2, 1, HPos.CENTER, VPos.CENTER);
-			
-			Button delScanBtn = new Button("Delete Scan");
-			delScanBtn.setMaxWidth(Double.MAX_VALUE);
-			delScanBtn.setTooltip(new Tooltip("Delete this scan."));
-			GridPane.setConstraints(delScanBtn, 0, 9, 2, 1, HPos.CENTER, VPos.CENTER);
-			delScanBtn.setOnAction(new EventHandler<ActionEvent>() {
+			scanBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					boolean yes = manager.makeQuestion("This will remove all of the data associated with this scan, are you sure you want to continue?");
-					if (yes) {
-						for(Scan scan : patient.getRawScans()) {
-				        	if (scan.equals(manager.getScan())) {
-				        		patient.getRawScans().remove(scan);
-				        		break;
-				        	}
-				        }
-						try {
-							patient.savePatient();
-							manager.setScan(null);
-							manager.getSceneStack().pop();
-							manager.paintScene("PatientInfo");
-						} catch (Exception e) {
-							// TODO in error task
-						}
-					}
+					// TODO: Implement this
 				}
 			});
 			
-			Label otherLabel = new Label("Other Scans:");
-			otherLabel.getStyleClass().add("label-white");
-			GridPane.setConstraints(otherLabel, 0, 10, 2, 1, HPos.CENTER, VPos.CENTER);
-			
-			Label newestLabel = new Label("Newest");
-			newestLabel.getStyleClass().add("label-white");
-			GridPane.setConstraints(newestLabel, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
-		
-			for (int i = 0; i < patient.getNumRawScans(); ++i) {
-				Button scanBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
-				scanBtn.setMaxWidth(Double.MAX_VALUE);
-				GridPane.setConstraints(scanBtn, 0, 12 + i, 2, 1, HPos.CENTER, VPos.CENTER);
-				scanBtn.setTooltip(new Tooltip("View this scan."));
-				
-				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						// TODO: Implement this
-					}
-				});
-				
-				grid.getChildren().add(scanBtn);
-			}
-			
-			Label oldestLabel = new Label("Oldest");
-			oldestLabel.getStyleClass().add("label-white");
-			GridPane.setConstraints(oldestLabel, 0, 12 + patient.getNumRawScans(), 2, 1, HPos.CENTER, VPos.CENTER);
-			
-			grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, otherLabel, notesLabel, newestLabel, oldestLabel);
-		} catch (Exception e) {
-			//TODO in error task
+			grid.getChildren().add(scanBtn);
 		}
+		
+		Label oldestLabel = new Label("Oldest");
+		oldestLabel.getStyleClass().add("label-white");
+		GridPane.setConstraints(oldestLabel, 0, 12 + patient.getNumRawScans(), 2, 1, HPos.CENTER, VPos.CENTER);
+		
+		grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, otherLabel, notesLabel, newestLabel, oldestLabel);
 	}
 }
