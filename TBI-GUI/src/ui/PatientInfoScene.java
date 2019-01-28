@@ -37,9 +37,15 @@ import utils.Scan;
  */
 public class PatientInfoScene {
 	
-	public static Scene initializeScene(StateManager manager) throws IOException {
+	private static Patient patient = new Patient();
+	
+	public static Scene initializeScene(StateManager manager) {
 		//Load Patient info from the database
-		Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+		try {
+			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+		} catch (IOException e) {
+			manager.makeError("Cannot load a patient. PatientEntry object set in StateManager is null.", e);
+		}
 		
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -156,7 +162,7 @@ public class PatientInfoScene {
 			saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
-	            public void handle(final ActionEvent e) {	            	
+	            public void handle(final ActionEvent ev) {	            	
 	            	try {
 	            		if (newScan.getDateOfScan() == null && newScan.getScan() != null) {
     	            		manager.makeDialog("Please select a date for the new scan.");
@@ -175,8 +181,8 @@ public class PatientInfoScene {
     	            		manager.setStateBool(false);
         	            	manager.paintScene("PatientInfo");
     	            	}
-	            	} catch (Exception ex) {
-	            		manager.makeError("Edit operation failed. Voiding changes.", ex);
+	            	} catch (Exception e) {
+	            		manager.makeError("Edit operation failed. Voiding changes.", e);
 	            	}
 	            }
 	        });
