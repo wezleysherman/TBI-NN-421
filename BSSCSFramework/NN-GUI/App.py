@@ -4,7 +4,7 @@
 #CURRENTLY NOT USED (FILE DIALOGS) https://pythonspot.com/pyqt5-file-dialog/
 #CURRENTLY NOT USED (STYLES) http://doc.qt.io/qt-5/qtwidgets-index.html#styles
 
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider
 import sys
 
 class NNGUI(QWidget):
@@ -50,6 +50,20 @@ class NNGUI(QWidget):
             #implement here
             print("not yet implemented")
         train_button.clicked.connect(train_clicked)
+
+        iter_label = QLabel("Iterations:")
+        iter_text = QLineEdit()
+        iter_text.setReadOnly(True)
+        iter_slider = QSlider(0x1)
+        iter_slider.setTickInterval(8)
+        iter_slider.setTickPosition(2)
+        
+        batch_label = QLabel("Batch Size:")
+        batch_text = QLineEdit()
+        batch_text.setReadOnly(True)
+        batch_slider = QSlider(0x1)
+        batch_slider.setTickInterval(8)
+        batch_slider.setTickPosition(2)
         
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
@@ -57,6 +71,12 @@ class NNGUI(QWidget):
         layout.addWidget(imgfolder_filepath)
         layout.addWidget(imgfolder_dirpick_button)
         layout.addWidget(imgfolder_load_button)
+        layout.addWidget(iter_label)
+        layout.addWidget(iter_slider)
+        layout.addWidget(iter_text)
+        layout.addWidget(batch_label)
+        layout.addWidget(batch_slider)
+        layout.addWidget(batch_text)
         layout.addWidget(train_button)
         
         self.setGeometry(300, 300, 350, 300)
