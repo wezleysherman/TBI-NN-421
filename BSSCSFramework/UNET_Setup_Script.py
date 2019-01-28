@@ -45,11 +45,11 @@ def test_unet(image_path):
 		print(output)
 		print(output[0])
 		print(output[0][0].shape)
-		img = np.reshape(output[0], [2, 508, 508])
-		plt.imshow(img[1])
-		plt.show()
-		plt.imshow(img[0])
-		plt.show()
+		#img = np.reshape(output[0], [2, 508, 508])
+		#plt.imshow(img[1])
+		#plt.show()
+		#plt.imshow(img[0])
+		#plt.show()
 
 
 test_unet('test_dicom/test_dicom.dcm')

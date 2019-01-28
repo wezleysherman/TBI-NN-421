@@ -106,8 +106,22 @@ class BSSCS_UNET:
 		convolution_layer_18 = tf.layers.conv2d(inputs=convolution_layer_17, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_19 = tf.layers.conv2d(inputs=convolution_layer_18, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_5 = tf.layers.conv2d_transpose(inputs=convolution_layer_19, filters=2, kernel_size=[1, 1], strides=1, padding="SAME")
-		print(convolution_up_5.shape)
-		return convolution_up_5
+		
+		flattened = tf.reshape(convolution_up_5, [-1, 1016])
+		return flattened
+
+	def create_regressor(input): 
+		''' Handles creating the regressor for the UNET classification
+
+			Parameters:
+				- input -- input layer (flattened layer from UNET) 
+			Returns:
+			 	- Tensor -- last layer in the regressor
+		'''
+		reg_input = tf.layers.dense(inputs=input, units=1016, activation=tf.nn.relu)
+		reg_hidden = tf.layers.dense(inputs=reg_input, units=2016, activation=tf.nn.relu)
+		reg_out = tf.layers.dense(inputs=reg_hidden, units=2)
+		return reg_out
 
 	def train_unet(self):
 		''' Handles training a UNET based off the data fed to it
@@ -125,11 +139,12 @@ class BSSCS_UNET:
 		# The regressor will contain the loss function we are optimizing to.
 		input_ph = tf.placeholder(tf.float32, shape=[None, 572, 572, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
 		conv_input = self.generate_unet_arch(input_ph)
+		classifier = self.create_regressor(conv_input)
 		with tf.Session() as session:
 			for iteration in range(0, self.iterations): # counts for epochs -- or how many times we go through our data
 				for batch in range(0, self.batch_size):
 					y_b, X_b = self.data_class.get_next_batch()
-					session.run(conv_input, feed_dict={input:X_b})
+					session.run(classifier, feed_dict={input:X_b})
 
 				if iteration % 500 == 0:
 					# Evaluate mse loss here and print the value
