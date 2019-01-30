@@ -17,11 +17,12 @@ import tensorflow as tf
 from UNET_Data import UNET_DATA
 
 class BSSCS_UNET:
-	def __init__(self, iterations, batch_size, data_class, learning_rate=0.001):
+	def __init__(self, iterations, batch_size, data_class, labels_shape=[None, 2], learning_rate=0.001):
 		self.learning_rate = learning_rate
 		self.iterations = iterations
 		self.batch_size = batch_size
 		self.data_class = data_class
+
 
 	def generate_unet_arch(self, input):
 		''' Handles generating a TF Implementation of a UNET utilizing the architecture discussed in
@@ -123,6 +124,30 @@ class BSSCS_UNET:
 		reg_out = tf.layers.dense(inputs=reg_hidden, units=2)
 		return reg_out
 
+	def create_loss(self, input, labels):
+		''' Handles creating a loss function and returning it to the optimizer
+
+			Parameters:
+			 	- Input: The final layer in the graph we are computing the loss for
+			 	- Labels: The labels for the batch we are computing the loss for
+
+			 Returns:
+			 	- Defined loss function
+
+			TensorFlow documentation: 
+			https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits_v2
+		'''
+		return tf.nn.softmax_cross_entropy_with_logits_v2(logits=input, labels=labels)
+
+	def create_optimizer(self, input, labels):
+		'''
+
+			TensorFlow documentation: 
+			https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizer
+		'''
+		loss = tf.reduce_mean(create_loss(input, labels))
+		return tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(loss)
+
 	def train_unet(self):
 		''' Handles training a UNET based off the data fed to it
 		'''
@@ -140,11 +165,13 @@ class BSSCS_UNET:
 		input_ph = tf.placeholder(tf.float32, shape=[None, 572, 572, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
 		conv_input = self.generate_unet_arch(input_ph)
 		classifier = self.create_regressor(conv_input)
+		labels_placeholder = tf.placeholder(tf.float32, shape=self.labels_shape)
+		optimizer = create_optimizer(classifier, labels_placeholder)
 		with tf.Session() as session:
 			for iteration in range(0, self.iterations): # counts for epochs -- or how many times we go through our data
 				for batch in range(0, self.batch_size):
 					y_b, X_b = self.data_class.get_next_batch()
-					session.run(classifier, feed_dict={input:X_b})
+					session.run(optimizer, feed_dict={input:X_b, labels_placeholder:y_b})
 
 				if iteration % 500 == 0:
 					# Evaluate mse loss here and print the value
