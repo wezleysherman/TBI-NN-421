@@ -44,11 +44,27 @@
 }
 
 .scroll-pane {
+	-fx-border-color: #455357;
+	-fx-background-color: #455357;
+}
+
+.scroll-pane .viewport {
+	-fx-border-color: #455357;
+	-fx-background-color: #455357;
+}
+
+.tranparent-pane {
 	-fx-background-color: transparent;
+}
+
+.text-area-sidebar {
+	-fx-text-fill: white;
+	-fx-background-color: transparent, transparent, white, transparent;
 }
 
 .text-area-sidebar .content {
 	-fx-background-color: #455357;
+	-fx-background-color: transparent, transparent, white, #455357;
 }
 
 .table-view{
