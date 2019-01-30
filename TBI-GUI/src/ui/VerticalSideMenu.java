@@ -78,7 +78,7 @@ public class VerticalSideMenu {
 				}
 				catch (EmptyStackException e) {
 					manager.paintScene("Landing");
-					manager.makeError("sceneStack in StateManager is empty and cannot be popped.", e);
+					manager.makeError("Back operation failed. sceneStack in ui.StateManager is empty and cannot be popped.", e);
 				}
 			}
 		});
@@ -302,7 +302,7 @@ public class VerticalSideMenu {
 						manager.getSceneStack().pop();
 						manager.paintScene("PreviousPatient");
 					} catch (IOException e) {
-						//TODO in error task
+						manager.makeError("Deleting patient failed. There is an issue with the file structure of the database. Check utils.PatientManagement deletePatient().", e);
 					}
 				}
 			}
@@ -319,7 +319,7 @@ public class VerticalSideMenu {
 						patient.savePatient();
 						manager.paintScene("PatientInfo");
 					} catch (Exception e) {
-						manager.makeError("Unable to delete scans. An issue with scans in the database occured.", e);
+						manager.makeError("Delete scans failed. There is an issue with the file structure of the database. Check utils.PatientManagement exportPatient().", e);
 					}
 				}
 			}
@@ -332,8 +332,9 @@ public class VerticalSideMenu {
 	private static void makeSV(GridPane grid, StateManager manager) { //TODO everything is sized wrong on this sidebar
 		try {
 			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
-		} catch (IOException e){
-			manager.makeError("Cannot load a patient. PatientEntry object set in StateManager is null.", e);
+		} catch (IOException e) {
+			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. Try deleting the resources/patients folder. "
+					+ "WARNING, this will delete all saved patient data in the system. Check utils.PatientManagement importPatient().", e);
 		}
 		
 		Label sceneLabel = new Label("Scan Vizualizer");
@@ -374,7 +375,7 @@ public class VerticalSideMenu {
 						manager.getSceneStack().pop();
 						manager.paintScene("PatientInfo");
 					} catch (Exception e) {
-						// TODO in error task
+						manager.makeError("Delete scan failed. There is an issue with the file structure of the database. Check utils.PatientManagement exportPatient().", e);
 					}
 				}
 			}
