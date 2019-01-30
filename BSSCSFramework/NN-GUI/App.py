@@ -3,6 +3,7 @@
 #(FILE DIALOGS / BASIC GUI SETUP) http://zetcode.com/gui/pyqt5/dialogs/
 #CURRENTLY NOT USED (FILE DIALOGS) https://pythonspot.com/pyqt5-file-dialog/
 #CURRENTLY NOT USED (STYLES) http://doc.qt.io/qt-5/qtwidgets-index.html#styles
+# (SLIDER VALUES) https://www.qtcentre.org/threads/54613-How-do-I-get-the-value-from-the-slider-s-position
 
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider
 import sys
@@ -64,6 +65,8 @@ class NNGUI(QWidget):
         batch_slider = QSlider(0x1)
         batch_slider.setTickInterval(8)
         batch_slider.setTickPosition(2)
+
+        BATCH_SLIDER.ONvALUEcHANGED(5)
         
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
