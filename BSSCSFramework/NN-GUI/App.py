@@ -10,13 +10,18 @@ import sys
 
 class NNGUI(QWidget):
 
+'''creates GUI when started'''
     def __init__(self):
         super().__init__()
         self.initNNGUI()
 
+'''constructor for the main window'''
     def initNNGUI(self):
+
+'''layout of the window'''
         layout = QVBoxLayout()
-		
+
+'''.csv UI elements'''
         csv_filepath = QLineEdit(".CSV Filename Here")
         csv_filepath.setReadOnly(True)
         csv_filepick_button = QPushButton("Choose a .CSV File")
@@ -24,14 +29,15 @@ class NNGUI(QWidget):
             csv_filepicker = QFileDialog.getOpenFileName(self, "CSV File Picker", "", "CSV (*.csv)")
             csv_filepath.setText(csv_filepicker[0])
         csv_filepick_button.clicked.connect(csv_filepick_clicked)
-		
+
+	    
         csv_load_button = QPushButton("Load the Selected .CSV File")
         def csv_load_clicked():
             #implement here
             print("not yet implemented")
         csv_load_button.clicked.connect(csv_load_clicked)
         
-
+'''image folder UI elements'''
         imgfolder_filepath = QLineEdit("Image Folder Filename Here")
         imgfolder_filepath.setReadOnly(True)
         imgfolder_dirpick_button = QPushButton("Choose an Image Folder")
@@ -46,12 +52,14 @@ class NNGUI(QWidget):
             print("not yet implemented")
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
 
+'''train UI elements'''
         train_button = QPushButton("Train Me!")
         def train_clicked():
             #implement here
             print("not yet implemented")
         train_button.clicked.connect(train_clicked)
 
+'''iteration UI elements'''
         iter_label = QLabel("Iterations:")
         iter_text = QLineEdit()
         iter_text.setReadOnly(True)
@@ -63,7 +71,8 @@ class NNGUI(QWidget):
         def user_iters(value):
             iter_text.setText(str(value))
         iter_slider.valueChanged[int].connect(user_iters)
-        
+
+'''batch UI elements'''
         batch_label = QLabel("Batch Size:")
         batch_text = QLineEdit()
         batch_text.setReadOnly(True)
@@ -75,7 +84,8 @@ class NNGUI(QWidget):
         def user_batchs(value):
             batch_text.setText(str(value))
         batch_slider.valueChanged[int].connect(user_batchs)
-        
+
+'''widgets added to layout'''
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
         layout.addWidget(csv_load_button)
@@ -89,11 +99,13 @@ class NNGUI(QWidget):
         layout.addWidget(batch_slider)
         layout.addWidget(batch_text)
         layout.addWidget(train_button)
-        
+
+'''setup of window'''
         self.setGeometry(300, 300, 350, 300)
         self.setLayout(layout)
         self.show()
 
+'''Main Method'''
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
