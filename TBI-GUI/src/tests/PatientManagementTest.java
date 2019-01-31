@@ -129,8 +129,8 @@ public class PatientManagementTest {
 		temp = (PatientEntry)patientList.get(patient2.getUID());
 		assertEquals(temp.name, patient2.getFirstName() + " " + patient2.getLastName());
 		
-		((PatientEntry)patientList.get(patient2.getUID())).date = new Date(new Date().getYear() + 2, 1, 21);;
-		((PatientEntry)patientList.get(patient.getUID())).date = new Date(new Date().getYear() + 1, 1, 21);;
+		((PatientEntry)patientList.get(patient2.getUID())).date = new Date(new Date().getYear() + 2, 1, 21);
+		((PatientEntry)patientList.get(patient.getUID())).date = new Date(new Date().getYear() + 1, 1, 21);
 
 		LinkedList dateSort = PatientManagement.dateSortPatients();
 		for(int i = 1; i < dateSort.size(); i++) {

@@ -72,7 +72,7 @@ public class PatientClassTests {
 		patient.delRawScan(0);
 		assertEquals(scan1, patient.getRawScan(0));
 	}
-	
+
 	private static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
