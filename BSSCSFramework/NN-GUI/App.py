@@ -56,17 +56,25 @@ class NNGUI(QWidget):
         iter_text = QLineEdit()
         iter_text.setReadOnly(True)
         iter_slider = QSlider(0x1)
-        iter_slider.setTickInterval(8)
+        iter_slider.setTickInterval(4)
         iter_slider.setTickPosition(2)
+        iter_slider.setRange(0,32)
+
+        def user_iters(value):
+            iter_text.setText(str(value))
+        iter_slider.valueChanged[int].connect(user_iters)
         
         batch_label = QLabel("Batch Size:")
         batch_text = QLineEdit()
         batch_text.setReadOnly(True)
         batch_slider = QSlider(0x1)
-        batch_slider.setTickInterval(8)
+        batch_slider.setTickInterval(4)
         batch_slider.setTickPosition(2)
+        batch_slider.setRange(0,32)
 
-        BATCH_SLIDER.ONvALUEcHANGED(5)
+        def user_batchs(value):
+            batch_text.setText(str(value))
+        batch_slider.valueChanged[int].connect(user_batchs)
         
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
