@@ -51,9 +51,13 @@ class DICOM_2_NIFTI:
         output_path += os.path.basename(os.path.dirname(input_path)) + ".nii"
         open(output_path, 'a').close()
         dicom_array = DICOMImporter.open_dicom_from_folder(input_path)
+        dicom_array_scrubbed = []
+        for dicom in dicom_array:
+            if 'ImagePositionPatient' in dicom:
+                dicom_array_scrubbed.append(dicom)
 
         try:
-            dicom2nifti.convert_dicom.dicom_array_to_nifti(dicom_array, output_path)
+            dicom2nifti.convert_dicom.dicom_array_to_nifti(dicom_array_scrubbed, output_path)
         except NotImplementedError:
             debug("You tried to convert compressed files.")
             raise dicom2nifti.exceptions.ConversionError("Cannot convert compressed files.")
