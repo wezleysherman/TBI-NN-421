@@ -29,13 +29,13 @@ class NNGUI(QWidget):
         def csv_filepick_clicked():
             csv_filepicker = QFileDialog.getOpenFileName(self, "CSV File Picker", "", "CSV (*.csv)")
             csv_filepath.setText(csv_filepicker[0])
-            print(csv_filepath.text())
+            print("Selected: " + csv_filepath.text())
         csv_filepick_button.clicked.connect(csv_filepick_clicked)
 
 	    
         csv_load_button = QPushButton("Load the Selected .CSV File")
         def csv_load_clicked():
-            print(csv_filepath.text())
+            print("Loaded: " + csv_filepath.text())
             csv_file = pandas.read_csv(csv_filepath.text())
             print(csv_file)
         csv_load_button.clicked.connect(csv_load_clicked)
