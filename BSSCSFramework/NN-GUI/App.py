@@ -5,7 +5,7 @@
 #CURRENTLY NOT USED (STYLES) http://doc.qt.io/qt-5/qtwidgets-index.html#styles
 #(CSV FILES) https://realpython.com/python-csv/
 
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
 import sys, pandas
 
 class NNGUI(QWidget):
@@ -31,14 +31,19 @@ class NNGUI(QWidget):
             csv_filepath.setText(csv_filepicker[0])
             print("Selected: " + csv_filepath.text())
         csv_filepick_button.clicked.connect(csv_filepick_clicked)
-
+        
+        csv_text = QTextEdit("Your .CSV File Will Appear Here")
+        csv_text.setReadOnly(True)
 	    
         csv_load_button = QPushButton("Load the Selected .CSV File")
         def csv_load_clicked():
             print("Loaded: " + csv_filepath.text())
             csv_file = pandas.read_csv(csv_filepath.text())
             print(csv_file)
+            csv_text.setText(str(csv_file))
         csv_load_button.clicked.connect(csv_load_clicked)
+
+        csv_spacer = QLabel()
         
 #image folder UI elements
         imgfolder_filepath = QLineEdit("Image Folder Filename Here")
@@ -54,6 +59,8 @@ class NNGUI(QWidget):
             #implement here
             print("not yet implemented")
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
+
+        img_spacer = QLabel()
 
 #train UI elements
         train_button = QPushButton("Train Me!")
@@ -75,6 +82,8 @@ class NNGUI(QWidget):
             iter_text.setText(str(value))
         iter_slider.valueChanged[int].connect(user_iters)
 
+        iter_spacer = QLabel()
+
 #batch UI elements
         batch_label = QLabel("Batch Size:")
         batch_text = QLineEdit()
@@ -88,23 +97,30 @@ class NNGUI(QWidget):
             batch_text.setText(str(value))
         batch_slider.valueChanged[int].connect(user_batchs)
 
+        batch_spacer = QLabel()
+
 #widgets added to layout
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
         layout.addWidget(csv_load_button)
+        layout.addWidget(csv_text)
+        layout.addWidget(csv_spacer)
         layout.addWidget(imgfolder_filepath)
         layout.addWidget(imgfolder_dirpick_button)
         layout.addWidget(imgfolder_load_button)
+        layout.addWidget(img_spacer)
         layout.addWidget(iter_label)
         layout.addWidget(iter_slider)
         layout.addWidget(iter_text)
+        layout.addWidget(iter_spacer)
         layout.addWidget(batch_label)
         layout.addWidget(batch_slider)
         layout.addWidget(batch_text)
+        layout.addWidget(batch_spacer)
         layout.addWidget(train_button)
 
 #setup of window
-        self.setGeometry(300, 300, 350, 300)
+        self.setGeometry(350, 350, 400, 350)
         self.setLayout(layout)
         self.show()
 
