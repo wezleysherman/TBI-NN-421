@@ -12,6 +12,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 
 public class LandingScene {
 			
@@ -61,6 +62,10 @@ public class LandingScene {
 		ColumnConstraints column2 = new ColumnConstraints();
 		column2.setPercentWidth(30);
 		grid.getColumnConstraints().addAll(column0, column1, column2);
+		
+		RowConstraints rowCon = new RowConstraints();
+		rowCon.setPercentHeight(100/15);
+		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon, rowCon, rowCon);
 		
 		GridPane.setConstraints(newPatBtn, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(orLabel, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);

@@ -1,14 +1,9 @@
 package ui;
 
-import java.util.ArrayList;
-
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -19,22 +14,21 @@ import javafx.scene.layout.RowConstraints;
 public class CNNVisualizationScene {
 
 	public static Scene initializeScene(StateManager manager) {
+
+		// declaration of UI elements
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
 		GridPane mainGrid;
 		Image filterImage = new Image("resources/TestImage1.jpg");
 		ImageView displayImage = new ImageView();
 		displayImage.setImage(filterImage);
-				
-		//Construct Grid
+		
+		// constructing grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		contentGrid.setVgap(15);
 		contentGrid.setHgap(10);
 		
-		GridPane.setConstraints(displayImage, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		
-		contentGrid.getChildren().addAll(displayImage);
-		
+		// grid restraints
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100);
 		contentGrid.getRowConstraints().add(rowCon);
@@ -42,56 +36,26 @@ public class CNNVisualizationScene {
 		columnCon.setPercentWidth(100);
 		contentGrid.getColumnConstraints().add(columnCon);
 		
-		//Merge Vertical Side Menu and Content
+		//Add image to the screen
+		GridPane.setConstraints(displayImage, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		
+		contentGrid.getChildren().add(displayImage);
+		
+		// adding side menu and content to the main scene
 		mainGrid = VerticalSideMenu.newSideBar(manager);
-
-		//Fill SideBar Elements
-		TextArea docNotesField = new TextArea();
-		GridPane scrollGrid = new GridPane();
-		ScrollPane scrollPane = new ScrollPane(scrollGrid);
-		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		ColumnConstraints scrollGridCols = new ColumnConstraints();
-		scrollGridCols.setPercentWidth(100);
-		scrollGrid.getColumnConstraints().add(scrollGridCols);
-		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
-		
-		//Dummy Data for testing purposes
-		ArrayList<String> layerList = new ArrayList<String>();
-		for(int i = 0; i < 10; i++) {
-			layerList.add("Layer " + i);
-		}
-		
-		for(int j = 0; j < layerList.size(); j++) {
-			//Place Holder -> Can be changed to panes for better look
-			Button layerButton = new Button();
-			layerButton.setMaxWidth(Double.MAX_VALUE);
-			layerButton.setText((String) layerList.get(j));
-			GridPane.setMargin(layerButton, new Insets(0, 20, 0, 0));
-			GridPane.setConstraints(layerButton, 0, j, 2, 1, HPos.LEFT, VPos.CENTER);
-			scrollGrid.getChildren().add(layerButton);
-		}
-		
-		//Set up text area
-		docNotesField.setText("This is where the doctors notes would be entered into the sidebar.");
-		docNotesField.setWrapText(true);
-		docNotesField.getStyleClass().add("text-area-sidebar");
-		
-		//Add elements to sideBar
-		GridPane.setConstraints(scrollPane, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(docNotesField, 0, 4, 2, 1, HPos.CENTER, VPos.CENTER);
-		GridPane sideBarGrid = (GridPane) mainGrid.getChildren().get(1);
-		sideBarGrid.getChildren().addAll(scrollPane, docNotesField);
-		
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-
-		//Add contentGrid to main grid
-		mainGrid.getChildren().add(contentGrid);
 		
-		layout.getStyleClass().add("content-pane");
+		// content grid gets added to the displayed grid
+		mainGrid.getChildren().add(contentGrid);
+		contentGrid.getStyleClass().add("content-pane");
+		
+		// displayed grid is set onto the layout for the scene
 		layout.setCenter(mainGrid);
 		
-		//Return constructed scene
-		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
+		// scene is created using the layout
+		Scene likelyTraumaAreasScene = new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
+		
+		// return the newly created scene
+		return likelyTraumaAreasScene;
 	}
 }

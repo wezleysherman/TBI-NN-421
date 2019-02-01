@@ -146,7 +146,6 @@ public class ScanVisualizerScene {
 		contentGrid.getColumnConstraints().addAll(contentColumn, contentColumn);
 		
 		RowConstraints contentRow = new RowConstraints(200, 200, Double.MAX_VALUE);
-		contentRow.setVgrow(Priority.ALWAYS);
 		contentRow.setPercentHeight(50);
 		contentGrid.getRowConstraints().addAll(contentRow, contentRow);
 				
@@ -157,13 +156,13 @@ public class ScanVisualizerScene {
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
 		
 		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane);
-
+		contentGrid.getStyleClass().add("content-pane");
+		
 		//Merge Vertical Side Menu and Content
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 
 		mainGrid.getChildren().add(contentGrid);
 		
-		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene
