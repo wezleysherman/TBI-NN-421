@@ -153,6 +153,7 @@ class BSSCS_UNET:
 		''' Handles training a UNET based off the data fed to it
 		'''
 
+
 		# This is where I would put my loss and optimization functions -..
 		# ..
 		# ..
