@@ -22,9 +22,13 @@ class UNET_DATA:
 		self.labels = labels_arr
 		self.images = image_arr
 		if csv_path and images_path:
+			print("Found CSV")
 			data_frame = self.open_csv(csv_path)
 			self.data_dictionary = self.fetch_images_with_csv(images_path, data_frame)
 			self.data_keys = list(self.data_dictionary.keys())
+		else:
+			print("No CSV")
+			self.data_dictionary = None
 
 	def set_batch_size(self, new_size):
 		''' Responsible for setting a new batch size
@@ -73,7 +77,7 @@ class UNET_DATA:
 		else:
 			label_batch_keys = self.data_keys[start_pos:end_pos]
 			for key in label_batch_keys:
-				image_batch.append(self.data_dictionary[key]['image_arr'])
+				image_batch.append(np.resize(np.array(self.data_dictionary[key]['image_arr']), (512, 512, 1)))
 				label_batch.append(self.data_dictionary[key]['labels'])
 
 		# Reset the current batch once we've iterated through all of our data
@@ -147,8 +151,8 @@ class UNET_DATA:
 			image_path = path +'/' + row[1][0] + '_blue.png'
 			image = list(Image.open(image_path).getdata())
 			data_dictionary[row[1][0]]['image_arr'] = image
-			data_dictionary[row[1][0]]['labels'] = row[1][1]
-			if count == 1000:
+			data_dictionary[row[1][0]]['labels'] = np.resize(np.array(row[1][1].split(' ')[0]), (1))
+			if count == 1:
 				break
 			count += 1
 		return data_dictionary

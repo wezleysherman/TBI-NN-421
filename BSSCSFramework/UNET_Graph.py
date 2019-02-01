@@ -17,11 +17,12 @@ import tensorflow as tf
 from UNET_Data import UNET_DATA
 
 class BSSCS_UNET:
-	def __init__(self, iterations, batch_size, data_class, labels_shape=[None, 2], learning_rate=0.001):
+	def __init__(self, iterations, batch_size, data_class, labels_shape=[None, 1], learning_rate=0.001):
 		self.learning_rate = learning_rate
 		self.iterations = iterations
 		self.batch_size = batch_size
 		self.data_class = data_class
+		self.labels_shape = labels_shape
 
 
 	def generate_unet_arch(self, input):
@@ -111,7 +112,7 @@ class BSSCS_UNET:
 		flattened = tf.reshape(convolution_up_5, [-1, 1016])
 		return flattened
 
-	def create_regressor(input): 
+	def create_regressor(self, input): 
 		''' Handles creating the regressor for the UNET classification
 
 			Parameters:
@@ -120,8 +121,8 @@ class BSSCS_UNET:
 			 	- Tensor -- last layer in the regressor
 		'''
 		reg_input = tf.layers.dense(inputs=input, units=1016, activation=tf.nn.relu)
-		reg_hidden = tf.layers.dense(inputs=reg_input, units=2016, activation=tf.nn.relu)
-		reg_out = tf.layers.dense(inputs=reg_hidden, units=2)
+		#reg_hidden = tf.layers.dense(inputs=reg_input, units=20, activation=tf.nn.relu)
+		reg_out = tf.layers.dense(inputs=reg_input, units=2)
 		return reg_out
 
 	def create_loss(self, input, labels):
@@ -145,7 +146,7 @@ class BSSCS_UNET:
 			TensorFlow documentation: 
 			https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizer
 		'''
-		loss = tf.reduce_mean(create_loss(input, labels))
+		loss = tf.reduce_mean(self.create_loss(input, labels))
 		return tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(loss)
 
 	def train_unet(self):
@@ -162,20 +163,24 @@ class BSSCS_UNET:
 		# On a serious note -.. Here is where we will plug in the deep regressor once that's built.
 		# After a UNET run the image will be passed to the deep regressor.
 		# The regressor will contain the loss function we are optimizing to.
-		input_ph = tf.placeholder(tf.float32, shape=[None, 572, 572, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
+		input_ph = tf.placeholder(tf.float32, shape=[None, 512, 512, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
 		conv_input = self.generate_unet_arch(input_ph)
 		classifier = self.create_regressor(conv_input)
 		labels_placeholder = tf.placeholder(tf.float32, shape=self.labels_shape)
-		optimizer = create_optimizer(classifier, labels_placeholder)
+		optimizer = self.create_optimizer(classifier, labels_placeholder)
+		loss = self.create_loss(classifier, labels_placeholder)
 		with tf.Session() as session:
+			tf.global_variables_initializer().run()
 			for iteration in range(0, self.iterations): # counts for epochs -- or how many times we go through our data
 				for batch in range(0, self.batch_size):
 					y_b, X_b = self.data_class.get_next_batch()
-					session.run(optimizer, feed_dict={input:X_b, labels_placeholder:y_b})
-
+					session.run(optimizer, feed_dict={input_ph:X_b, labels_placeholder:y_b})
+					
 				if iteration % 500 == 0:
+					it_loss = session.run(loss, feed_dict={input_ph:X_b, labels_placeholder:y_b})
+
 					# Evaluate mse loss here and print the value
-					print("Passed 500 iterations with mse: ")
+					print("Passed 500 iterations with mse: " + it_loss)
 		
 
 	def test_unet(self, graph_out, input_x):

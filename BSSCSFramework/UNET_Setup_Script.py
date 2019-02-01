@@ -51,5 +51,12 @@ def test_unet(image_path):
 		#plt.imshow(img[0])
 		#plt.show()
 
+def test_unet_training(image_path, csv_path, batch_size, iterations):
+	print(image_path)
+	print(csv_path)
+	unet_data = UNET_DATA(images_path=image_path, csv_path=csv_path)
+	unet = BSSCS_UNET(iterations, batch_size, unet_data)
+	print(unet_data.get_next_batch())
+	unet.train_unet()
 
-test_unet('test_dicom/test_dicom.dcm')
+test_unet_training(image_path="Data_right/Train/train", csv_path="Data_right/train.csv", batch_size=1, iterations=100)
