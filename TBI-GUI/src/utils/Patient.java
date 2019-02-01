@@ -19,7 +19,7 @@ public class Patient implements Serializable {
 	private String notes;
 	private LinkedList<Scan> rawScans;
 	private LinkedList<Scan> procScans;
-	private UUID uid;
+	private String uid;
 	
 	//constructor for blank patient
 	public Patient() {
@@ -35,17 +35,29 @@ public class Patient implements Serializable {
 	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan) {
 		this(fName, lName, pDate, pNotes, wrapScan(pDate, pScan));
 	}
+	
+	//constructor for patient w/ established uid with 1 scan
+	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan, String uid) {
+		this(fName, lName, pDate, pNotes, wrapScan(pDate, pScan), uid);
+		
+	}
 
-	// constructor for fresh patient with multiple scans (main constructor)
+	// constructor for fresh patient with multiple scans
 	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans) {
+		this(fName, lName, pDate, pNotes, pScans, UUID.nameUUIDFromBytes((fName + " " + lName).getBytes()).toString());
+		
+	}
+	
+	//constructor for patient w/ established uid and multiple scans (main constructor)
+	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans, String uid) {
 		this.setFirstName(fName);
 		this.setLastName(lName);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
 		this.setRawScans(pScans);
 		this.procScans = new LinkedList<Scan>();
-		this.uid = UUID.nameUUIDFromBytes((fName + " " + lName).getBytes());
-		this.file = new File(basePath, uid.toString()).getAbsolutePath();
+		this.uid = uid;
+		this.file = new File(basePath, uid).getAbsolutePath();
 	}
 	
 	public static LinkedList<Scan> wrapScan(Date pDate, File pScan){
@@ -96,7 +108,7 @@ public class Patient implements Serializable {
 	}
 
 	public String getUID() {
-		return uid.toString();
+		return uid;
 	}
 
 	public LinkedList<Scan> getRawScans() {

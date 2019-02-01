@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -181,8 +182,8 @@ public class PatientInfoEntryScene {
 					}
 					try {
 						PatientManagement.exportPatient(patient);
-					} catch (Exception e) {
-						manager.makeError("Creating new patient failed.", e);
+					} catch (IOException e) {
+						manager.makeError("Creating new patient failed. There is an issue with the file structure of the database. Check utils.PatientManagement exportPatient().", e);
 					}
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PreviousPatient");
