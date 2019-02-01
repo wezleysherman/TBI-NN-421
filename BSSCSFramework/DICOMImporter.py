@@ -43,7 +43,7 @@ class DICOMImporter:
 				- array of dicoms
 		'''
 		dicom_images = []
-		for dicom_path in glob.glob(path + '/*.dcm'):
+		for dicom_path in glob.glob(path + '*.dcm'):
 			dicom_file = pydicom.dcmread(dicom_path)
 			dicom_images.append(dicom_file)
 		return dicom_images
