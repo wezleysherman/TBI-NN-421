@@ -46,7 +46,7 @@ public class PreviousPatientScene {
         	PatientEntry entry = patients.get(key);
         	patientList.add(entry);
         }
-		
+        
 		//Retrieve button Setup/Styling
 		Button retrieveBtn = new Button("Retrieve");
 		retrieveBtn.setOnAction(new EventHandler<ActionEvent>() {

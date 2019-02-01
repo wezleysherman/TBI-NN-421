@@ -44,8 +44,12 @@ public class PatientInfoScene {
 		try {
 			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
 		} catch (IOException e) {
-			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. Try deleting the resources/patients folder. "
-					+ "WARNING, this will delete all saved patient data in the system. Check utils.PatientManagement importPatient().", e);
+			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. \n"
+	        		+ "Try deleting the resources/patients folder. WARNING, this will delete all saved patient data in the system. \n"
+	        		+ "Check utils.PatientManagement importPatient().", e);
+			manager.setPatient(null);
+			manager.getSceneStack().pop();
+			manager.paintScene("PreviousPatient");
 		}
 		
 		BorderPane layout = new BorderPane();
@@ -183,7 +187,8 @@ public class PatientInfoScene {
         	            	manager.paintScene("PatientInfo");
     	            	}
 	            	} catch (Exception e) {
-	            		manager.makeError("Edit operation failed. Voiding changes. There is an issue with the file structure of the database. Check utils.PatientManagement exportPatient().", e);
+	            		manager.makeError("Edit operation failed. Voiding changes. There is an issue with the file structure of the database. \n"
+	            				+ "Check utils.PatientManagement exportPatient().", e);
 	            	}
 	            }
 	        });
