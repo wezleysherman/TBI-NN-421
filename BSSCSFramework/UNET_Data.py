@@ -9,18 +9,15 @@
 # BSSCS Docs Importer location: BSSCS_DOCS/dicom.html
 from DICOMImporter import DICOMImporter
 import pandas as pd
-import numpy as np
-from PIL import Image
-from tqdm import tqdm
-import math
 
 class UNET_DATA:
-	def __init__(self, batch_size=0, labels_arr=None, image_arr=None, csv_path=None, images_path=None):
+	def __init__(self, labels_arr=None, image_arr=None):
 		self.current_batch = 0
 		self.batch_size = 0
 		self.total_batches = 0
 		self.labels = labels_arr
 		self.images = image_arr
+
 		if csv_path and images_path:
 			print("Found CSV")
 			data_frame = self.open_csv(csv_path)
@@ -53,22 +50,18 @@ class UNET_DATA:
 				- int -- corresponds to the number of batches in our dataset
 		'''
 		return math.floor(self.images/batch_size)
+
 	
 	def get_next_batch(self):
 		'''	Responsible for batching the data arrays and returning them
-			Will decice which data to use depending on how it's been preprocessed
-
-			If the data is in a single dictionary it'll batch off of that. Otherwise
-			It'll use the self.labels and self.images arrays.
 		
 			Returns: 
 				label_batch: arr -- batch of labels for the associated image
 				image_batch: arr -- batch of images for the associated labels
-
 		'''
-
 		start_pos = (self.batch_size * self.current_batch)
 		end_pos =  (self.batch_size * self.current_batch+1)
+
 		label_batch = []
 		image_batch = []
 		if not self.data_dictionary:
@@ -86,7 +79,6 @@ class UNET_DATA:
 			self.current_batch = 0
 
 		return label_batch, image_batch
-
 		
 	def fetch_data(self, path_to_csv):
 		''' Handles fetching the data from the DICOM Importer
@@ -156,3 +148,4 @@ class UNET_DATA:
 				break
 			count += 1
 		return data_dictionary
+
