@@ -3,41 +3,49 @@
 #(FILE DIALOGS / BASIC GUI SETUP) http://zetcode.com/gui/pyqt5/dialogs/
 #CURRENTLY NOT USED (FILE DIALOGS) https://pythonspot.com/pyqt5-file-dialog/
 #CURRENTLY NOT USED (STYLES) http://doc.qt.io/qt-5/qtwidgets-index.html#styles
-# (SLIDER VALUES) https://www.qtcentre.org/threads/54613-How-do-I-get-the-value-from-the-slider-s-position
+#(CSV FILES) https://realpython.com/python-csv/
 
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider
-import sys
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
+import sys, pandas
 
 class NNGUI(QWidget):
 
-'''creates GUI when started'''
+#creates GUI when started
+
     def __init__(self):
         super().__init__()
         self.initNNGUI()
 
-'''constructor for the main window'''
+#constructor for the main window
     def initNNGUI(self):
 
-'''layout of the window'''
+#layout of the window
         layout = QVBoxLayout()
 
-'''.csv UI elements'''
+#.csv UI elements
         csv_filepath = QLineEdit(".CSV Filename Here")
         csv_filepath.setReadOnly(True)
         csv_filepick_button = QPushButton("Choose a .CSV File")
         def csv_filepick_clicked():
             csv_filepicker = QFileDialog.getOpenFileName(self, "CSV File Picker", "", "CSV (*.csv)")
             csv_filepath.setText(csv_filepicker[0])
+            print("Selected: " + csv_filepath.text())
         csv_filepick_button.clicked.connect(csv_filepick_clicked)
-
+        
+        csv_text = QTextEdit("Your .CSV File Will Appear Here")
+        csv_text.setReadOnly(True)
 	    
         csv_load_button = QPushButton("Load the Selected .CSV File")
         def csv_load_clicked():
-            #implement here
-            print("not yet implemented")
+            print("Loaded: " + csv_filepath.text())
+            csv_file = pandas.read_csv(csv_filepath.text())
+            print(csv_file)
+            csv_text.setText(str(csv_file))
         csv_load_button.clicked.connect(csv_load_clicked)
+
+        csv_spacer = QLabel()
         
-'''image folder UI elements'''
+#image folder UI elements
         imgfolder_filepath = QLineEdit("Image Folder Filename Here")
         imgfolder_filepath.setReadOnly(True)
         imgfolder_dirpick_button = QPushButton("Choose an Image Folder")
@@ -52,14 +60,16 @@ class NNGUI(QWidget):
             print("not yet implemented")
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
 
-'''train UI elements'''
+        img_spacer = QLabel()
+
+#train UI elements
         train_button = QPushButton("Train Me!")
         def train_clicked():
             #implement here
             print("not yet implemented")
         train_button.clicked.connect(train_clicked)
 
-'''iteration UI elements'''
+#iteration UI elements
         iter_label = QLabel("Iterations:")
         iter_text = QLineEdit()
         iter_text.setReadOnly(True)
@@ -72,7 +82,9 @@ class NNGUI(QWidget):
             iter_text.setText(str(value))
         iter_slider.valueChanged[int].connect(user_iters)
 
-'''batch UI elements'''
+        iter_spacer = QLabel()
+
+#batch UI elements
         batch_label = QLabel("Batch Size:")
         batch_text = QLineEdit()
         batch_text.setReadOnly(True)
@@ -85,27 +97,34 @@ class NNGUI(QWidget):
             batch_text.setText(str(value))
         batch_slider.valueChanged[int].connect(user_batchs)
 
-'''widgets added to layout'''
+        batch_spacer = QLabel()
+
+#widgets added to layout
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
         layout.addWidget(csv_load_button)
+        layout.addWidget(csv_text)
+        layout.addWidget(csv_spacer)
         layout.addWidget(imgfolder_filepath)
         layout.addWidget(imgfolder_dirpick_button)
         layout.addWidget(imgfolder_load_button)
+        layout.addWidget(img_spacer)
         layout.addWidget(iter_label)
         layout.addWidget(iter_slider)
         layout.addWidget(iter_text)
+        layout.addWidget(iter_spacer)
         layout.addWidget(batch_label)
         layout.addWidget(batch_slider)
         layout.addWidget(batch_text)
+        layout.addWidget(batch_spacer)
         layout.addWidget(train_button)
 
-'''setup of window'''
-        self.setGeometry(300, 300, 350, 300)
+#setup of window
+        self.setGeometry(350, 350, 400, 350)
         self.setLayout(layout)
         self.show()
 
-'''Main Method'''
+#Main Method
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
