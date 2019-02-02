@@ -170,8 +170,9 @@ public class VerticalSideMenu {
 		try {
 			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
 		} catch (IOException e) {
-			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. Try deleting the resources/patients folder. "
-					+ "WARNING, this will delete all saved patient data in the system. Check utils.PatientManagement importPatient().", e);
+			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. \n"
+	        		+ "Try deleting the resources/patients folder. WARNING, this will delete all saved patient data in the system. \n"
+	        		+ "Check utils.PatientManagement importPatient().", e);
 		}
 		
 		Label sceneLabel = new Label("Scan Vizualizer");
@@ -300,7 +301,8 @@ public class VerticalSideMenu {
 						manager.getSceneStack().pop();
 						manager.paintScene("PreviousPatient");
 					} catch (IOException e) {
-						manager.makeError("Deleting patient failed. There is an issue with the file structure of the database. Check utils.PatientManagement deletePatient().", e);
+						manager.makeError("Deleting patient failed. There is an issue with the file structure of the database. \n"
+								+ "Check utils.PatientManagement deletePatient().", e);
 					}
 				}
 			}
@@ -317,7 +319,8 @@ public class VerticalSideMenu {
 						patient.savePatient();
 						manager.paintScene("PatientInfo");
 					} catch (Exception e) {
-						manager.makeError("Delete scans failed. There is an issue with the file structure of the database. Check utils.PatientManagement exportPatient().", e);
+						manager.makeError("Delete scans failed. There is an issue with the file structure of the database. \n"
+								+ "Check utils.PatientManagement exportPatient().", e);
 					}
 				}
 			}
@@ -331,8 +334,9 @@ public class VerticalSideMenu {
 		try {
 			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
 		} catch (IOException e) {
-			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. Try deleting the resources/patients folder. "
-					+ "WARNING, this will delete all saved patient data in the system. Check utils.PatientManagement importPatient().", e);
+			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. \n"
+	        		+ "Try deleting the resources/patients folder. WARNING, this will delete all saved patient data in the system. \n"
+	        		+ "Check utils.PatientManagement importPatient().", e);
 		}
 		
 		Label sceneLabel = new Label("Scan Vizualizer");
@@ -370,7 +374,8 @@ public class VerticalSideMenu {
 						manager.getSceneStack().pop();
 						manager.paintScene("PatientInfo");
 					} catch (Exception e) {
-						manager.makeError("Delete scan failed. There is an issue with the file structure of the database. Check utils.PatientManagement exportPatient().", e);
+						manager.makeError("Delete scan failed. There is an issue with the file structure of the database. \n"
+								+ "Check utils.PatientManagement exportPatient().", e);
 					}
 				}
 			}
