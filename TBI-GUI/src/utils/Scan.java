@@ -1,9 +1,11 @@
 package utils;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.InputMismatchException;
 
-public class Scan {
+public class Scan implements Serializable, Comparable{
 
 	private Date dateOfScan;
 	private File scan;
@@ -47,6 +49,13 @@ public class Scan {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+	
+	public int compareTo(Object other) {
+		if(other.getClass() != Scan.class) {
+			throw new InputMismatchException("You tried to compare a scan with a not-scan.");
+		}
+		return ((Scan)other).getDateOfScan().compareTo(this.dateOfScan);
 	}
 	
 }

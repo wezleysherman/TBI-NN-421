@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -137,7 +138,7 @@ public class PatientInfoEntryScene {
 		});
 		
 		//Finish Button Setup
-		Style.styleButton(finishBtn);
+		finishBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		
 		finishBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -181,8 +182,9 @@ public class PatientInfoEntryScene {
 					}
 					try {
 						PatientManagement.exportPatient(patient);
-					} catch (Exception ex) {
-						manager.makeDialog("Creating new patient failed.");
+					} catch (IOException e) {
+						manager.makeError("Creating new patient failed. There is an issue with the file structure of the database. \n"
+								+ "Check utils.PatientManagement exportPatient().", e);
 					}
 					manager.getSceneStack().push(manager.getSceneID());
 					manager.paintScene("PreviousPatient");
@@ -196,7 +198,7 @@ public class PatientInfoEntryScene {
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(contentGrid);
-		Style.styleBorderPane(layout);
+		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
 		
 		//Return constructed scene

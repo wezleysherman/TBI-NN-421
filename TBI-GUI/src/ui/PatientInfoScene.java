@@ -37,9 +37,20 @@ import utils.Scan;
  */
 public class PatientInfoScene {
 	
-	public static Scene initializeScene(StateManager manager) throws IOException {
+	private static Patient patient = new Patient();
+	
+	public static Scene initializeScene(StateManager manager) {
 		//Load Patient info from the database
-		Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+		try {
+			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
+		} catch (IOException e) {
+			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. \n"
+	        		+ "Try deleting the resources/patients folder. WARNING, this will delete all saved patient data in the system. \n"
+	        		+ "Check utils.PatientManagement importPatient().", e);
+			manager.setPatient(null);
+			manager.getSceneStack().pop();
+			manager.paintScene("PreviousPatient");
+		}
 		
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -111,8 +122,8 @@ public class PatientInfoScene {
 			
 			//Analyze button
 			Button analyzeBtn = new Button("Analyze");
+			analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
-			Style.styleButton(analyzeBtn);
 			analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
@@ -149,15 +160,14 @@ public class PatientInfoScene {
 			datePicker.setPromptText("Date of Scan");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
-			Style.styleButton(saveBtn);
-			Style.styleButton(cancelBtn);
 			datePicker.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 			Scan newScan = new Scan();
 			
+			saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
-	            public void handle(final ActionEvent e) {	            	
+	            public void handle(final ActionEvent ev) {	            	
 	            	try {
 	            		if (newScan.getDateOfScan() == null && newScan.getScan() != null) {
     	            		manager.makeDialog("Please select a date for the new scan.");
@@ -176,12 +186,14 @@ public class PatientInfoScene {
     	            		manager.setStateBool(false);
         	            	manager.paintScene("PatientInfo");
     	            	}
-	            	} catch (Exception ex) {
-	            		manager.makeDialog("Edit operation failed. Voiding changes.");
+	            	} catch (Exception e) {
+	            		manager.makeError("Edit operation failed. Voiding changes. There is an issue with the file structure of the database. \n"
+	            				+ "Check utils.PatientManagement exportPatient().", e);
 	            	}
 	            }
 	        });
 			
+			cancelBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 			cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(final ActionEvent e) {

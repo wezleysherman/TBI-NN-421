@@ -46,7 +46,7 @@ public class PreviousPatientScene {
         	PatientEntry entry = patients.get(key);
         	patientList.add(entry);
         }
-		
+        
 		//Retrieve button Setup/Styling
 		Button retrieveBtn = new Button("Retrieve");
 		retrieveBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -84,6 +84,7 @@ public class PreviousPatientScene {
 		VBox vbox = new VBox();
 		HBox hbox1 = new HBox();
 		Label nameLabel = new Label("Name Search: ");
+		nameLabel.getStyleClass().add("label-white");
 		TextField searchName = new TextField();
 		
 		searchName.textProperty().addListener((observable, oldVal, newVal) -> {

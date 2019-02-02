@@ -10,6 +10,8 @@ import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.LinkedList;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -116,6 +118,24 @@ public class PatientManagementTest {
 		assertEquals(temp.name, patient.getFirstName() + " " + patient.getLastName());
 		temp = (PatientEntry)patientList.get(patient2.getUID());
 		assertEquals(temp.name, patient2.getFirstName() + " " + patient2.getLastName());
+	}
+	
+	@Test
+	public void testPatientSort() throws Exception {
+		Hashtable patientList = PatientManagement.getPatientList();
+		
+		PatientEntry temp = (PatientEntry)patientList.get(patient.getUID());
+		assertEquals(temp.name, patient.getFirstName() + " " + patient.getLastName());
+		temp = (PatientEntry)patientList.get(patient2.getUID());
+		assertEquals(temp.name, patient2.getFirstName() + " " + patient2.getLastName());
+		
+		((PatientEntry)patientList.get(patient2.getUID())).date = new Date(new Date().getYear() + 2, 1, 21);
+		((PatientEntry)patientList.get(patient.getUID())).date = new Date(new Date().getYear() + 1, 1, 21);
+
+		LinkedList dateSort = PatientManagement.dateSortPatients();
+		for(int i = 1; i < dateSort.size(); i++) {
+			assertEquals(-1, ((PatientEntry)dateSort.get(i - 1)).date.compareTo(((PatientEntry)dateSort.get(i)).date));
+		}
 	}
 	
 	@Test

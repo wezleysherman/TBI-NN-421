@@ -12,6 +12,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 
 public class LandingScene {
 			
@@ -21,9 +22,7 @@ public class LandingScene {
 		Label orLabel = new Label("or");
 		Button newPatBtn = new Button();
 		Button prevPatBtn = new Button();
-		
-		Style.styleLabel(orLabel);
-		
+				
 		//Button Setup/Styling/Tooltips
 		newPatBtn.setText("Start New Patient");
 		newPatBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -35,7 +34,7 @@ public class LandingScene {
 		});
 		newPatBtn.setTooltip(new Tooltip("Input information and a scan for a new patient.")); 
 		
-		Style.styleButton(newPatBtn);	
+		newPatBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);	
 		
 		prevPatBtn.setText("Find Previous Patient");
 		prevPatBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -47,7 +46,9 @@ public class LandingScene {
 		});
 		prevPatBtn.setTooltip(new Tooltip("View/edit information and scans of patients already in the system."));
 		
-		Style.styleButton(prevPatBtn);
+		prevPatBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
+		orLabel.getStyleClass().add("label-white");
 		
 		//Construct Grid		
 		grid.setPadding(new Insets(10, 10, 10, 10));
@@ -62,6 +63,10 @@ public class LandingScene {
 		column2.setPercentWidth(30);
 		grid.getColumnConstraints().addAll(column0, column1, column2);
 		
+		RowConstraints rowCon = new RowConstraints();
+		rowCon.setPercentHeight(100/15);
+		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon, rowCon, rowCon);
+		
 		GridPane.setConstraints(newPatBtn, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(orLabel, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(prevPatBtn, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -69,7 +74,7 @@ public class LandingScene {
 		grid.getChildren().addAll(newPatBtn, orLabel, prevPatBtn);
 				
 		//Add Grid and layout to scene
-		Style.styleLandingBorderPane(layout);
+		layout.getStyleClass().add("side-pane");
 		layout.setCenter(grid);
 		
 		//Return constructed scene

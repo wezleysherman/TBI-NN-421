@@ -1,0 +1,402 @@
+<html>
+	<head>
+		<title>Patient Documentation</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+
+		<h1>Patient</h1>
+		<div style="width:500px">
+			<span>
+      <p>
+        The purpose of this class is to store data about individual patients in a serializable format. Code can be found on
+        <a href="https://github.com/wezleysherman/TBI-NN-421/blob/master/TBI-GUI/src/utils/Patient.java">Github</a>.
+      </p>
+			</span><br>
+
+			<b>Constructors:</b></br>
+			<b><code>Patient()</code></b>
+			<br>
+			<span>
+			Creates a blank Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>Patient(String fname, String lname, Date pDate, String pNotes)</code></b>
+			<br>
+			<span>
+			Creates a fresh Patient with no scans
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String fname</p>
+			<p>- String lname</p>
+			<p>- Date pDate</p>
+			<p>- String pNotes</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>Patient(String fname, String lname, Date pDate, String pNotes, File pScan)</code></b>
+			<br>
+			<span>
+			Creates a fresh Patient with one scan
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String fname</p>
+			<p>- String lname</p>
+			<p>- Date pDate</p>
+			<p>- String pNotes</p>
+			<p>- File pScan</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>Patient(String fname, String lname, Date pDate, String pNotes, File pScan, String uid)</code></b>
+			<br>
+			<span>
+			Creates a Patient with one scan and an established UID
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String fname</p>
+			<p>- String lname</p>
+			<p>- Date pDate</p>
+			<p>- String pNotes</p>
+			<p>- File pScan</p>
+			<p>- String uid</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>Patient(String fname, String lname, Date pDate, String pNotes, LinkedList<Scan> pScans)</code></b>
+			<br>
+			<span>
+			Creates a fresh Patient with multiple scans
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String fname</p>
+			<p>- String lname</p>
+			<p>- Date pDate</p>
+			<p>- String pNotes</p>
+			<p>- LinkedList<Scan> pScans</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>Patient(String fname, String lname, Date pDate, String pNotes, LinkedList<Scan> pScans, String uid)</code></b>
+			<br>
+			<span>
+			Creates a Patient with multiple scans and an established UID
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String fname</p>
+			<p>- String lname</p>
+			<p>- Date pDate</p>
+			<p>- String pNotes</p>
+			<p>- LinkedList<Scan> pScans</p>
+			<p>- String uid</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b>Methods:</b></br>
+			<b><code>void addProcScan(Scan scan)</code></b>
+			<br>
+			<span>
+			Adds a new processed scan to the patient's list
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- Scan scan</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>void addRawScan(Scan scan)</code></b>
+			<br>
+			<span>
+			Adds a new unprocessed scan to the patient's list
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- Scan scan</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>Scan delProcScan(int index)</code></b>
+			<br>
+			<span>
+			Deletes a processed scan from the patient's list
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- int index</p>
+			<p>Returns:</p>
+			<p>- Scan</p>
+			</span>
+
+			<b><code>Scan delRrocScan(int index)</code></b>
+			<br>
+			<span>
+			Deletes an unprocessed scan from the patient's list
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- int index</p>
+			<p>Returns:</p>
+			<p>- Scan</p>
+			</span>
+
+			<b><code>Date getDate()</code></b>
+			<br>
+			<span>
+			Returns the date the Patient was created
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- Date</p>
+			</span>
+
+			<b><code>File getFile()</code></b>
+			<br>
+			<span>
+			Returns the file location that the Patient is stored at
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- File</p>
+			</span>
+
+			<b><code>String getFirstName()</code></b>
+			<br>
+			<span>
+			Returns the first name of the Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- String</p>
+			</span>
+
+			<b><code>String getLastName()</code></b>
+			<br>
+			<span>
+			Returns the last name of the Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- String</p>
+			</span>
+
+			<b><code>Date getLastRawScanDate()</code></b>
+			<br>
+			<span>
+			Returns the date of the most recent scan for this Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- Date</p>
+			</span>
+
+			<b><code>String getNotes()</code></b>
+			<br>
+			<span>
+			Returns the notes on this Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- String</p>
+			</span>
+
+			<b><code>Integer getNumProcScans()</code></b>
+			<br>
+			<span>
+			Returns the number of processed scans for the Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- Integer</p>
+			</span>
+
+			<b><code>Integer getNumRawScans()</code></b>
+			<br>
+			<span>
+			Returns the number of unprocessed scans for the Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- Integer</p>
+			</span>
+
+			<b><code>Scan getProcScan(int index)</code></b>
+			<br>
+			<span>
+			Returns the Patient's processed scan at this index
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- int index</p>
+			<p>Returns:</p>
+			<p>- Scan</p>
+			</span>
+
+			<b><code>LinkedList<Scan> getProcScans()</code></b>
+			<br>
+			<span>
+			Returns all processed scans for the Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- LinkedList<Scan></p>
+			</span>
+
+			<b><code>Scan getRawScan(int index)</code></b>
+			<br>
+			<span>
+			Returns the Patient's unprocessed scan at this index
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- int index</p>
+			<p>Returns:</p>
+			<p>- Scan</p>
+			</span>
+
+			<b><code>LinkedList<Scan> getRawScans()</code></b>
+			<br>
+			<span>
+			Returns all unprocessed scans for the Patient
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- LinkedList<Scan></p>
+			</span>
+
+			<b><code>String getUID()</code></b>
+			<br>
+			<span>
+			Gets the patient's UID as a string
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- String</p>
+			</span>
+
+			<b><code>void savePatient()</code></b>
+			<br>
+			<span>
+			Exports the patient to the DB
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- None</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>void setDate(Date date)</code></b>
+			<br>
+			<span>
+			Sets the date that the patient was created
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- Date</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>void setFirstName(String fname)</code></b>
+			<br>
+			<span>
+			Sets the Patient's first name
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>void setLastName(String lname)</code></b>
+			<br>
+			<span>
+			Sets the Patient's last name
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>void setNotes(String notes)</code></b>
+			<br>
+			<span>
+			Sets the Patient's notes
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- String</p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>void setProcScans(LinkedList<Scan> scan)</code></b>
+			<br>
+			<span>
+			Replaces the Patient's list of processed scans
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- LinkedList<Scan></p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+			<b><code>void setRawScans(LinkedList<Scan> scan)</code></b>
+			<br>
+			<span>
+			Replaces the Patient's list of unprocessed scans
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- LinkedList<Scan></p>
+			<p>Returns:</p>
+			<p>- None</p>
+			</span>
+
+		</div>
+	</body>
+</html>

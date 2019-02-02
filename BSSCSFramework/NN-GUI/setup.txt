@@ -8,3 +8,5 @@ https://stackoverflow.com/questions/11813435/im-trying-to-use-python-in-powershe
 Powershell in this directory and run: pip install PyQt5==5.9.2
 
 then run: python App.py
+
+FOR .CSV FILES: pip install pandas

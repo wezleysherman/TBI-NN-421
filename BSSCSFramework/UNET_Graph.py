@@ -17,11 +17,13 @@ import tensorflow as tf
 from UNET_Data import UNET_DATA
 
 class BSSCS_UNET:
-	def __init__(self, iterations, batch_size, data_class, learning_rate=0.001):
+	def __init__(self, iterations, batch_size, data_class, labels_shape=[None, 1], learning_rate=0.001):
 		self.learning_rate = learning_rate
 		self.iterations = iterations
 		self.batch_size = batch_size
 		self.data_class = data_class
+		self.labels_shape = labels_shape
+
 
 	def generate_unet_arch(self, input):
 		''' Handles generating a TF Implementation of a UNET utilizing the architecture discussed in
@@ -106,12 +108,51 @@ class BSSCS_UNET:
 		convolution_layer_18 = tf.layers.conv2d(inputs=convolution_layer_17, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_layer_19 = tf.layers.conv2d(inputs=convolution_layer_18, filters=64, kernel_size=[3, 3], strides=1, padding="SAME", activation=tf.nn.relu)
 		convolution_up_5 = tf.layers.conv2d_transpose(inputs=convolution_layer_19, filters=2, kernel_size=[1, 1], strides=1, padding="SAME")
-		print(convolution_up_5.shape)
-		return convolution_up_5
+		
+		flattened = tf.reshape(convolution_up_5, [-1, 1016])
+		return flattened
+
+	def create_regressor(self, input): 
+		''' Handles creating the regressor for the UNET classification
+
+			Parameters:
+				- input -- input layer (flattened layer from UNET) 
+			Returns:
+			 	- Tensor -- last layer in the regressor
+		'''
+		reg_input = tf.layers.dense(inputs=input, units=1016, activation=tf.nn.relu)
+		#reg_hidden = tf.layers.dense(inputs=reg_input, units=20, activation=tf.nn.relu)
+		reg_out = tf.layers.dense(inputs=reg_input, units=2)
+		return reg_out
+
+	def create_loss(self, input, labels):
+		''' Handles creating a loss function and returning it to the optimizer
+
+			Parameters:
+			 	- Input: The final layer in the graph we are computing the loss for
+			 	- Labels: The labels for the batch we are computing the loss for
+
+			 Returns:
+			 	- Defined loss function
+
+			TensorFlow documentation: 
+			https://www.tensorflow.org/api_docs/python/tf/nn/softmax_cross_entropy_with_logits_v2
+		'''
+		return tf.nn.softmax_cross_entropy_with_logits_v2(logits=input, labels=labels)
+
+	def create_optimizer(self, input, labels):
+		'''
+
+			TensorFlow documentation: 
+			https://www.tensorflow.org/api_docs/python/tf/train/AdamOptimizer
+		'''
+		loss = tf.reduce_mean(self.create_loss(input, labels))
+		return tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(loss)
 
 	def train_unet(self):
 		''' Handles training a UNET based off the data fed to it
 		'''
+
 
 		# This is where I would put my loss and optimization functions -..
 		# ..
@@ -123,17 +164,24 @@ class BSSCS_UNET:
 		# On a serious note -.. Here is where we will plug in the deep regressor once that's built.
 		# After a UNET run the image will be passed to the deep regressor.
 		# The regressor will contain the loss function we are optimizing to.
-		input_ph = tf.placeholder(tf.float32, shape=[None, 572, 572, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
+		input_ph = tf.placeholder(tf.float32, shape=[None, 512, 512, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
 		conv_input = self.generate_unet_arch(input_ph)
+		classifier = self.create_regressor(conv_input)
+		labels_placeholder = tf.placeholder(tf.float32, shape=self.labels_shape)
+		optimizer = self.create_optimizer(classifier, labels_placeholder)
+		loss = self.create_loss(classifier, labels_placeholder)
 		with tf.Session() as session:
+			tf.global_variables_initializer().run()
 			for iteration in range(0, self.iterations): # counts for epochs -- or how many times we go through our data
 				for batch in range(0, self.batch_size):
 					y_b, X_b = self.data_class.get_next_batch()
-					session.run(conv_input, feed_dict={input:X_b})
-
+					session.run(optimizer, feed_dict={input_ph:X_b, labels_placeholder:y_b})
+					
 				if iteration % 500 == 0:
+					it_loss = session.run(loss, feed_dict={input_ph:X_b, labels_placeholder:y_b})
+
 					# Evaluate mse loss here and print the value
-					print("Passed 500 iterations with mse: ")
+					print("Passed 500 iterations with mse: " + it_loss)
 		
 
 	def test_unet(self, graph_out, input_x):
