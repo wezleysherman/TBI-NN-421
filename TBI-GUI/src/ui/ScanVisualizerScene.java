@@ -160,10 +160,9 @@ public class ScanVisualizerScene {
 		
 		//Merge Vertical Side Menu and Content
 		mainGrid = VerticalSideMenu.newSideBar(manager);
-
 		mainGrid.getChildren().add(contentGrid);
-		
 		layout.setCenter(mainGrid);
+		layout.setTop(TopMenuBar.newMenuBar(manager));
 		
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());

@@ -44,6 +44,7 @@ public class LikelyTraumaAreasScene {
 		
 		// displayed grid is set onto the layout for the scene
 		layout.setCenter(mainGrid);
+		layout.setTop(TopMenuBar.newMenuBar(manager));
 		
 		// scene is created using the layout
 		Scene likelyTraumaAreasScene = new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
