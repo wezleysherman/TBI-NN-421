@@ -200,6 +200,7 @@ public class PatientInfoEntryScene {
 		mainGrid.getChildren().add(contentGrid);
 		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
+		layout.setTop(TopMenuBar.newMenuBar(manager));
 		
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());

@@ -76,6 +76,7 @@ public class LandingScene {
 		//Add Grid and layout to scene
 		layout.getStyleClass().add("side-pane");
 		layout.setCenter(grid);
+		layout.setTop(TopMenuBar.newMenuBar(manager));
 		
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
