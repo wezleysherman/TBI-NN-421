@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -80,7 +81,9 @@ public class StateManager {
 	public StateManager(Stage inStage) {
 		sceneStack = new Stack<String>();
 		stage = inStage;
-		stage.setTitle("TBI");
+		Image icon = new Image("resources/icon.png");
+		stage.getIcons().add(icon);
+		stage.setTitle("Traumatic Brain Injury Locator");
 		stage.setWidth(960);
 		stage.setHeight(540);
 		stage.setMinWidth(960);
