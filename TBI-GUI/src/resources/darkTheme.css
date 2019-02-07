@@ -38,6 +38,31 @@
 	-fx-text-fill: black;
 }
 
+.menu-bar {
+	-fx-background-color: #f1fafe;
+	-fx-text-fill: black;
+}
+
+.menu .label {
+	-fx-text-fill: black;
+}
+
+.menu:hover {
+	-fx-background-color: #c1cace;
+}
+
+.menu:showing {
+	-fx-background-color: #c1cace;
+}
+
+.menu-item .label {
+	-fx-text-fill: black;
+}
+
+.menu-item:focused {
+	-fx-background-color: #c1cace;
+}
+
 .vbox-dialog-box {
 	-fx-background-color: #455357;
 }
