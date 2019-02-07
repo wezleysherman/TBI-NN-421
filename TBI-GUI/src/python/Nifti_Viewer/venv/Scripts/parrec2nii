@@ -1,0 +1,9 @@
+#!C:\Users\Freyr\Desktop\CAPSTONE\TBI-NN-421\TBI-GUI\src\python\Nifti_Viewer\venv\Scripts\python.exe
+"""PAR/REC to NIfTI converter
+"""
+
+from nibabel.cmdline.parrec2nii import main
+
+
+if __name__ == '__main__':
+    main()
