@@ -1,5 +1,7 @@
 package ui;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -10,18 +12,46 @@ public class TopMenuBar {
 		
 		MenuBar menuBar = new MenuBar();
 		
+		//Shortcuts
+		Menu shortcuts = new Menu("Shortcuts");
+		
+		MenuItem home = new MenuItem("Home");
+		home.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (manager.makeQuestion("Returning to the home page will cause you to lose all unsaved information. Are you sure?")) {
+					manager.getSceneStack().clear();
+					manager.paintScene("Landing");
+				}
+			}
+		});
+		
+		MenuItem newPat = new MenuItem("New Patient");
+		newPat.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.getSceneStack().push(manager.getSceneID());
+				manager.paintScene("PatientInfoEntry");
+			}
+		});
+		
+		MenuItem patList = new MenuItem("Patient List");
+		patList.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.getSceneStack().push(manager.getSceneID());
+				manager.paintScene("PreviousPatient");
+			}
+		});
+		
+		shortcuts.getItems().addAll(home, newPat, patList);
+		
 		//Preferences
 		Menu preferences = new Menu("Preferences");
 		MenuItem themes = new MenuItem("Themes");
 		preferences.getItems().addAll(themes);
 		
-		//Shortcuts
-		Menu shortcuts = new Menu("Shortcuts");
-		MenuItem newPat = new MenuItem("New Patient");
-		MenuItem patList = new MenuItem("Patient List");
-		shortcuts.getItems().addAll(newPat, patList);
-		
-		menuBar.getMenus().addAll(preferences, shortcuts);
+		menuBar.getMenus().addAll(shortcuts, preferences);
 		
 		return menuBar;
 	}
