@@ -6,7 +6,7 @@
 #(CSV FILES) https://realpython.com/python-csv/
 
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
-import sys, pandas
+import sys, pandas, os
 
 class NNGUI(QWidget):
 
@@ -52,12 +52,18 @@ class NNGUI(QWidget):
         def imgfolder_dirpick_clicked():
             imgfolder_filepicker = QFileDialog.getExistingDirectory(self, "Image Folder File Picker", "")
             imgfolder_filepath.setText(imgfolder_filepicker)
+            print("Selected: " + imgfolder_filepath.text())
         imgfolder_dirpick_button.clicked.connect(imgfolder_dirpick_clicked)
 
+        img_list = []
         imgfolder_load_button = QPushButton("Load all Images from Selected Folder")
         def imgfolder_load_clicked():
-            #implement here
-            print("not yet implemented")
+            print("Loaded: " + imgfolder_filepath.text())
+            for img in os.listdir(imgfolder_filepath.text()):
+                img_list.append(img)
+            for img in img_list:
+                print(img)
+                
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
 
         img_spacer = QLabel()
