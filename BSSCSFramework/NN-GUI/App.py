@@ -87,9 +87,9 @@ class NNGUI(QWidget):
         iter_text = QLineEdit()
         iter_text.setReadOnly(True)
         iter_slider = QSlider(0x1)
-        iter_slider.setTickInterval(4)
+        iter_slider.setTickInterval(5)
         iter_slider.setTickPosition(2)
-        iter_slider.setRange(0,32)
+        iter_slider.setRange(0,50)
 
         def user_iters(value):
             iter_text.setText(str(value))
@@ -102,9 +102,9 @@ class NNGUI(QWidget):
         batch_text = QLineEdit()
         batch_text.setReadOnly(True)
         batch_slider = QSlider(0x1)
-        batch_slider.setTickInterval(4)
+        batch_slider.setTickInterval(5)
         batch_slider.setTickPosition(2)
-        batch_slider.setRange(0,32)
+        batch_slider.setRange(0,50)
 
         def user_batchs(value):
             batch_text.setText(str(value))
