@@ -37,10 +37,14 @@ class NNGUI(QWidget):
 	    
         csv_load_button = QPushButton("Load the Selected .CSV File")
         def csv_load_clicked():
-            print("Loaded: " + csv_filepath.text())
-            csv_file = pandas.read_csv(csv_filepath.text())
-            print(csv_file)
-            csv_text.setText(str(csv_file))
+            try:
+                print("Loaded: " + csv_filepath.text())
+                csv_file = pandas.read_csv(csv_filepath.text())
+                print(csv_file)
+                csv_text.setText(str(csv_file))
+            except:
+                print("There was an error loading the file.")
+                
         csv_load_button.clicked.connect(csv_load_clicked)
 
         csv_spacer = QLabel()
@@ -58,11 +62,14 @@ class NNGUI(QWidget):
         img_list = []
         imgfolder_load_button = QPushButton("Load all Images from Selected Folder")
         def imgfolder_load_clicked():
-            print("Loaded: " + imgfolder_filepath.text())
-            for img in os.listdir(imgfolder_filepath.text()):
-                img_list.append(img)
-            for img in img_list:
-                print(img)
+            try:
+                print("Loaded: " + imgfolder_filepath.text())
+                for img in os.listdir(imgfolder_filepath.text()):
+                    img_list.append(img)
+                for img in img_list:
+                    print(img)
+            except:
+                print("There was an error loading the file.")
                 
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
 
