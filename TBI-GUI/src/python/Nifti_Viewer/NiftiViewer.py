@@ -1,12 +1,38 @@
 import nibabel
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import plot, ion, show
 import matplotlib.animation as animation
 import threading
 import time
 
+current_index = 0
+
+def prev_slice(axes):
+    global current_index
+    current_index = current_index % data_arr.shape[0]
+    axes.images[0].set_array(data_arr[current_index])
+    axes.imshow(data_arr[current_index])
+    current_index += 1
+
+def next_slice(axes):
+    pass
+
+def switch_slice():
+    while current_index < 22:
+        time.sleep(.5)
+        prev_slice(axes)
+        plt.draw()
+    return
+
 image = nibabel.load("../../resources/knee.nii")
-data = image.get_fdata()
-slice_0 = data[300, :, :]
+data_arr = image.get_data().T
+fig, axes = plt.subplots()
+axes.imshow(data_arr[0])
+slice_switch = threading.Thread(name="Switch", target=switch_slice)
+slice_switch.start()
+plt.show()
+
+'''slice_0 = data[300, :, :]
 slice_1 = data[:, 300, :]
 slice_2 = data[:, :, 5]
 
@@ -34,4 +60,4 @@ def main():
     show_slices([slice_0, slice_1, slice_2])
 
 if __name__ == '__main__':
-    main()
+    main()'''
