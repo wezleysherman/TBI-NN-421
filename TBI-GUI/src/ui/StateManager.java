@@ -45,6 +45,7 @@ public class StateManager {
 	private PatientEntry patient = null;
 	private Scan scan = null;
 	private boolean stateBool = false;
+	private String themeFile = "../resources/themes/darkTheme.css";
 	
 	public Stage getStage() {
 		return stage;
@@ -75,6 +76,13 @@ public class StateManager {
 	}
 	public boolean getStateBool() {
 		return stateBool;
+	}
+	public void setThemeFile(String fileName) {
+		this.themeFile = fileName;
+		paintScene(sceneID);
+	}
+	public String getThemeFile() {
+		return themeFile;
 	}
 	
 	// constructor (mostly just the app start)
@@ -130,7 +138,7 @@ public class StateManager {
 		}
 		
 		stage.setScene(scene);
-		stage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		stage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		
 		if (DEBUG) {
 			debugStack();
@@ -173,7 +181,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		dialogStage.showAndWait();
 	}
 	
@@ -230,7 +238,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		dialogStage.showAndWait();
 		
 		return vh.value;
@@ -298,7 +306,7 @@ public class StateManager {
 		
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		dialogStage.showAndWait();
 	}
 

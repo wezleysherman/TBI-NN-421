@@ -6,6 +6,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
+/**
+ * REFERENCE: http://tutorials.jenkov.com/javafx/menubar.html
+ * @author Ty Chase
+ */
 public class TopMenuBar {
 	
 	public static MenuBar newMenuBar(StateManager manager) {
@@ -48,7 +52,18 @@ public class TopMenuBar {
 		
 		//Preferences
 		Menu preferences = new Menu("Preferences");
-		MenuItem themes = new MenuItem("Themes");
+		Menu themes = new Menu("Themes");
+		
+		MenuItem darkTheme = new MenuItem("Dark");
+		darkTheme.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.setThemeFile("../resources/themes/darkTheme.css");
+			}
+		});
+		
+		themes.getItems().addAll(darkTheme); //Add themes here
+		
 		preferences.getItems().addAll(themes);
 		
 		menuBar.getMenus().addAll(shortcuts, preferences);
