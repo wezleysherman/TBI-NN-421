@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title>BSSCS UNET Graph Class</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+		<h1>BSSCS UNET Data</h1>
+		<div>
+			<b>__init__(self, iterations, batch_size, data_class, labels_shape=[None, 1], learning_rate=0.001)</b>
+			<br>
+			<span>
+			 	Class initializer that sets the starting values for all global variables
+			</span><br>
+			<span>
+			<p>Input:</p>
+				iterations - Number of training iterations for the neural network
+				batch_size - Number of data we are putting through with each iteration
+				data_class - The UNET_Data object with batching methods
+				labels_shape - The shape of the initial dataset [batch_size, number of labels]
+				learning_rate - Learning rate for the neural network
+			</span>
+		</div>
+		<div>
+			<b>generate_unet_arch(self, input)</b>
+			<br>
+			<span>
+				Handles generating the UNET architecture
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- input: Input data placeholder
+
+				Returns:
+				- Final output from UNET
+			</span>
+		</div>
+			<div>
+			<b>create_regressor(self, input)</b>
+			<br>
+			<span>
+				Creates a deep regressor for classification
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- input: The output condensed layer from the UNET
+				Returns:
+				- final layer in regressor
+			</span>
+		</div>
+			<div>
+			<b>create_loss(self, input, labels)</b>
+			<br>
+			<span>
+				Creates and returns a loss function utilizing softmax cross entropy with logits
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- input - The final layer from our regressor
+				- labels - the labels we are optimizing to
+			</span>
+		</div>
+			<div>
+			<b>create_optimizer(self, input, labels)</b>
+			<br>
+			<span>
+				Creates an optimizer utilizing Adam Optimizer and targets to minimize the loss from the loss function.
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- input - Final layer from regressor
+				- Labels - the labels are are optimizing
+			</span>
+		</div>
+			<div>
+			<b>train_unet(self)</b>
+			<br>
+			<span>
+				Trains the UNET Graph
+			</span><br>
+		</div>
+
+	</body>
+</html>
