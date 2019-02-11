@@ -34,7 +34,7 @@ public class UserManagement {
 	private static String defaultPath = buildDefaultPath();
 	private static Hashtable <String, UserEntry> userList;
 
-	private static String buildDefaultPath() {
+	public static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
 		f = new File(f.getAbsolutePath(), "users");

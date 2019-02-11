@@ -34,7 +34,7 @@ public class PatientManagement {
 	private static String defaultPath = buildDefaultPath();
 	private static Hashtable <String, PatientEntry> patientList;
 
-	private static String buildDefaultPath() {
+	public static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
 		f = new File(f.getAbsolutePath(), "patients");

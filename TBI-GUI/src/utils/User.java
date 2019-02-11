@@ -9,16 +9,12 @@ import java.io.Serializable;
 
 //Class for saving patient information
 @SuppressWarnings("serial")
-public class User implements Serializable {
+public class User extends Info implements Serializable {
 
-	private static final String basePath = buildDefaultPath();
-	private String firstName;
-	private String lastName;
-	private String file;
+	private static final String basePath = UserManagement.buildDefaultPath();
 	//private Theme theme;
 	private Date dateCreated;
 	private Date lastAccess;
-	private String uid;
 	
 	//constructor for user w/o a name
 	public User() {
@@ -27,36 +23,11 @@ public class User implements Serializable {
 	
 	//constructor for user w/ a name
 	public User(String f, String l, Date d) {
-		firstName = f;
-		lastName = l;
+		super(f, l);
 		dateCreated = d;
 		lastAccess = d;
 		//TODO theme = default;
-		this.file = new File(basePath, uid).getAbsolutePath();
-	}
-
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getFile() {
-		return file;
-	}
-
-	public String getUID() {
-		return uid;
+		super.file = new File(basePath, uid).getAbsolutePath();
 	}
 
 	public Date getLastAccessDate() {
@@ -81,11 +52,4 @@ public class User implements Serializable {
 	/*public Theme resetTheme() {
 		theme = default;
 	}*/
-
-	private static String buildDefaultPath() {
-		File f = new File(System.getProperty("user.dir"), "src");
-		f = new File(f.getAbsolutePath(), "resources");
-		f = new File(f.getAbsolutePath(), "patients");
-		return f.getAbsolutePath();
-	}
 }
