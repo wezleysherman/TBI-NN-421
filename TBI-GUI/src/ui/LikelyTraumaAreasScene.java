@@ -11,7 +11,6 @@ import javafx.scene.layout.RowConstraints;
 
 /**
  * This page will allow for the user to view likely trauma areas within the selected CT scan image
- * @author Canyon Schubert
  */
 public class LikelyTraumaAreasScene {
 	//TODO: File input from the viewScan page
