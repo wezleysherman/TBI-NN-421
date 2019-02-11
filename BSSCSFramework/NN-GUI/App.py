@@ -6,7 +6,7 @@
 #(CSV FILES) https://realpython.com/python-csv/
 
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
-import sys, pandas
+import sys, pandas, os
 
 class NNGUI(QWidget):
 
@@ -37,10 +37,14 @@ class NNGUI(QWidget):
 	    
         csv_load_button = QPushButton("Load the Selected .CSV File")
         def csv_load_clicked():
-            print("Loaded: " + csv_filepath.text())
-            csv_file = pandas.read_csv(csv_filepath.text())
-            print(csv_file)
-            csv_text.setText(str(csv_file))
+            try:
+                print("Loaded: " + csv_filepath.text())
+                csv_file = pandas.read_csv(csv_filepath.text())
+                print(csv_file)
+                csv_text.setText(str(csv_file))
+            except:
+                print("There was an error loading the file.")
+                
         csv_load_button.clicked.connect(csv_load_clicked)
 
         csv_spacer = QLabel()
@@ -52,12 +56,21 @@ class NNGUI(QWidget):
         def imgfolder_dirpick_clicked():
             imgfolder_filepicker = QFileDialog.getExistingDirectory(self, "Image Folder File Picker", "")
             imgfolder_filepath.setText(imgfolder_filepicker)
+            print("Selected: " + imgfolder_filepath.text())
         imgfolder_dirpick_button.clicked.connect(imgfolder_dirpick_clicked)
 
+        img_list = []
         imgfolder_load_button = QPushButton("Load all Images from Selected Folder")
         def imgfolder_load_clicked():
-            #implement here
-            print("not yet implemented")
+            try:
+                print("Loaded: " + imgfolder_filepath.text())
+                for img in os.listdir(imgfolder_filepath.text()):
+                    img_list.append(img)
+                for img in img_list:
+                    print(img)
+            except:
+                print("There was an error loading the file.")
+                
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
 
         img_spacer = QLabel()
@@ -74,9 +87,9 @@ class NNGUI(QWidget):
         iter_text = QLineEdit()
         iter_text.setReadOnly(True)
         iter_slider = QSlider(0x1)
-        iter_slider.setTickInterval(4)
+        iter_slider.setTickInterval(5)
         iter_slider.setTickPosition(2)
-        iter_slider.setRange(0,32)
+        iter_slider.setRange(0,50)
 
         def user_iters(value):
             iter_text.setText(str(value))
@@ -89,9 +102,9 @@ class NNGUI(QWidget):
         batch_text = QLineEdit()
         batch_text.setReadOnly(True)
         batch_slider = QSlider(0x1)
-        batch_slider.setTickInterval(4)
+        batch_slider.setTickInterval(5)
         batch_slider.setTickPosition(2)
-        batch_slider.setRange(0,32)
+        batch_slider.setRange(0,50)
 
         def user_batchs(value):
             batch_text.setText(str(value))

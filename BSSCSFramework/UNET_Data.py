@@ -9,9 +9,13 @@
 # BSSCS Docs Importer location: BSSCS_DOCS/dicom.html
 from DICOMImporter import DICOMImporter
 import pandas as pd
+import numpy as np
+from PIL import Image
+from tqdm import tqdm
+import math
 
 class UNET_DATA:
-	def __init__(self, labels_arr=None, image_arr=None):
+	def __init__(self, batch_size=0, labels_arr=None, image_arr=None, csv_path=None, images_path=None):
 		self.current_batch = 0
 		self.batch_size = 0
 		self.total_batches = 0
