@@ -3,6 +3,7 @@ package ui;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javafx.beans.value.ChangeListener;
@@ -158,7 +159,7 @@ public class PatientInfoEntryScene {
 					lNameStackPane.setVisible(false);
 				}
 				
-				//File needs date or date needs file
+				//If Date selected, a File must also be selected
 				if (newScan.getDateOfScan() != null && newScan.getScan() == null) {
 					complete = false;
 					fileStackPane.setVisible(true);
@@ -166,18 +167,15 @@ public class PatientInfoEntryScene {
 					fileStackPane.setVisible(false);
 				}
 				
-				if (newScan.getDateOfScan() == null && newScan.getScan() != null) {
-					complete = false;
-					dateStackPane.setVisible(true);
-				} else {
-					dateStackPane.setVisible(false);
-				}
-				
 				//Switch to proper scene
 				if(complete) {
 					Date dateCreated = java.sql.Date.valueOf(LocalDate.now()); //get current date
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), dateCreated, notesField.getText());
-					if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
+					if (newScan.getScan() != null) {
+						if (newScan.getDateOfScan() == null) {
+							manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
+							newScan.setDateOfScan(java.sql.Date.valueOf(LocalDate.now()));
+						}
 						patient.addRawScan(newScan);
 					}
 					try {
