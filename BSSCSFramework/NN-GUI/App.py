@@ -6,6 +6,7 @@
 #(CSV FILES) https://realpython.com/python-csv/
 
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
+from PyQt5.QtCore import QUrl, QFileInfo
 import sys, pandas, os
 
 class NNGUI(QWidget):
@@ -23,23 +24,28 @@ class NNGUI(QWidget):
         layout = QVBoxLayout()
 
 #.csv UI elements
+
+        #.csv picker
         csv_filepath = QLineEdit(".CSV Filename Here")
         csv_filepath.setReadOnly(True)
+        csv_path = QLabel()
         csv_filepick_button = QPushButton("Choose a .CSV File")
         def csv_filepick_clicked():
             csv_filepicker = QFileDialog.getOpenFileName(self, "CSV File Picker", "", "CSV (*.csv)")
-            csv_filepath.setText(csv_filepicker[0])
+            csv_filepath.setText(csv_filepicker[0].split("/")[len(csv_filepicker[0].split("/")) - 1])
+            csv_path.setText(csv_filepicker[0])
             print("Selected: " + csv_filepath.text())
         csv_filepick_button.clicked.connect(csv_filepick_clicked)
         
         csv_text = QTextEdit("Your .CSV File Will Appear Here")
         csv_text.setReadOnly(True)
-	    
+
+	#.csv loader
         csv_load_button = QPushButton("Load the Selected .CSV File")
         def csv_load_clicked():
             try:
-                print("Loaded: " + csv_filepath.text())
-                csv_file = pandas.read_csv(csv_filepath.text())
+                print("Loaded: " + csv_path.text())
+                csv_file = pandas.read_csv(csv_path.text())
                 print(csv_file)
                 csv_text.setText(str(csv_file))
             except:
@@ -50,21 +56,26 @@ class NNGUI(QWidget):
         csv_spacer = QLabel()
         
 #image folder UI elements
+
+        #image folder picker
         imgfolder_filepath = QLineEdit("Image Folder Filename Here")
         imgfolder_filepath.setReadOnly(True)
+        imgfolder_path = QLabel()
         imgfolder_dirpick_button = QPushButton("Choose an Image Folder")
         def imgfolder_dirpick_clicked():
             imgfolder_filepicker = QFileDialog.getExistingDirectory(self, "Image Folder File Picker", "")
-            imgfolder_filepath.setText(imgfolder_filepicker)
+            imgfolder_filepath.setText(imgfolder_filepicker.split("/")[len(imgfolder_filepicker.split("/")) - 1])
+            imgfolder_path.setText(imgfolder_filepicker)
             print("Selected: " + imgfolder_filepath.text())
         imgfolder_dirpick_button.clicked.connect(imgfolder_dirpick_clicked)
 
+        #image folder loader
         img_list = []
         imgfolder_load_button = QPushButton("Load all Images from Selected Folder")
         def imgfolder_load_clicked():
             try:
-                print("Loaded: " + imgfolder_filepath.text())
-                for img in os.listdir(imgfolder_filepath.text()):
+                print("Loaded: " + imgfolder_path.text())
+                for img in os.listdir(imgfolder_path.text()):
                     img_list.append(img)
                 for img in img_list:
                     print(img)
