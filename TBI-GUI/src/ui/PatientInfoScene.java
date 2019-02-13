@@ -2,6 +2,7 @@ package ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javafx.beans.value.ChangeListener;
@@ -170,17 +171,19 @@ public class PatientInfoScene {
 	            @Override
 	            public void handle(final ActionEvent ev) {	            	
 	            	try {
-	            		if (newScan.getDateOfScan() == null && newScan.getScan() != null) {
-    	            		manager.makeDialog("Please select a date for the new scan.");
-    	            	}
-    	            	else if (newScan.getDateOfScan() != null && newScan.getScan() == null){
+    	            	//Date needs a Scan
+	            		if (newScan.getDateOfScan() != null && newScan.getScan() == null){
     	            		manager.makeDialog("Please select a file for the new scan.");
     	            	}
     	            	else {
     	            		patient.setFirstName(firstField.getText());
         	            	patient.setLastName(lastField.getText());
         	            	patient.setNotes(notesArea.getText());
-    	            		if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
+    	            		if (newScan.getScan() != null) {
+    	            			if (newScan.getDateOfScan() == null) {
+    	            				manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
+    								newScan.setDateOfScan(java.sql.Date.valueOf(LocalDate.now()));
+    							}
     	            			patient.addRawScan(newScan);
     	            		}
     	            		patient.savePatient();
