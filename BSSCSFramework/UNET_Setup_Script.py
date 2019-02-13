@@ -23,32 +23,16 @@ def convert_dicom_to_nifti(path):
 	return dicom_files_arr, as_nifti
 
 
-def test_unet(image_path):
+def test_unet(image_path, csv_path):
 	''' Responsible for testing the UNET output to ensure the implementation is correct
 
 		Parameters:
 			- image_path: string -- path to test image
-
-		returns:
-			output_img: arr -- pixel array for the output image
+			- csv_path: string -- path to training CSV
 
 	'''
-	unet = BSSCS_UNET(1, 1, None)
-	dicom = DICOMImporter.open_dicom_file(image_path)
-	dicom_arr = np.reshape(DICOMImporter.get_dicom_pixel_array(dicom), (1, 512, 512, 1))
-	input_ph = tf.placeholder(tf.float32, shape=[None, 512, 512, 1]) # Placeholder vals were given by paper in initial layer -- these numbers were referenced from the paper.
-	graph = unet.generate_unet_arch(input_ph)
-	with tf.Session() as session:
-		tf.global_variables_initializer().run()
-		output = session.run(graph, feed_dict={input_ph: dicom_arr})
-		print(output)
-		print(output[0])
-		print(output[0][0].shape)
-		#img = np.reshape(output[0], [2, 508, 508])
-		#plt.imshow(img[1])
-		#plt.show()
-		#plt.imshow(img[0])
-		#plt.show()
+	unet_data = UNET_DATA(images_path=image_path, csv_path=csv_path, label_classes=28)
+
 
 def test_unet_training(image_path, csv_path, batch_size, iterations):
 	print(image_path)
@@ -58,4 +42,4 @@ def test_unet_training(image_path, csv_path, batch_size, iterations):
 	print(unet_data.get_next_batch())
 	unet.train_unet()
 
-test_unet_training(image_path="Data_right/Train/train", csv_path="Data_right/train.csv", batch_size=1, iterations=100)
+test_unet(image_path="Data_right/Train/train", csv_path="Data_right/train.csv")

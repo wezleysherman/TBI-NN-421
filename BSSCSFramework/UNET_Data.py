@@ -15,12 +15,13 @@ from tqdm import tqdm
 import math
 
 class UNET_DATA:
-	def __init__(self, batch_size=0, labels_arr=None, image_arr=None, csv_path=None, images_path=None):
+	def __init__(self,label_classes, batch_size=10, labels_arr=None, image_arr=None, csv_path=None, images_path=None):
 		self.current_batch = 0
-		self.batch_size = 0
+		self.batch_size = batch_size
 		self.total_batches = 0
 		self.labels = labels_arr
 		self.images = image_arr
+		self.label_classes = label_classes
 
 		if csv_path and images_path:
 			print("Found CSV")
@@ -147,8 +148,18 @@ class UNET_DATA:
 			image_path = path +'/' + row[1][0] + '_blue.png'
 			image = list(Image.open(image_path).getdata())
 			data_dictionary[row[1][0]]['image_arr'] = image
-			data_dictionary[row[1][0]]['labels'] = np.resize(np.array(row[1][1].split(' ')[0]), (1))
-			if count == 1:
+			label_classes_arr = np.zeros(shape=(28))
+			labels_in_data = np.array(row[1][1].split(' '))
+			print(self.label_classes)
+			print(labels_in_data)
+			for label in labels_in_data:
+				label_idx = int(label)
+				print(label_idx)
+				print(labels_in_data.size)
+				label_classes_arr[label_idx] = 1
+			print(label_classes_arr)
+			data_dictionary[row[1][0]]['labels'] = label_classes_arr
+			if count == self.batch_size:
 				break
 			count += 1
 		return data_dictionary
