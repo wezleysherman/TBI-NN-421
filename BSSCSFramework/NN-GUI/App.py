@@ -86,6 +86,13 @@ class NNGUI(QWidget):
 
         img_spacer = QLabel()
 
+#tensorboard UI elements
+
+        tb_button = QPushButton("Tensorboard")
+        def tb_clicked():
+            print("tb_button clicked")
+        tb_button.clicked.connect(tb_clicked)
+
 #train UI elements
         train_button = QPushButton("Train Me!")
         def train_clicked():
@@ -141,6 +148,7 @@ class NNGUI(QWidget):
         layout.addWidget(batch_slider)
         layout.addWidget(batch_text)
         layout.addWidget(batch_spacer)
+        layout.addWidget(tb_button)
         layout.addWidget(train_button)
 
 #setup of window
