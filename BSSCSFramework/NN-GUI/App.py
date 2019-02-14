@@ -103,7 +103,7 @@ class NNGUI(QWidget):
         tb_button = QPushButton("Tensorboard")
         def tb_clicked():
             print("tb_button clicked")
-            #tensorboard --logdir=(filepicker)
+            os.system("tensorboard --logdir=" + tb_path.text())
         tb_button.clicked.connect(tb_clicked)
 
         tb_spacer = QLabel()
