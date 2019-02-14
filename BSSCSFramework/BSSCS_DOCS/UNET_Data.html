@@ -1,0 +1,111 @@
+<html>
+	<head>
+		<title>BSSCS UNET Data Class</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+		<h1>BSSCS UNET Data</h1>
+		<div>
+			<b>__init__(self, labels_arr=None, image_arr=None)</b>
+			<br>
+			<span>
+			 	Class initializer that sets the starting values for all global variables
+			</span><br>
+			<span>
+			<p>Input:</p>
+				labels_arr - An array of labels for the classifier to check against 
+				image_arr - An array of images to classify
+			</span>
+		</div>
+		<div>
+			<b>set_batch_size(self, new_size)</b>
+			<br>
+			<span>
+			 	Sets the batch size of the data class.
+			</span><br>
+			<span>
+			<p>Input:</p>
+				new_size - new size of each batch to be assigned.
+			</span>
+		</div>
+		<div>
+			<b>get_batch_size(self)</b>
+			<br>
+			<span>
+			 	Returns the batch size
+			</span><br>
+			<span>
+			<p>Returns:</p>
+				- batch_size - size of the batches.
+			</span>
+		</div>
+		<div>
+			<b>get_total_batches(self)</b>
+			<br>
+			<span>
+			 	Returns the total number of batches for the dataset.
+			</span><br>
+			<span>
+			<p>Returns:</p>
+				- total_batch_size - total number of batches
+			</span>
+		</div>
+		<div>
+			<b>get_next_batch(self)</b>
+			<br>
+			<span>
+			 	Returns the next batch of data
+			</span><br>
+			<span>
+			<p>Returns:</p>
+				- images - images for the batch
+				- labels - labels for the batch
+			</span>
+		</div>
+		<div>
+			<b>fetch_data(self, path_to_csv)</b>
+			<br>
+			<span>
+			 	Load in data from a CSV file containing image names and labels.
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- path_to_csv - String containing the path to the data CSV
+			</span>
+		</div>
+		<div>
+			<b>import_labels_from_csv(self, path)</b>
+			<br>
+			<span>
+			 	Load in just the data labels from a CSV file.
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- path - path to the CSV file
+			</span>
+		</div>
+		<div>
+			<b>open_csv(self, path)</b>
+			<br>
+			<span>
+			 	Opens a given CSV into a pandas dataframe
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- path - String path to CSV
+			</span>
+		</div>
+		<div>
+			<b>fetch_images_with_csv(self, path, dataframe)</b>
+			<br>
+			<span>
+			 	Get all data and images tied to a CSV file
+			</span><br>
+			<span>
+			<p>Input:</p>
+				- path - path to images
+				- dataframe - csv dataframe with image names and labels
+			</span>
+		</div>
+	</body>
+</html>
