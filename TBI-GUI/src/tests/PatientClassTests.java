@@ -7,6 +7,7 @@ import java.util.Date;
 import org.junit.Test;
 
 import utils.Patient;
+import utils.PatientManagement;
 import utils.Scan;
 
 import static org.junit.Assert.*;

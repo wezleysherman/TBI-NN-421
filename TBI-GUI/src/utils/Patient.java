@@ -9,17 +9,13 @@ import java.io.Serializable;
 
 //Class for saving patient information
 @SuppressWarnings("serial")
-public class Patient implements Serializable {
+public class Patient extends Info implements Serializable {
 
-	private static final String basePath = buildDefaultPath();
-	private String firstName;
-	private String lastName;
-	private String file;
+	private String basePath = PatientManagement.buildDefaultPath();
 	private Date dateCreated;
 	private String notes;
 	private LinkedList<Scan> rawScans;
 	private LinkedList<Scan> procScans;
-	private String uid;
 	
 	//constructor for blank patient
 	public Patient() {
@@ -50,8 +46,7 @@ public class Patient implements Serializable {
 	
 	//constructor for patient w/ established uid and multiple scans (main constructor)
 	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans, String uid) {
-		this.setFirstName(fName);
-		this.setLastName(lName);
+		super(fName, lName);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
 		this.setRawScans(pScans);
@@ -71,22 +66,6 @@ public class Patient implements Serializable {
 		return pScans;
 	}
 
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
 	public Date getDate() {
 		return this.dateCreated;
 	}
@@ -101,14 +80,6 @@ public class Patient implements Serializable {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
-	}
-
-	public String getFile() {
-		return file;
-	}
-
-	public String getUID() {
-		return uid;
 	}
 
 	public LinkedList<Scan> getRawScans() {
@@ -200,10 +171,4 @@ public class Patient implements Serializable {
 		PatientManagement.exportPatient(this);
 	}
 
-	private static String buildDefaultPath() {
-		File f = new File(System.getProperty("user.dir"), "src");
-		f = new File(f.getAbsolutePath(), "resources");
-		f = new File(f.getAbsolutePath(), "patients");
-		return f.getAbsolutePath();
-	}
 }
