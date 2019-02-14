@@ -3,6 +3,7 @@ package ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -109,7 +110,6 @@ public class StateManager {
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID) {			
 		this.sceneID = newSceneID;
-		
 		if (sceneID.equals("Landing")) {
 			this.patient = null;
 			scene = new LandingScene().initializeScene(this);
@@ -119,6 +119,16 @@ public class StateManager {
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
 		else if (sceneID.equals("LikelyTraumaAreas")) {
+			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+			path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py";
+			//ProcessBuilder pb = new ProcessBuilder("cmd.exe", "python " + path);
+			try {
+				Process p = Runtime.getRuntime().exec("cmd.exe /c start " + path);
+				//Process p = pb.start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			scene = new LikelyTraumaAreasScene().initializeScene(this);
 		}
 		else if (sceneID.equals("CNNVisualizer")) {
