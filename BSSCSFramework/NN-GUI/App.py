@@ -7,7 +7,7 @@
 
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
 from PyQt5.QtCore import QUrl, QFileInfo
-import sys, pandas, os
+import sys, pandas, os, webbrowser
 
 class NNGUI(QWidget):
 
@@ -104,6 +104,8 @@ class NNGUI(QWidget):
         def tb_clicked():
             print("tb_button clicked")
             os.system("tensorboard --logdir=" + tb_path.text())
+            print("Loaded: " + tb_path.text())
+            webbrowser.open("http://localhost:6006", new=2)
         tb_button.clicked.connect(tb_clicked)
 
         tb_spacer = QLabel()
