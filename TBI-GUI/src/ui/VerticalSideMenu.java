@@ -402,8 +402,19 @@ public class VerticalSideMenu {
 		Label scansLabel = new Label("Scans: ");
 		scansLabel.getStyleClass().add("label-white");
 		
-		Label notesLabel = new Label("Notes: ");
+		Label notesLabel = new Label("Scan Notes: ");
 		notesLabel.getStyleClass().add("label-white");
+		
+		Button editScanBtn = new Button("Edit This Scan");
+		editScanBtn.setMaxWidth(Double.MAX_VALUE);
+		editScanBtn.setTooltip(new Tooltip("Edit this scan's information."));
+		editScanBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.setStateBool(true);
+				manager.paintScene("ScanVisualizer");
+			}
+		});
 		
 		Button delScanBtn = new Button("Delete Current Scan");
 		delScanBtn.setMaxWidth(Double.MAX_VALUE);
@@ -411,13 +422,11 @@ public class VerticalSideMenu {
 		delScanBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				boolean yes = manager.makeQuestion("This will remove all of the data associated with this scan, are you sure you want to continue?");
-				if (yes) {
+				if (manager.makeQuestion("This will remove all of the data associated with this scan, are you sure you want to continue?")) {
 					for(Scan scan : patient.getRawScans()) {
-			        	if (scan.equals(manager.getScan())) {
+						if (scan.getScan().equals(manager.getScan().getScan())) {
 			        		patient.getRawScans().remove(scan);
-			        		break;
-			        	}
+			        	}			        	
 			        }
 					try {
 						patient.savePatient();
@@ -467,7 +476,7 @@ public class VerticalSideMenu {
 		
 		//Set up text area
 		TextArea docNotesField = new TextArea();
-		docNotesField.setText(patient.getNotes());
+		docNotesField.setText(manager.getScan().getNotes());
 		docNotesField.setWrapText(true);
 		docNotesField.getStyleClass().add("text-area-sidebar");
 		
@@ -478,8 +487,9 @@ public class VerticalSideMenu {
 		GridPane.setConstraints(scrollPane, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(notesLabel, 0, 8, 2, 1, HPos.LEFT, VPos.CENTER);		
 		GridPane.setConstraints(docNotesField, 0, 9, 2, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(delScanBtn, 0, 10, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(editScanBtn, 0, 10, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(delScanBtn, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
 		
-		grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, scrollPane, docNotesField, scansLabel, notesLabel);
+		grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, scrollPane, docNotesField, scansLabel, notesLabel, editScanBtn);
 	}
 }
