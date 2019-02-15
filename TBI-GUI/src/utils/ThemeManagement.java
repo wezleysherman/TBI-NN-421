@@ -109,11 +109,11 @@ public class ThemeManagement {
 				// read and unseal object
 				themeList = (Hashtable)oin.readObject();
 				oin.close();
-				// return user
+				// return theme
 				return themeList;
 			} catch (ClassNotFoundException e) {
 				fin.close();
-				throw new IOException("Could not parse write as user. Read failed.");
+				throw new IOException("Could not parse write as theme. Read failed.");
 			}
 		}
 	}
