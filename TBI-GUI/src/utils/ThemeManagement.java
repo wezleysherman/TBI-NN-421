@@ -14,6 +14,7 @@ public class ThemeManagement {
 	private static String defaultPath = buildDefaultPath();
 	//current is stored as <"_current", FormattedName>
 	private static Hashtable <String, String> themeList; //non-current stored as <FormattedName, filepath>
+	private static final String defaultTheme = "Dark Theme";
 
 	public static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
@@ -50,6 +51,9 @@ public class ThemeManagement {
 	}
 	
 	public static void deleteTheme(String path, String filename) throws IOException{
+		if(filename.equals(themeList.get(themeList.get("_current")))){
+			themeList.put("_current", defaultTheme);
+		}
 		File top = new File(path, filename);
 		File data = new File(top.getAbsolutePath(), "data.enc");
 		data.delete();
@@ -100,6 +104,7 @@ public class ThemeManagement {
 			// create file stream
 			f.createNewFile();
 			themeList = new Hashtable <String, String>();
+			themeList.put("_current", defaultTheme);
 			exportThemeList();
 			return themeList;
 		} else {
