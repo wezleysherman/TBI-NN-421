@@ -120,13 +120,14 @@ public class StateManager {
 		}
 		else if (sceneID.equals("LikelyTraumaAreas")) {
 			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-			path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py";
-			//ProcessBuilder pb = new ProcessBuilder("cmd.exe", "python " + path);
+			if(path.contains("main")) {
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py";
+			} else {
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py";
+			}
 			try {
-				Process p = Runtime.getRuntime().exec("cmd.exe /c start " + path);
-				//Process p = pb.start();
+				Process p = Runtime.getRuntime().exec("python -i " + path);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			scene = new LikelyTraumaAreasScene().initializeScene(this);

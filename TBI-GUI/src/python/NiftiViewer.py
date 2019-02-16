@@ -2,11 +2,7 @@ import nibabel
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import plot, ion, show
 from matplotlib.widgets import Slider
-import matplotlib.animation as animation
-import threading
-import time
 import os
-import socket
 
 current_index = 0
 plt.rcParams['toolbar'] = 'None'
