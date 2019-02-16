@@ -7,7 +7,7 @@
 
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
 from PyQt5.QtCore import QUrl, QFileInfo
-import sys, pandas, os
+import sys, pandas, os, webbrowser
 
 class NNGUI(QWidget):
 
@@ -86,6 +86,30 @@ class NNGUI(QWidget):
 
         img_spacer = QLabel()
 
+#tensorboard UI elements
+
+        tb_filepath = QLineEdit("Tensorboard Log File Path Here")
+        tb_filepath.setReadOnly(True)
+        tb_path = QLabel()
+
+        tb_filepick_button = QPushButton("Select Log Folder")
+        def tb_filepick_clicked():
+            tb_filepicker = QFileDialog.getExistingDirectory(self, "Log Folder File Picker", "")
+            tb_filepath.setText(tb_filepicker.split("/")[len(tb_filepicker.split("/")) - 1])
+            tb_path.setText(tb_filepicker)
+            print("Selected: " + tb_filepath.text())
+        tb_filepick_button.clicked.connect(tb_filepick_clicked)
+
+        tb_button = QPushButton("Tensorboard")
+        def tb_clicked():
+            print("tb_button clicked")
+            os.system("tensorboard --logdir=" + tb_path.text())
+            print("Loaded: " + tb_path.text())
+            webbrowser.open("http://localhost:6006", new=2)
+        tb_button.clicked.connect(tb_clicked)
+
+        tb_spacer = QLabel()
+
 #train UI elements
         train_button = QPushButton("Train Me!")
         def train_clicked():
@@ -141,6 +165,10 @@ class NNGUI(QWidget):
         layout.addWidget(batch_slider)
         layout.addWidget(batch_text)
         layout.addWidget(batch_spacer)
+        layout.addWidget(tb_filepath)
+        layout.addWidget(tb_filepick_button)
+        layout.addWidget(tb_button)
+        layout.addWidget(tb_spacer)
         layout.addWidget(train_button)
 
 #setup of window
