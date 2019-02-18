@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>Info Entry Documentation</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+
+		<h1>InfoEntry</h1>
+		<div style="width:500px">
+			<span>
+      <p>
+        The purpose of this static class is to provide easy encryption methods for multiple forms of information. Code can be found on
+        <a href="https://github.com/wezleysherman/TBI-NN-421/blob/master/TBI-GUI/src/utils/EncryptionUtils.java">Github</a>.
+      </p>
+			</span><br>
+
+			<b>Methods:</b></br>
+			<b><code>int exportInfo(Patient patient, Key key)</code></b>
+			<br>
+			<span>
+			Encrypt a patient and export it to the proper file. Returns the associated key for metadata storage.
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- Patient patient</p>
+      <p>- Key key</p>
+			<p>Returns:</p>
+			<p>- Key</p>
+			</span>
+
+      <b><code>Info importInfo(Key key, String path, String uid)</code></b>
+			<br>
+			<span>
+			Retrieves and decrypts stored information.
+			</span>
+			<span>
+			<p>Inputs:</p>
+			<p>- Key key</p>
+      <p>- String path</p>
+      <p>- String uid</p>
+			<p>Returns:</p>
+			<p>- Info</p>
+			</span>
+
+		</div>
+	</body>
+</html>

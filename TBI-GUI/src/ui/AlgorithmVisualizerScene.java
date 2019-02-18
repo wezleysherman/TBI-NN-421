@@ -102,6 +102,7 @@ public class AlgorithmVisualizerScene {
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(contentGrid);
 		layout.setCenter(mainGrid);
+		layout.setTop(TopMenuBar.newMenuBar(manager));
 		
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());

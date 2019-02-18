@@ -3,7 +3,10 @@ package ui;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -53,12 +56,12 @@ public class PatientInfoEntryScene {
 		patLNameField.setPromptText("Patient Last Name");
 		
 		fileField.setMaxSize(200, 10);
-		fileField.setPromptText("Select File");
+		fileField.setPromptText("Select File(s)");
 		
 		notesField.setMaxSize(200, 10);
 		notesField.setPromptText("Notes");
 		
-		datePicker.setPromptText("Select Date of Scan");
+		datePicker.setPromptText("Select Date of Scan(s)");
 		
 		//Add required indicator tags
 		StackPane fNameStackPane = makeRequiredSVG();
@@ -110,18 +113,26 @@ public class PatientInfoEntryScene {
 		columnCon.setPercentWidth(100);
 		pointerGrid.getColumnConstraints().add(columnCon);
 				
-		Scan newScan = new Scan();
-		
+		Scan dateHolder = new Scan();
+		LinkedList<File> newFiles = new LinkedList<File>();
+
 		//File Chooser Setup
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt")); //TODO remove .txt
 		fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 				if(arg2) {
-					File file = fileChooser.showOpenDialog(manager.getStage());
-		            if (file != null) {
-		            	fileField.setText(file.getName());
-		            	newScan.setScan(file);
+					List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
+		            if (files.size() > 0) {
+		            	if (files.size() == 1) {
+		            		fileField.setText(files.get(0).getName());
+		            	}
+		            	else {
+		            		fileField.setText(files.size() + " files");
+		            	}
+		            	for (int i = 0; i < files.size(); ++i) {
+		            		newFiles.add(files.get(i));
+		            	}
 		            }
 				}
 	            datePicker.requestFocus();
@@ -133,7 +144,7 @@ public class PatientInfoEntryScene {
 		datePicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				newScan.setDateOfScan(java.sql.Date.valueOf(datePicker.getValue()));;
+				dateHolder.setDateOfScan(java.sql.Date.valueOf(datePicker.getValue()));
 			}
 		});
 		
@@ -158,27 +169,26 @@ public class PatientInfoEntryScene {
 					lNameStackPane.setVisible(false);
 				}
 				
-				//File needs date or date needs file
-				if (newScan.getDateOfScan() != null && newScan.getScan() == null) {
+				//If Date selected, a File must also be selected
+				if (dateHolder.getDateOfScan() != null && newFiles.size() == 0) {
 					complete = false;
 					fileStackPane.setVisible(true);
 				} else {
 					fileStackPane.setVisible(false);
 				}
 				
-				if (newScan.getDateOfScan() == null && newScan.getScan() != null) {
-					complete = false;
-					dateStackPane.setVisible(true);
-				} else {
-					dateStackPane.setVisible(false);
-				}
-				
 				//Switch to proper scene
 				if(complete) {
 					Date dateCreated = java.sql.Date.valueOf(LocalDate.now()); //get current date
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), dateCreated, notesField.getText());
-					if (newScan.getDateOfScan() != null && newScan.getScan() != null) {
-						patient.addRawScan(newScan);
+					if (newFiles.size() > 0) {
+						if (dateHolder.getDateOfScan() == null) {
+							manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
+							dateHolder.setDateOfScan(java.sql.Date.valueOf(LocalDate.now()));
+						}
+						for (int i = 0; i < newFiles.size(); ++i) {
+							patient.addRawScan(new Scan(dateHolder.getDateOfScan(), newFiles.get(i)));
+						}
 					}
 					try {
 						PatientManagement.exportPatient(patient);
@@ -200,6 +210,7 @@ public class PatientInfoEntryScene {
 		mainGrid.getChildren().add(contentGrid);
 		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
+		layout.setTop(TopMenuBar.newMenuBar(manager));
 		
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());

@@ -3,6 +3,7 @@ package ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,9 +21,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -45,6 +46,7 @@ public class StateManager {
 	private PatientEntry patient = null;
 	private Scan scan = null;
 	private boolean stateBool = false;
+	private String themeFile = "../resources/themes/darkTheme.css";
 	
 	public Stage getStage() {
 		return stage;
@@ -76,12 +78,21 @@ public class StateManager {
 	public boolean getStateBool() {
 		return stateBool;
 	}
+	public void setThemeFile(String fileName) {
+		this.themeFile = fileName;
+		paintScene(sceneID);
+	}
+	public String getThemeFile() {
+		return themeFile;
+	}
 	
 	// constructor (mostly just the app start)
 	public StateManager(Stage inStage) {
 		sceneStack = new Stack<String>();
 		stage = inStage;
-		stage.setTitle("TBI");
+		Image icon = new Image("resources/icon.png");
+		stage.getIcons().add(icon);
+		stage.setTitle("Traumatic Brain Injury Locator");
 		stage.setWidth(960);
 		stage.setHeight(540);
 		stage.setMinWidth(960);
@@ -99,7 +110,6 @@ public class StateManager {
 	@SuppressWarnings("static-access")
 	public void paintScene(String newSceneID) {			
 		this.sceneID = newSceneID;
-		
 		if (sceneID.equals("Landing")) {
 			this.patient = null;
 			scene = new LandingScene().initializeScene(this);
@@ -109,6 +119,17 @@ public class StateManager {
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
 		else if (sceneID.equals("LikelyTraumaAreas")) {
+			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+			if(path.contains("main")) {
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py";
+			} else {
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py";
+			}
+			try {
+				Process p = Runtime.getRuntime().exec("python -i " + path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			scene = new LikelyTraumaAreasScene().initializeScene(this);
 		}
 		else if (sceneID.equals("CNNVisualizer")) {
@@ -128,7 +149,7 @@ public class StateManager {
 		}
 		
 		stage.setScene(scene);
-		stage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		stage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		
 		if (DEBUG) {
 			debugStack();
@@ -171,7 +192,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		dialogStage.showAndWait();
 	}
 	
@@ -228,7 +249,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		dialogStage.showAndWait();
 		
 		return vh.value;
@@ -296,7 +317,7 @@ public class StateManager {
 		
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource("../resources/darkTheme.css").toExternalForm());
+		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
 		dialogStage.showAndWait();
 	}
 

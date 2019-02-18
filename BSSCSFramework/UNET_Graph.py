@@ -121,8 +121,9 @@ class BSSCS_UNET:
 			 	- Tensor -- last layer in the regressor
 		'''
 		reg_input = tf.layers.dense(inputs=input, units=1016, activation=tf.nn.relu)
-		#reg_hidden = tf.layers.dense(inputs=reg_input, units=20, activation=tf.nn.relu)
-		reg_out = tf.layers.dense(inputs=reg_input, units=2)
+		reg_hidden = tf.layers.dense(inputs=reg_input, units=20, activation=tf.nn.relu)
+		reg_hidden1 = tf.layers.dense(inputs=reg_hidden, units=30, activation=tf.nn.relu)
+		reg_out = tf.layers.dense(inputs=reg_hidden1, units=2)
 		return reg_out
 
 	def create_loss(self, input, labels):
@@ -183,6 +184,25 @@ class BSSCS_UNET:
 					# Evaluate mse loss here and print the value
 					print("Passed 500 iterations with mse: " + it_loss)
 		
+
+	def generalize_prediction(output):
+		''' Handles generalizing UNET outputs to the labels so that we can better understand the predictions.
+			If the prediction is under 50% then we mark it as 0, otherwise keep the value.
+
+			Input: 
+				- output - array of outputs based off labels from UNET
+
+			Return:
+				- return_prediction - array of normalized outputs from output input
+		'''
+		return_prediction = []
+		for prediction in output:
+			if(prediction > 0.5):
+				return_prediction.append(prediction)
+			else:
+				return_prediction.append(0)
+
+		return return_prediction
 
 	def test_unet(self, graph_out, input_x):
 		''' Runs a trained UNET through an evaluation/test phase to detect errors
