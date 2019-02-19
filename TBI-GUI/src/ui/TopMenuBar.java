@@ -64,7 +64,16 @@ public class TopMenuBar {
 		
 		themes.getItems().addAll(darkTheme); //Add themes here
 		
-		preferences.getItems().addAll(themes);
+		MenuItem themeCreate = new MenuItem("Theme Creator");
+		themeCreate.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				manager.getSceneStack().push(manager.getSceneID());
+				manager.paintScene("ThemeCreation");
+			}
+		});
+		
+		preferences.getItems().addAll(themes, themeCreate);
 		
 		menuBar.getMenus().addAll(shortcuts, preferences);
 		

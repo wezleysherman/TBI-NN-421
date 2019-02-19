@@ -149,6 +149,9 @@ public class StateManager {
 		else if (sceneID.equals("PatientInfo")) {
 			scene = new PatientInfoScene().initializeScene(this);
 		}
+		else if (sceneID.equals("ThemeCreation")) {
+			scene = new ThemeCreationScene().initializeScene(this);
+		}
 		
 		stage.setScene(scene);
 		stage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
