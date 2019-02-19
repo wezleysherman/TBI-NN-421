@@ -29,7 +29,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import utils.Patient;
 import utils.PatientEntry;
+import utils.PatientManagement;
 import utils.Scan;
 
 /**
@@ -121,9 +123,9 @@ public class StateManager {
 		else if (sceneID.equals("LikelyTraumaAreas")) {
 			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 			if(path.contains("main")) {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py";
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getName();
 			} else {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py";
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getName();
 			}
 			try {
 				Process p = Runtime.getRuntime().exec("python -i " + path);
