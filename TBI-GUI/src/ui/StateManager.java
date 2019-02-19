@@ -122,7 +122,6 @@ public class StateManager {
 		}
 		else if (sceneID.equals("LikelyTraumaAreas")) {
 			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-			System.out.println(scan.getScan().getName());
 			if(path.contains("main")) {
 				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getName();
 			} else {
