@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import plot, ion, show
 from matplotlib.widgets import Slider
 import os
+import sys
 
 current_index = 0
 plt.rcParams['toolbar'] = 'None'
@@ -15,7 +16,8 @@ def update(val):
     im.set_data(data_arr[int(val)])
     plt.draw()
 
-image = nibabel.load(os.path.dirname(os.path.abspath(__file__)).replace("\\", "/") + "/../resources/knee.nii")
+file = sys.argv[1]
+image = nibabel.load(os.path.dirname(os.path.abspath(__file__)).replace("\\", "/") + "/../resources/" + file)
 data_arr = image.get_data().T
 global im
 im = axes.imshow(data_arr[0])
