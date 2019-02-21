@@ -147,6 +147,22 @@ class NNGUI(QWidget):
 
         batch_spacer = QLabel()
 
+#layer UI elements
+
+        layer_label = QLabel("Layer Amount:")
+        layer_text = QLineEdit()
+        layer_text.setReadOnly(True)
+        layer_slider = QSlider(0x1)
+        layer_slider.setTickInterval(5)
+        layer_slider.setTickPosition(2)
+        layer_slider.setRange(0,50)
+
+        def user_layers(value):
+            layer_text.setText(str(value))
+        layer_slider.valueChanged[int].connect(user_layers)
+
+        layer_spacer = QLabel()
+
 #widgets added to layout
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
@@ -169,6 +185,10 @@ class NNGUI(QWidget):
         layout.addWidget(tb_filepick_button)
         layout.addWidget(tb_button)
         layout.addWidget(tb_spacer)
+        layout.addWidget(layer_label)
+        layout.addWidget(layer_slider)
+        layout.addWidget(layer_text)
+        layout.addWidget(layer_spacer)
         layout.addWidget(train_button)
 
 #setup of window
