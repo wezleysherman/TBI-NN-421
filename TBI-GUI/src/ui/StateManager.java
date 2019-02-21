@@ -29,14 +29,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import utils.Patient;
 import utils.PatientEntry;
-import utils.PatientManagement;
 import utils.Scan;
 
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
- * @author Canyon Schubert & Ty Chase
  */
 public class StateManager {
 	private final boolean DEBUG = false; //Manually change this value 
@@ -123,15 +120,16 @@ public class StateManager {
 		else if (sceneID.equals("LikelyTraumaAreas")) {
 			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 			if(path.contains("main")) {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getName();
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getAbsolutePath();
 			} else {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getName();
+				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getAbsolutePath();
 			}
 			try {
 				Process p = Runtime.getRuntime().exec("python -i " + path);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
 			scene = new LikelyTraumaAreasScene().initializeScene(this);
 		}
 		else if (sceneID.equals("CNNVisualizer")) {

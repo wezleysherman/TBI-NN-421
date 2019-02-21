@@ -4,7 +4,10 @@ from matplotlib.pyplot import plot, ion, show
 from matplotlib.widgets import Slider
 import os
 import sys
-
+import socket
+'''
+Used nipy site as reference when displaying. http://nipy.org/nibabel/coordinate_systems.html
+'''
 current_index = 0
 plt.rcParams['toolbar'] = 'None'
 fig, axes = plt.subplots()
@@ -16,8 +19,12 @@ def update(val):
     im.set_data(data_arr[int(val)])
     plt.draw()
 
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("127.0.0.1", 8080))
+
 file = sys.argv[1]
-image = nibabel.load(os.path.dirname(os.path.abspath(__file__)).replace("\\", "/") + "/../resources/" + file)
+image = nibabel.load(file)
 data_arr = image.get_data().T
 global im
 im = axes.imshow(data_arr[0])
