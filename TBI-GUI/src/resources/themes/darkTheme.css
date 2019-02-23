@@ -91,8 +91,13 @@
 	-fx-background-color: transparent, transparent, white, #455357;
 }
 
-.table-view{
+.table-view {
    -fx-background-color: transparent;
+   -fx-control-inner-background: #919a9e;
+   -fx-control-inner-background-alt: #c1cace;
+   -fx-selection-bar: transparent;
+   -fx-background-insets: 0, 0 0 1 0;
+   -fx-padding: 0.0em;
 }
 
 .table-view .table-cell {
@@ -100,27 +105,8 @@
 }
 
 .table-row-cell {
-    -fx-background-color: -fx-table-cell-border-color, #919a9e;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
-}
-
-.table-row-cell:selected {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 1;
-}
-
-.table-row-cell:odd:selected {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 1;
-}
-
-.table-row-cell:odd {
-    -fx-background-color: -fx-table-cell-border-color, #c1cace;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;  
 }
 
 .table-view:focused {
