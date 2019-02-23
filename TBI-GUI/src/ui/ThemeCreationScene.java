@@ -408,8 +408,7 @@ public class ThemeCreationScene {
 		mainGrid.getChildren().addAll(nameField, saveBtn);
 		
 		//Add Grid and layout to scene---------------------------------------------------------------------------------------------------------------
-		//layout.getStyleClass().add("side-pane");
-		GridPane.setConstraints(previewGrid, 2, 1, 1, mainGrid.getRowCount() - 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(previewGrid, 2, 1, 1, 18, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(previewGrid);
 		layout.setCenter(mainGrid);
 		layout.setTop(TopMenuBar.newMenuBar(manager));
