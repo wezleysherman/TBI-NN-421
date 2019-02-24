@@ -163,6 +163,12 @@ class NNGUI(QWidget):
 
         layer_spacer = QLabel()
 
+#user nodes UI elements
+
+        nodes_label = QLabel("Node Amount:")
+        node_text = QLineEdit()
+        node_text.setReadOnly(True)
+
 #widgets added to layout
         layout.addWidget(csv_filepath)
         layout.addWidget(csv_filepick_button)
