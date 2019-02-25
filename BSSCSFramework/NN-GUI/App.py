@@ -165,9 +165,19 @@ class NNGUI(QWidget):
 
 #user nodes UI elements
 
-        nodes_label = QLabel("Node Amount:")
+        node_label = QLabel("Node Amount:")
         node_text = QLineEdit()
         node_text.setReadOnly(True)
+        node_slider = QSlider(0x1)
+        node_slider.setTickInterval(5)
+        node_slider.setTickPosition(2)
+        node_slider.setRange(0,50)
+
+        def user_nodes(value):
+            node_text.setText(str(value))
+        node_slider.valueChanged[int].connect(user_nodes)
+
+        node_spacer = QLabel()
 
 #widgets added to layout
         layout.addWidget(csv_filepath)
@@ -195,6 +205,10 @@ class NNGUI(QWidget):
         layout.addWidget(layer_slider)
         layout.addWidget(layer_text)
         layout.addWidget(layer_spacer)
+        layout.addWidget(node_label)
+        layout.addWidget(node_slider)
+        layout.addWidget(node_text)
+        layout.addWidget(node_spacer)
         layout.addWidget(train_button)
 
 #setup of window
