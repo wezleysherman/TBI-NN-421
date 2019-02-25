@@ -1,5 +1,9 @@
 package ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import javafx.collections.FXCollections;
@@ -273,31 +277,31 @@ public class ThemeCreationScene {
 		GridPane.setConstraints(menuBarPicker, 1, 9, 1, 1, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().addAll(menuBarLabel, menuBarPicker);
 		
-		Label menuHoverLabel = new Label("Menu");
-		ColorPicker menuHoverPicker = new ColorPicker();
-		menuHoverPicker.setOnAction(new EventHandler<ActionEvent>() {
+		Label menuLabel = new Label("Menu");
+		ColorPicker menuPicker = new ColorPicker();
+		menuPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				colors.put("menu", toHex(menuHoverPicker.getValue()));
+				colors.put("menu", toHex(menuPicker.getValue()));
 				previewMenu.setStyle("-fx-background-color: " + colors.get("menu") + ";");
 			}
 		});
-		GridPane.setConstraints(menuHoverLabel, 0, 10, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(menuHoverPicker, 1, 10, 1, 1, HPos.CENTER, VPos.CENTER);
-		mainGrid.getChildren().addAll(menuHoverLabel, menuHoverPicker);
+		GridPane.setConstraints(menuLabel, 0, 10, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(menuPicker, 1, 10, 1, 1, HPos.CENTER, VPos.CENTER);
+		mainGrid.getChildren().addAll(menuLabel, menuPicker);
 		
-		Label menuItemLabelLabel = new Label("MenuItem");
-		ColorPicker menuItemLabelPicker = new ColorPicker();
-		menuItemLabelPicker.setOnAction(new EventHandler<ActionEvent>() {
+		Label menuItemLabel = new Label("MenuItem");
+		ColorPicker menuItemPicker = new ColorPicker();
+		menuItemPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				colors.put("menuItem", toHex(menuItemLabelPicker.getValue()));
+				colors.put("menuItem", toHex(menuItemPicker.getValue()));
 				previewMenuItem.setStyle("-fx-background-color: " + colors.get("menuItem") + ";");
 			}
 		});
-		GridPane.setConstraints(menuItemLabelLabel, 0, 11, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(menuItemLabelPicker, 1, 11, 1, 1, HPos.CENTER, VPos.CENTER);
-		mainGrid.getChildren().addAll(menuItemLabelLabel, menuItemLabelPicker);
+		GridPane.setConstraints(menuItemLabel, 0, 11, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(menuItemPicker, 1, 11, 1, 1, HPos.CENTER, VPos.CENTER);
+		mainGrid.getChildren().addAll(menuItemLabel, menuItemPicker);
 	
 		Label tableTextLabel = new Label("Table Text*");
 		ColorPicker tableTextPicker = new ColorPicker();
@@ -400,7 +404,46 @@ public class ThemeCreationScene {
 		saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				//TODO
+				
+				if (colors.get("label") == null) 
+					colors.put("label", toHex(labelPicker.getValue()));
+				if (colors.get("contentPane") == null) 
+					colors.put("contentPane", toHex(contentPanePicker.getValue()));
+				if (colors.get("sidePane") == null) 
+					colors.put("sidePane", toHex(sidePanePicker.getValue()));
+				if (colors.get("dialogBox") == null) 
+					colors.put("dialogBox", toHex(dialogBoxPicker.getValue()));
+				if (colors.get("button") == null) 
+					colors.put("button", toHex(buttonPicker.getValue()));
+				if (colors.get("buttonHover") == null) 
+					colors.put("buttonHover", toHex(buttonHoverPicker.getValue()));
+				if (colors.get("buttonPress") == null) 
+					colors.put("buttonPress", toHex(buttonPressPicker.getValue()));
+				if (colors.get("menuText") == null) 
+					colors.put("menuText", toHex(menuTextPicker.getValue()));
+				if (colors.get("menuBar") == null) 
+					colors.put("menuBar", toHex(menuBarPicker.getValue()));
+				if (colors.get("menu") == null) 
+					colors.put("menu", toHex(menuPicker.getValue()));
+				if (colors.get("menuItem") == null) 
+					colors.put("menuItem", toHex(menuItemPicker.getValue()));
+				if (colors.get("tableText") == null) 
+					colors.put("tableText", toHex(tableTextPicker.getValue()));
+				if (colors.get("tableHeader") == null) 
+					colors.put("tableHeader", toHex(tableHeaderPicker.getValue()));
+				if (colors.get("tableRowEven") == null) 
+					colors.put("tableRowEven", toHex(tableRowEvenPicker.getValue()));
+				if (colors.get("tableRowOdd") == null) 
+					colors.put("tableRowOdd", toHex(tableRowOddPicker.getValue()));
+				if (colors.get("tableRowSelected") == null) 
+					colors.put("tableRowSelected", toHex(tableRowSelectedPicker.getValue()));
+				
+				if (nameField.getText().isEmpty()) {
+					manager.makeDialog("Please give the theme a name.");
+				}
+				else {
+					writeCss(manager, nameField.getText(), colors);
+				}
 			}
 		});
 		GridPane.setConstraints(saveBtn, 1, 18, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -429,5 +472,79 @@ public class ThemeCreationScene {
 			hex = "000000".substring(0, 6 - hex.length()) + hex;
 		}
 		return "#" + hex;
+	}
+	
+	private static void writeCss(StateManager manager, String name, HashMap<String, String> colors) {
+		PrintWriter writer;		
+		try {
+			File file = new File("./src/resources/themes/" + name + ".css");
+			
+			if (file.exists()) {
+				manager.makeDialog("A theme with this name already exists. Choose a different name.");
+			}
+			
+			else {
+				writer = new PrintWriter(new FileOutputStream(file));
+				writer.append(".label-white { -fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".content-pane { -fx-background-color: " + colors.get("contentPane") + "; } \n\n");
+				writer.append(".side-pane { -fx-background-color: " + colors.get("sidePane") + "; } \n\n");
+				writer.append(".vbox-dialog-box { -fx-background-color: " + colors.get("dialogBox") + "; } \n\n");
+				writer.append(".button { -fx-background-color: " + colors.get("button") + "; "
+						+ "-fx-background-radius: 5; "
+						+ "-fx-background-insets: 0,1,2; "
+						+ "-fx-text-fill: black; } \n\n");
+				writer.append(".button:hover { -fx-background-color: " + colors.get("buttonHover") + "; "
+						+ "-fx-background-radius: 5; "
+						+ "-fx-background-insets: 0,1,2; "
+						+ "-fx-text-fill: black; } \n\n");
+				writer.append(".button:pressed { -fx-background-color: " + colors.get("buttonPress") + "; "
+						+ "-fx-background-radius: 5; "
+						+ "-fx-background-insets: 0,1,2; "
+						+ "-fx-text-fill: black; } \n\n");
+				writer.append(".menu-bar { -fx-background-color: " + colors.get("menuBar") + "; "
+						+ "-fx-text-fill: black; } \n\n");
+				writer.append(".menu .label { -fx-text-fill: " + colors.get("menuText") + "; } \n\n");
+				writer.append(".menu:hover { -fx-background-color: " + colors.get("menu") + "; } \n\n");
+				writer.append(".menu:showing { -fx-background-color: " + colors.get("menu") + "; } \n\n");
+				writer.append(".menu-item .label { -fx-text-fill: black; } \n\n");
+				writer.append(".menu-item:focused { -fx-background-color: " + colors.get("menuItem") + "; } \n\n");
+				writer.append(".scroll-pane { -fx-border-color: #455357; "
+						+ "-fx-background-color: #455357; } \n\n");
+				writer.append(".scroll-pane .viewport { -fx-border-color: #455357; "
+						+ "-fx-background-color: #455357; } \n\n");
+				writer.append(".tranparent-pane { -fx-background-color: transparent; } \n\n");
+				writer.append(".text-area-sidebar { -fx-text-fill: white; "
+						+ "-fx-background-color: transparent, transparent, white, transparent; } \n\n");
+				writer.append(".text-area-sidebar .content { -fx-background-color: #455357; "
+						+ "-fx-background-color: transparent, transparent, white, #455357; } \n\n");
+				writer.append(".table-view { -fx-background-color: transparent; "
+						+ "-fx-control-inner-background: " + colors.get("tableRowEven") + "; "
+						+ "-fx-control-inner-background-alt: " + colors.get("tableRowOdd") + "; "
+						+ "-fx-selection-bar: transparent; "
+						+ "-fx-background-insets: 0, 0 0 1 0; "
+						+ "-fx-padding: 0.0em; } \n\n");
+				writer.append(".table-view .table-cell { -fx-text-fill: " + colors.get("tableText") + "; } \n\n");
+				writer.append(".table-row-cell { -fx-background-insets: 0, 0 0 1 0; "
+						+ "-fx-padding: 0.0em; } \n\n");
+				writer.append(".table-view:focused { -fx-background-color: transparent; } \n\n");
+				writer.append(".table-view .column-header-background { -fx-background-color: " + colors.get("tableHeader") + "; } \n\n");
+				writer.append(".table-view .column-header-background .label { -fx-background-color: transparent; "
+						+ "-fx-text-fill: " + colors.get("tableText") + "; } \n\n");
+				writer.append(".table-view .column-header { -fx-background-color: transparent; } \n\n");
+				writer.append(".text-area-dialog { -fx-text-fill: white; } \n\n");
+				writer.append(".titled-pane { -fx-text-fill: black; } \n\n");
+				writer.append(".titled-pane .title { -fx-background-color: #cfd8dc; } \n\n");
+				writer.append(".titled-pane .content { -fx-background-color: #455357; } \n\n");
+				
+				writer.close();
+				
+				manager.makeDialog("Theme saved. Select from the preferences menu to use.");
+				manager.getSceneStack().clear();
+				manager.paintScene("Landing");
+			}
+			
+		} catch (Exception e) {
+			manager.makeError("Error saving theme. Your name uses invalid characters.", e);
+		}
 	}
 }

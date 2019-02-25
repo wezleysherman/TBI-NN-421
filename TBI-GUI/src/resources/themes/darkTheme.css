@@ -1,20 +1,17 @@
---table-color: #cfd8dc;
---landing-background: #455357;
-
-.root{
-    -fx-background-color: #cfd8dc;
-}
-
-.side-pane {
-	-fx-background-color: #455357;
+.label-white {
+	-fx-text-fill: #f1fafe;
 }
 
 .content-pane {
 	-fx-background-color: #cfd8dc;
 }
 
-.label-white {
-	-fx-text-fill: #f1fafe;
+.side-pane {
+	-fx-background-color: #455357;
+}
+
+.vbox-dialog-box {
+	-fx-background-color: #455357;
 }
 
 .button {
@@ -61,10 +58,6 @@
 
 .menu-item:focused {
 	-fx-background-color: #c1cace;
-}
-
-.vbox-dialog-box {
-	-fx-background-color: #455357;
 }
 
 .scroll-pane {
