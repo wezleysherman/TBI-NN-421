@@ -10,7 +10,9 @@ public class Scan implements Serializable, Comparable{
 	private Date dateOfScan;
 	private File scan;
 	private String notes;
-	
+	private String label;
+	private float labelProb;
+
 	public Scan() {
 		this.setDateOfScan(null);
 		this.setScan(null);
@@ -25,6 +27,22 @@ public class Scan implements Serializable, Comparable{
 		this.setDateOfScan(dOS);
 		this.setScan(inScan);
 		this.setNotes(inNotes);
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public float getLabelProb() {
+		return labelProb;
+	}
+
+	public void setLabelProb(float labelProb) {
+		this.labelProb = labelProb;
 	}
 
 	public Date getDateOfScan() {

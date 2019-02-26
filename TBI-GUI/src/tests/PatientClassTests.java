@@ -73,6 +73,17 @@ public class PatientClassTests {
 		patient.delRawScan(0);
 		assertEquals(scan1, patient.getRawScan(0));
 	}
+	
+	@Test
+	public void PatientScanAnalysisTest() throws Exception {
+		Patient patient = new Patient("John", "Doe", new Date(), "Some notes");
+		Date date1 = new Date();
+		Scan scan1 = new Scan(date1, new File("C:\\Users\\julia\\Documents\\sandy401\\TBI-NN-421\\TBI-GUI\\src\\resources\\tensor_test_images\\porcupine.jpg"), "scan 1");
+		patient.addRawScan(scan1);
+		
+		scan1 = patient.getRawScan(0);
+		patient.analyzeScan(scan1);
+	}
 
 	private static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
