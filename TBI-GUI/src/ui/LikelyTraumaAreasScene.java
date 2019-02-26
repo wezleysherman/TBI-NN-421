@@ -31,6 +31,7 @@ public class LikelyTraumaAreasScene {
 
 		// declaration of UI elements
 		BorderPane layout = new BorderPane();
+		BorderPane loadingLayout = LoadingScene.createLoadingScene(manager);
 		contentGrid = new GridPane();
 		GridPane mainGrid;
 		Label connectionLabel = new Label("Opening Viewer...");
@@ -52,10 +53,11 @@ public class LikelyTraumaAreasScene {
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(connectionLabel, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(loadingLayout, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		// content grid gets added to the displayed grid
 		mainGrid.getChildren().add(contentGrid);
-		contentGrid.getChildren().add(connectionLabel);
+		contentGrid.getChildren().addAll(connectionLabel, loadingLayout);
 
 		// displayed grid is set onto the layout for the scene
 		layout.setCenter(mainGrid);

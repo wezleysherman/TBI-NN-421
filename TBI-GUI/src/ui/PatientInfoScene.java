@@ -108,15 +108,15 @@ public class PatientInfoScene {
 			scanTable.setEditable(false);
 			
 			TableColumn dateCol = new TableColumn("Date");
-			dateCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.2));
+			dateCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.19));
 			dateCol.setCellValueFactory(new PropertyValueFactory<Scan, Date>("dateOfScan"));
 			
 			TableColumn fileCol = new TableColumn("File");
-			fileCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.4));
+			fileCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
 			fileCol.setCellValueFactory(new PropertyValueFactory<Scan, File>("scan"));
 			
 			TableColumn notesCol = new TableColumn("Notes");
-			notesCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.4));
+			notesCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
 			notesCol.setCellValueFactory(new PropertyValueFactory<Scan, String>("notes"));
 			
 			scanTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

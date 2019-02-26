@@ -117,19 +117,7 @@ public class StateManager {
 			this.patient = null;
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
-		else if (sceneID.equals("LikelyTraumaAreas")) {
-			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-			if(path.contains("main")) {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getAbsolutePath();
-			} else {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + scan.getScan().getAbsolutePath();
-			}
-			try {
-				Process p = Runtime.getRuntime().exec("python -i " + path);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
+		else if (sceneID.equals("LikelyTraumaAreas")) {			
 			scene = new LikelyTraumaAreasScene().initializeScene(this);
 		}
 		else if (sceneID.equals("CNNVisualizer")) {
