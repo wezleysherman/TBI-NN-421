@@ -6,7 +6,7 @@
 #(CSV FILES) https://realpython.com/python-csv/
 
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit, QGridLayout
-from PyQt5.QtCore import QUrl, QFileInfo
+from PyQt5.QtCore import QUrl, QFileInfo, Qt
 import sys, pandas, os, webbrowser
 
 class NNGUI(QWidget):
@@ -22,7 +22,9 @@ class NNGUI(QWidget):
 
 #layout of the window
         layout = QGridLayout()
-        layout.setSpacing(5)
+        layout.setVerticalSpacing(5)
+        layout.setHorizontalSpacing(10)
+        self.setWindowTitle("Neural Network Customizer")
 
 #.csv UI elements
 
@@ -54,6 +56,7 @@ class NNGUI(QWidget):
                 
         csv_load_button.clicked.connect(csv_load_clicked)
 
+        csv_name = QLabel("CSV File:")
         csv_spacer = QLabel()
         
 #image folder UI elements
@@ -85,8 +88,76 @@ class NNGUI(QWidget):
                 
         imgfolder_load_button.clicked.connect(imgfolder_load_clicked)
 
+        img_name = QLabel("Image Folder:")
         img_spacer = QLabel()
 
+        custom_name = QLabel("Customizations:")
+#iteration UI elements
+        iter_label = QLabel("Iterations:")
+        iter_label.setAlignment(Qt.AlignCenter)
+        iter_text = QLineEdit()
+        iter_text.setReadOnly(True)
+        iter_slider = QSlider(0x1)
+        iter_slider.setTickInterval(5)
+        iter_slider.setTickPosition(2)
+        iter_slider.setRange(0,50)
+
+        def user_iters(value):
+            iter_text.setText(str(value))
+        iter_slider.valueChanged[int].connect(user_iters)
+
+        iter_spacer = QLabel()
+
+#batch UI elements
+        batch_label = QLabel("Batch Size:")
+        batch_label.setAlignment(Qt.AlignCenter)
+        batch_text = QLineEdit()
+        batch_text.setReadOnly(True)
+        batch_slider = QSlider(0x1)
+        batch_slider.setTickInterval(5)
+        batch_slider.setTickPosition(2)
+        batch_slider.setRange(0,50)
+
+        def user_batchs(value):
+            batch_text.setText(str(value))
+        batch_slider.valueChanged[int].connect(user_batchs)
+
+        batch_spacer = QLabel()
+
+#layer UI elements
+
+        layer_label = QLabel("Layer Amount:")
+        layer_label.setAlignment(Qt.AlignCenter)
+        layer_text = QLineEdit()
+        layer_text.setReadOnly(True)
+        layer_slider = QSlider(0x1)
+        layer_slider.setTickInterval(5)
+        layer_slider.setTickPosition(2)
+        layer_slider.setRange(0,50)
+
+        def user_layers(value):
+            layer_text.setText(str(value))
+        layer_slider.valueChanged[int].connect(user_layers)
+
+        layer_spacer = QLabel()
+
+#user nodes UI elements
+
+        node_label = QLabel("Node Amount:")
+        node_label.setAlignment(Qt.AlignCenter)
+        node_text = QLineEdit()
+        node_text.setReadOnly(True)
+        node_slider = QSlider(0x1)
+        node_slider.setTickInterval(5)
+        node_slider.setTickPosition(2)
+        node_slider.setRange(0,50)
+
+        def user_nodes(value):
+            node_text.setText(str(value))
+        node_slider.valueChanged[int].connect(user_nodes)
+
+        node_spacer = QLabel()
+        
 #tensorboard UI elements
 
         tb_filepath = QLineEdit("Tensorboard Log File Path Here")
@@ -109,6 +180,7 @@ class NNGUI(QWidget):
             webbrowser.open("http://localhost:6006", new=2)
         tb_button.clicked.connect(tb_clicked)
 
+        tb_name = QLabel("Tensorboard:")
         tb_spacer = QLabel()
 
 #train UI elements
@@ -117,103 +189,48 @@ class NNGUI(QWidget):
             #implement here
             print("not yet implemented")
         train_button.clicked.connect(train_clicked)
-
-#iteration UI elements
-        iter_label = QLabel("Iterations:")
-        iter_text = QLineEdit()
-        iter_text.setReadOnly(True)
-        iter_slider = QSlider(0x1)
-        iter_slider.setTickInterval(5)
-        iter_slider.setTickPosition(2)
-        iter_slider.setRange(0,50)
-
-        def user_iters(value):
-            iter_text.setText(str(value))
-        iter_slider.valueChanged[int].connect(user_iters)
-
-        iter_spacer = QLabel()
-
-#batch UI elements
-        batch_label = QLabel("Batch Size:")
-        batch_text = QLineEdit()
-        batch_text.setReadOnly(True)
-        batch_slider = QSlider(0x1)
-        batch_slider.setTickInterval(5)
-        batch_slider.setTickPosition(2)
-        batch_slider.setRange(0,50)
-
-        def user_batchs(value):
-            batch_text.setText(str(value))
-        batch_slider.valueChanged[int].connect(user_batchs)
-
-        batch_spacer = QLabel()
-
-#layer UI elements
-
-        layer_label = QLabel("Layer Amount:")
-        layer_text = QLineEdit()
-        layer_text.setReadOnly(True)
-        layer_slider = QSlider(0x1)
-        layer_slider.setTickInterval(5)
-        layer_slider.setTickPosition(2)
-        layer_slider.setRange(0,50)
-
-        def user_layers(value):
-            layer_text.setText(str(value))
-        layer_slider.valueChanged[int].connect(user_layers)
-
-        layer_spacer = QLabel()
-
-#user nodes UI elements
-
-        node_label = QLabel("Node Amount:")
-        node_text = QLineEdit()
-        node_text.setReadOnly(True)
-        node_slider = QSlider(0x1)
-        node_slider.setTickInterval(5)
-        node_slider.setTickPosition(2)
-        node_slider.setRange(0,50)
-
-        def user_nodes(value):
-            node_text.setText(str(value))
-        node_slider.valueChanged[int].connect(user_nodes)
-
-        node_spacer = QLabel()
-
+        
 #widgets added to layout
-        layout.addWidget(csv_filepath, 1, 1)
-        layout.addWidget(csv_filepick_button, 2, 1)
-        layout.addWidget(csv_load_button, 3, 1)
-        layout.addWidget(csv_text, 4, 1)
-        layout.addWidget(csv_spacer, 5, 1)
-        layout.addWidget(imgfolder_filepath, 6, 1)
-        layout.addWidget(imgfolder_dirpick_button, 7 ,1)
-        layout.addWidget(imgfolder_load_button, 8, 1)
-        layout.addWidget(img_spacer, 9, 1)
-        layout.addWidget(iter_label, 10, 1)
-        layout.addWidget(iter_slider, 11, 1)
-        layout.addWidget(iter_text, 12, 1)
-        layout.addWidget(iter_spacer, 13, 1)
-        layout.addWidget(batch_label, 14, 1)
-        layout.addWidget(batch_slider, 15, 1)
-        layout.addWidget(batch_text, 16, 1)
-        layout.addWidget(batch_spacer, 17, 1)
-        layout.addWidget(tb_filepath, 18, 1)
-        layout.addWidget(tb_filepick_button, 19, 1)
-        layout.addWidget(tb_button, 20, 1)
-        layout.addWidget(tb_spacer, 21, 1)
-        layout.addWidget(layer_label, 22, 1)
-        layout.addWidget(layer_slider, 23, 1)
-        layout.addWidget(layer_text, 24, 1)
-        layout.addWidget(layer_spacer, 25, 1)
-        layout.addWidget(node_label, 26, 1)
-        layout.addWidget(node_slider, 27, 1)
-        layout.addWidget(node_text, 28, 1)
-        layout.addWidget(node_spacer, 29, 1)
-        layout.addWidget(train_button, 30, 1)
+        layout.addWidget(csv_name, 1, 0, 1, 0)
+        layout.addWidget(csv_filepath, 1, 1, 1, 3)
+        layout.addWidget(csv_filepick_button, 2, 1, 1, 3)
+        layout.addWidget(csv_load_button, 3, 1, 1, 3)
+        layout.addWidget(csv_text, 4, 1, 1, 3)
+        layout.addWidget(csv_spacer, 5, 1, 1, 3)
+        
+        layout.addWidget(img_name, 6, 0, 1, 0)
+        layout.addWidget(imgfolder_filepath, 6, 1, 1, 3)
+        layout.addWidget(imgfolder_dirpick_button, 7 ,1, 1, 3)
+        layout.addWidget(imgfolder_load_button, 8, 1, 1 ,3)
+        layout.addWidget(img_spacer, 9, 1, 1, 3)
+        
+        layout.addWidget(custom_name, 10, 0, 1, 0)
+        layout.addWidget(iter_label, 10, 2, 1, 1)
+        layout.addWidget(iter_slider, 11, 1, 1, 3)
+        layout.addWidget(iter_text, 12, 1, 1, 3)
+        layout.addWidget(iter_spacer, 13, 1, 1, 3)
+        layout.addWidget(batch_label, 14, 2, 1, 1)
+        layout.addWidget(batch_slider, 15, 1, 1, 3)
+        layout.addWidget(batch_text, 16, 1, 1, 3)
+        layout.addWidget(batch_spacer, 17, 1, 1, 3)
+        layout.addWidget(layer_label, 18, 2, 1, 1)
+        layout.addWidget(layer_slider, 19, 1, 1, 3)
+        layout.addWidget(layer_text, 20, 1, 1, 3)
+        layout.addWidget(layer_spacer, 21, 1, 1, 3)
+        layout.addWidget(node_label, 22, 2, 1, 1)
+        layout.addWidget(node_slider, 23, 1, 1, 3)
+        layout.addWidget(node_text, 24, 1, 1, 3)
+        layout.addWidget(node_spacer, 25, 1, 1, 3)
+        
+        layout.addWidget(tb_name, 26, 0, 1, 0)
+        layout.addWidget(tb_filepath, 26, 1, 1, 3)
+        layout.addWidget(tb_filepick_button, 27, 1, 1, 3)
+        layout.addWidget(tb_button, 28, 1, 1, 3)
+        layout.addWidget(tb_spacer, 29, 1, 1, 3)
+        layout.addWidget(train_button, 30, 1, 1, 3)
 
 #setup of window
-        self.setGeometry(350, 350, 400, 350)
+        self.setGeometry(350, 350, 450, 350)
         self.setLayout(layout)
         self.show()
 
