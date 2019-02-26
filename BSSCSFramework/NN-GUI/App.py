@@ -5,7 +5,7 @@
 #CURRENTLY NOT USED (STYLES) http://doc.qt.io/qt-5/qtwidgets-index.html#styles
 #(CSV FILES) https://realpython.com/python-csv/
 
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit, QGridLayout
 from PyQt5.QtCore import QUrl, QFileInfo
 import sys, pandas, os, webbrowser
 
@@ -21,7 +21,8 @@ class NNGUI(QWidget):
     def initNNGUI(self):
 
 #layout of the window
-        layout = QVBoxLayout()
+        layout = QGridLayout()
+        layout.setSpacing(5)
 
 #.csv UI elements
 
@@ -180,36 +181,36 @@ class NNGUI(QWidget):
         node_spacer = QLabel()
 
 #widgets added to layout
-        layout.addWidget(csv_filepath)
-        layout.addWidget(csv_filepick_button)
-        layout.addWidget(csv_load_button)
-        layout.addWidget(csv_text)
-        layout.addWidget(csv_spacer)
-        layout.addWidget(imgfolder_filepath)
-        layout.addWidget(imgfolder_dirpick_button)
-        layout.addWidget(imgfolder_load_button)
-        layout.addWidget(img_spacer)
-        layout.addWidget(iter_label)
-        layout.addWidget(iter_slider)
-        layout.addWidget(iter_text)
-        layout.addWidget(iter_spacer)
-        layout.addWidget(batch_label)
-        layout.addWidget(batch_slider)
-        layout.addWidget(batch_text)
-        layout.addWidget(batch_spacer)
-        layout.addWidget(tb_filepath)
-        layout.addWidget(tb_filepick_button)
-        layout.addWidget(tb_button)
-        layout.addWidget(tb_spacer)
-        layout.addWidget(layer_label)
-        layout.addWidget(layer_slider)
-        layout.addWidget(layer_text)
-        layout.addWidget(layer_spacer)
-        layout.addWidget(node_label)
-        layout.addWidget(node_slider)
-        layout.addWidget(node_text)
-        layout.addWidget(node_spacer)
-        layout.addWidget(train_button)
+        layout.addWidget(csv_filepath, 1, 1)
+        layout.addWidget(csv_filepick_button, 2, 1)
+        layout.addWidget(csv_load_button, 3, 1)
+        layout.addWidget(csv_text, 4, 1)
+        layout.addWidget(csv_spacer, 5, 1)
+        layout.addWidget(imgfolder_filepath, 6, 1)
+        layout.addWidget(imgfolder_dirpick_button, 7 ,1)
+        layout.addWidget(imgfolder_load_button, 8, 1)
+        layout.addWidget(img_spacer, 9, 1)
+        layout.addWidget(iter_label, 10, 1)
+        layout.addWidget(iter_slider, 11, 1)
+        layout.addWidget(iter_text, 12, 1)
+        layout.addWidget(iter_spacer, 13, 1)
+        layout.addWidget(batch_label, 14, 1)
+        layout.addWidget(batch_slider, 15, 1)
+        layout.addWidget(batch_text, 16, 1)
+        layout.addWidget(batch_spacer, 17, 1)
+        layout.addWidget(tb_filepath, 18, 1)
+        layout.addWidget(tb_filepick_button, 19, 1)
+        layout.addWidget(tb_button, 20, 1)
+        layout.addWidget(tb_spacer, 21, 1)
+        layout.addWidget(layer_label, 22, 1)
+        layout.addWidget(layer_slider, 23, 1)
+        layout.addWidget(layer_text, 24, 1)
+        layout.addWidget(layer_spacer, 25, 1)
+        layout.addWidget(node_label, 26, 1)
+        layout.addWidget(node_slider, 27, 1)
+        layout.addWidget(node_text, 28, 1)
+        layout.addWidget(node_spacer, 29, 1)
+        layout.addWidget(train_button, 30, 1)
 
 #setup of window
         self.setGeometry(350, 350, 400, 350)
