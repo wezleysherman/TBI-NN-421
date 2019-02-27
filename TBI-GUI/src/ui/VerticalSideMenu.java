@@ -171,7 +171,7 @@ public class VerticalSideMenu {
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-		scrollPane.getStyleClass().add("scroll-pane");
+		scrollPane.getStyleClass().add("scroll-pane-side");
 		scrollGrid.getStyleClass().add("side-pane");
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
@@ -245,7 +245,7 @@ public class VerticalSideMenu {
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-		scrollPane.getStyleClass().add("scroll-pane");
+		scrollPane.getStyleClass().add("scroll-pane-side");
 		scrollGrid.getStyleClass().add("side-pane");
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
@@ -445,7 +445,7 @@ public class VerticalSideMenu {
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-		scrollPane.getStyleClass().add("scroll-pane");
+		scrollPane.getStyleClass().add("scroll-pane-side");
 		scrollGrid.getStyleClass().add("side-pane");
 		ColumnConstraints scrollGridCols = new ColumnConstraints();
 		scrollGridCols.setPercentWidth(100);
