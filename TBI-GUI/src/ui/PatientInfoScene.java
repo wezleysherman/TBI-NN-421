@@ -29,7 +29,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import utils.Patient;
 import utils.PatientManagement;
@@ -73,13 +72,13 @@ public class PatientInfoScene {
 		//Construct content grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
 		ColumnConstraints column0 = new ColumnConstraints();
-		column0.setPercentWidth(25);
+		column0.setPercentWidth(10);
 		ColumnConstraints column1 = new ColumnConstraints();
-		column1.setPercentWidth(25);
+		column1.setPercentWidth(30);
 		ColumnConstraints column2 = new ColumnConstraints();
-		column2.setPercentWidth(25);
+		column2.setPercentWidth(30);
 		ColumnConstraints column3 = new ColumnConstraints();
-		column3.setPercentWidth(25);
+		column3.setPercentWidth(30);
 		contentGrid.getColumnConstraints().addAll(column0, column1, column2, column3);
 		
 		//Add elements to content grid
@@ -256,6 +255,7 @@ public class PatientInfoScene {
 		}
 
 		//Merge content grid with left nav
+		contentGrid.getStyleClass().add("content-pane");
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(contentGrid);
