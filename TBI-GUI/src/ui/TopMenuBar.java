@@ -58,7 +58,12 @@ public class TopMenuBar {
 		darkTheme.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.setThemeFile("../resources/themes/darkTheme.css");
+				if (manager.getThemeFile().equals("../resources/themes/darkTheme.css")) {
+					manager.makeDialog("This theme is already loaded.");
+				}
+				else {
+					manager.setThemeFile("../resources/themes/darkTheme.css");
+				}
 			}
 		});
 		
