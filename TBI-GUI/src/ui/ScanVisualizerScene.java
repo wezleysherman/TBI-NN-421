@@ -159,7 +159,7 @@ public class ScanVisualizerScene {
 								Platform.runLater(new Runnable() {
 									@Override
 									public void run() {
-										contentGrid.getChildren().remove(loadingPane);
+										//contentGrid.getChildren().remove(loadingPane);
 									}
 								});  
 								server.close();

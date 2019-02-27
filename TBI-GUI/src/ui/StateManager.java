@@ -117,9 +117,6 @@ public class StateManager {
 			this.patient = null;
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
-		else if (sceneID.equals("LikelyTraumaAreas")) {			
-			scene = new LikelyTraumaAreasScene().initializeScene(this);
-		}
 		else if (sceneID.equals("CNNVisualizer")) {
 			scene = new CNNVisualizationScene().initializeScene(this);
 		}
