@@ -42,7 +42,16 @@ import org.tensorflow.types.UInt8;
  */
 public class NNUtils {
 	
-	private static final String modelDir = "C:\\Users\\julia\\Documents\\sandy401\\TBI-NN-421\\TBI-GUI\\src\\resources\\models\\test_model";
+	private static String modelDir = buildModelDir();
+	
+	public static String buildModelDir() {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		
+		f = new File(f.getAbsolutePath(), "models");
+		return new File(f.getAbsolutePath(), "test_model").getAbsolutePath();
+		
+	}
 	
 	public static Scan get_label(Scan s) {
 		String imageFile = s.getScan().getAbsolutePath();

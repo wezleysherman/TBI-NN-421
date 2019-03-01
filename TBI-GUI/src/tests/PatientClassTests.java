@@ -78,7 +78,7 @@ public class PatientClassTests {
 	public void PatientScanAnalysisTest() throws Exception {
 		Patient patient = new Patient("John", "Doe", new Date(), "Some notes");
 		Date date1 = new Date();
-		Scan scan1 = new Scan(date1, new File("C:\\Users\\julia\\Documents\\sandy401\\TBI-NN-421\\TBI-GUI\\src\\resources\\tensor_test_images\\porcupine.jpg"), "scan 1");
+		Scan scan1 = new Scan(date1, new File(buildImagePath()), "scan 1");
 		patient.addRawScan(scan1);
 		
 		scan1 = patient.getRawScan(0);
@@ -89,6 +89,14 @@ public class PatientClassTests {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
 		f = new File(f.getAbsolutePath(), "patients");
+		return f.getAbsolutePath();
+	}
+	
+	private static String buildImagePath() {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		f = new File(f.getAbsolutePath(), "tensor_test_images");
+		f = new File(f.getAbsolutePath(), "porcupine.jpg");
 		return f.getAbsolutePath();
 	}
 }
