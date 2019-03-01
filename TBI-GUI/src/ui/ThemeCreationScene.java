@@ -203,7 +203,6 @@ public class ThemeCreationScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				colors.put("sidePane", toHex(sidePanePicker.getValue()));
-				previewGrid.setStyle("-fx-background-color: " + colors.get("sidePane") + ";");
 			}
 		});
 		GridPane.setConstraints(sidePaneLabel, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -503,6 +502,10 @@ public class ThemeCreationScene {
 			
 			if (file.exists()) {
 				manager.makeDialog("A theme with this name already exists. Choose a different name.");
+			} 
+			
+			else if (name.contains(" ")) {
+				manager.makeDialog("Names cannot contain spcaes.");
 			}
 			
 			else {
@@ -511,34 +514,34 @@ public class ThemeCreationScene {
 				writer.append(".content-pane { -fx-background-color: " + colors.get("contentPane") + "; } \n\n");
 				writer.append(".side-pane { -fx-background-color: " + colors.get("sidePane") + "; } \n\n");
 				writer.append(".vbox-dialog-box { -fx-background-color: " + colors.get("dialogBox") + "; } \n\n");
-				writer.append(".button { -fx-background-color: " + colors.get("button") + "; "
+				writer.append(".button, .color-picker { -fx-background-color: " + colors.get("button") + "; "
 						+ "-fx-background-radius: 5; "
 						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
-				writer.append(".button:hover { -fx-background-color: " + colors.get("buttonHover") + "; "
+						+ "-fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".button:hover, .color-picker:hover { -fx-background-color: " + colors.get("buttonHover") + "; "
 						+ "-fx-background-radius: 5; "
 						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
-				writer.append(".button:pressed { -fx-background-color: " + colors.get("buttonPress") + "; "
+						+ "-fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".button:pressed, .color-picker:pressed { -fx-background-color: " + colors.get("buttonPress") + "; "
 						+ "-fx-background-radius: 5; "
 						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
+						+ "-fx-text-fill: " + colors.get("label") + "; } \n\n");
 				writer.append(".menu-bar { -fx-background-color: " + colors.get("menuBar") + "; "
-						+ "-fx-text-fill: black; } \n\n");
+						+ "-fx-text-fill: " + colors.get("menuText") + "; } \n\n");
 				writer.append(".menu .label { -fx-text-fill: " + colors.get("menuText") + "; } \n\n");
 				writer.append(".menu:hover { -fx-background-color: " + colors.get("menu") + "; } \n\n");
 				writer.append(".menu:showing { -fx-background-color: " + colors.get("menu") + "; } \n\n");
-				writer.append(".menu-item .label { -fx-text-fill: black; } \n\n");
+				writer.append(".menu-item .label { -fx-text-fill: " + colors.get("menuText") + "; } \n\n");
 				writer.append(".menu-item:focused { -fx-background-color: " + colors.get("menuItem") + "; } \n\n");
-				writer.append(".scroll-pane-side { -fx-border-color: #455357; "
-						+ "-fx-background-color: #455357; } \n\n");
-				writer.append(".scroll-pane-side .viewport { -fx-border-color: #455357; "
-						+ "-fx-background-color: #455357; } \n\n");
+				writer.append(".scroll-pane-side { -fx-border-color: " + colors.get("sidePane") + "; "
+						+ "-fx-background-color: " + colors.get("sidePane") + "; } \n\n");
+				writer.append(".scroll-pane-side .viewport { -fx-border-color: " + colors.get("sidePane") + "; "
+						+ "-fx-background-color: " + colors.get("sidePane") + "; } \n\n");
 				writer.append(".tranparent-pane { -fx-background-color: transparent; } \n\n");
-				writer.append(".text-area-sidebar { -fx-text-fill: white; "
+				writer.append(".text-area-sidebar { -fx-text-fill: " + colors.get("label") + "; "
 						+ "-fx-background-color: transparent, transparent, white, transparent; } \n\n");
-				writer.append(".text-area-sidebar .content { -fx-background-color: #455357; "
-						+ "-fx-background-color: transparent, transparent, white, #455357; } \n\n");
+				writer.append(".text-area-sidebar .content { -fx-background-color: " + colors.get("sidePane") + "; "
+						+ "-fx-background-color: transparent, transparent, white, " + colors.get("sidePane") + "; } \n\n");
 				writer.append(".table-view { -fx-background-color: transparent; "
 						+ "-fx-control-inner-background: " + colors.get("tableRowEven") + "; "
 						+ "-fx-control-inner-background-alt: " + colors.get("tableRowOdd") + "; "
@@ -553,22 +556,10 @@ public class ThemeCreationScene {
 				writer.append(".table-view .column-header-background .label { -fx-background-color: transparent; "
 						+ "-fx-text-fill: " + colors.get("tableText") + "; } \n\n");
 				writer.append(".table-view .column-header { -fx-background-color: transparent; } \n\n");
-				writer.append(".text-area-dialog { -fx-text-fill: white; } \n\n");
-				writer.append(".titled-pane { -fx-text-fill: black; } \n\n");
-				writer.append(".titled-pane .title { -fx-background-color: #cfd8dc; } \n\n");
-				writer.append(".titled-pane .content { -fx-background-color: #455357; } \n\n");
-				writer.append(".color-picker { -fx-background-color: " + colors.get("button") + "; "
-						+ "-fx-background-radius: 5; "
-						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
-				writer.append(".color-picker:hover { -fx-background-color: " + colors.get("buttonHover") + "; "
-						+ "-fx-background-radius: 5; "
-						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
-				writer.append(".color-picker:pressed { -fx-background-color: " + colors.get("buttonPress") + "; "
-						+ "-fx-background-radius: 5; "
-						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
+				writer.append(".text-area-dialog { -fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".titled-pane { -fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".titled-pane .title { -fx-background-color: " + colors.get("contentPane") + "; } \n\n");
+				writer.append(".titled-pane .content { -fx-background-color: " + colors.get("sidePane") + "; } \n\n");
 				writer.append(".scroll-pane .corner { -fx-background-color: transparent; } \n\n");
 				writer.append(".scroll-bar { -fx-background-color: transparent; } \n\n");
 				writer.append(".scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb "
