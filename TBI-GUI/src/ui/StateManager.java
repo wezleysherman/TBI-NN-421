@@ -3,7 +3,6 @@ package ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,7 +44,9 @@ public class StateManager {
 	private PatientEntry patient = null;
 	private Scan scan = null;
 	private boolean stateBool = false;
-	private String themeFile = "../resources/themes/darkTheme.css";
+	
+	private final File defaultTheme = new File ("./src/resources/themes/Dark.css");
+	private String themeFile = "file:///" + defaultTheme.getAbsolutePath().replace("\\", "/");
 	
 	public Stage getStage() {
 		return stage;
@@ -137,7 +138,7 @@ public class StateManager {
 		}
 		
 		stage.setScene(scene);
-		stage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		stage.getScene().getStylesheets().add(themeFile);
 		
 		if (DEBUG) {
 			debugStack();
@@ -180,7 +181,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		dialogStage.getScene().getStylesheets().add(themeFile);
 		dialogStage.showAndWait();
 	}
 	
@@ -237,7 +238,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		dialogStage.getScene().getStylesheets().add(themeFile);
 		dialogStage.showAndWait();
 		
 		return vh.value;
@@ -305,7 +306,7 @@ public class StateManager {
 		
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		dialogStage.getScene().getStylesheets().add(themeFile);
 		dialogStage.showAndWait();
 	}
 

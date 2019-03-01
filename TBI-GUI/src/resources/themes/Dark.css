@@ -14,21 +14,21 @@
 	-fx-background-color: #455357;
 }
 
-.button {
+.button, .color-picker {
 	-fx-background-color: #f1fafe;
 	-fx-background-radius: 5;
 	-fx-background-insets: 0,1,2;
 	-fx-text-fill: black;
 }
 
-.button:hover {
+.button:hover, .color-picker:hover {
 	-fx-background-color: #c1cace;
 	-fx-background-radius: 5;
 	-fx-background-insets: 0,1,2; 
 	-fx-text-fill: black;
 }
 
-.button:pressed {
+.button:pressed, .color-picker:pressed {
 	-fx-background-color: #919a9e;
 	-fx-background-radius: 5;
 	-fx-background-insets: 0,1,2;
@@ -133,27 +133,6 @@
 
 .titled-pane .content {
 	-fx-background-color: #455357;
-}
-
-.color-picker {
-	-fx-background-color: #f1fafe;
-	-fx-background-radius: 5;
-	-fx-background-insets: 0,1,2;
-	-fx-text-fill: black;
-}
-
-.color-picker:hover {
-	-fx-background-color: #c1cace;
-	-fx-background-radius: 5;
-	-fx-background-insets: 0,1,2;
-	-fx-text-fill: black;
-}
-
-.color-picker:pressed {
-	-fx-background-color: #919a9e;
-	-fx-background-radius: 5;
-	-fx-background-insets: 0,1,2;
-	-fx-text-fill: black;
 }
 
 .scroll-pane .corner {
