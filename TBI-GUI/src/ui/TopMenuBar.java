@@ -1,5 +1,7 @@
 package ui;
 
+import java.io.File;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -7,7 +9,10 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
 /**
- * REFERENCE: http://tutorials.jenkov.com/javafx/menubar.html
+ * REFERENCES: 
+ * http://tutorials.jenkov.com/javafx/menubar.html
+ * https://www.baeldung.com/java-file-extension
+ * https://blog.idrsolutions.com/2014/04/use-external-css-files-javafx/
  * @author Ty Chase
  */
 public class TopMenuBar {
@@ -54,17 +59,40 @@ public class TopMenuBar {
 		Menu preferences = new Menu("Preferences");
 		Menu themes = new Menu("Themes");
 		
-		MenuItem darkTheme = new MenuItem("Dark");
-		darkTheme.setOnAction(new EventHandler<ActionEvent>() {
+		File directory = new File("./src/resources/themes");
+		for (File file : directory.listFiles()) {
+			String fileName = file.getName();
+			if (!fileName.equals("greenTheme.css")) { //factor out test theme
+				if (fileName.substring(fileName.lastIndexOf(".") + 1).equals("css")) {
+					String themeName = fileName.substring(0, fileName.lastIndexOf("."));
+					MenuItem theme = new MenuItem(themeName);
+					
+					theme.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							if (manager.getThemeFile().equals("file:///" + file.getAbsolutePath().replace("\\", "/"))) {
+								manager.makeDialog("This theme is already loaded.");
+							}
+							else {
+								manager.setThemeFile("file:///" + file.getAbsolutePath().replace("\\", "/"));
+							}
+						}
+					});
+					themes.getItems().add(theme);
+				}
+			}
+		}
+		
+		MenuItem themeCreate = new MenuItem("Theme Creator");
+		themeCreate.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				manager.setThemeFile("../resources/themes/darkTheme.css");
+				manager.getSceneStack().push(manager.getSceneID());
+				manager.paintScene("ThemeCreation");
 			}
 		});
 		
-		themes.getItems().addAll(darkTheme); //Add themes here
-		
-		preferences.getItems().addAll(themes);
+		preferences.getItems().addAll(themes, themeCreate);
 		
 		menuBar.getMenus().addAll(shortcuts, preferences);
 		

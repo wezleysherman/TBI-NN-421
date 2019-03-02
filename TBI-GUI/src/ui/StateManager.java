@@ -3,7 +3,6 @@ package ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +33,6 @@ import utils.Scan;
 
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
- * @author Canyon Schubert & Ty Chase
  */
 public class StateManager {
 	private final boolean DEBUG = false; //Manually change this value 
@@ -46,7 +44,9 @@ public class StateManager {
 	private PatientEntry patient = null;
 	private Scan scan = null;
 	private boolean stateBool = false;
-	private String themeFile = "../resources/themes/darkTheme.css";
+	
+	private final File defaultTheme = new File ("./src/resources/themes/Dark.css");
+	private String themeFile = "file:///" + defaultTheme.getAbsolutePath().replace("\\", "/");
 	
 	public Stage getStage() {
 		return stage;
@@ -118,20 +118,6 @@ public class StateManager {
 			this.patient = null;
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
-		else if (sceneID.equals("LikelyTraumaAreas")) {
-			String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-			if(path.contains("main")) {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py";
-			} else {
-				path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py";
-			}
-			try {
-				Process p = Runtime.getRuntime().exec("python -i " + path);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			scene = new LikelyTraumaAreasScene().initializeScene(this);
-		}
 		else if (sceneID.equals("CNNVisualizer")) {
 			scene = new CNNVisualizationScene().initializeScene(this);
 		}
@@ -147,9 +133,12 @@ public class StateManager {
 		else if (sceneID.equals("PatientInfo")) {
 			scene = new PatientInfoScene().initializeScene(this);
 		}
+		else if (sceneID.equals("ThemeCreation")) {
+			scene = new ThemeCreationScene().initializeScene(this);
+		}
 		
 		stage.setScene(scene);
-		stage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		stage.getScene().getStylesheets().add(themeFile);
 		
 		if (DEBUG) {
 			debugStack();
@@ -192,7 +181,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		dialogStage.getScene().getStylesheets().add(themeFile);
 		dialogStage.showAndWait();
 	}
 	
@@ -249,7 +238,7 @@ public class StateManager {
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.sizeToScene();
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		dialogStage.getScene().getStylesheets().add(themeFile);
 		dialogStage.showAndWait();
 		
 		return vh.value;
@@ -317,7 +306,7 @@ public class StateManager {
 		
 		Scene dialogScene = new Scene(dialogLayout);
 		dialogStage.setScene(dialogScene);
-		dialogStage.getScene().getStylesheets().add(getClass().getResource(themeFile).toExternalForm());
+		dialogStage.getScene().getStylesheets().add(themeFile);
 		dialogStage.showAndWait();
 	}
 
