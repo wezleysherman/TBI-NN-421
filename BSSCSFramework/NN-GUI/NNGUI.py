@@ -177,7 +177,8 @@ class NNGUI(QWidget):
             print("tb_button clicked")
             os.system("tensorboard --logdir=" + tb_path.text())
             print("Loaded: " + tb_path.text())
-            webbrowser.open("http://localhost:6006", new=2)
+            webpath = "http://localhost:6006"
+            webbrowser.open(webpath, new=2)
         tb_button.clicked.connect(tb_clicked)
 
         tb_name = QLabel("Tensorboard:")
