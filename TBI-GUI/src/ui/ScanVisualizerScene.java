@@ -144,39 +144,41 @@ public class ScanVisualizerScene {
 					}
 					try {
 						Process p = Runtime.getRuntime().exec("python -i " + path);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-					//Remove Loading screen once the python file is opened.
-					Task launch = new Task() {
-						@Override
-						protected Object call() throws Exception {
-							ServerSocket server = null;
-							Socket client = null;
-							try {
-								server = new ServerSocket(8080);
-								client = server.accept();
-								Platform.runLater(new Runnable() {
-									@Override
-									public void run() {
-										//contentGrid.getChildren().remove(loadingPane);
-									}
-								});  
-								server.close();
-								client.close();
-							} catch (IOException e) {
-								e.printStackTrace();
+						//Remove Loading screen once the python file is opened.
+						Task launch = new Task() {
+							@Override
+							protected Object call() throws Exception {
+								ServerSocket server = null;
+								Socket client = null;
 								try {
+									server = new ServerSocket(8080);
+									client = server.accept();
+									Platform.runLater(new Runnable() {
+										@Override
+										public void run() {
+											contentGrid.getChildren().remove(loadingPane);
+										}
+									});  
 									server.close();
 									client.close();
-								} catch (IOException e1) {
-									e1.printStackTrace();
-								}
-								System.out.println("Closing connection socket");
-							}    
-							return null;
-						}};
-						new Thread(launch).start();
+								} catch (IOException e) {
+									e.printStackTrace();
+									try {
+										server.close();
+										client.close();
+									} catch (IOException e1) {
+										e1.printStackTrace();
+									}
+									System.out.println("Closing connection socket");
+								}    
+								return null;
+							}};
+							new Thread(launch).start();
+					} catch (IOException ex) {
+						contentGrid.getChildren().remove(loadingPane);
+						manager.makeDialog("Python isn't installed! Make sure to go throught the installation file for python to get the different modules.");
+					}
+					
 				}
 			});
 			String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
