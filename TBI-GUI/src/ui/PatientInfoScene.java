@@ -71,6 +71,8 @@ public class PatientInfoScene {
 		
 		//Construct content grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
+		contentGrid.setHgap(10);
+		contentGrid.setVgap(10);
 		ColumnConstraints column0 = new ColumnConstraints();
 		column0.setPercentWidth(10);
 		ColumnConstraints column1 = new ColumnConstraints();

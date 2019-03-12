@@ -471,6 +471,8 @@ public class ThemeCreationScene {
 		mainGrid.getChildren().addAll(nameField, saveBtn);
 		
 		//Add Grid and layout to scene---------------------------------------------------------------------------------------------------------------
+		mainGrid.getStyleClass().add("content-pane");
+		
 		GridPane.setConstraints(previewGrid, 2, 1, 1, 18, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(previewGrid);
 		wholeGrid.getChildren().addAll(mainGrid, scrollPane);
