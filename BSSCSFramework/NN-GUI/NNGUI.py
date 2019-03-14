@@ -8,6 +8,8 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit, QGridLayout
 from PyQt5.QtCore import QUrl, QFileInfo, Qt
 import sys, pandas, os, webbrowser
+sys.path.append('..')
+import BSSCS_CNN
 
 class NNGUI(QWidget):
 
