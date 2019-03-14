@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>Theme Creator UI Page Documentation</title>
+	</head>
+	<body>
+		<a href="main.html">Back - Main</a>
+
+		<h1>Theme Creator GUI Page</h1>
+		<div>
+			The purpose of this is to allow users to create their own themes for <br>
+			the app. This is accomplished by using the Javafx library for all GUI <br>
+			elements. Use the color pickers to pick colors for the different UI <br>
+			elements. 
+		</div>
+
+		<div>
+			<h3>Scene initializeScene(StateManager manager)</h3>
+			Method for Theme Creator Scene construction <br>
+			Inputs: <br>
+			- StateManager: object to manage state of the UI <br>
+			Returns: <br>
+			- A scene filled with elements pertaining to the theme creator page <br>
+
+			<h3>String toHex(Color color)</h3>
+			Method for converting a Color object from a ColorPicker into a hex String <br>
+			Inputs: <br>
+			- Color: object holding a color <br>
+			Returns: <br>
+			- A String representing the color in hex <br>
+
+			<h3>void writeCss(StateManager manager, String name, HashMap colors)</h3>
+			Inputs: <br>
+			- StateManager: object to manage state of the UI <br>
+			- String: a name chosen for the new theme <br>
+			- HashMap: holds the colors as values mapped to keys representing the elements <br>
+			Returns: <br>
+			- none <br>
+		</div>
+	</body>
+</html>
