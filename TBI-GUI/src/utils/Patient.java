@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.UUID;
+
+import javafx.scene.image.Image;
+
 import java.io.File;
 import java.io.Serializable;
 
@@ -16,6 +19,7 @@ public class Patient extends Info implements Serializable {
 	private String notes;
 	private LinkedList<Scan> rawScans;
 	private LinkedList<Scan> procScans;
+	private Image picture;
 	
 	//constructor for blank patient
 	public Patient() {
@@ -111,6 +115,14 @@ public class Patient extends Info implements Serializable {
 		return last.getDateOfScan();
 	}
 
+	public Image getPicture() {
+		return picture;
+	}
+	
+	public void setPicture(String file) {
+		this.picture = new Image(file);
+	}
+	
 	public void addRawScan(Scan scan) {
 		/* Handles adding a new scan to the patient's linked list.
 		 *
