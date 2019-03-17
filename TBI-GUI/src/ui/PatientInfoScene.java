@@ -115,7 +115,7 @@ public class PatientInfoScene {
 			TableColumn fileCol = new TableColumn("File");
 			fileCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
 			fileCol.setCellValueFactory(new PropertyValueFactory<Scan, File>("scan"));
-			
+			//TODO
 			TableColumn notesCol = new TableColumn("Notes");
 			notesCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
 			notesCol.setCellValueFactory(new PropertyValueFactory<Scan, String>("notes"));
@@ -213,13 +213,13 @@ public class PatientInfoScene {
 	        });
 			
 			FileChooser fileChooser = new FileChooser();
-			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt")); //TODO remove .txt
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
 			fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 				@Override
 				public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 					if(arg2) {
 						List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
-			            if (files.size() > 0) {
+			            if (files != null && files.size() > 0) {
 			            	if (files.size() == 1) {
 			            		fileField.setText(files.get(0).getName());
 			            	}
