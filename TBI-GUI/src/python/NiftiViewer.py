@@ -27,7 +27,7 @@ s.close()
 
 file = sys.argv[1]
 ext = os.path.splitext(file)[1]
-if(ext == ".nii" or ext == ".dicom"):
+if(ext == ".nii" or ext == ".dicom" or ext == ".NIFTI" or ext == ".nifti"):
     image = nibabel.load(file)
     image_size = image.shape[2] - 1
     data_arr = image.get_data().T
