@@ -3,6 +3,8 @@ package ui;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -10,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -28,6 +31,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import utils.Patient;
 import utils.PatientManagement;
 import utils.Scan;
@@ -51,6 +58,11 @@ public class ScanVisualizerScene {
 			Button likelyTraumaBtn = new Button();
 			Button algoVisBtn = new Button();
 			Button viewCNNBtn = new Button();
+			
+			//Loading screen handlers
+			Button yesBtn = new Button("Yes");
+			Button noBtn = new Button("No");
+			Stage dialogStage = new Stage();
 
 			//Create panes to the grids so the elements can fully fill the grid
 			BorderPane cnnBPane = new BorderPane();
@@ -142,8 +154,81 @@ public class ScanVisualizerScene {
 					} else {
 						path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getScan().getAbsolutePath();
 					}
+					
 					try {
 						Process p = Runtime.getRuntime().exec("python -i " + path);
+						Timer timer = new Timer();
+
+						TimerTask timerTask = new TimerTask() {
+
+							@Override
+							public void run() {
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											dialogStage.initModality(Modality.APPLICATION_MODAL);
+											dialogStage.initStyle(StageStyle.UNDECORATED);
+											dialogStage.setResizable(false);
+										} catch(IllegalStateException e) {
+											
+										}
+										
+										Label messLabel = new Label("It is taking longer than expected to open the viewer. You may not have the proper python modules installed. Check the niftiviewer documentation for more information on what you need to run it.\n\n"
+												+ "Cancel opening the viewer?");
+										messLabel.setMaxSize(300, 500);
+										messLabel.setWrapText(true);
+										messLabel.getStyleClass().add("label-white");
+										messLabel.autosize();
+										
+										class ValueHolder {boolean value;}
+										ValueHolder vh = new ValueHolder();
+										
+										VBox dialogLayout = new VBox(5);
+										GridPane buttonGrid = new GridPane();
+										ColumnConstraints columnCon = new ColumnConstraints();
+										columnCon.setPercentWidth(100/5);
+										buttonGrid.getColumnConstraints().addAll(columnCon, columnCon, columnCon, columnCon, columnCon);
+										GridPane.setConstraints(yesBtn, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+										GridPane.setConstraints(noBtn, 3, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+										buttonGrid.getChildren().addAll(yesBtn, noBtn);
+										dialogLayout.getChildren().addAll(messLabel, buttonGrid);
+										dialogLayout.setAlignment(Pos.CENTER);
+										dialogLayout.setPadding(new Insets(40, 40, 40, 40));
+										dialogLayout.setSpacing(15);
+										dialogLayout.getStyleClass().add("vbox-dialog-box");
+										
+										Scene dialogScene = new Scene(dialogLayout);
+										dialogStage.sizeToScene();
+										dialogStage.setScene(dialogScene);
+										dialogStage.getScene().getStylesheets().add(manager.getThemeFile());
+										try {
+											dialogStage.showAndWait();
+										} catch(IllegalStateException e) {
+											
+										}
+									}
+								});  
+							}
+							
+						};
+						timer.schedule(timerTask, 10 * 1000, 10 * 1000);
+						yesBtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent arg0) {
+								contentGrid.getChildren().remove(loadingPane);
+								p.destroy();
+								timer.cancel();
+								timer.purge();
+								dialogStage.close();	
+							}
+						});
+						noBtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent arg0) {
+								dialogStage.close();
+							}
+						});
 						//Remove Loading screen once the python file is opened.
 						Task launch = new Task() {
 							@Override
@@ -156,6 +241,8 @@ public class ScanVisualizerScene {
 									Platform.runLater(new Runnable() {
 										@Override
 										public void run() {
+											timer.cancel();
+											timer.purge();
 											contentGrid.getChildren().remove(loadingPane);
 										}
 									});  
@@ -176,11 +263,12 @@ public class ScanVisualizerScene {
 							new Thread(launch).start();
 					} catch (IOException ex) {
 						contentGrid.getChildren().remove(loadingPane);
-						manager.makeDialog("Python isn't installed! Make sure to go through the installation file for python to get the different modules.");
+						manager.makeDialog("Python isn't installed! Make sure to go through the niftiviewer documentation to make sure you have everything needed.");
 					}
 					
 				}
 			});
+			
 			String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
 			likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
 
@@ -309,5 +397,5 @@ public class ScanVisualizerScene {
 
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
-	}
+	}	
 }
