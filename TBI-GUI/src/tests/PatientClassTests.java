@@ -74,7 +74,7 @@ public class PatientClassTests {
 		assertEquals(scan1, patient.getRawScan(0));
 	}
 	
-	/*@Test
+	@Test
 	public void PatientScanAnalysisTest() throws Exception {
 		Patient patient = new Patient("John", "Doe", new Date(), "Some notes");
 		Date date1 = new Date();
@@ -83,7 +83,7 @@ public class PatientClassTests {
 		
 		scan1 = patient.getRawScan(0);
 		patient.analyzeScan(scan1);
-	}*/
+	}
 
 	private static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
@@ -96,7 +96,7 @@ public class PatientClassTests {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
 		f = new File(f.getAbsolutePath(), "tensor_test_images");
-		f = new File(f.getAbsolutePath(), "porcupine.jpg");
+		f = new File(f.getAbsolutePath(), "whale.jpg");
 		return f.getAbsolutePath();
 	}
 }
