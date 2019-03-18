@@ -26,6 +26,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -62,10 +64,12 @@ public class PatientInfoScene {
 		//Create elements
 		Label firstNameLabel = new Label("First Name");
 		Label lastNameLabel = new Label("Last Name");
+		Label pictureLabel = new Label("Picture");
 		Label notesLabel = new Label("Notes");
 		Label scansLabel = new Label("Scans");
 		firstNameLabel.setStyle("-fx-font-weight: bold");
 		lastNameLabel.setStyle("-fx-font-weight: bold");
+		pictureLabel.setStyle("-fx-font-weight: bold");
 		notesLabel.setStyle("-fx-font-weight: bold");
 		scansLabel.setStyle("-fx-font-weight: bold");
 		
@@ -86,10 +90,11 @@ public class PatientInfoScene {
 		//Add elements to content grid
 		GridPane.setConstraints(firstNameLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(lastNameLabel, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
-		GridPane.setConstraints(notesLabel, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
-		GridPane.setConstraints(scansLabel, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(pictureLabel, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(notesLabel, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(scansLabel, 0, 5, 1, 1, HPos.LEFT, VPos.CENTER);
 		contentGrid.getChildren().addAll(
-				firstNameLabel, lastNameLabel, notesLabel, scansLabel
+				firstNameLabel, lastNameLabel, pictureLabel, notesLabel, scansLabel
 			);
 		
 		//Check if edit was pressed
@@ -97,7 +102,11 @@ public class PatientInfoScene {
 			//Create elements
 			Label firstName = new Label(patient.getFirstName());
 			Label lastName = new Label(patient.getLastName());
-			Label notes = new Label(patient.getNotes());
+			Image pictureImage = new Image("resources/TestImage1.jpg"); //TODO
+			ImageView picture = new ImageView();
+			picture.setImage(pictureImage);
+			TextArea notes = new TextArea(patient.getNotes());
+			notes.setEditable(false);
 			
 			//Set up scan table
 			ObservableList<Scan> scanList = FXCollections.observableArrayList();
@@ -115,7 +124,7 @@ public class PatientInfoScene {
 			TableColumn fileCol = new TableColumn("File");
 			fileCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
 			fileCol.setCellValueFactory(new PropertyValueFactory<Scan, File>("scan"));
-			
+			//TODO
 			TableColumn notesCol = new TableColumn("Notes");
 			notesCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
 			notesCol.setCellValueFactory(new PropertyValueFactory<Scan, String>("notes"));
@@ -145,11 +154,12 @@ public class PatientInfoScene {
 			//Add elements to content grid
 			GridPane.setConstraints(firstName, 1, 1, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(lastName, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(notes, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(scanTable, 1, 4, 3, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(analyzeBtn, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(picture, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(notes, 1, 4, 3, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(scanTable, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(analyzeBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
 			contentGrid.getChildren().addAll(
-					firstName, lastName, notes, scanTable, analyzeBtn
+					firstName, lastName, picture, notes, scanTable, analyzeBtn
 				);
 		}
 		
@@ -158,6 +168,7 @@ public class PatientInfoScene {
 			//Create elements
 			TextField firstField = new TextField(patient.getFirstName());
 			TextField lastField = new TextField(patient.getLastName());
+			TextField pictureField = new TextField("Select Picture");
 			TextArea notesArea = new TextArea(patient.getNotes());
 			Label scanLabel = new Label("Add New Scan(s):");
 			TextField fileField = new TextField("Select File(s)");
@@ -167,6 +178,7 @@ public class PatientInfoScene {
 			Button cancelBtn = new Button("Cancel");
 			datePicker.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
+			Scan pictureHolder = new Scan();
 			Scan dateHolder = new Scan();
 			LinkedList<File> newFiles = new LinkedList<File>();
 			
@@ -192,6 +204,9 @@ public class PatientInfoScene {
         							patient.addRawScan(new Scan(dateHolder.getDateOfScan(), newFiles.get(i)));
         						}
         	            	}
+        	            	if (pictureHolder.getScan() != null) {
+        						patient.setPicture(pictureHolder.getScan());
+        					}
     	            		patient.savePatient();
     	            		manager.setStateBool(false);
         	            	manager.paintScene("PatientInfo");
@@ -212,14 +227,30 @@ public class PatientInfoScene {
 	            }
 	        });
 			
+			FileChooser pictureChooser = new FileChooser();
+			pictureChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("IMAGE", "*.png", "*.jpg"));
+			pictureField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+				@Override
+				public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+					if(arg2) {
+						File picture = pictureChooser.showOpenDialog(manager.getStage());
+			            if (picture != null) {
+			            	pictureField.setText(picture.getName());
+		            		pictureHolder.setScan(picture);
+			            }
+					}
+		            datePicker.requestFocus();
+				}
+			});
+			
 			FileChooser fileChooser = new FileChooser();
-			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt")); //TODO remove .txt
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
 			fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 				@Override
 				public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 					if(arg2) {
 						List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
-			            if (files.size() > 0) {
+			            if (files != null && files.size() > 0) {
 			            	if (files.size() == 1) {
 			            		fileField.setText(files.get(0).getName());
 			            	}
@@ -245,14 +276,15 @@ public class PatientInfoScene {
 			//Add elements to content grid
 			GridPane.setConstraints(firstField, 1, 1, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(lastField, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(notesArea, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(scanLabel, 1, 4, 1, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(fileField, 2, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(datePicker, 3, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(saveBtn, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(cancelBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(pictureField, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(notesArea, 1, 4, 3, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(scanLabel, 1, 5, 1, 1, HPos.LEFT, VPos.CENTER);
+			GridPane.setConstraints(fileField, 2, 5, 1, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(datePicker, 3, 5, 1, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(saveBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(cancelBtn, 1, 7, 3, 1, HPos.CENTER, VPos.CENTER);
 			contentGrid.getChildren().addAll(
-					firstField, lastField, notesArea, scanLabel, fileField, datePicker, saveBtn, cancelBtn
+					firstField, lastField, pictureField, notesArea, scanLabel, fileField, datePicker, saveBtn, cancelBtn
 				);
 		}
 

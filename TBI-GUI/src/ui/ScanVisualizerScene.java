@@ -176,7 +176,7 @@ public class ScanVisualizerScene {
 							new Thread(launch).start();
 					} catch (IOException ex) {
 						contentGrid.getChildren().remove(loadingPane);
-						manager.makeDialog("Python isn't installed! Make sure to go throught the installation file for python to get the different modules.");
+						manager.makeDialog("Python isn't installed! Make sure to go through the installation file for python to get the different modules.");
 					}
 					
 				}
