@@ -3,8 +3,10 @@ package utils;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 //Class for saving patient information
@@ -172,10 +174,18 @@ public class Patient extends Info implements Serializable {
 		PatientManagement.exportPatient(this);
 	}
 	
-	public Scan analyzeScan(Scan s) {
-		s = NNUtils.get_label(s);
-		System.out.println(String.format("BEST MATCH: %s (%.2f%% likely)", s.getLabel(),
-				s.getLabelProb()));
+	public Scan analyzeScan(Scan s) throws IOException {
+		String file = s.getScan().getAbsolutePath();
+		file = file.substring(file.length()-3, file.length());
+		System.out.println(file);
+		List l = new LinkedList(); l.add("jpg"); l.add("png"); l.add("gif");
+		if(!l.contains(file)) {
+			s.setLabel("Attempted to analyze but could not due to filetype.");
+		}else {
+			s = NNUtils.get_label(s);
+			System.out.println(String.format("BEST MATCH: %s (%.2f%% likely)", s.getLabel(),
+					s.getLabelProb()));
+		}
 		return s;
 	}
 

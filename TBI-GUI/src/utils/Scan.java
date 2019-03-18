@@ -35,6 +35,7 @@ public class Scan implements Serializable, Comparable{
 
 	public void setLabel(String label) {
 		this.label = label;
+		notes = notes + "\nLabel:" + label;
 	}
 
 	public float getLabelProb() {
@@ -43,6 +44,7 @@ public class Scan implements Serializable, Comparable{
 
 	public void setLabelProb(float labelProb) {
 		this.labelProb = labelProb;
+		notes = notes + "\nProbability:" + labelProb;
 	}
 
 	public Date getDateOfScan() {

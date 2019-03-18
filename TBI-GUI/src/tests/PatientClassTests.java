@@ -83,6 +83,7 @@ public class PatientClassTests {
 		
 		scan1 = patient.getRawScan(0);
 		patient.analyzeScan(scan1);
+		System.out.println(scan1.getNotes());
 	}
 
 	private static String buildDefaultPath() {
