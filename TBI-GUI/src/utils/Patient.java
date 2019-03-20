@@ -120,6 +120,7 @@ public class Patient extends Info implements Serializable {
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
+		scan = analyzeScan(scan);
 		this.rawScans.add(scan);
 		Collections.sort(rawScans);
 	}
@@ -174,7 +175,7 @@ public class Patient extends Info implements Serializable {
 		PatientManagement.exportPatient(this);
 	}
 	
-	public Scan analyzeScan(Scan s) throws IOException {
+	public Scan analyzeScan(Scan s) {
 		String file = s.getScan().getAbsolutePath();
 		file = file.substring(file.length()-3, file.length());
 		System.out.println(file);
