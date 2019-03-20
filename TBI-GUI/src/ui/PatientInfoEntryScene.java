@@ -27,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
+import utils.Holder;
 import utils.Patient;
 import utils.PatientManagement;
 import utils.Scan;
@@ -112,10 +113,9 @@ public class PatientInfoEntryScene {
 		columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100);
 		pointerGrid.getColumnConstraints().add(columnCon);
-				
-		Scan pictureHolder = new Scan();
-		Scan dateHolder = new Scan();
+		
 		LinkedList<File> newFiles = new LinkedList<File>();
+		Holder holder = new Holder();
 
 		//Picture Chooser Setup
 		pictureChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("IMAGE", "*.png", "*.jpg"));
@@ -126,7 +126,7 @@ public class PatientInfoEntryScene {
 					File picture = pictureChooser.showOpenDialog(manager.getStage());
 	            	if (picture != null) {
 	            		pictureField.setText(picture.getName());
-	            		pictureHolder.setScan(picture);
+	            		holder.setFile(picture);
 		            }
 				}
 	            datePicker.requestFocus();
@@ -162,7 +162,7 @@ public class PatientInfoEntryScene {
 		datePicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				dateHolder.setDateOfScan(java.sql.Date.valueOf(datePicker.getValue()));
+				holder.setDate(java.sql.Date.valueOf(datePicker.getValue()));
 			}
 		});
 		
@@ -188,7 +188,7 @@ public class PatientInfoEntryScene {
 				}
 				
 				//If Date selected, a File must also be selected
-				if (dateHolder.getDateOfScan() != null && newFiles.size() == 0) {
+				if (holder.getDate() != null && newFiles.size() == 0) {
 					complete = false;
 					fileStackPane.setVisible(true);
 				} else {
@@ -200,16 +200,16 @@ public class PatientInfoEntryScene {
 					Date dateCreated = java.sql.Date.valueOf(LocalDate.now()); //get current date
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), dateCreated, notesField.getText());
 					if (newFiles.size() > 0) {
-						if (dateHolder.getDateOfScan() == null) {
+						if (holder.getDate() == null) {
 							manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
-							dateHolder.setDateOfScan(java.sql.Date.valueOf(LocalDate.now()));
+							holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
 						}
 						for (int i = 0; i < newFiles.size(); ++i) {
-							patient.addRawScan(new Scan(dateHolder.getDateOfScan(), newFiles.get(i)));
+							patient.addRawScan(new Scan(holder.getDate(), newFiles.get(i)));
 						}
 					}
-					if (pictureHolder.getScan() != null) {
-						patient.setPicture(pictureHolder.getScan());
+					if (holder.getFile() != null) {
+						patient.setPicture(holder.getFile());
 					}
 					try {
 						PatientManagement.exportPatient(patient);
