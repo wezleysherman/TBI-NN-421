@@ -32,6 +32,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import utils.Holder;
 import utils.Patient;
 import utils.PatientManagement;
 import utils.Scan;
@@ -102,10 +103,21 @@ public class PatientInfoScene {
 			//Create elements
 			Label firstName = new Label(patient.getFirstName());
 			Label lastName = new Label(patient.getLastName());
-			Image pictureImage = new Image("resources/TestImage1.jpg"); //TODO
+			
 			ImageView picture = new ImageView();
-			picture.setImage(pictureImage);
+			if(patient.getPicture() != null) {
+				Image pictureImage = new Image(patient.getPicture().toURI().toString());
+				double height = pictureImage.getHeight();
+				double width = pictureImage.getWidth();
+				width = width * 100 / height;
+				height = 100;
+				picture.setFitHeight(height);
+				picture.setFitWidth(width);
+				picture.setImage(pictureImage);			
+			}
+			
 			TextArea notes = new TextArea(patient.getNotes());
+			notes.setPrefHeight(300);
 			notes.setEditable(false);
 			
 			//Set up scan table
@@ -170,6 +182,7 @@ public class PatientInfoScene {
 			TextField lastField = new TextField(patient.getLastName());
 			TextField pictureField = new TextField("Select Picture");
 			TextArea notesArea = new TextArea(patient.getNotes());
+			notesArea.setPrefHeight(300);
 			Label scanLabel = new Label("Add New Scan(s):");
 			TextField fileField = new TextField("Select File(s)");
 			DatePicker datePicker = new DatePicker();
@@ -178,8 +191,7 @@ public class PatientInfoScene {
 			Button cancelBtn = new Button("Cancel");
 			datePicker.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-			Scan pictureHolder = new Scan();
-			Scan dateHolder = new Scan();
+			Holder holder = new Holder();
 			LinkedList<File> newFiles = new LinkedList<File>();
 			
 			saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -188,7 +200,7 @@ public class PatientInfoScene {
 	            public void handle(final ActionEvent ev) {	            	
 	            	try {
     	            	//Date needs a Scan
-	            		if (dateHolder.getDateOfScan() != null && newFiles.size() == 0) {
+	            		if (holder.getDate() != null && newFiles.size() == 0) {
     	            		manager.makeDialog("Please select a file for the new scan.");
     	            	}
     	            	else {
@@ -196,16 +208,16 @@ public class PatientInfoScene {
         	            	patient.setLastName(lastField.getText());
         	            	patient.setNotes(notesArea.getText());
         	            	if (newFiles.size() > 0) {
-        						if (dateHolder.getDateOfScan() == null) {
+        						if (holder.getDate() == null) {
         							manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
-        							dateHolder.setDateOfScan(java.sql.Date.valueOf(LocalDate.now()));
+        							holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
         						}
         						for (int i = 0; i < newFiles.size(); ++i) {
-        							patient.addRawScan(new Scan(dateHolder.getDateOfScan(), newFiles.get(i)));
+        							patient.addRawScan(new Scan(holder.getDate(), newFiles.get(i)));
         						}
         	            	}
-        	            	if (pictureHolder.getScan() != null) {
-        						patient.setPicture(pictureHolder.getScan());
+        	            	if (holder.getFile() != null) {
+        						patient.setPicture(holder.getFile());
         					}
     	            		patient.savePatient();
     	            		manager.setStateBool(false);
@@ -236,7 +248,7 @@ public class PatientInfoScene {
 						File picture = pictureChooser.showOpenDialog(manager.getStage());
 			            if (picture != null) {
 			            	pictureField.setText(picture.getName());
-		            		pictureHolder.setScan(picture);
+		            		holder.setFile(picture);
 			            }
 					}
 		            datePicker.requestFocus();
@@ -269,7 +281,7 @@ public class PatientInfoScene {
 			datePicker.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					dateHolder.setDateOfScan(java.sql.Date.valueOf(datePicker.getValue()));
+					holder.setDate(java.sql.Date.valueOf(datePicker.getValue()));
 				}
 			});
 			
