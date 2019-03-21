@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import utils.Patient;
+import utils.PatientEntry;
 import utils.PatientManagement;
 import utils.Scan;
 
@@ -328,17 +329,6 @@ public class VerticalSideMenu {
 		Label notesLabel = new Label("Scan Notes: ");
 		notesLabel.getStyleClass().add("label-white");
 		
-		Button editScanBtn = new Button("Edit This Scan");
-		editScanBtn.setMaxWidth(Double.MAX_VALUE);
-		editScanBtn.setTooltip(new Tooltip("Edit this scan's information."));
-		editScanBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				manager.setStateBool(true);
-				manager.paintScene("ScanVisualizer");
-			}
-		});
-		
 		Button delScanBtn = new Button("Delete Current Scan");
 		delScanBtn.setMaxWidth(Double.MAX_VALUE);
 		delScanBtn.setTooltip(new Tooltip("Delete this scan."));
@@ -398,10 +388,58 @@ public class VerticalSideMenu {
 		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon, rowCon, rowCon, rowCon, scrollCon, rowCon, scrollCon, rowCon);
 		
 		//Set up text area
+		Button cancelEditNotesBtn = new Button("Cancel Changes");
+		Button editNotesBtn = new Button("Save Changes");
+
 		TextArea docNotesField = new TextArea();
 		docNotesField.setText(manager.getScan().getNotes());
 		docNotesField.setWrapText(true);
 		docNotesField.getStyleClass().add("text-area-sidebar");
+		docNotesField.textProperty().addListener((observable, oldVal, newVal) -> {
+			cancelEditNotesBtn.setVisible(true);
+			editNotesBtn.setVisible(true);
+		});
+		
+		cancelEditNotesBtn.setMaxWidth(Double.MAX_VALUE);
+		cancelEditNotesBtn.setTooltip(new Tooltip("Cancel changes to the notes."));
+		cancelEditNotesBtn.setVisible(false);
+		cancelEditNotesBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				docNotesField.setText(manager.getScan().getNotes());
+				editNotesBtn.setVisible(false);
+				cancelEditNotesBtn.setVisible(false);
+			}
+			
+		});
+		editNotesBtn.setMaxWidth(Double.MAX_VALUE);
+		editNotesBtn.setTooltip(new Tooltip("Edit this scan's notes."));
+		editNotesBtn.setVisible(false);
+		editNotesBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				try {
+					Scan scan= manager.getScan();
+					scan.setNotes(docNotesField.getText());
+
+					for(Scan patScan : patient.getRawScans()) {
+						if (patScan.getScan().equals(scan.getScan())) {
+							patScan.setDateOfScan(scan.getDateOfScan());
+							patScan.setNotes(scan.getNotes());
+						}			        	
+					}
+
+					patient.savePatient();
+					manager.setStateBool(false);
+					manager.paintScene("ScanVisualizer");
+					editNotesBtn.setVisible(false);
+					cancelEditNotesBtn.setVisible(false);
+				} catch (Exception e) {
+					manager.makeError("Edit operation failed. Voiding changes. There is an issue with the file structure of the database. \n"
+							+ "Check utils.PatientManagement exportPatient().", e);
+				}
+			}
+		});
 		
 		GridPane.setConstraints(sceneLabel, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(patientLabel, 0, 4, 2, 1, HPos.LEFT, VPos.CENTER);
@@ -410,9 +448,10 @@ public class VerticalSideMenu {
 		GridPane.setConstraints(scrollPane, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(notesLabel, 0, 8, 2, 1, HPos.LEFT, VPos.CENTER);		
 		GridPane.setConstraints(docNotesField, 0, 9, 2, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(editScanBtn, 0, 10, 2, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(editNotesBtn, 0, 10, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(cancelEditNotesBtn, 1, 10, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(delScanBtn, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
 		
-		grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, scrollPane, docNotesField, scansLabel, notesLabel, editScanBtn);
+		grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, scrollPane, docNotesField, scansLabel, notesLabel, editNotesBtn, cancelEditNotesBtn);
 	}
 }
