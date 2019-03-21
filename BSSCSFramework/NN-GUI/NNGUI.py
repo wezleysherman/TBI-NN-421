@@ -8,6 +8,7 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit, QGridLayout
 from PyQt5.QtCore import QUrl, QFileInfo, Qt
 import sys, pandas, os, webbrowser
+import Customizations as custom
 sys.path.append('..')
 import BSSCS_CNN, BSSCS_AUTO_ENCODER, BSSCS_CLASSIFIER, BSSCS_IMG_PROCESSING
 
@@ -190,7 +191,11 @@ class NNGUI(QWidget):
         train_button = QPushButton("Train Me!")
         def train_clicked():
             #implement here
-            print("not yet implemented")
+            print("not yet fully implemented")
+
+            nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())))
+            nn_options.toString()
+            
         train_button.clicked.connect(train_clicked)
         
 #widgets added to layout
