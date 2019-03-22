@@ -94,6 +94,7 @@ class NNGUI(QWidget):
         img_name = QLabel("Image Folder:")
         img_spacer = QLabel()
 
+        img_wh_name = QLabel("Width and Height (pixels): ")
         img_w = QLineEdit()
         img_h = QLineEdit()
         img_wh_spacer = QLabel("x")
@@ -215,6 +216,7 @@ class NNGUI(QWidget):
         layout.addWidget(imgfolder_filepath, 6, 1, 1, 3)
         layout.addWidget(imgfolder_dirpick_button, 7 ,1, 1, 3)
         layout.addWidget(imgfolder_load_button, 8, 1, 1 ,3)
+        layout.addWidget(img_wh_name, 9, 0, 1, 1)
         layout.addWidget(img_w, 9, 1, 1, 1)
         layout.addWidget(img_wh_spacer, 9, 2, 1, 1)
         layout.addWidget(img_h, 9, 3, 1, 1)
