@@ -81,8 +81,7 @@ public class PatientClassTests {
 		Scan scan1 = new Scan(date1, new File(buildImagePath("whale.jpg")), "scan 1");
 		patient.addRawScan(scan1);
 		
-		scan1 = patient.getRawScan(0);
-		patient.analyzeScan(scan1);
+		scan1 = patient.getProcScan(0);
 		assertEquals(scan1.getLabel(), "killer whale");
 		assertTrue(scan1.getNotes().contains("killer whale"));
 	}

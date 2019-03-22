@@ -120,9 +120,10 @@ public class Patient extends Info implements Serializable {
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
-		scan = analyzeScan(scan);
+		Scan scan2 = analyzeScan(scan);
 		this.rawScans.add(scan);
 		Collections.sort(rawScans);
+		this.addProcScan(scan2);
 	}
 
 	public Scan getRawScan(int index) {
@@ -140,6 +141,8 @@ public class Patient extends Info implements Serializable {
 		 *
 		 * Input: - index: index of scan we want to return
 		 */
+		//TODO: create matching mechanism for a better way to remove the processed scan.
+		this.delProcScan(index);
 		return this.rawScans.remove(index);
 	}
 
