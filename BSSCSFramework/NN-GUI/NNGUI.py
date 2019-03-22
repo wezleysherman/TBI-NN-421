@@ -199,7 +199,7 @@ class NNGUI(QWidget):
             #implement here
             print("not yet fully implemented")
 
-            nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())))
+            nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())))
             nn_options.toString()
             
         train_button.clicked.connect(train_clicked)
