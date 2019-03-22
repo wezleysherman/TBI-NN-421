@@ -20,7 +20,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import utils.Patient;
-import utils.PatientEntry;
 import utils.PatientManagement;
 import utils.Scan;
 
@@ -366,14 +365,16 @@ public class VerticalSideMenu {
 		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 		
 		for (int i = 0; i < patient.getNumRawScans(); ++i) {
-			Button scanBtn = new Button(patient.getRawScans().get(i).getDateOfScan().toString());
+			Button scanBtn = new Button(patient.getRawScans().get(i).getScan().getName() + " Scan " + (i + 1));
 			scanBtn.setMaxWidth(Double.MAX_VALUE);
 			scanBtn.setTooltip(new Tooltip("View this scan."));
-			
 			scanBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
-					// TODO: Implement this
+					int index = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length() - 1));
+					manager.setScan(patient.getRawScans().get(index - 1));
+					manager.paintScene("ScanVisualizer");
+					//TODO See about only redrawing elements that need to be updated.
 				}
 			});
 			
