@@ -16,6 +16,7 @@ public class Scan implements Serializable, Comparable{
 	public Scan() {
 		this.setDateOfScan(null);
 		this.setScan(null);
+		this.notes = "";
 	}
 	
 	public Scan(Date dOS, File inScan) {
