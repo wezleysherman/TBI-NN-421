@@ -3,6 +3,7 @@ package utils;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -10,6 +11,7 @@ import javax.imageio.ImageIO;
 import javafx.scene.image.Image;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 //Class for saving patient information
@@ -27,30 +29,31 @@ public class Patient extends Info implements Serializable {
 	public Patient() {
 		this("", "", new Date(), "");
 	}
-	
-	//constructor for fresh patient with no scans
+
+	// constructor for fresh patient with no scans
 	public Patient(String fName, String lName, Date pDate, String pNotes) {
 		this(fName, lName, pDate, pNotes, wrapScan(pDate, null));
 	}
-	
-	//constructor for fresh patient with 1 scan
+
+	// constructor for fresh patient with 1 scan
 	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan) {
 		this(fName, lName, pDate, pNotes, wrapScan(pDate, pScan));
 	}
-	
-	//constructor for patient w/ established uid with 1 scan
+
+	// constructor for patient w/ established uid with 1 scan
 	public Patient(String fName, String lName, Date pDate, String pNotes, File pScan, String uid) {
 		this(fName, lName, pDate, pNotes, wrapScan(pDate, pScan), uid);
-		
+
 	}
 
 	// constructor for fresh patient with multiple scans
 	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans) {
 		this(fName, lName, pDate, pNotes, pScans, UUID.nameUUIDFromBytes((fName + " " + lName).getBytes()).toString());
-		
+
 	}
-	
-	//constructor for patient w/ established uid and multiple scans (main constructor)
+
+	// constructor for patient w/ established uid and multiple scans (main
+	// constructor)
 	public Patient(String fName, String lName, Date pDate, String pNotes, LinkedList<Scan> pScans, String uid) {
 		super(fName, lName);
 		this.setDate(pDate);
@@ -60,12 +63,12 @@ public class Patient extends Info implements Serializable {
 		this.uid = uid;
 		this.file = new File(basePath, uid).getAbsolutePath();
 	}
-	
-	public static LinkedList<Scan> wrapScan(Date pDate, File pScan){
-		if(pScan == null) {
+
+	public static LinkedList<Scan> wrapScan(Date pDate, File pScan) {
+		if (pScan == null) {
 			return new LinkedList<Scan>();
 		}
-		
+
 		Scan newScan = new Scan(pDate, pScan);
 		LinkedList<Scan> pScans = new LinkedList<Scan>();
 		pScans.push(newScan);
@@ -95,7 +98,7 @@ public class Patient extends Info implements Serializable {
 	public void setRawScans(LinkedList<Scan> scans) {
 		this.rawScans = scans;
 	}
-	
+
 	public LinkedList<Scan> getProcScans() {
 		return procScans;
 	}
@@ -107,7 +110,7 @@ public class Patient extends Info implements Serializable {
 	public Integer getNumRawScans() {
 		return this.rawScans.size();
 	}
-	
+
 	public Integer getNumProcScans() {
 		return this.procScans.size();
 	}
@@ -126,63 +129,82 @@ public class Patient extends Info implements Serializable {
 	}
 	
 	public void addRawScan(Scan scan) {
-		/* Handles adding a new scan to the patient's linked list.
+		/*
+		 * Handles adding a new scan to the patient's linked list.
 		 *
-		 *	Input:
-		 * 		- scan: A scan object containing the patient's scan image
+		 * Input: - scan: A scan object containing the patient's scan image
 		 */
-		this.rawScans.add(scan);
+		Scan scan2 = analyzeScan(scan);
+		this.rawScans.add(scan2); //TODO: don't add proccessed scan to raw scan
 		Collections.sort(rawScans);
+		this.addProcScan(scan2);
 	}
 
 	public Scan getRawScan(int index) {
-		/* Handles getting a scan of a specific index from the linked list
+		/*
+		 * Handles getting a scan of a specific index from the linked list
 		 *
-		 *	Input:
-		 * 		- index: index of scan we want to return
+		 * Input: - index: index of scan we want to return
 		 */
 		return this.rawScans.get(index);
 	}
-	
+
 	public Scan delRawScan(int index) {
-		/* Handles removing a scan of a specific index from the linked list
+		/*
+		 * Handles removing a scan of a specific index from the linked list
 		 *
-		 *	Input:
-		 * 		- index: index of scan we want to return
+		 * Input: - index: index of scan we want to return
 		 */
+		//TODO: create matching mechanism for a better way to remove the processed scan.
+		this.delProcScan(index);
 		return this.rawScans.remove(index);
 	}
-	
+
 	public void addProcScan(Scan scan) {
-		/* Handles adding a new scan to the patient's linked list.
+		/*
+		 * Handles adding a new scan to the patient's linked list.
 		 *
-		 *	Input:
-		 * 		- scan: A scan object containing the patient's analyzed scan image
+		 * Input: - scan: A scan object containing the patient's analyzed scan image
 		 */
 		this.procScans.add(scan);
 		Collections.sort(procScans);
 	}
 
 	public Scan getProcScan(int index) {
-		/* Handles getting a scan of a specific index from the linked list
+		/*
+		 * Handles getting a scan of a specific index from the linked list
 		 *
-		 *	Input:
-		 * 		- index: index of scan we want to return
+		 * Input: - index: index of scan we want to return
 		 */
 		return this.procScans.get(index);
 	}
-	
+
 	public Scan delProcScan(int index) {
-		/* Handles removing a scan of a specific index from the linked list
+		/*
+		 * Handles removing a scan of a specific index from the linked list
 		 *
-		 *	Input:
-		 * 		- index: index of scan we want to return
+		 * Input: - index: index of scan we want to return
 		 */
 		return this.procScans.remove(index);
 	}
 
 	public void savePatient() throws Exception {
 		PatientManagement.exportPatient(this);
+	}
+	
+	public Scan analyzeScan(Scan s) {
+		String file = s.getScan().getAbsolutePath();
+		file = file.substring(file.length()-3, file.length());
+		System.out.println(file);
+		List l = new LinkedList(); l.add("jpg"); l.add("png"); l.add("gif");
+		if(!l.contains(file)) {
+			s.setLabel("Attempted to analyze but could not due to filetype.");
+		}else {
+			s = NNUtils.get_label(s);
+			System.out.println(String.format("BEST MATCH: %s (%.2f%% likely)", s.getLabel(),
+					s.getLabelProb()));
+		}
+		return s;
 	}
 
 }
