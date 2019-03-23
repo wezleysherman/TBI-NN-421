@@ -1,7 +1,6 @@
 package ui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.EmptyStackException;
@@ -25,19 +24,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import utils.PatientEntry;
 
 /**
  * This page is used to create new themes
  * @author Ty Chase
- * REFERENCES: https://docs.oracle.com/javafx/2/ui_controls/color-picker.htm
+ * REFERENCES: 
+ * https://docs.oracle.com/javafx/2/ui_controls/color-picker.htm
+ * https://farrukhobaid.wordpress.com/2013/01/16/dark-scrollbar-skin-for-javafx/
  */
 public class ThemeCreationScene {
 
@@ -46,8 +47,17 @@ public class ThemeCreationScene {
 		HashMap<String, String> colors = new HashMap<String, String>();
 		
 		BorderPane layout = new BorderPane();
+		GridPane wholeGrid = new GridPane();
 		GridPane mainGrid = new GridPane();
 		GridPane previewGrid = new GridPane();
+		
+		
+		RowConstraints wholeRow = new RowConstraints();
+		wholeRow.setPercentHeight(100);
+		wholeGrid.getRowConstraints().add(wholeRow);
+		ColumnConstraints wholeColumn = new ColumnConstraints();
+		wholeColumn.setPercentWidth(100);
+		wholeGrid.getColumnConstraints().add(wholeColumn);
 		
 		//Construct main grid
 		mainGrid.setPadding(new Insets(10, 10, 10, 10));
@@ -61,15 +71,10 @@ public class ThemeCreationScene {
 		column2.setPercentWidth(70);
 		mainGrid.getColumnConstraints().addAll(column0, column1, column2);
 		
-		/* TODO
+		//Construct scroll bar
 		ScrollPane scrollPane = new ScrollPane(mainGrid);
 		scrollPane.getStyleClass().add("scroll-pane");
-		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-		scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-		mainGrid.prefWidthProperty().bind(scrollPane.widthProperty());
-		GridPane.setConstraints(scrollPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		mainGrid.getChildren().add(scrollPane);
-		*/
+		wholeGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 		
 		//Construct preview grid
 		previewGrid.setPadding(new Insets(10, 10, 10, 10));
@@ -90,7 +95,7 @@ public class ThemeCreationScene {
 		
 		//Preview Button
 		Button previewButton = new Button("Button");
-		previewButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		previewButton.setMaxWidth(Double.MAX_VALUE);
 		previewButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -165,6 +170,7 @@ public class ThemeCreationScene {
 		
 		Label labelLabel = new Label("Label");
 		ColorPicker labelPicker = new ColorPicker();
+		labelPicker.setMaxWidth(Double.MAX_VALUE);
 		labelPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -178,6 +184,7 @@ public class ThemeCreationScene {
 		
 		Label contentPaneLabel = new Label("Content Pane");
 		ColorPicker contentPanePicker = new ColorPicker();
+		contentPanePicker.setMaxWidth(Double.MAX_VALUE);
 		contentPanePicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -189,13 +196,13 @@ public class ThemeCreationScene {
 		GridPane.setConstraints(contentPanePicker, 1, 2, 1, 1, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().addAll(contentPaneLabel, contentPanePicker);
 		
-		Label sidePaneLabel = new Label("Side Pane*");
+		Label sidePaneLabel = new Label("Side Pane*/Scrollbar*");
 		ColorPicker sidePanePicker = new ColorPicker();
+		sidePanePicker.setMaxWidth(Double.MAX_VALUE);
 		sidePanePicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				colors.put("sidePane", toHex(sidePanePicker.getValue()));
-				previewGrid.setStyle("-fx-background-color: " + colors.get("sidePane") + ";");
 			}
 		});
 		GridPane.setConstraints(sidePaneLabel, 0, 3, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -204,6 +211,7 @@ public class ThemeCreationScene {
 		
 		Label dialogBoxLabel = new Label("Dialog Box*");
 		ColorPicker dialogBoxPicker = new ColorPicker();
+		dialogBoxPicker.setMaxWidth(Double.MAX_VALUE);
 		dialogBoxPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -216,6 +224,7 @@ public class ThemeCreationScene {
 		
 		Label buttonLabel = new Label("Button");
 		ColorPicker buttonPicker = new ColorPicker();
+		buttonPicker.setMaxWidth(Double.MAX_VALUE);
 		buttonPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -229,6 +238,7 @@ public class ThemeCreationScene {
 		
 		Label buttonHoverLabel = new Label("Button: Hover");
 		ColorPicker buttonHoverPicker = new ColorPicker();
+		buttonHoverPicker.setMaxWidth(Double.MAX_VALUE);
 		buttonHoverPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -241,6 +251,7 @@ public class ThemeCreationScene {
 		
 		Label buttonPressLabel = new Label("Button: Press");
 		ColorPicker buttonPressPicker = new ColorPicker();
+		buttonPressPicker.setMaxWidth(Double.MAX_VALUE);
 		buttonPressPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -253,6 +264,7 @@ public class ThemeCreationScene {
 		
 		Label menuTextLabel = new Label("Menu Text*");
 		ColorPicker menuTextPicker = new ColorPicker();
+		menuTextPicker.setMaxWidth(Double.MAX_VALUE);
 		menuTextPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -266,6 +278,7 @@ public class ThemeCreationScene {
 		
 		Label menuBarLabel = new Label("Menubar");
 		ColorPicker menuBarPicker = new ColorPicker();
+		menuBarPicker.setMaxWidth(Double.MAX_VALUE);
 		menuBarPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -279,6 +292,7 @@ public class ThemeCreationScene {
 		
 		Label menuLabel = new Label("Menu");
 		ColorPicker menuPicker = new ColorPicker();
+		menuPicker.setMaxWidth(Double.MAX_VALUE);
 		menuPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -292,6 +306,7 @@ public class ThemeCreationScene {
 		
 		Label menuItemLabel = new Label("MenuItem");
 		ColorPicker menuItemPicker = new ColorPicker();
+		menuItemPicker.setMaxWidth(Double.MAX_VALUE);
 		menuItemPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -305,6 +320,7 @@ public class ThemeCreationScene {
 	
 		Label tableTextLabel = new Label("Table Text*");
 		ColorPicker tableTextPicker = new ColorPicker();
+		tableTextPicker.setMaxWidth(Double.MAX_VALUE);
 		tableTextPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -318,6 +334,7 @@ public class ThemeCreationScene {
 		
 		Label tableHeaderLabel = new Label("Table Header*");
 		ColorPicker tableHeaderPicker = new ColorPicker();
+		tableHeaderPicker.setMaxWidth(Double.MAX_VALUE);
 		tableHeaderPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -331,6 +348,7 @@ public class ThemeCreationScene {
 		
 		Label tableRowEvenLabel = new Label("Table Row Even");
 		ColorPicker tableRowEvenPicker = new ColorPicker();
+		tableRowEvenPicker.setMaxWidth(Double.MAX_VALUE);
 		tableRowEvenPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -351,6 +369,7 @@ public class ThemeCreationScene {
 		
 		Label tableRowOddLabel = new Label("Table Row Odd");
 		ColorPicker tableRowOddPicker = new ColorPicker();
+		tableRowOddPicker.setMaxWidth(Double.MAX_VALUE);
 		tableRowOddPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -371,6 +390,7 @@ public class ThemeCreationScene {
 		
 		Label tableRowOddSelectedLabel = new Label("Table Row: Selected");
 		ColorPicker tableRowSelectedPicker = new ColorPicker();
+		tableRowSelectedPicker.setMaxWidth(Double.MAX_VALUE);
 		tableRowSelectedPicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -451,9 +471,12 @@ public class ThemeCreationScene {
 		mainGrid.getChildren().addAll(nameField, saveBtn);
 		
 		//Add Grid and layout to scene---------------------------------------------------------------------------------------------------------------
+		mainGrid.getStyleClass().add("content-pane");
+		
 		GridPane.setConstraints(previewGrid, 2, 1, 1, 18, HPos.CENTER, VPos.CENTER);
 		mainGrid.getChildren().add(previewGrid);
-		layout.setCenter(mainGrid);
+		wholeGrid.getChildren().addAll(mainGrid, scrollPane);
+		layout.setCenter(wholeGrid);
 		layout.setTop(TopMenuBar.newMenuBar(manager));
 		
 		//Return constructed scene
@@ -481,6 +504,10 @@ public class ThemeCreationScene {
 			
 			if (file.exists()) {
 				manager.makeDialog("A theme with this name already exists. Choose a different name.");
+			} 
+			
+			else if (name.contains(" ")) {
+				manager.makeDialog("Names cannot contain spcaes.");
 			}
 			
 			else {
@@ -489,34 +516,34 @@ public class ThemeCreationScene {
 				writer.append(".content-pane { -fx-background-color: " + colors.get("contentPane") + "; } \n\n");
 				writer.append(".side-pane { -fx-background-color: " + colors.get("sidePane") + "; } \n\n");
 				writer.append(".vbox-dialog-box { -fx-background-color: " + colors.get("dialogBox") + "; } \n\n");
-				writer.append(".button { -fx-background-color: " + colors.get("button") + "; "
+				writer.append(".button, .color-picker { -fx-background-color: " + colors.get("button") + "; "
 						+ "-fx-background-radius: 5; "
 						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
-				writer.append(".button:hover { -fx-background-color: " + colors.get("buttonHover") + "; "
+						+ "-fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".button:hover, .color-picker:hover { -fx-background-color: " + colors.get("buttonHover") + "; "
 						+ "-fx-background-radius: 5; "
 						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
-				writer.append(".button:pressed { -fx-background-color: " + colors.get("buttonPress") + "; "
+						+ "-fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".button:pressed, .color-picker:pressed { -fx-background-color: " + colors.get("buttonPress") + "; "
 						+ "-fx-background-radius: 5; "
 						+ "-fx-background-insets: 0,1,2; "
-						+ "-fx-text-fill: black; } \n\n");
+						+ "-fx-text-fill: " + colors.get("label") + "; } \n\n");
 				writer.append(".menu-bar { -fx-background-color: " + colors.get("menuBar") + "; "
-						+ "-fx-text-fill: black; } \n\n");
+						+ "-fx-text-fill: " + colors.get("menuText") + "; } \n\n");
 				writer.append(".menu .label { -fx-text-fill: " + colors.get("menuText") + "; } \n\n");
 				writer.append(".menu:hover { -fx-background-color: " + colors.get("menu") + "; } \n\n");
 				writer.append(".menu:showing { -fx-background-color: " + colors.get("menu") + "; } \n\n");
-				writer.append(".menu-item .label { -fx-text-fill: black; } \n\n");
+				writer.append(".menu-item .label { -fx-text-fill: " + colors.get("menuText") + "; } \n\n");
 				writer.append(".menu-item:focused { -fx-background-color: " + colors.get("menuItem") + "; } \n\n");
-				writer.append(".scroll-pane { -fx-border-color: #455357; "
-						+ "-fx-background-color: #455357; } \n\n");
-				writer.append(".scroll-pane .viewport { -fx-border-color: #455357; "
-						+ "-fx-background-color: #455357; } \n\n");
+				writer.append(".scroll-pane-side { -fx-border-color: " + colors.get("sidePane") + "; "
+						+ "-fx-background-color: " + colors.get("sidePane") + "; } \n\n");
+				writer.append(".scroll-pane-side .viewport { -fx-border-color: " + colors.get("sidePane") + "; "
+						+ "-fx-background-color: " + colors.get("sidePane") + "; } \n\n");
 				writer.append(".tranparent-pane { -fx-background-color: transparent; } \n\n");
-				writer.append(".text-area-sidebar { -fx-text-fill: white; "
+				writer.append(".text-area-sidebar { -fx-text-fill: " + colors.get("label") + "; "
 						+ "-fx-background-color: transparent, transparent, white, transparent; } \n\n");
-				writer.append(".text-area-sidebar .content { -fx-background-color: #455357; "
-						+ "-fx-background-color: transparent, transparent, white, #455357; } \n\n");
+				writer.append(".text-area-sidebar .content { -fx-background-color: " + colors.get("sidePane") + "; "
+						+ "-fx-background-color: transparent, transparent, white, " + colors.get("sidePane") + "; } \n\n");
 				writer.append(".table-view { -fx-background-color: transparent; "
 						+ "-fx-control-inner-background: " + colors.get("tableRowEven") + "; "
 						+ "-fx-control-inner-background-alt: " + colors.get("tableRowOdd") + "; "
@@ -531,10 +558,20 @@ public class ThemeCreationScene {
 				writer.append(".table-view .column-header-background .label { -fx-background-color: transparent; "
 						+ "-fx-text-fill: " + colors.get("tableText") + "; } \n\n");
 				writer.append(".table-view .column-header { -fx-background-color: transparent; } \n\n");
-				writer.append(".text-area-dialog { -fx-text-fill: white; } \n\n");
-				writer.append(".titled-pane { -fx-text-fill: black; } \n\n");
-				writer.append(".titled-pane .title { -fx-background-color: #cfd8dc; } \n\n");
-				writer.append(".titled-pane .content { -fx-background-color: #455357; } \n\n");
+				writer.append(".text-area-dialog { -fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".titled-pane { -fx-text-fill: " + colors.get("label") + "; } \n\n");
+				writer.append(".titled-pane .title { -fx-background-color: " + colors.get("contentPane") + "; } \n\n");
+				writer.append(".titled-pane .content { -fx-background-color: " + colors.get("sidePane") + "; } \n\n");
+				writer.append(".scroll-pane .corner { -fx-background-color: transparent; } \n\n");
+				writer.append(".scroll-bar { -fx-background-color: transparent; } \n\n");
+				writer.append(".scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb "
+						+ "{ -fx-background-color: " + colors.get("sidePane") + "; } \n\n");
+				writer.append(".scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button, "
+						+ ".scroll-bar:horizontal .increment-button, .scroll-bar:horizontal .decrement-button "
+						+ "{ -fx-background-color: transparent; } \n\n");
+				writer.append(".scroll-bar:horizontal .increment-arrow, .scroll-bar:vertical .increment-arrow, "
+						+ ".scroll-bar:horizontal .decrement-arrow, .scroll-bar:vertical .decrement-arrow "
+						+ "{ -fx-background-color: " + colors.get("sidePane") + "; } \n\n");
 				
 				writer.close();
 				

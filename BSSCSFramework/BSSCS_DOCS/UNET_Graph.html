@@ -58,8 +58,8 @@
 				- input - The final layer from our regressor
 				- labels - the labels we are optimizing to
 			</span>
-		</div>
-			<div>
+		</div><br>
+		<div>
 			<b>create_optimizer(self, input, labels)</b>
 			<br>
 			<span>
@@ -71,12 +71,41 @@
 				- Labels - the labels are are optimizing
 			</span>
 		</div>
-			<div>
+		<div>
 			<b>train_unet(self)</b>
 			<br>
 			<span>
 				Trains the UNET Graph
 			</span><br>
+		</div><br>
+		
+		<div>
+			<b>save_graph(self, unet_save, session, path)</b>
+			<br>
+			<span>
+				Saves an instance of the UNET into the specified path
+			</span><br>
+			<span>
+				<p>Input:</p>
+					- unet_save - The instance of TF Saver
+					- session -  The session object we want to save
+					- path -  The save location
+			</span>
+		</div><br>
+		</div>
+			<div>
+			<b>load_graph(self, unet_save, session, path)</b>
+			<br>
+			<span>
+				Loads a previously saved UNET instance
+			</span><br>
+			<span>
+				<p>Input:</p>
+					- unet_save - The instance of TF Saver 
+					- session -  The session object we want to load to
+					- path - The path to the saved unet graph
+			</span>
+		</div>
 		</div>
 
 	</body>
