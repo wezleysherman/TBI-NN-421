@@ -121,7 +121,7 @@ public class Patient extends Info implements Serializable {
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
 		Scan scan2 = analyzeScan(scan);
-		this.rawScans.add(scan);
+		this.rawScans.add(scan2); //TODO: don't add proccessed scan to raw scan
 		Collections.sort(rawScans);
 		this.addProcScan(scan2);
 	}
