@@ -8,6 +8,9 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QFileDialog, QPushButton, QMessageBox, QLineEdit, QSlider, QTextEdit, QGridLayout
 from PyQt5.QtCore import QUrl, QFileInfo, Qt
 import sys, pandas, os, webbrowser
+import Customizations as custom
+sys.path.append('..')
+import BSSCS_CNN, BSSCS_AUTO_ENCODER, BSSCS_CLASSIFIER, BSSCS_IMG_PROCESSING
 
 class NNGUI(QWidget):
 
@@ -90,6 +93,12 @@ class NNGUI(QWidget):
 
         img_name = QLabel("Image Folder:")
         img_spacer = QLabel()
+
+        img_wh_name = QLabel("Width and Height (pixels): ")
+        img_w = QLineEdit()
+        img_h = QLineEdit()
+        img_wh_spacer = QLabel("x")
+        img_wh_spacer.setAlignment(Qt.AlignCenter)
 
         custom_name = QLabel("Customizations:")
 #iteration UI elements
@@ -188,7 +197,11 @@ class NNGUI(QWidget):
         train_button = QPushButton("Train Me!")
         def train_clicked():
             #implement here
-            print("not yet implemented")
+            print("not yet fully implemented")
+
+            nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())))
+            nn_options.toString()
+            
         train_button.clicked.connect(train_clicked)
         
 #widgets added to layout
@@ -203,32 +216,36 @@ class NNGUI(QWidget):
         layout.addWidget(imgfolder_filepath, 6, 1, 1, 3)
         layout.addWidget(imgfolder_dirpick_button, 7 ,1, 1, 3)
         layout.addWidget(imgfolder_load_button, 8, 1, 1 ,3)
-        layout.addWidget(img_spacer, 9, 1, 1, 3)
+        layout.addWidget(img_wh_name, 9, 0, 1, 1)
+        layout.addWidget(img_w, 9, 1, 1, 1)
+        layout.addWidget(img_wh_spacer, 9, 2, 1, 1)
+        layout.addWidget(img_h, 9, 3, 1, 1)
+        layout.addWidget(img_spacer, 10, 1, 1, 3)
         
-        layout.addWidget(custom_name, 10, 0, 1, 0)
-        layout.addWidget(iter_label, 10, 2, 1, 1)
-        layout.addWidget(iter_slider, 11, 1, 1, 3)
-        layout.addWidget(iter_text, 12, 1, 1, 3)
-        layout.addWidget(iter_spacer, 13, 1, 1, 3)
-        layout.addWidget(batch_label, 14, 2, 1, 1)
-        layout.addWidget(batch_slider, 15, 1, 1, 3)
-        layout.addWidget(batch_text, 16, 1, 1, 3)
-        layout.addWidget(batch_spacer, 17, 1, 1, 3)
-        layout.addWidget(layer_label, 18, 2, 1, 1)
-        layout.addWidget(layer_slider, 19, 1, 1, 3)
-        layout.addWidget(layer_text, 20, 1, 1, 3)
-        layout.addWidget(layer_spacer, 21, 1, 1, 3)
-        layout.addWidget(node_label, 22, 2, 1, 1)
-        layout.addWidget(node_slider, 23, 1, 1, 3)
-        layout.addWidget(node_text, 24, 1, 1, 3)
-        layout.addWidget(node_spacer, 25, 1, 1, 3)
+        layout.addWidget(custom_name, 11, 0, 1, 0)
+        layout.addWidget(iter_label, 11, 2, 1, 1)
+        layout.addWidget(iter_slider, 12, 1, 1, 3)
+        layout.addWidget(iter_text, 13, 1, 1, 3)
+        layout.addWidget(iter_spacer, 14, 1, 1, 3)
+        layout.addWidget(batch_label, 15, 2, 1, 1)
+        layout.addWidget(batch_slider, 16, 1, 1, 3)
+        layout.addWidget(batch_text, 17, 1, 1, 3)
+        layout.addWidget(batch_spacer, 18, 1, 1, 3)
+        layout.addWidget(layer_label, 19, 2, 1, 1)
+        layout.addWidget(layer_slider, 20, 1, 1, 3)
+        layout.addWidget(layer_text, 21, 1, 1, 3)
+        layout.addWidget(layer_spacer, 22, 1, 1, 3)
+        layout.addWidget(node_label, 23, 2, 1, 1)
+        layout.addWidget(node_slider, 24, 1, 1, 3)
+        layout.addWidget(node_text, 25, 1, 1, 3)
+        layout.addWidget(node_spacer, 26, 1, 1, 3)
         
-        layout.addWidget(tb_name, 26, 0, 1, 0)
-        layout.addWidget(tb_filepath, 26, 1, 1, 3)
-        layout.addWidget(tb_filepick_button, 27, 1, 1, 3)
-        layout.addWidget(tb_button, 28, 1, 1, 3)
-        layout.addWidget(tb_spacer, 29, 1, 1, 3)
-        layout.addWidget(train_button, 30, 1, 1, 3)
+        layout.addWidget(tb_name, 27, 0, 1, 0)
+        layout.addWidget(tb_filepath, 27, 1, 1, 3)
+        layout.addWidget(tb_filepick_button, 28, 1, 1, 3)
+        layout.addWidget(tb_button, 29, 1, 1, 3)
+        layout.addWidget(tb_spacer, 30, 1, 1, 3)
+        layout.addWidget(train_button, 31, 1, 1, 3)
 
 #setup of window
         self.setGeometry(350, 350, 450, 350)

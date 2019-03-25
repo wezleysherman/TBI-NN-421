@@ -1,0 +1,156 @@
+.label-white {
+	-fx-text-fill: white;
+}
+
+.content-pane {
+	-fx-background-color: white;
+}
+
+.side-pane {
+	-fx-background-color: black;
+}
+
+.vbox-dialog-box {
+	-fx-background-color: black;
+}
+
+.button, .color-picker {
+	-fx-background-color: whitesmoke;
+	-fx-background-radius: 5;
+	-fx-background-insets: 0,1,2;
+	-fx-text-fill: black;
+}
+
+.button:hover, .color-picker:hover {
+	-fx-background-color: lightgray;
+	-fx-background-radius: 5;
+	-fx-background-insets: 0,1,2; 
+	-fx-text-fill: black;
+}
+
+.button:pressed, .color-picker:pressed {
+	-fx-background-color: gray;
+	-fx-background-radius: 5;
+	-fx-background-insets: 0,1,2;
+	-fx-text-fill: black;
+}
+
+.menu-bar {
+	-fx-background-color: lightgray;
+	-fx-text-fill: black;
+}
+
+.menu .label {
+	-fx-text-fill: black;
+}
+
+.menu:hover {
+	-fx-background-color: lightgray;
+}
+
+.menu:showing {
+	-fx-background-color: lightgray;
+}
+
+.menu-item .label {
+	-fx-text-fill: black;
+}
+
+.menu-item:focused {
+	-fx-background-color: lightgray;
+}
+
+.scroll-pane-side {
+	-fx-border-color: black;
+	-fx-background-color: black;
+}
+
+.scroll-pane-side .viewport {
+	-fx-border-color: black;
+	-fx-background-color: black;
+}
+
+.tranparent-pane {
+	-fx-background-color: transparent;
+}
+
+.text-area-sidebar {
+	-fx-text-fill: white;
+	-fx-background-color: transparent, transparent, white, transparent;
+}
+
+.text-area-sidebar .content {
+	-fx-background-color: black;
+	-fx-background-color: transparent, transparent, white, black;
+}
+
+.table-view {
+   -fx-background-color: transparent;
+   -fx-control-inner-background: lightgray;
+   -fx-control-inner-background-alt: gray;
+   -fx-selection-bar: transparent;
+   -fx-background-insets: 0, 0 0 1 0;
+   -fx-padding: 0.0em;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: black;
+}
+
+.table-row-cell {
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.table-view:focused {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: black;
+}
+
+.table-view .column-header-background .label {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.text-area-dialog {
+	-fx-text-fill: white;
+}
+
+.titled-pane {
+	-fx-text-fill: black;
+}
+
+.titled-pane .title {
+	-fx-background-color: whitesmoke;
+}
+
+.titled-pane .content {
+	-fx-background-color: black;
+}
+
+.scroll-pane .corner {
+	-fx-background-color: transparent;
+}
+
+.scroll-bar {
+	-fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb {
+	-fx-background-color: black;
+}
+
+.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button, .scroll-bar:horizontal .increment-button, .scroll-bar:horizontal .decrement-button {
+	-fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .increment-arrow, .scroll-bar:vertical .increment-arrow, .scroll-bar:horizontal .decrement-arrow, .scroll-bar:vertical .decrement-arrow {
+	-fx-background-color: black;
+}

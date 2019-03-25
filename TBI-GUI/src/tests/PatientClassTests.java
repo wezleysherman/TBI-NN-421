@@ -60,9 +60,9 @@ public class PatientClassTests {
 		Date date2 = new Date(date1.getYear() - 1, 1, 21);
 		Date date3 = new Date(date1.getYear() + 1, 1, 21);
 		Patient patient = new Patient("John", "Doe", new Date(), "Some notes");
-		Scan scan1 = new Scan(date1, new File(buildDefaultPath(), patient.getUID()), "scan 1");
-		Scan scan2 = new Scan(date2, new File(buildDefaultPath(), patient.getUID()), "scan 2");
-		Scan scan3 = new Scan(date3, new File(buildDefaultPath(), patient.getUID()), "scan 3");
+		Scan scan1 = new Scan(date1, new File(buildImagePath("porcupine.jpg")), "scan 1");
+		Scan scan2 = new Scan(date2, new File(buildImagePath("terrier2.jpg")), "scan 2");
+		Scan scan3 = new Scan(date3, new File(buildImagePath("whale.png")), "scan 3");
 		patient.addRawScan(scan2);
 		patient.addRawScan(scan1);
 		assertEquals(date1, patient.getLastRawScanDate());
@@ -73,11 +73,31 @@ public class PatientClassTests {
 		patient.delRawScan(0);
 		assertEquals(scan1, patient.getRawScan(0));
 	}
+	
+	@Test
+	public void PatientScanAnalysisTest() throws Exception {
+		Patient patient = new Patient("John", "Doe", new Date(), "Some notes");
+		Date date1 = new Date();
+		Scan scan1 = new Scan(date1, new File(buildImagePath("whale.jpg")), "scan 1");
+		patient.addRawScan(scan1);
+		
+		scan1 = patient.getProcScan(0);
+		assertEquals(scan1.getLabel(), "killer whale");
+		assertTrue(scan1.getNotes().contains("killer whale"));
+	}
 
 	private static String buildDefaultPath() {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
 		f = new File(f.getAbsolutePath(), "patients");
+		return f.getAbsolutePath();
+	}
+	
+	private static String buildImagePath(String filename) {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		f = new File(f.getAbsolutePath(), "tensor_test_images");
+		f = new File(f.getAbsolutePath(), filename);
 		return f.getAbsolutePath();
 	}
 }

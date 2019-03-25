@@ -3,7 +3,6 @@ package ui;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
+import utils.Holder;
 import utils.Patient;
 import utils.PatientManagement;
 import utils.Scan;
@@ -43,7 +43,9 @@ public class PatientInfoEntryScene {
 		TextField patFNameField = new TextField();
 		TextField patLNameField = new TextField();
 		TextField fileField = new TextField();
+		TextField pictureField = new TextField();
 		TextField notesField = new TextField();
+		FileChooser pictureChooser = new FileChooser();
 		FileChooser fileChooser = new FileChooser();
 		DatePicker datePicker = new DatePicker();
 		Button finishBtn = new Button("Finish");
@@ -54,6 +56,9 @@ public class PatientInfoEntryScene {
 		
 		patLNameField.setMaxSize(200, 10);
 		patLNameField.setPromptText("Patient Last Name");
+		
+		pictureField.setMaxSize(200, 10);
+		pictureField.setPromptText("Select Picture");
 		
 		fileField.setMaxSize(200, 10);
 		fileField.setPromptText("Select File(s)");
@@ -73,17 +78,12 @@ public class PatientInfoEntryScene {
 		pointerGrid.getChildren().add(lNameStackPane);
 		
 		StackPane fileStackPane = makeRequiredSVG();
-		GridPane.setConstraints(fileStackPane, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(fileStackPane, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
 		pointerGrid.getChildren().add(fileStackPane);
-		
-		StackPane dateStackPane = makeRequiredSVG();
-		GridPane.setConstraints(dateStackPane, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
-		pointerGrid.getChildren().add(dateStackPane);
 		
 		fNameStackPane.setVisible(false);
 		lNameStackPane.setVisible(false);
 		fileStackPane.setVisible(false);
-		dateStackPane.setVisible(false);
 		
 		//Construct Grid
 		contentGrid.setVgap(15);
@@ -91,12 +91,13 @@ public class PatientInfoEntryScene {
 		
 		GridPane.setConstraints(patFNameField, 1, 2, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(patLNameField, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(fileField, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(datePicker, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(notesField, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(finishBtn, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(pictureField, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(fileField, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);		
+		GridPane.setConstraints(datePicker, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(notesField, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(finishBtn, 1, 8, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(pointerGrid, 2, 2, 2, 4, HPos.LEFT, VPos.CENTER);
-		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, datePicker, notesField, finishBtn, pointerGrid);
+		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, pictureField, datePicker, notesField, finishBtn, pointerGrid);
 		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100.0/11);
@@ -112,18 +113,35 @@ public class PatientInfoEntryScene {
 		columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100);
 		pointerGrid.getColumnConstraints().add(columnCon);
-				
-		Scan dateHolder = new Scan();
+		
 		LinkedList<File> newFiles = new LinkedList<File>();
+		Holder holder = new Holder();
 
+		//Picture Chooser Setup
+		pictureChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("IMAGE", "*.png", "*.jpg"));
+		pictureField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+				if(arg2) {
+					File picture = pictureChooser.showOpenDialog(manager.getStage());
+	            	if (picture != null) {
+	            		pictureField.setText(picture.getName());
+	            		holder.setFile(picture);
+		            }
+				}
+	            datePicker.requestFocus();
+			}
+		});
+		
+		
 		//File Chooser Setup
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt")); //TODO remove .txt
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
 		fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 				if(arg2) {
 					List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
-		            if (files.size() > 0) {
+		            if (files != null && files.size() > 0) {
 		            	if (files.size() == 1) {
 		            		fileField.setText(files.get(0).getName());
 		            	}
@@ -144,7 +162,7 @@ public class PatientInfoEntryScene {
 		datePicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				dateHolder.setDateOfScan(java.sql.Date.valueOf(datePicker.getValue()));
+				holder.setDate(java.sql.Date.valueOf(datePicker.getValue()));
 			}
 		});
 		
@@ -170,7 +188,7 @@ public class PatientInfoEntryScene {
 				}
 				
 				//If Date selected, a File must also be selected
-				if (dateHolder.getDateOfScan() != null && newFiles.size() == 0) {
+				if (holder.getDate() != null && newFiles.size() == 0) {
 					complete = false;
 					fileStackPane.setVisible(true);
 				} else {
@@ -182,13 +200,16 @@ public class PatientInfoEntryScene {
 					Date dateCreated = java.sql.Date.valueOf(LocalDate.now()); //get current date
 					Patient patient = new Patient(patFNameField.getText(), patLNameField.getText(), dateCreated, notesField.getText());
 					if (newFiles.size() > 0) {
-						if (dateHolder.getDateOfScan() == null) {
+						if (holder.getDate() == null) {
 							manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
-							dateHolder.setDateOfScan(java.sql.Date.valueOf(LocalDate.now()));
+							holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
 						}
 						for (int i = 0; i < newFiles.size(); ++i) {
-							patient.addRawScan(new Scan(dateHolder.getDateOfScan(), newFiles.get(i)));
+							patient.addRawScan(new Scan(holder.getDate(), newFiles.get(i)));
 						}
+					}
+					if (holder.getFile() != null) {
+						patient.setPicture(holder.getFile());
 					}
 					try {
 						PatientManagement.exportPatient(patient);
