@@ -14,6 +14,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -29,7 +30,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -61,6 +65,7 @@ public class ScanVisualizerScene {
 		//Create panes to the grids so the elements can fully fill the grid
 		BorderPane cnnBPane = new BorderPane();
 		Pane cnnPane = new Pane();
+		BorderPane accuracyPane = new BorderPane();
 		Pane likelyTraumaPane = new Pane();
 		BorderPane likelyTraumaBPane = new BorderPane();
 		BorderPane algoVisBPane = new BorderPane();
@@ -82,6 +87,26 @@ public class ScanVisualizerScene {
 		}
 		chart1.getData().add(series1);
 		chart1.setMaxWidth(Double.MAX_VALUE);
+
+		//Pie Chart to show accuracy
+		StackPane accuracyStack = new StackPane();
+		Arc arc2 = new Arc();
+		arc2.setStartAngle(90);
+		arc2.setRadiusX(50);
+		arc2.setRadiusY(50);
+		arc2.setLength(350);
+		arc2.setType(ArcType.ROUND);
+		arc2.setStyle("-fx-fill: #cfd8dc");
+		Arc arc = new Arc();
+		arc.setStartAngle(90);
+		arc.setRadiusX(50);
+		arc.setRadiusY(50);
+		arc.setLength(120);
+		arc.setType(ArcType.ROUND);
+		arc.setStyle("-fx-fill: #455357");
+		accuracyStack.getChildren().add(arc);
+		Group arcGroup = new Group(arc2, arc);
+		accuracyPane.setCenter(arcGroup);
 
 		//###ADD ELEMENTS TO THEIR GRID LOCATION###
 		//Algorithm Cell setup
@@ -297,9 +322,10 @@ public class ScanVisualizerScene {
 		GridPane.setConstraints(likelyTraumaBPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(algoVisBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(cnnBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(accuracyPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
 
-		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane);
+		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane, accuracyPane);
 		contentGrid.getStyleClass().add("content-pane");
 
 		//Merge Vertical Side Menu and Content
