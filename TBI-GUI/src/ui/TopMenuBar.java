@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.File;
+import java.net.URL;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -59,6 +60,7 @@ public class TopMenuBar {
 		Menu preferences = new Menu("Preferences");
 		Menu themes = new Menu("Themes");
 		
+		//File directory = new File(TopMenuBar.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "resources/themes");
 		File directory = new File("./src/resources/themes");
 		for (File file : directory.listFiles()) {
 			String fileName = file.getName();
