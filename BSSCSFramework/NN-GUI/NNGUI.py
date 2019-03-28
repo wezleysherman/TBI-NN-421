@@ -11,6 +11,7 @@ import sys, pandas, os, webbrowser
 import Customizations as custom
 sys.path.append('..')
 import BSSCS_CNN, BSSCS_AUTO_ENCODER, BSSCS_CLASSIFIER, BSSCS_IMG_PROCESSING
+import tensorflow as tf
 
 class NNGUI(QWidget):
 
@@ -94,7 +95,7 @@ class NNGUI(QWidget):
         img_name = QLabel("Image Folder:")
         img_spacer = QLabel()
 
-        img_wh_name = QLabel("Width and Height (pixels): ")
+        img_wh_name = QLabel("Width & Height (pixels): ")
         img_w = QLineEdit()
         img_h = QLineEdit()
         img_wh_spacer = QLabel("x")
@@ -201,6 +202,9 @@ class NNGUI(QWidget):
 
             nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())))
             nn_options.toString()
+
+            bsscs = BSSCS_CNN.BSSCS_CNN()
+            input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nnoptions.getIMG_H(), 1])
             
         train_button.clicked.connect(train_clicked)
         
