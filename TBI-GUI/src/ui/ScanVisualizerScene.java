@@ -6,6 +6,9 @@ import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -14,6 +17,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -23,17 +27,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import utils.Patient;
+import javafx.util.Duration;
 
 /**
  * This page will allow for the user to view a CT scan image
@@ -41,9 +52,8 @@ import utils.Patient;
  * REFERENCES: https://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm
  */
 public class ScanVisualizerScene {
-
-	private static Patient patient = new Patient();
-
+	
+	@SuppressWarnings({ "static-access" })
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -61,6 +71,7 @@ public class ScanVisualizerScene {
 		//Create panes to the grids so the elements can fully fill the grid
 		BorderPane cnnBPane = new BorderPane();
 		Pane cnnPane = new Pane();
+		BorderPane accuracyPane = new BorderPane();
 		Pane likelyTraumaPane = new Pane();
 		BorderPane likelyTraumaBPane = new BorderPane();
 		BorderPane algoVisBPane = new BorderPane();
@@ -82,6 +93,13 @@ public class ScanVisualizerScene {
 		}
 		chart1.getData().add(series1);
 		chart1.setMaxWidth(Double.MAX_VALUE);
+
+		//Pie Chart to show accuracy
+		StackPane accuracyStack = createArc(35);
+		Label informationLabel = new Label("The results of this analysis are " + manager.getScan().getLabelProb() + "% likely.");
+		accuracyPane.setCenter(accuracyStack);
+		accuracyPane.setAlignment(informationLabel, Pos.CENTER);
+		accuracyPane.setBottom(informationLabel);
 
 		//###ADD ELEMENTS TO THEIR GRID LOCATION###
 		//Algorithm Cell setup
@@ -174,9 +192,6 @@ public class ScanVisualizerScene {
 									messLabel.setWrapText(true);
 									messLabel.getStyleClass().add("label-white");
 									messLabel.autosize();
-
-									class ValueHolder {boolean value;}
-									ValueHolder vh = new ValueHolder();
 
 									VBox dialogLayout = new VBox(5);
 									GridPane buttonGrid = new GridPane();
@@ -297,9 +312,10 @@ public class ScanVisualizerScene {
 		GridPane.setConstraints(likelyTraumaBPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(algoVisBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(cnnBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(accuracyPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
 
-		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane);
+		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane, accuracyPane);
 		contentGrid.getStyleClass().add("content-pane");
 
 		//Merge Vertical Side Menu and Content
@@ -311,5 +327,43 @@ public class ScanVisualizerScene {
 
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
-	}	
+	}
+	
+	//Create Arc to display as percentage with animation
+	public static StackPane createArc(double percent) {
+		Label percentLabel = new Label(percent + "%");
+		percentLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf("#ffffff"), CornerRadii.EMPTY, Insets.EMPTY)));
+		//Arc for placing in the center
+		Arc arc2 = new Arc();
+		arc2.setStartAngle(90);
+		arc2.setRadiusX(50);
+		arc2.setRadiusY(50);
+		arc2.setLength(350);
+		arc2.setType(ArcType.ROUND);
+		arc2.setStyle("-fx-fill: #cfd8dc");
+		Arc arc = new Arc();
+		arc.setStartAngle(90);
+		arc.setRadiusX(50);
+		arc.setRadiusY(50);
+		arc.setLength(0);
+		arc.setType(ArcType.ROUND);
+		arc.setStyle("-fx-fill: #455357");
+		StackPane stackPane = new StackPane();
+		Group arcGroup = new Group(arc2, arc);
+		stackPane.getChildren().addAll(arcGroup, percentLabel);
+				
+		double endAngle = percent / 100 * 360;
+		//Animation
+		KeyValue kvStart = new KeyValue(arc.startAngleProperty(), 90);
+		KeyValue kvPause = new KeyValue(arc.lengthProperty(), 1);
+		KeyValue kvEnd = new KeyValue(arc.lengthProperty(), endAngle);
+		
+		KeyFrame fillArc = new KeyFrame(Duration.seconds(1.5), kvStart, kvEnd);
+		KeyFrame pauseFrame = new KeyFrame(Duration.seconds(.5), kvStart, kvPause);
+		Timeline timeline = new Timeline(pauseFrame, fillArc);
+		timeline.setCycleCount(1);
+
+		timeline.play();
+		return stackPane;	
+	}
 }
