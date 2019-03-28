@@ -16,6 +16,7 @@ limitations under the License.
 package utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
@@ -32,8 +33,9 @@ import org.tensorflow.Session;
 import org.tensorflow.Tensor;
 import org.tensorflow.TensorFlow;
 import org.tensorflow.types.UInt8;
+import nifti.Nifti1Dataset;
 
-//THIS IS LARGELY NOT MY WORK. It has been adapted to run when called from a Patient class instead of from the command line.
+//THIS IS LARGELY NOT MY (julia's) WORK. It has been adapted to run when called from a Patient class instead of from the command line.
 //This sample is pulled from https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/java/src/main/java/org/tensorflow/examples/LabelImage.java
 
 /**
@@ -219,5 +221,26 @@ public class NNUtils {
 		}
 
 		private Graph g;
+	}
+	
+	//this is moreso my (julia's) work. it uses the niftijlib library
+	
+	public static void main(String [] args) throws FileNotFoundException, IOException {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		f = new File(f.getAbsolutePath(), "tensor_test_images");
+		f = new File(f.getAbsolutePath(), "knee.nii");
+		
+		Nifti1Dataset nifti = new Nifti1Dataset(f.getAbsolutePath());
+		nifti.readHeader();
+		nifti.printHeader();
+		double [][][] voxels = nifti.readDoubleVol((short)0);
+		for(int i = 0; i < voxels.length; i++) {
+			for(int j = 0; j < voxels[i].length; j++) {
+				for(int k = 0; k < voxels[i][j].length; k++) {
+					System.out.println(voxels[i][j][k]);
+				}
+			}
+		}
 	}
 }
