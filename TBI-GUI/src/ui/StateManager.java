@@ -118,14 +118,8 @@ public class StateManager {
 			this.patient = null;
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
-		else if (sceneID.equals("CNNVisualizer")) {
-			scene = new CNNVisualizationScene().initializeScene(this);
-		}
 		else if (sceneID.equals("PreviousPatient")) {
 			scene = new PreviousPatientScene().initializeScene(this);
-		}
-		else if (sceneID.equals("AlgorithmVisualizer")) {
-			scene = new AlgorithmVisualizerScene().initializeScene(this);
 		}
 		else if (sceneID.equals("ScanVisualizer")) {
 			scene = new ScanVisualizerScene().initializeScene(this);
