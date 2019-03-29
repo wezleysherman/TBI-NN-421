@@ -222,25 +222,4 @@ public class NNUtils {
 
 		private Graph g;
 	}
-	
-	//this is moreso my (julia's) work. it uses the niftijlib library
-	
-	public static void main(String [] args) throws FileNotFoundException, IOException {
-		File f = new File(System.getProperty("user.dir"), "src");
-		f = new File(f.getAbsolutePath(), "resources");
-		f = new File(f.getAbsolutePath(), "tensor_test_images");
-		f = new File(f.getAbsolutePath(), "knee.nii");
-		
-		Nifti1Dataset nifti = new Nifti1Dataset(f.getAbsolutePath());
-		nifti.readHeader();
-		nifti.printHeader();
-		double [][][] voxels = nifti.readDoubleVol((short)0);
-		for(int i = 0; i < voxels.length; i++) {
-			for(int j = 0; j < voxels[i].length; j++) {
-				for(int k = 0; k < voxels[i][j].length; k++) {
-					System.out.println(voxels[i][j][k]);
-				}
-			}
-		}
-	}
 }

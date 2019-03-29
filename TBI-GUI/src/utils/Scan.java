@@ -1,9 +1,13 @@
 package utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.InputMismatchException;
+
+import nifti.Nifti1Dataset;
 
 public class Scan implements Serializable, Comparable{
 
@@ -12,6 +16,9 @@ public class Scan implements Serializable, Comparable{
 	private String notes;
 	private String label;
 	private float labelProb;
+	private boolean isNifti = false;
+	private Nifti1Dataset nifti;
+	private int [][][] niftiArray = null;
 
 	public Scan() {
 		this.setDateOfScan(null);
@@ -22,12 +29,34 @@ public class Scan implements Serializable, Comparable{
 	public Scan(Date dOS, File inScan) {
 		this.setDateOfScan(dOS);
 		this.setScan(inScan);
+		
+		if(inScan.getAbsolutePath().contains(".nii")) {
+			try {
+				createNifti();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			isNifti = true;
+		}
 	}
 	
 	public Scan(Date dOS, File inScan, String inNotes) {
 		this.setDateOfScan(dOS);
 		this.setScan(inScan);
 		this.setNotes(inNotes);
+		
+		if(inScan.getAbsolutePath().contains(".nii")) {
+			try {
+				createNifti();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			isNifti = true;
+		}
 	}
 	
 	public String getLabel() {
@@ -77,6 +106,62 @@ public class Scan implements Serializable, Comparable{
 			throw new InputMismatchException("You tried to compare a scan with a not-scan.");
 		}
 		return ((Scan)other).getDateOfScan().compareTo(this.dateOfScan);
+	}
+	
+	//nifti-only methods
+	private void createNifti() throws FileNotFoundException, IOException {
+		nifti = new Nifti1Dataset(scan.getAbsolutePath());
+		nifti.readHeader();
+		getNiftiArray();
+	}
+	
+	public boolean isNifti() {
+		return isNifti;
+	}
+	
+	public Nifti1Dataset getNifti() {
+		return nifti;
+	}
+	
+	public int [][][] getNiftiArray() throws IOException{
+		if(!isNifti) {
+			return new int[0][0][0];
+		}else if (niftiArray == null){
+			double [][][] voxels = nifti.readDoubleVol((short)0);
+			niftiArray = new int[voxels.length][voxels[0].length][voxels[0][0].length];
+			for(int i = 0; i < voxels.length; i++) {
+				for(int j = 0; j < voxels[i].length; j++) {
+					for(int k = 0; k < voxels[i][j].length; k++) {
+						niftiArray[i][j][k] = (int)voxels[i][j][k];
+					}
+				}
+			}
+		}
+		return niftiArray;
+	}
+	
+	//for testing purposes
+	public static void main(String [] args) throws FileNotFoundException, IOException {
+		File f = new File(System.getProperty("user.dir"), "src");
+		f = new File(f.getAbsolutePath(), "resources");
+		f = new File(f.getAbsolutePath(), "tensor_test_images");
+		f = new File(f.getAbsolutePath(), "knee.nii");
+
+		Scan nscan = new Scan(new Date(), f);
+		Nifti1Dataset n = nscan.getNifti();
+		
+		double [][][] voxels = n.readDoubleVol((short)0);
+		int [][][] ints = nscan.getNiftiArray();
+		for(int i = 0; i < voxels.length; i++) {
+			for(int j = 0; j < voxels[i].length; j++) {
+				for(int k = 0; k < voxels[i][j].length; k++) {
+					if(voxels[i][j][k] - ints[i][j][k] != 0) {
+						System.out.println(voxels[i][j][k]);
+						System.out.println(ints[i][j][k]);
+					}
+				}
+			}
+		}
 	}
 	
 }
