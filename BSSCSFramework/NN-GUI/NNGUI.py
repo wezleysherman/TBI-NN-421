@@ -143,7 +143,7 @@ class NNGUI(QWidget):
         layer_slider = QSlider(0x1)
         layer_slider.setTickInterval(5)
         layer_slider.setTickPosition(2)
-        layer_slider.setRange(0,50)
+        layer_slider.setRange(1,50)
 
         def user_layers(value):
             layer_text.setText(str(value))
@@ -202,10 +202,20 @@ class NNGUI(QWidget):
 
             nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())))
             nn_options.toString()
+            blocks = []
 
-            bsscs = BSSCS_CNN.BSSCS_CNN()
-            input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nnoptions.getIMG_H(), 1])
-            cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
+            if nn_options.getLAYERS() > 1:
+                for x in range(nn_options.getLAYERS()):
+                    bsscs = BSSCS_CNN.BSSCS_CNN()
+                    input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
+                    cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
+                    blocks.append(cnn_block)
+                    print("Block #" + str(x + 1) + ": Successful")
+            else:
+                bsscs = BSSCS_CNN.BSSCS_CNN()
+                input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
+                cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
+                print("Singular Layer Successful")
             
         train_button.clicked.connect(train_clicked)
         
