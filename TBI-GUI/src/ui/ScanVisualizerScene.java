@@ -2,7 +2,6 @@ package ui;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -203,10 +202,10 @@ public class ScanVisualizerScene {
 						@Override
 						protected Object call() throws Exception {
 							ServerSocket server = null;
-							Socket client = null;
 							try {
 								server = new ServerSocket(8080);
-								client = server.accept();
+								server.accept();
+								server.close();
 								Platform.runLater(new Runnable() {
 									@Override
 									public void run() {
@@ -215,13 +214,10 @@ public class ScanVisualizerScene {
 										contentGrid.getChildren().remove(loadingPane);
 									}
 								});  
-								server.close();
-								client.close();
 							} catch (IOException e) {
 								e.printStackTrace();
 								try {
 									server.close();
-									client.close();
 								} catch (IOException e1) {
 									e1.printStackTrace();
 								}

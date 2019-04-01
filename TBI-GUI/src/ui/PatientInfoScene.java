@@ -193,8 +193,6 @@ public class PatientInfoScene {
 			TextField pictureField = new TextField("Select Picture");
 			TextArea notesArea = new TextArea(patient.getNotes());
 			notesArea.setPrefHeight(300);
-			Label scanLabel = new Label("Add New Scan(s):");
-			TextField fileField = new TextField("Select File(s)");
 			DatePicker datePicker = new DatePicker();
 			datePicker.setPromptText("Date of Scan(s)");
 			Button saveBtn = new Button("Save");
@@ -217,15 +215,6 @@ public class PatientInfoScene {
 							patient.setFirstName(firstField.getText());
 							patient.setLastName(lastField.getText());
 							patient.setNotes(notesArea.getText());
-							if (newFiles.size() > 0) {
-								if (holder.getDate() == null) {
-									manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
-									holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
-								}
-								for (int i = 0; i < newFiles.size(); ++i) {
-									patient.addScan(new Scan(holder.getDate(), newFiles.get(i)));
-								}
-							}
 							if (holder.getFile() != null) {
 								patient.setPicture(holder.getFile());
 							}
@@ -267,26 +256,6 @@ public class PatientInfoScene {
 
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
-			fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-					if(arg2) {
-						List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
-						if (files != null && files.size() > 0) {
-							if (files.size() == 1) {
-								fileField.setText(files.get(0).getName());
-							}
-							else {
-								fileField.setText(files.size() + " files");
-							}
-							for (int i = 0; i < files.size(); ++i) {
-								newFiles.add(files.get(i));
-							}
-						}
-					}
-					datePicker.requestFocus();
-				}
-			});
 
 			datePicker.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -300,13 +269,11 @@ public class PatientInfoScene {
 			GridPane.setConstraints(lastField, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(pictureField, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(notesArea, 1, 4, 3, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(scanLabel, 1, 5, 1, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(fileField, 2, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(datePicker, 3, 5, 1, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(saveBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
 			GridPane.setConstraints(cancelBtn, 1, 7, 3, 1, HPos.CENTER, VPos.CENTER);
 			contentGrid.getChildren().addAll(
-					firstField, lastField, pictureField, notesArea, scanLabel, fileField, datePicker, saveBtn, cancelBtn
+					firstField, lastField, pictureField, notesArea, datePicker, saveBtn, cancelBtn
 					);
 		}
 
