@@ -2,11 +2,8 @@ package ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -122,7 +119,7 @@ public class PatientInfoScene {
 
 			//Set up scan table
 			ObservableList<Scan> scanList = FXCollections.observableArrayList();
-			for(Scan scan : patient.getScans()) { //TODO proc scans too?
+			for(Scan scan : patient.getScans()) {
 				scanList.add(scan);
 			}
 
@@ -188,16 +185,14 @@ public class PatientInfoScene {
 		//Edit was pressed
 		else {
 			//Create elements
+			scansLabel.setVisible(false);
 			TextField firstField = new TextField(patient.getFirstName());
 			TextField lastField = new TextField(patient.getLastName());
 			TextField pictureField = new TextField("Select Picture");
 			TextArea notesArea = new TextArea(patient.getNotes());
 			notesArea.setPrefHeight(300);
-			DatePicker datePicker = new DatePicker();
-			datePicker.setPromptText("Date of Scan(s)");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
-			datePicker.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 			Holder holder = new Holder();
 			LinkedList<File> newFiles = new LinkedList<File>();
@@ -250,17 +245,7 @@ public class PatientInfoScene {
 							holder.setFile(picture);
 						}
 					}
-					datePicker.requestFocus();
-				}
-			});
-
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
-
-			datePicker.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					holder.setDate(java.sql.Date.valueOf(datePicker.getValue()));
+					cancelBtn.requestFocus();
 				}
 			});
 
@@ -269,11 +254,10 @@ public class PatientInfoScene {
 			GridPane.setConstraints(lastField, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(pictureField, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(notesArea, 1, 4, 3, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(datePicker, 3, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(saveBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(cancelBtn, 1, 7, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(saveBtn, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(cancelBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
 			contentGrid.getChildren().addAll(
-					firstField, lastField, pictureField, notesArea, datePicker, saveBtn, cancelBtn
+					firstField, lastField, pictureField, notesArea, saveBtn, cancelBtn
 					);
 		}
 
