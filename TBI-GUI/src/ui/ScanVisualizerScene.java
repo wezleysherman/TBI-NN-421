@@ -122,9 +122,9 @@ public class ScanVisualizerScene {
 				contentGrid.getChildren().add(loadingPane);
 				String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 				if(path.contains("main")) {
-					path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getScan().getAbsolutePath();
+					path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getRawScan().getAbsolutePath();
 				} else {
-					path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getScan().getAbsolutePath();
+					path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getRawScan().getAbsolutePath();
 				}
 
 				try {

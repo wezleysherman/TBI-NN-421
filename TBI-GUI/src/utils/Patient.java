@@ -21,8 +21,7 @@ public class Patient extends Info implements Serializable {
 	private String basePath = PatientManagement.buildDefaultPath();
 	private Date dateCreated;
 	private String notes;
-	private LinkedList<Scan> rawScans;
-	private LinkedList<Scan> procScans;
+	private LinkedList<Scan> scans;
 	private File picture;
 	
 	//constructor for blank patient
@@ -58,8 +57,7 @@ public class Patient extends Info implements Serializable {
 		super(fName, lName);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
-		this.setRawScans(pScans);
-		this.procScans = new LinkedList<Scan>();
+		this.setScans(pScans);
 		this.uid = uid;
 		this.file = new File(basePath, uid).getAbsolutePath();
 	}
@@ -91,32 +89,20 @@ public class Patient extends Info implements Serializable {
 		this.notes = notes;
 	}
 
-	public LinkedList<Scan> getRawScans() {
-		return rawScans;
+	public LinkedList<Scan> getScans() {
+		return scans;
 	}
 
-	public void setRawScans(LinkedList<Scan> scans) {
-		this.rawScans = scans;
+	public void setScans(LinkedList<Scan> scans) {
+		this.scans = scans;
 	}
 
-	public LinkedList<Scan> getProcScans() {
-		return procScans;
+	public Integer getNumScans() {
+		return this.scans.size();
 	}
 
-	public void setProcScans(LinkedList<Scan> scans) {
-		this.procScans = scans;
-	}
-
-	public Integer getNumRawScans() {
-		return this.rawScans.size();
-	}
-
-	public Integer getNumProcScans() {
-		return this.procScans.size();
-	}
-
-	public Date getLastRawScanDate() {
-		Scan last = this.rawScans.peek();
+	public Date getLastScanDate() {
+		Scan last = this.scans.peek();
 		return last.getDateOfScan();
 	}
 
@@ -128,64 +114,32 @@ public class Patient extends Info implements Serializable {
 		this.picture = file;
 	}
 	
-	public void addRawScan(Scan scan) {
+	public void addScan(Scan scan) {
 		/*
 		 * Handles adding a new scan to the patient's linked list.
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
-		Scan scan2 = analyzeScan(scan);
-		this.rawScans.add(scan2); //TODO: don't add proccessed scan to raw scan
-		Collections.sort(rawScans);
-		this.addProcScan(scan2);
+		analyzeScan(scan); //TODO add file location of processed scan to scan object
+		Collections.sort(scans);
 	}
 
-	public Scan getRawScan(int index) {
+	public Scan getScan(int index) {
 		/*
 		 * Handles getting a scan of a specific index from the linked list
 		 *
 		 * Input: - index: index of scan we want to return
 		 */
-		return this.rawScans.get(index);
+		return this.scans.get(index);
 	}
 
-	public Scan delRawScan(int index) {
+	public Scan delScan(int index) {
 		/*
 		 * Handles removing a scan of a specific index from the linked list
 		 *
 		 * Input: - index: index of scan we want to return
 		 */
-		//TODO: create matching mechanism for a better way to remove the processed scan.
-		this.delProcScan(index);
-		return this.rawScans.remove(index);
-	}
-
-	public void addProcScan(Scan scan) {
-		/*
-		 * Handles adding a new scan to the patient's linked list.
-		 *
-		 * Input: - scan: A scan object containing the patient's analyzed scan image
-		 */
-		this.procScans.add(scan);
-		Collections.sort(procScans);
-	}
-
-	public Scan getProcScan(int index) {
-		/*
-		 * Handles getting a scan of a specific index from the linked list
-		 *
-		 * Input: - index: index of scan we want to return
-		 */
-		return this.procScans.get(index);
-	}
-
-	public Scan delProcScan(int index) {
-		/*
-		 * Handles removing a scan of a specific index from the linked list
-		 *
-		 * Input: - index: index of scan we want to return
-		 */
-		return this.procScans.remove(index);
+		return this.scans.remove(index);
 	}
 
 	public void savePatient() throws Exception {
@@ -193,7 +147,7 @@ public class Patient extends Info implements Serializable {
 	}
 	
 	public Scan analyzeScan(Scan s) {
-		String file = s.getScan().getAbsolutePath();
+		String file = s.getRawScan().getAbsolutePath();
 		file = file.substring(file.length()-3, file.length());
 		System.out.println(file);
 		List l = new LinkedList(); l.add("jpg"); l.add("png"); l.add("gif");

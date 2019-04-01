@@ -54,7 +54,7 @@ public class NNUtils {
 	}
 	
 	public static Scan get_label(Scan s) {
-		String imageFile = s.getScan().getAbsolutePath();
+		String imageFile = s.getRawScan().getAbsolutePath();
 		byte[] graphDef = readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));
 		List<String> labels = readAllLinesOrExit(Paths.get(modelDir, "imagenet_comp_graph_label_strings.txt"));
 		byte[] imageBytes = readAllBytesOrExit(Paths.get(imageFile));

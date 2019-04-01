@@ -63,15 +63,15 @@ public class PatientClassTests {
 		Scan scan1 = new Scan(date1, new File(buildImagePath("porcupine.jpg")), "scan 1");
 		Scan scan2 = new Scan(date2, new File(buildImagePath("terrier2.jpg")), "scan 2");
 		Scan scan3 = new Scan(date3, new File(buildImagePath("whale.png")), "scan 3");
-		patient.addRawScan(scan2);
-		patient.addRawScan(scan1);
-		assertEquals(date1, patient.getLastRawScanDate());
+		patient.addScan(scan2);
+		patient.addScan(scan1);
+		assertEquals(date1, patient.getLastScanDate());
 		
-		patient.addRawScan(scan3);
-		assertEquals(date3, patient.getLastRawScanDate());
+		patient.addScan(scan3);
+		assertEquals(date3, patient.getLastScanDate());
 		
-		patient.delRawScan(0);
-		assertEquals(scan1, patient.getRawScan(0));
+		patient.delScan(0);
+		assertEquals(scan1, patient.getScan(0));
 	}
 	
 	@Test
@@ -79,7 +79,7 @@ public class PatientClassTests {
 		Patient patient = new Patient("John", "Doe", new Date(), "Some notes");
 		Date date1 = new Date();
 		Scan scan1 = new Scan(date1, new File(buildImagePath("whale.jpg")), "scan 1");
-		patient.addRawScan(scan1);
+		patient.addScan(scan1);
 		
 		scan1 = patient.getProcScan(0);
 		assertEquals(scan1.getLabel(), "killer whale");

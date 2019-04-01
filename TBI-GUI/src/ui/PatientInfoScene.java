@@ -122,7 +122,7 @@ public class PatientInfoScene {
 
 			//Set up scan table
 			ObservableList<Scan> scanList = FXCollections.observableArrayList();
-			for(Scan scan : patient.getRawScans()) { //TODO proc scans too?
+			for(Scan scan : patient.getScans()) { //TODO proc scans too?
 				scanList.add(scan);
 			}
 
@@ -223,7 +223,7 @@ public class PatientInfoScene {
 									holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
 								}
 								for (int i = 0; i < newFiles.size(); ++i) {
-									patient.addRawScan(new Scan(holder.getDate(), newFiles.get(i)));
+									patient.addScan(new Scan(holder.getDate(), newFiles.get(i)));
 								}
 							}
 							if (holder.getFile() != null) {

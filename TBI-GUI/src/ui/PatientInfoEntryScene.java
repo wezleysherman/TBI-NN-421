@@ -205,7 +205,7 @@ public class PatientInfoEntryScene {
 							holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
 						}
 						for (int i = 0; i < newFiles.size(); ++i) {
-							patient.addRawScan(new Scan(holder.getDate(), newFiles.get(i)));
+							patient.addScan(new Scan(holder.getDate(), newFiles.get(i)));
 						}
 					}
 					if (holder.getFile() != null) {
