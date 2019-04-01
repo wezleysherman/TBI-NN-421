@@ -289,7 +289,7 @@ public class VerticalSideMenu {
 				if (yes) {
 					try {
 						Patient patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
-						patient.getRawScans().clear();
+						patient.getScans().clear();
 						patient.savePatient();
 						manager.paintScene("PatientInfo");
 					} catch (Exception e) {
@@ -335,9 +335,9 @@ public class VerticalSideMenu {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (manager.makeQuestion("This will remove all of the data associated with this scan, are you sure you want to continue?")) {
-					for(Scan scan : patient.getRawScans()) {
-						if (scan.getScan().equals(manager.getScan().getScan())) {
-			        		patient.getRawScans().remove(scan);
+					for(Scan scan : patient.getScans()) {
+						if (scan.getRawScan().equals(manager.getScan().getRawScan())) {
+			        		patient.getScans().remove(scan);
 			        	}			        	
 			        }
 					try {
@@ -364,15 +364,15 @@ public class VerticalSideMenu {
 		scrollGrid.getColumnConstraints().add(scrollGridCols);
 		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
 		
-		for (int i = 0; i < patient.getNumRawScans(); ++i) {
-			Button scanBtn = new Button(patient.getRawScans().get(i).getScan().getName() + " Scan " + (i + 1));
+		for (int i = 0; i < patient.getNumScans(); ++i) {
+			Button scanBtn = new Button(patient.getScans().get(i).getRawScan().getName() + " Scan " + (i + 1));
 			scanBtn.setMaxWidth(Double.MAX_VALUE);
 			scanBtn.setTooltip(new Tooltip("View this scan."));
 			scanBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
 					int index = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length() - 1));
-					manager.setScan(patient.getRawScans().get(index - 1));
+					manager.setScan(patient.getScans().get(index - 1));
 					manager.paintScene("ScanVisualizer");
 					//TODO See about only redrawing elements that need to be updated.
 				}
@@ -423,8 +423,8 @@ public class VerticalSideMenu {
 					Scan scan= manager.getScan();
 					scan.setNotes(docNotesField.getText());
 
-					for(Scan patScan : patient.getRawScans()) {
-						if (patScan.getScan().equals(scan.getScan())) {
+					for(Scan patScan : patient.getScans()) {
+						if (patScan.getRawScan().equals(scan.getRawScan())) {
 							patScan.setDateOfScan(scan.getDateOfScan());
 							patScan.setNotes(scan.getNotes());
 						}			        	
