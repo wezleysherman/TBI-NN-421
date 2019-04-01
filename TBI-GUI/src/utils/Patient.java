@@ -120,6 +120,7 @@ public class Patient extends Info implements Serializable {
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
+		scans.add(scan);
 		analyzeScan(scan); //TODO add file location of processed scan to scan object
 		Collections.sort(scans);
 	}
