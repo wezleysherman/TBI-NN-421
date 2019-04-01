@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.InputMismatchException;
+import java.awt.image.BufferedImage;
 
 import nifti.Nifti1Dataset;
 
@@ -140,6 +141,26 @@ public class Scan implements Serializable, Comparable{
 		return niftiArray;
 	}
 	
+	public int getNumNiftiSlices() throws IOException{
+		if(!isNifti) {
+			return 0;
+		}else if (niftiArray == null){
+			getNiftiArray();
+		}
+		
+		return niftiArray.length;
+	}
+	
+	public int [][] getNiftiSlice(int slice) throws IOException{
+		if(!isNifti) {
+			return new int[0][0];
+		}else if (niftiArray == null){
+			getNiftiArray();
+		}
+		
+		return niftiArray[slice];
+	}
+	
 	//for testing purposes
 	public static void main(String [] args) throws FileNotFoundException, IOException {
 		File f = new File(System.getProperty("user.dir"), "src");
@@ -152,16 +173,9 @@ public class Scan implements Serializable, Comparable{
 		
 		double [][][] voxels = n.readDoubleVol((short)0);
 		int [][][] ints = nscan.getNiftiArray();
-		for(int i = 0; i < voxels.length; i++) {
-			for(int j = 0; j < voxels[i].length; j++) {
-				for(int k = 0; k < voxels[i][j].length; k++) {
-					if(voxels[i][j][k] - ints[i][j][k] != 0) {
-						System.out.println(voxels[i][j][k]);
-						System.out.println(ints[i][j][k]);
-					}
-				}
-			}
-		}
+		int [][] slice = nscan.getNiftiSlice((int)(nscan.getNumNiftiSlices()/2));
+		
+		//BufferedImage img = new BufferedImage(slice[0].length, slice.length, BufferedImage.);
 	}
 	
 }
