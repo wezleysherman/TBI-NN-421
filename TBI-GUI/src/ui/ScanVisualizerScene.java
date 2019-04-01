@@ -3,6 +3,7 @@ package ui;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,9 +20,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -60,8 +58,6 @@ public class ScanVisualizerScene {
 		GridPane mainGrid;
 
 		Button likelyTraumaBtn = new Button();
-		Button algoVisBtn = new Button();
-		Button viewCNNBtn = new Button();
 
 		//Loading screen handlers
 		Button yesBtn = new Button("Yes");
@@ -69,52 +65,30 @@ public class ScanVisualizerScene {
 		Stage dialogStage = new Stage();
 
 		//Create panes to the grids so the elements can fully fill the grid
-		BorderPane cnnBPane = new BorderPane();
-		Pane cnnPane = new Pane();
 		BorderPane accuracyPane = new BorderPane();
+		StackPane iconPane= new StackPane();
 		Pane likelyTraumaPane = new Pane();
 		BorderPane likelyTraumaBPane = new BorderPane();
-		BorderPane algoVisBPane = new BorderPane();
-
-		//Temp Chart for proof of concept with dummy data
-		LineChart<Number, Number> chart1 = null;
-		int[] fileNum = new int[]{100, 200, 300, 400, 500, 600, 700, 800};
-		double[] percentages = new double[]{10.5, 15.6, 20.5, 35.6, 48.9, 68.3, 80.1, 92.3};
-		NumberAxis xAxis1 = new NumberAxis();
-		xAxis1.setLabel("Files analyzed");
-		NumberAxis yAxis1 = new NumberAxis();
-		yAxis1.setLabel("Percent Accuracy");
-		chart1 = new LineChart<Number, Number>(xAxis1, yAxis1);
-		chart1.setTitle("Percent Accuracy Increase with More Files Analyzed");
-		XYChart.Series series1 = new XYChart.Series();
-		series1.setName("Specific Data Points");
-		for (int i = 0; i < fileNum.length; ++i) {
-			series1.getData().add(new XYChart.Data<Integer, Double>(fileNum[i],percentages[i]));
-		}
-		chart1.getData().add(series1);
-		chart1.setMaxWidth(Double.MAX_VALUE);
 
 		//Pie Chart to show accuracy
-		StackPane accuracyStack = createArc(35);
-		Label informationLabel = new Label("The results of this analysis are " + manager.getScan().getLabelProb() + "% likely.");
+		DecimalFormat df = new DecimalFormat("#.##");
+		StackPane accuracyStack = createArc(manager.getScan().getLabelProb());
+		Label informationLabel = new Label("The results of this analysis are " + df.format(manager.getScan().getLabelProb()) + "% likely.");
 		accuracyPane.setCenter(accuracyStack);
 		accuracyPane.setAlignment(informationLabel, Pos.CENTER);
 		accuracyPane.setBottom(informationLabel);
 
 		//###ADD ELEMENTS TO THEIR GRID LOCATION###
-		//Algorithm Cell setup
-		algoVisBPane.prefWidthProperty().bind(contentGrid.widthProperty());
-		algoVisBtn.setMaxWidth(Double.MAX_VALUE);
-		algoVisBPane.setCenter(chart1);
-		algoVisBPane.setBottom(algoVisBtn);
-
-		//Get dummy image to fill into the grid
+		//Get images to fill into the grid
 		Image filterImage = new Image("resources/TestImage1.jpg");
-		ImageView displayCNNImage = new ImageView();
-		displayCNNImage.setImage(filterImage);
 		ImageView displayLTAImage = new ImageView();
 		displayLTAImage.setImage(filterImage);
 
+		Image iconImage = new Image("resources/icon.png");
+		ImageView displayIcon = new ImageView();
+		displayIcon.setImage(iconImage);
+		displayIcon.setPreserveRatio(true);
+		
 		//Likely Trauma Area cell setup
 		displayLTAImage.fitWidthProperty().bind(likelyTraumaPane.widthProperty());
 		displayLTAImage.fitHeightProperty().bind(likelyTraumaPane.heightProperty());
@@ -124,33 +98,19 @@ public class ScanVisualizerScene {
 		likelyTraumaBPane.setCenter(likelyTraumaPane);
 		likelyTraumaBPane.setBottom(likelyTraumaBtn);
 		likelyTraumaPane.getChildren().add(displayLTAImage);
-
-		//CNN cell setup
-		displayCNNImage.fitWidthProperty().bind(cnnPane.widthProperty());
-		displayCNNImage.fitHeightProperty().bind(cnnPane.heightProperty());
-
-		cnnBPane.prefWidthProperty().bind(contentGrid.widthProperty());
-		viewCNNBtn.setMaxWidth(Double.MAX_VALUE);
-		cnnBPane.setCenter(cnnPane);
-		cnnBPane.setBottom(viewCNNBtn);
-		cnnPane.getChildren().add(displayCNNImage);
+		
+		//Icon area cell setup
+		displayIcon.fitWidthProperty().bind(likelyTraumaBPane.widthProperty());
+		displayIcon.fitHeightProperty().bind(likelyTraumaBPane.heightProperty());
+		
+		StackPane.setAlignment(displayIcon, Pos.CENTER);
+		iconPane.prefWidthProperty().bind(contentGrid.widthProperty());
+		iconPane.setMaxWidth(Double.MAX_VALUE);
+		iconPane.getChildren().add(displayIcon);
 
 		//###STYLE AND ADD FUNCTION TO BUTTONS
 		//Setup buttons on the scene
-		viewCNNBtn.setText("CNN Visualizer");
 		likelyTraumaBtn.setText("Trauma Area Visualizer");
-		algoVisBtn.setText("Algorithm Visualizer");
-
-		//Style CNN Button
-		viewCNNBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("CNNVisualizer");
-			}
-		});
-		String viewCNNTT = "View the Convolutional Neural Network Visualizer.";
-		viewCNNBtn.setTooltip(new Tooltip(viewCNNTT));
 
 		//Style LTA button
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -281,17 +241,6 @@ public class ScanVisualizerScene {
 		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
 		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
 
-		//Style Algorithm Visualizer button
-		algoVisBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				manager.getSceneStack().push(manager.getSceneID());
-				manager.paintScene("AlgorithmVisualizer");
-			}
-		});
-		String algoVisTT = "View the Algorithm Visualizer.";
-		algoVisBtn.setTooltip(new Tooltip(algoVisTT));
-
 		//###LAYOUT CONTENT GRID AND ADD ELEMENTS
 		//Construct Content Grid
 		contentGrid.setPadding(new Insets(10, 10, 10, 10));
@@ -310,12 +259,11 @@ public class ScanVisualizerScene {
 
 		// Position Elements within the UI
 		GridPane.setConstraints(likelyTraumaBPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		GridPane.setConstraints(algoVisBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		GridPane.setConstraints(cnnBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(iconPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(accuracyPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
 
-		contentGrid.getChildren().addAll(likelyTraumaBPane, algoVisBPane, cnnBPane, accuracyPane);
+		contentGrid.getChildren().addAll(likelyTraumaBPane, accuracyPane, iconPane);
 		contentGrid.getStyleClass().add("content-pane");
 
 		//Merge Vertical Side Menu and Content
@@ -331,36 +279,36 @@ public class ScanVisualizerScene {
 	
 	//Create Arc to display as percentage with animation
 	public static StackPane createArc(double percent) {
-		Label percentLabel = new Label(percent + "%");
+		DecimalFormat df = new DecimalFormat("#.##");
+
+		Label percentLabel = new Label(df.format(percent) + "%");
 		percentLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf("#ffffff"), CornerRadii.EMPTY, Insets.EMPTY)));
 		//Arc for placing in the center
-		Arc arc2 = new Arc();
-		arc2.setStartAngle(90);
-		arc2.setRadiusX(50);
-		arc2.setRadiusY(50);
-		arc2.setLength(350);
-		arc2.setType(ArcType.ROUND);
-		arc2.setStyle("-fx-fill: #cfd8dc");
+		Arc placementArc = new Arc();
+		placementArc.setStartAngle(90);
+		placementArc.setRadiusX(80);
+		placementArc.setRadiusY(80);
+		placementArc.setLength(350);
+		placementArc.setType(ArcType.ROUND);
+		placementArc.setStyle("-fx-fill: #cfd8dc");
 		Arc arc = new Arc();
 		arc.setStartAngle(90);
-		arc.setRadiusX(50);
-		arc.setRadiusY(50);
+		arc.setRadiusX(80);
+		arc.setRadiusY(80);
 		arc.setLength(0);
 		arc.setType(ArcType.ROUND);
 		arc.setStyle("-fx-fill: #455357");
 		StackPane stackPane = new StackPane();
-		Group arcGroup = new Group(arc2, arc);
+		Group arcGroup = new Group(placementArc, arc);
 		stackPane.getChildren().addAll(arcGroup, percentLabel);
 				
 		double endAngle = percent / 100 * 360;
 		//Animation
 		KeyValue kvStart = new KeyValue(arc.startAngleProperty(), 90);
-		KeyValue kvPause = new KeyValue(arc.lengthProperty(), 1);
 		KeyValue kvEnd = new KeyValue(arc.lengthProperty(), endAngle);
 		
 		KeyFrame fillArc = new KeyFrame(Duration.seconds(1.5), kvStart, kvEnd);
-		KeyFrame pauseFrame = new KeyFrame(Duration.seconds(.5), kvStart, kvPause);
-		Timeline timeline = new Timeline(pauseFrame, fillArc);
+		Timeline timeline = new Timeline(fillArc);
 		timeline.setCycleCount(1);
 
 		timeline.play();

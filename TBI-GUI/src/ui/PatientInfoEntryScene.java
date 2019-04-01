@@ -97,7 +97,7 @@ public class PatientInfoEntryScene {
 		GridPane.setConstraints(notesField, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(finishBtn, 1, 8, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(pointerGrid, 2, 2, 2, 4, HPos.LEFT, VPos.CENTER);
-		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, pictureField, datePicker, notesField, finishBtn, pointerGrid);
+		contentGrid.getChildren().addAll(patFNameField, patLNameField, pictureField, fileField, datePicker, notesField, finishBtn, pointerGrid);
 		
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100.0/11);
@@ -129,7 +129,7 @@ public class PatientInfoEntryScene {
 	            		holder.setFile(picture);
 		            }
 				}
-	            datePicker.requestFocus();
+	            fileField.requestFocus();
 			}
 		});
 		
