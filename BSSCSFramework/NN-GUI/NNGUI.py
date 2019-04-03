@@ -203,16 +203,16 @@ class NNGUI(QWidget):
             nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())))
             nn_options.toString()
             blocks = []
-
+            bsscs = BSSCS_CNN.BSSCS_CNN()
+            classifier = BSSCS_CLASSIFIER.BSSCS_CLASSIFIER(tf.contrib.layers.12_regularizer(scale=0.001), 0.001, 250, nn_options.getBATCHES())
             if nn_options.getLAYERS() > 1:
                 for x in range(nn_options.getLAYERS()):
-                    bsscs = BSSCS_CNN.BSSCS_CNN()
                     input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
                     cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
                     blocks.append(cnn_block)
                     print("Block #" + str(x + 1) + ": Successful")
+                     
             else:
-                bsscs = BSSCS_CNN.BSSCS_CNN()
                 input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
                 cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
                 print("Singular Layer Successful")
