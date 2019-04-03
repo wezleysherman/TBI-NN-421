@@ -57,6 +57,7 @@ public class ScanVisualizerScene {
 		GridPane mainGrid;
 
 		Button likelyTraumaBtn = new Button();
+		Button rawScanBtn = new Button();
 
 		//Loading screen handlers
 		Button yesBtn = new Button("Yes");
@@ -68,6 +69,8 @@ public class ScanVisualizerScene {
 		StackPane iconPane= new StackPane();
 		Pane likelyTraumaPane = new Pane();
 		BorderPane likelyTraumaBPane = new BorderPane();
+		Pane rawScanPane = new Pane();
+		BorderPane rawScanBPane = new BorderPane();
 
 		//Pie Chart to show accuracy
 		DecimalFormat df = new DecimalFormat("#.##");
@@ -82,6 +85,8 @@ public class ScanVisualizerScene {
 		Image filterImage = new Image("resources/TestImage1.jpg");
 		ImageView displayLTAImage = new ImageView();
 		displayLTAImage.setImage(filterImage);
+		ImageView displayRawImage = new ImageView();
+		displayRawImage.setImage(filterImage);
 
 		Image iconImage = new Image("resources/icon.png");
 		ImageView displayIcon = new ImageView();
@@ -98,6 +103,16 @@ public class ScanVisualizerScene {
 		likelyTraumaBPane.setBottom(likelyTraumaBtn);
 		likelyTraumaPane.getChildren().add(displayLTAImage);
 		
+		//Raw Scan Area cell setup
+		displayRawImage.fitWidthProperty().bind(likelyTraumaPane.widthProperty());
+		displayRawImage.fitHeightProperty().bind(likelyTraumaPane.heightProperty());
+		
+		rawScanBPane.prefWidthProperty().bind(contentGrid.widthProperty());
+		rawScanBtn.setMaxWidth(Double.MAX_VALUE);
+		rawScanBPane.setCenter(rawScanPane);
+		rawScanBPane.setBottom(rawScanBtn);
+		rawScanPane.getChildren().add(displayRawImage);
+		
 		//Icon area cell setup
 		displayIcon.fitWidthProperty().bind(likelyTraumaBPane.widthProperty());
 		displayIcon.fitHeightProperty().bind(likelyTraumaBPane.heightProperty());
@@ -113,6 +128,133 @@ public class ScanVisualizerScene {
 
 		//Style LTA button
 		likelyTraumaBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				//Add loading screen to frame
+				BorderPane loadingPane = LoadingScene.createLoadingScene(manager);
+				GridPane.setConstraints(loadingPane, 0, 0, 2, 2);
+				contentGrid.getChildren().add(loadingPane);
+				String path = StateManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+				if(path.contains("main")) {
+					path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\..\\..\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getProcScan().getAbsolutePath();
+				} else {
+					path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getProcScan().getAbsolutePath();
+				}
+
+				try {
+					Process p = Runtime.getRuntime().exec("python -i " + path);
+					Timer timer = new Timer();
+
+					TimerTask timerTask = new TimerTask() {
+
+						@Override
+						public void run() {
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										dialogStage.initModality(Modality.APPLICATION_MODAL);
+										dialogStage.initStyle(StageStyle.UNDECORATED);
+										dialogStage.setResizable(false);
+									} catch(IllegalStateException e) {
+
+									}
+
+									Label messLabel = new Label("It is taking longer than expected to open the viewer. You may not have the proper python modules installed. Check the niftiviewer documentation for more information on what you need to run it.\n\n"
+											+ "Cancel opening the viewer?");
+									messLabel.setMaxSize(300, 500);
+									messLabel.setWrapText(true);
+									messLabel.getStyleClass().add("label-white");
+									messLabel.autosize();
+
+									VBox dialogLayout = new VBox(5);
+									GridPane buttonGrid = new GridPane();
+									ColumnConstraints columnCon = new ColumnConstraints();
+									columnCon.setPercentWidth(100/5);
+									buttonGrid.getColumnConstraints().addAll(columnCon, columnCon, columnCon, columnCon, columnCon);
+									GridPane.setConstraints(yesBtn, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+									GridPane.setConstraints(noBtn, 3, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+									buttonGrid.getChildren().addAll(yesBtn, noBtn);
+									dialogLayout.getChildren().addAll(messLabel, buttonGrid);
+									dialogLayout.setAlignment(Pos.CENTER);
+									dialogLayout.setPadding(new Insets(40, 40, 40, 40));
+									dialogLayout.setSpacing(15);
+									dialogLayout.getStyleClass().add("vbox-dialog-box");
+
+									Scene dialogScene = new Scene(dialogLayout);
+									dialogStage.sizeToScene();
+									dialogStage.setScene(dialogScene);
+									dialogStage.getScene().getStylesheets().add(manager.getThemeFile());
+									try {
+										dialogStage.showAndWait();
+									} catch(IllegalStateException e) {
+
+									}
+								}
+							});  
+						}
+
+					};
+					timer.schedule(timerTask, 10 * 1000, 10 * 1000);
+					yesBtn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							contentGrid.getChildren().remove(loadingPane);
+							p.destroy();
+							timer.cancel();
+							timer.purge();
+							dialogStage.close();	
+						}
+					});
+					noBtn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							dialogStage.close();
+						}
+					});
+					//Remove Loading screen once the python file is opened.
+					Task launch = new Task() {
+						@Override
+						protected Object call() throws Exception {
+							ServerSocket server = null;
+							try {
+								server = new ServerSocket(8080);
+								server.accept();
+								server.close();
+								Platform.runLater(new Runnable() {
+									@Override
+									public void run() {
+										timer.cancel();
+										timer.purge();
+										contentGrid.getChildren().remove(loadingPane);
+									}
+								});  
+							} catch (IOException e) {
+								e.printStackTrace();
+								try {
+									server.close();
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+								System.out.println("Closing connection socket");
+							}    
+							return null;
+						}};
+						new Thread(launch).start();
+				} catch (IOException ex) {
+					contentGrid.getChildren().remove(loadingPane);
+					manager.makeDialog("Python isn't installed! Make sure to go through the niftiviewer documentation to make sure you have everything needed.");
+				}
+
+			}
+		});
+
+		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
+		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
+		
+		//Style Raw Scan button
+		rawScanBtn.setText("Raw Scan Visualizer");
+		rawScanBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
 				//Add loading screen to frame
@@ -233,9 +375,8 @@ public class ScanVisualizerScene {
 
 			}
 		});
-
-		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
-		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
+		
+		rawScanBtn.setTooltip(new Tooltip("View the raw scan."));
 
 		//###LAYOUT CONTENT GRID AND ADD ELEMENTS
 		//Construct Content Grid
@@ -255,11 +396,12 @@ public class ScanVisualizerScene {
 
 		// Position Elements within the UI
 		GridPane.setConstraints(likelyTraumaBPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(rawScanBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(iconPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(accuracyPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
 
-		contentGrid.getChildren().addAll(likelyTraumaBPane, accuracyPane, iconPane);
+		contentGrid.getChildren().addAll(likelyTraumaBPane, rawScanBPane, accuracyPane, iconPane);
 		contentGrid.getStyleClass().add("content-pane");
 
 		//Merge Vertical Side Menu and Content
