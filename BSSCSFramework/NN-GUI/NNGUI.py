@@ -11,6 +11,7 @@ import sys, pandas, os, webbrowser
 import Customizations as custom
 sys.path.append('..')
 import BSSCS_CNN, BSSCS_AUTO_ENCODER, BSSCS_CLASSIFIER, BSSCS_IMG_PROCESSING
+import tensorflow as tf
 
 class NNGUI(QWidget):
 
@@ -94,9 +95,9 @@ class NNGUI(QWidget):
         img_name = QLabel("Image Folder:")
         img_spacer = QLabel()
 
-        img_wh_name = QLabel("Width and Height (pixels): ")
-        img_w = QLineEdit()
-        img_h = QLineEdit()
+        img_wh_name = QLabel("Width & Height (pixels): ")
+        img_w = QLineEdit("512")
+        img_h = QLineEdit("512")
         img_wh_spacer = QLabel("x")
         img_wh_spacer.setAlignment(Qt.AlignCenter)
 
@@ -104,12 +105,12 @@ class NNGUI(QWidget):
 #iteration UI elements
         iter_label = QLabel("Iterations:")
         iter_label.setAlignment(Qt.AlignCenter)
-        iter_text = QLineEdit()
+        iter_text = QLineEdit("1")
         iter_text.setReadOnly(True)
         iter_slider = QSlider(0x1)
         iter_slider.setTickInterval(5)
         iter_slider.setTickPosition(2)
-        iter_slider.setRange(0,50)
+        iter_slider.setRange(1,50)
 
         def user_iters(value):
             iter_text.setText(str(value))
@@ -120,12 +121,12 @@ class NNGUI(QWidget):
 #batch UI elements
         batch_label = QLabel("Batch Size:")
         batch_label.setAlignment(Qt.AlignCenter)
-        batch_text = QLineEdit()
+        batch_text = QLineEdit("1")
         batch_text.setReadOnly(True)
         batch_slider = QSlider(0x1)
         batch_slider.setTickInterval(5)
         batch_slider.setTickPosition(2)
-        batch_slider.setRange(0,50)
+        batch_slider.setRange(1,50)
 
         def user_batchs(value):
             batch_text.setText(str(value))
@@ -137,12 +138,12 @@ class NNGUI(QWidget):
 
         layer_label = QLabel("Layer Amount:")
         layer_label.setAlignment(Qt.AlignCenter)
-        layer_text = QLineEdit()
+        layer_text = QLineEdit("1")
         layer_text.setReadOnly(True)
         layer_slider = QSlider(0x1)
         layer_slider.setTickInterval(5)
         layer_slider.setTickPosition(2)
-        layer_slider.setRange(0,50)
+        layer_slider.setRange(1,50)
 
         def user_layers(value):
             layer_text.setText(str(value))
@@ -154,12 +155,12 @@ class NNGUI(QWidget):
 
         node_label = QLabel("Node Amount:")
         node_label.setAlignment(Qt.AlignCenter)
-        node_text = QLineEdit()
+        node_text = QLineEdit("1")
         node_text.setReadOnly(True)
         node_slider = QSlider(0x1)
         node_slider.setTickInterval(5)
         node_slider.setTickPosition(2)
-        node_slider.setRange(0,50)
+        node_slider.setRange(1,50)
 
         def user_nodes(value):
             node_text.setText(str(value))
@@ -201,6 +202,25 @@ class NNGUI(QWidget):
 
             nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())))
             nn_options.toString()
+            blocks = []
+            bsscs = BSSCS_CNN.BSSCS_CNN()
+            classifier = BSSCS_CLASSIFIER.BSSCS_CLASSIFIER(tf.contrib.layers.l2_regularizer(scale=0.001), 0.001, 250, nn_options.getBATCHS())
+            if nn_options.getLAYERS() > 1:
+                for x in range(nn_options.getLAYERS()):
+                    input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
+                    cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
+                    blocks.append(cnn_block)
+                    print("Block #" + str(x + 1) + ": Successful")
+
+                classifier.connect_conv_net(blocks[len(blocks) - 1])
+                print("CNN Block Connected to Classifier")
+            else:
+                input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
+                cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
+                print("Singular Layer Successful")
+
+                classifier.connect_conv_net(cnn_block)
+                print("CNN Block Connected to Classifier")
             
         train_button.clicked.connect(train_clicked)
         
