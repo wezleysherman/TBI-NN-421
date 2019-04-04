@@ -67,9 +67,9 @@ public class ScanVisualizerScene {
 		//Create panes to the grids so the elements can fully fill the grid
 		BorderPane accuracyPane = new BorderPane();
 		StackPane iconPane= new StackPane();
-		Pane likelyTraumaPane = new Pane();
+		StackPane likelyTraumaPane = new StackPane();
 		BorderPane likelyTraumaBPane = new BorderPane();
-		Pane rawScanPane = new Pane();
+		StackPane rawScanPane = new StackPane();
 		BorderPane rawScanBPane = new BorderPane();
 
 		//Pie Chart to show accuracy
@@ -82,45 +82,37 @@ public class ScanVisualizerScene {
 
 		//###ADD ELEMENTS TO THEIR GRID LOCATION###
 		//Get images to fill into the grid
-		Image filterImage = new Image("resources/TestImage1.jpg");
-		ImageView displayLTAImage = new ImageView();
-		displayLTAImage.setImage(filterImage);
-		ImageView displayRawImage = new ImageView();
-		displayRawImage.setImage(filterImage);
-
 		Image iconImage = new Image("resources/icon.png");
 		ImageView displayIcon = new ImageView();
 		displayIcon.setImage(iconImage);
 		displayIcon.setPreserveRatio(true);
 		
+		Image rawIcon = new Image("resources/icon-no-highlight.png");
+		ImageView displayIconGray = new ImageView();
+		displayIconGray.setImage(rawIcon);
+		displayIconGray.setPreserveRatio(true);
+		
 		//Likely Trauma Area cell setup
-		displayLTAImage.fitWidthProperty().bind(likelyTraumaPane.widthProperty());
-		displayLTAImage.fitHeightProperty().bind(likelyTraumaPane.heightProperty());
+		displayIcon.fitWidthProperty().bind(rawScanBPane.widthProperty());
+		displayIcon.fitHeightProperty().bind(accuracyPane.heightProperty());
 
 		likelyTraumaBPane.prefWidthProperty().bind(contentGrid.widthProperty());
 		likelyTraumaBtn.setMaxWidth(Double.MAX_VALUE);
 		likelyTraumaBPane.setCenter(likelyTraumaPane);
 		likelyTraumaBPane.setBottom(likelyTraumaBtn);
-		likelyTraumaPane.getChildren().add(displayLTAImage);
+		StackPane.setAlignment(displayIcon, Pos.CENTER);
+		likelyTraumaPane.getChildren().add(displayIcon);
 		
 		//Raw Scan Area cell setup
-		displayRawImage.fitWidthProperty().bind(likelyTraumaPane.widthProperty());
-		displayRawImage.fitHeightProperty().bind(likelyTraumaPane.heightProperty());
+		displayIconGray.fitWidthProperty().bind(accuracyPane.widthProperty());
+		displayIconGray.fitHeightProperty().bind(accuracyPane.heightProperty());
 		
 		rawScanBPane.prefWidthProperty().bind(contentGrid.widthProperty());
 		rawScanBtn.setMaxWidth(Double.MAX_VALUE);
 		rawScanBPane.setCenter(rawScanPane);
 		rawScanBPane.setBottom(rawScanBtn);
-		rawScanPane.getChildren().add(displayRawImage);
-		
-		//Icon area cell setup
-		displayIcon.fitWidthProperty().bind(likelyTraumaBPane.widthProperty());
-		displayIcon.fitHeightProperty().bind(likelyTraumaBPane.heightProperty());
-		
-		StackPane.setAlignment(displayIcon, Pos.CENTER);
-		iconPane.prefWidthProperty().bind(contentGrid.widthProperty());
-		iconPane.setMaxWidth(Double.MAX_VALUE);
-		iconPane.getChildren().add(displayIcon);
+		StackPane.setAlignment(displayIconGray, Pos.CENTER);
+		rawScanPane.getChildren().add(displayIconGray);
 
 		//###STYLE AND ADD FUNCTION TO BUTTONS
 		//Setup buttons on the scene
@@ -396,9 +388,9 @@ public class ScanVisualizerScene {
 
 		// Position Elements within the UI
 		GridPane.setConstraints(likelyTraumaBPane, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		GridPane.setConstraints(rawScanBPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(rawScanBPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(iconPane, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-		GridPane.setConstraints(accuracyPane, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+		GridPane.setConstraints(accuracyPane, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1);
 
 		contentGrid.getChildren().addAll(likelyTraumaBPane, rawScanBPane, accuracyPane, iconPane);
