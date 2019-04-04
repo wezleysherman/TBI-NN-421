@@ -214,6 +214,9 @@ class NNGUI(QWidget):
 
                 classifier.connect_conv_net(blocks[len(blocks) - 1])
                 print("CNN Block Connected to Classifier")
+
+                single_layer = classifier.create_layer(512, activation=tf.nn.relu)
+                print("Layer Created Successfully")
             else:
                 input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
                 cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
@@ -221,6 +224,9 @@ class NNGUI(QWidget):
 
                 classifier.connect_conv_net(cnn_block)
                 print("CNN Block Connected to Classifier")
+                
+                single_layer = classifier.create_layer(512, activation=tf.nn.relu)
+                print("Layer Created Successfully")
             
         train_button.clicked.connect(train_clicked)
         
