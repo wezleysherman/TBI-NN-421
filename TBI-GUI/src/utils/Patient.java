@@ -6,12 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.imageio.ImageIO;
-
-import javafx.scene.image.Image;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 
 //Class for saving patient information
