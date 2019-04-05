@@ -37,7 +37,11 @@ public class Scan implements Serializable, Comparable {
 
 	public void setLabel(String label) {
 		this.label = label;
-		notes = notes + "\nLabel:" + label;
+		if(notes != null) {
+			notes = notes + "\nLabel:" + label;
+		} else {
+			notes = "Label:" + label;
+		}
 	}
 
 	public float getLabelProb() {
