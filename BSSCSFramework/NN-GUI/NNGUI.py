@@ -255,6 +255,9 @@ class NNGUI(QWidget):
             labels_ph = tf.placeholder(tf.float32, shape=[None, 2])
             loss_function = classifier.create_loss_function(input=input_ph, labels=labels_ph)
             print("Loss Function Created Successfully")
+
+            optimizer = classifier.create_optimizer()
+            print("Optimizer Created Successfully")
             
         train_button.clicked.connect(train_clicked)
         
