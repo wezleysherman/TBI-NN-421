@@ -134,6 +134,23 @@ class NNGUI(QWidget):
 
         batch_spacer = QLabel()
 
+#block UI elements
+
+        block_label = QLabel("Block Amount:")
+        block_label.setAlignment(Qt.AlignCenter)
+        block_text = QLineEdit("1")
+        block_text.setReadOnly(True)
+        block_slider = QSlider(0x1)
+        block_slider.setTickInterval(5)
+        block_slider.setTickPosition(2)
+        block_slider.setRange(1,50)
+
+        def user_blocks(value):
+            block_text.setText(str(value))
+        block_slider.valueChanged[int].connect(user_blocks)
+
+        block_spacer = QLabel()
+
 #layer UI elements
 
         layer_label = QLabel("Layer Amount:")
@@ -200,13 +217,14 @@ class NNGUI(QWidget):
             #implement here
             print("not yet fully implemented")
 
-            nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())))
+            nn_options = custom.Customizations(str(csv_path.text()), str(imgfolder_path.text()), int(str(iter_text.text())), int(str(batch_text.text())), int(str(layer_text.text())), int(str(node_text.text())), int(str(img_w.text())), int(str(img_h.text())), int(str(block_text.text())))
             nn_options.toString()
             blocks = []
+            layers = []
             bsscs = BSSCS_CNN.BSSCS_CNN()
             classifier = BSSCS_CLASSIFIER.BSSCS_CLASSIFIER(tf.contrib.layers.l2_regularizer(scale=0.001), 0.001, 250, nn_options.getBATCHS())
-            if nn_options.getLAYERS() > 1:
-                for x in range(nn_options.getLAYERS()):
+            if nn_options.getBLOCKS() > 1:
+                for x in range(nn_options.getBLOCKS()):
                     input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
                     cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
                     blocks.append(cnn_block)
@@ -214,13 +232,32 @@ class NNGUI(QWidget):
 
                 classifier.connect_conv_net(blocks[len(blocks) - 1])
                 print("CNN Block Connected to Classifier")
+
             else:
                 input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H(), 1])
                 cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
-                print("Singular Layer Successful")
+                print("Singular Block Successful")
 
                 classifier.connect_conv_net(cnn_block)
                 print("CNN Block Connected to Classifier")
+
+            if nn_options.getLAYERS() > 1:
+                for x in range(nn_options.getLAYERS()):
+                    single_layer = classifier.create_layer(512, activation=tf.nn.relu)
+                    layers.append(single_layer)
+                    print("Layer #" + str(x + 1) + ": Successful")
+
+            else:
+                single_layer = classifier.create_layer(512, activation=tf.nn.relu)
+                print("Singular Layer Successful")
+
+            input_ph = tf.placeholder(tf.float32, shape=[None, nn_options.getIMG_W(), nn_options.getIMG_H()])
+            labels_ph = tf.placeholder(tf.float32, shape=[None, 2])
+            loss_function = classifier.create_loss_function(input=input_ph, labels=labels_ph)
+            print("Loss Function Created Successfully")
+
+            optimizer = classifier.create_optimizer()
+            print("Optimizer Created Successfully")
             
         train_button.clicked.connect(train_clicked)
         
@@ -251,21 +288,25 @@ class NNGUI(QWidget):
         layout.addWidget(batch_slider, 16, 1, 1, 3)
         layout.addWidget(batch_text, 17, 1, 1, 3)
         layout.addWidget(batch_spacer, 18, 1, 1, 3)
-        layout.addWidget(layer_label, 19, 2, 1, 1)
-        layout.addWidget(layer_slider, 20, 1, 1, 3)
-        layout.addWidget(layer_text, 21, 1, 1, 3)
-        layout.addWidget(layer_spacer, 22, 1, 1, 3)
-        layout.addWidget(node_label, 23, 2, 1, 1)
-        layout.addWidget(node_slider, 24, 1, 1, 3)
-        layout.addWidget(node_text, 25, 1, 1, 3)
-        layout.addWidget(node_spacer, 26, 1, 1, 3)
+        layout.addWidget(block_label, 19, 2, 1, 1)
+        layout.addWidget(block_slider, 20, 1, 1, 3)
+        layout.addWidget(block_text, 21, 1, 1, 3)
+        layout.addWidget(block_spacer, 22, 1, 1, 3)
+        layout.addWidget(layer_label, 23, 2, 1, 1)
+        layout.addWidget(layer_slider, 24, 1, 1, 3)
+        layout.addWidget(layer_text, 25, 1, 1, 3)
+        layout.addWidget(layer_spacer, 26, 1, 1, 3)
+        layout.addWidget(node_label, 27, 2, 1, 1)
+        layout.addWidget(node_slider, 28, 1, 1, 3)
+        layout.addWidget(node_text, 29, 1, 1, 3)
+        layout.addWidget(node_spacer, 30, 1, 1, 3)
         
-        layout.addWidget(tb_name, 27, 0, 1, 0)
-        layout.addWidget(tb_filepath, 27, 1, 1, 3)
-        layout.addWidget(tb_filepick_button, 28, 1, 1, 3)
-        layout.addWidget(tb_button, 29, 1, 1, 3)
-        layout.addWidget(tb_spacer, 30, 1, 1, 3)
-        layout.addWidget(train_button, 31, 1, 1, 3)
+        layout.addWidget(tb_name, 31, 0, 1, 0)
+        layout.addWidget(tb_filepath, 31, 1, 1, 3)
+        layout.addWidget(tb_filepick_button, 32, 1, 1, 3)
+        layout.addWidget(tb_button, 33, 1, 1, 3)
+        layout.addWidget(tb_spacer, 34, 1, 1, 3)
+        layout.addWidget(train_button, 35, 1, 1, 3)
 
 #setup of window
         self.setGeometry(350, 350, 450, 350)

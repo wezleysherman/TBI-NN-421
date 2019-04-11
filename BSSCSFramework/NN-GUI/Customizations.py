@@ -1,6 +1,6 @@
 class Customizations():
 
-    def __init__(self, csv_fp, img_fp, iters, batchs, layers, nodes, img_w, img_h):
+    def __init__(self, csv_fp, img_fp, iters, batchs, layers, nodes, img_w, img_h, blocks):
         super().__init__()
         self.csv_fp = csv_fp
         self.img_fp = img_fp
@@ -10,6 +10,7 @@ class Customizations():
         self.nodes = nodes
         self.img_w = img_w
         self.img_h = img_h
+        self.blocks = blocks
 
     def setCSV_FP(self, csv_fp):
         self.csv_fp = csv_fp
@@ -59,6 +60,12 @@ class Customizations():
     def getIMG_H(self):
         return self.img_h
 
+    def setBLOCKS(self, blocks):
+        self.blocks = blocks
+
+    def getBLOCKS(self):
+        return self.blocks
+
     def toString(self):
         print("CSV Filepath: " + self.getCSV_FP())
         print("IMG Folder Filepath: " + self.getIMG_FP())
@@ -68,6 +75,7 @@ class Customizations():
         print("Nodes: " + str(self.getNODES()))
         print("Image Width: " + str(self.getIMG_W()))
         print("Image Height: " + str(self.getIMG_H()))
+        print("Blocks: " + str(self.getBLOCKS()))
 
 # nn_options = Customizations("csv", "img", 1, 2, 3, 4)
 # nn_options.toString()
