@@ -131,7 +131,6 @@ public class ScanVisualizerScene {
 				} else {
 					path = path.substring(1, path.length() - 1).replace("/", "\\") + "\\..\\src\\python\\NiftiViewer.py " + manager.getScan().getProcScan().getAbsolutePath();
 				}
-
 				try {
 					Process p = Runtime.getRuntime().exec("python -i " + path);
 					Timer timer = new Timer();
@@ -419,7 +418,7 @@ public class ScanVisualizerScene {
 		placementArc.setRadiusY(80);
 		placementArc.setLength(350);
 		placementArc.setType(ArcType.ROUND);
-		placementArc.setStyle("-fx-fill: #cfd8dc");
+		placementArc.setStyle("-fx-fill: #00000000");
 		Arc arc = new Arc();
 		arc.setStartAngle(90);
 		arc.setRadiusX(80);

@@ -57,20 +57,25 @@ public class PatientInfoEntryScene {
 		//Text fields set up and design
 		patFNameField.setMaxSize(200, 10);
 		patFNameField.setPromptText("Patient First Name");
+		StateManager.textMaxLength(patFNameField, 50);
 
 		patLNameField.setMaxSize(200, 10);
 		patLNameField.setPromptText("Patient Last Name");
+		StateManager.textMaxLength(patLNameField, 50);
 
 		pictureField.setMaxSize(180, 10);
 		pictureField.setEditable(false);
 		pictureField.setPromptText("Select Picture");
+		StateManager.textMaxLength(pictureField, 100);
 
 		fileField.setMaxSize(180, 10);
 		fileField.setEditable(false);
 		fileField.setPromptText("Select File(s)");
+		StateManager.textMaxLength(fileField, 100);
 
 		notesField.setMaxSize(200, 10);
 		notesField.setPromptText("Notes");
+		StateManager.textMaxLength(notesField, 256);
 
 		datePicker.setPromptText("Select Date of Scan(s)");
 

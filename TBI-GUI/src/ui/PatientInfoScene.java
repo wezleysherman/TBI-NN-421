@@ -15,7 +15,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -115,6 +114,7 @@ public class PatientInfoScene {
 
 			TextArea notes = new TextArea(patient.getNotes());
 			notes.setPrefHeight(300);
+			notes.setWrapText(true);
 			notes.setEditable(false);
 
 			//Set up scan table
@@ -190,6 +190,12 @@ public class PatientInfoScene {
 			TextField lastField = new TextField(patient.getLastName());
 			TextField pictureField = new TextField("Select Picture");
 			TextArea notesArea = new TextArea(patient.getNotes());
+			notesArea.setWrapText(true);
+			StateManager.textMaxLength(firstField, 50);
+			StateManager.textMaxLength(lastField, 50);
+			StateManager.textMaxLength(pictureField, 100);
+			StateManager.textMaxLength(notesArea, 256);
+
 			notesArea.setPrefHeight(300);
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
