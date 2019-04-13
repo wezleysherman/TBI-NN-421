@@ -182,6 +182,7 @@ public class VerticalSideMenu {
 		
 		//Add Scan to the current patient
 		TextField fileField = new TextField();
+		StateManager.textMaxLength(fileField, 50);
 		fileField.setEditable(false);
 		LinkedList<File> newFiles = new LinkedList<File>();
 		Holder holder = new Holder();
@@ -380,6 +381,8 @@ public class VerticalSideMenu {
 		Button editNotesBtn = new Button("Save Changes");
 
 		TextArea docNotesField = new TextArea();
+		StateManager.textMaxLength(docNotesField, 256);
+
 		docNotesField.setText(manager.getScan().getNotes());
 		docNotesField.setWrapText(true);
 		docNotesField.getStyleClass().add("text-area-sidebar");
