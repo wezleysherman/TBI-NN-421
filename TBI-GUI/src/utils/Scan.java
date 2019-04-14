@@ -124,7 +124,7 @@ public class Scan implements Serializable, Comparable {
 	
 	//nifti-only methods
 	private void createNifti() throws FileNotFoundException, IOException {
-		nifti = new Nifti1Dataset(scan.getAbsolutePath());
+		nifti = new Nifti1Dataset(rawScan.getAbsolutePath());
 		nifti.readHeader();
 		getNiftiArray();
 	}
