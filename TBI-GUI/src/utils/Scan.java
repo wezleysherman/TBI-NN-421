@@ -10,10 +10,11 @@ import java.awt.image.BufferedImage;
 
 import nifti.Nifti1Dataset;
 
-public class Scan implements Serializable, Comparable{
+public class Scan implements Serializable, Comparable {
 
 	private Date dateOfScan;
-	private File scan;
+	private File rawScan;
+	private File procScan;
 	private String notes;
 	private String label;
 	private float labelProb;
@@ -23,13 +24,13 @@ public class Scan implements Serializable, Comparable{
 
 	public Scan() {
 		this.setDateOfScan(null);
-		this.setScan(null);
+		this.setRawScan(null);
 		this.notes = "";
 	}
 	
 	public Scan(Date dOS, File inScan) {
 		this.setDateOfScan(dOS);
-		this.setScan(inScan);
+		this.setRawScan(inScan);
 		
 		if(inScan.getAbsolutePath().contains(".nii")) {
 			try {
@@ -45,7 +46,7 @@ public class Scan implements Serializable, Comparable{
 	
 	public Scan(Date dOS, File inScan, String inNotes) {
 		this.setDateOfScan(dOS);
-		this.setScan(inScan);
+		this.setRawScan(inScan);
 		this.setNotes(inNotes);
 		
 		if(inScan.getAbsolutePath().contains(".nii")) {
@@ -66,7 +67,11 @@ public class Scan implements Serializable, Comparable{
 
 	public void setLabel(String label) {
 		this.label = label;
-		notes = notes + "\nLabel:" + label;
+		if(notes != null) {
+			notes = notes + "\nLabel:" + label;
+		} else {
+			notes = "Label:" + label;
+		}
 	}
 
 	public float getLabelProb() {
@@ -86,12 +91,20 @@ public class Scan implements Serializable, Comparable{
 		this.dateOfScan = dateOfScan;
 	}
 
-	public File getScan() {
-		return scan;
+	public File getRawScan() {
+		return rawScan;
 	}
 
-	public void setScan(File scan) {
-		this.scan = scan;
+	public void setRawScan(File scan) {
+		this.rawScan = scan;
+	}
+	
+	public File getProcScan() {
+		return procScan;
+	}
+
+	public void setProcScan(File scan) {
+		this.procScan = scan;
 	}
 
 	public String getNotes() {

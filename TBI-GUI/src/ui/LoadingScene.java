@@ -23,7 +23,7 @@ public class LoadingScene {
 		content.setAlignment(Pos.CENTER);
 		
 		//Create path and elements to move on the path
-		Circle circlePath = new Circle(70);
+		Circle circlePath = new Circle(80);
 		Circle circle = new Circle(10);
 		circle.setFill(Color.rgb(69, 83, 87));
 		Circle circle2 = new Circle(10);
@@ -95,7 +95,7 @@ public class LoadingScene {
 		loadingAnimation4.play();
 		
 		//Add some information on the loading screen
-		Circle backgroundCircle = new Circle(50);
+		Circle backgroundCircle = new Circle(60);
 		backgroundCircle.setFill(Color.rgb(69, 83, 87));
 		Label opening = new Label("Opening Viewer");
 		opening.getStyleClass().add("label-white");

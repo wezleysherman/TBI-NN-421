@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
@@ -118,14 +119,8 @@ public class StateManager {
 			this.patient = null;
 			scene = new PatientInfoEntryScene().initializeScene(this);
 		}
-		else if (sceneID.equals("CNNVisualizer")) {
-			scene = new CNNVisualizationScene().initializeScene(this);
-		}
 		else if (sceneID.equals("PreviousPatient")) {
 			scene = new PreviousPatientScene().initializeScene(this);
-		}
-		else if (sceneID.equals("AlgorithmVisualizer")) {
-			scene = new AlgorithmVisualizerScene().initializeScene(this);
 		}
 		else if (sceneID.equals("ScanVisualizer")) {
 			scene = new ScanVisualizerScene().initializeScene(this);
@@ -357,6 +352,23 @@ public class StateManager {
 			}
 			
 		}, 0, 15);
+	}
+	
+	public static void textMaxLength(final TextField tf, final int maxLength) {
+		tf.textProperty().addListener((observable, oldVal, newVal) -> {
+			if (tf.getText().length() > maxLength) {
+                String s = tf.getText().substring(0, maxLength);
+                tf.setText(s);
+            }
+		});
+	}
+	public static void textMaxLength(final TextArea tf, final int maxLength) {
+		tf.textProperty().addListener((observable, oldVal, newVal) -> {
+			if (tf.getText().length() > maxLength) {
+                String s = tf.getText().substring(0, maxLength);
+                tf.setText(s);
+            }
+		});
 	}
 	
 	/* DEBUG CONSOLE OUTPUTS*/

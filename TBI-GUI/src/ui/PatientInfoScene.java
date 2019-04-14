@@ -2,11 +2,8 @@ package ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,7 +15,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -118,11 +114,12 @@ public class PatientInfoScene {
 
 			TextArea notes = new TextArea(patient.getNotes());
 			notes.setPrefHeight(300);
+			notes.setWrapText(true);
 			notes.setEditable(false);
 
 			//Set up scan table
 			ObservableList<Scan> scanList = FXCollections.observableArrayList();
-			for(Scan scan : patient.getRawScans()) { //TODO proc scans too?
+			for(Scan scan : patient.getScans()) {
 				scanList.add(scan);
 			}
 
@@ -188,18 +185,20 @@ public class PatientInfoScene {
 		//Edit was pressed
 		else {
 			//Create elements
+			scansLabel.setVisible(false);
 			TextField firstField = new TextField(patient.getFirstName());
 			TextField lastField = new TextField(patient.getLastName());
 			TextField pictureField = new TextField("Select Picture");
 			TextArea notesArea = new TextArea(patient.getNotes());
+			notesArea.setWrapText(true);
+			StateManager.textMaxLength(firstField, 50);
+			StateManager.textMaxLength(lastField, 50);
+			StateManager.textMaxLength(pictureField, 100);
+			StateManager.textMaxLength(notesArea, 256);
+
 			notesArea.setPrefHeight(300);
-			Label scanLabel = new Label("Add New Scan(s):");
-			TextField fileField = new TextField("Select File(s)");
-			DatePicker datePicker = new DatePicker();
-			datePicker.setPromptText("Date of Scan(s)");
 			Button saveBtn = new Button("Save");
 			Button cancelBtn = new Button("Cancel");
-			datePicker.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 			Holder holder = new Holder();
 			LinkedList<File> newFiles = new LinkedList<File>();
@@ -217,15 +216,6 @@ public class PatientInfoScene {
 							patient.setFirstName(firstField.getText());
 							patient.setLastName(lastField.getText());
 							patient.setNotes(notesArea.getText());
-							if (newFiles.size() > 0) {
-								if (holder.getDate() == null) {
-									manager.makeDialog("No date was selected for the scan(s). Today's date will be used.");
-									holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
-								}
-								for (int i = 0; i < newFiles.size(); ++i) {
-									patient.addRawScan(new Scan(holder.getDate(), newFiles.get(i)));
-								}
-							}
 							if (holder.getFile() != null) {
 								patient.setPicture(holder.getFile());
 							}
@@ -261,37 +251,7 @@ public class PatientInfoScene {
 							holder.setFile(picture);
 						}
 					}
-					datePicker.requestFocus();
-				}
-			});
-
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
-			fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-					if(arg2) {
-						List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
-						if (files != null && files.size() > 0) {
-							if (files.size() == 1) {
-								fileField.setText(files.get(0).getName());
-							}
-							else {
-								fileField.setText(files.size() + " files");
-							}
-							for (int i = 0; i < files.size(); ++i) {
-								newFiles.add(files.get(i));
-							}
-						}
-					}
-					datePicker.requestFocus();
-				}
-			});
-
-			datePicker.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					holder.setDate(java.sql.Date.valueOf(datePicker.getValue()));
+					cancelBtn.requestFocus();
 				}
 			});
 
@@ -300,13 +260,10 @@ public class PatientInfoScene {
 			GridPane.setConstraints(lastField, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(pictureField, 1, 3, 3, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(notesArea, 1, 4, 3, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(scanLabel, 1, 5, 1, 1, HPos.LEFT, VPos.CENTER);
-			GridPane.setConstraints(fileField, 2, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(datePicker, 3, 5, 1, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(saveBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
-			GridPane.setConstraints(cancelBtn, 1, 7, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(saveBtn, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
+			GridPane.setConstraints(cancelBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
 			contentGrid.getChildren().addAll(
-					firstField, lastField, pictureField, notesArea, scanLabel, fileField, datePicker, saveBtn, cancelBtn
+					firstField, lastField, pictureField, notesArea, saveBtn, cancelBtn
 					);
 		}
 

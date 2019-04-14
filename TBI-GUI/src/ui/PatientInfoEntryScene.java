@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -19,6 +17,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -34,7 +34,7 @@ import utils.Scan;
 
 public class PatientInfoEntryScene {
 	static boolean analyzeFailed = false;
-	
+
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();
@@ -49,113 +49,170 @@ public class PatientInfoEntryScene {
 		FileChooser fileChooser = new FileChooser();
 		DatePicker datePicker = new DatePicker();
 		Button finishBtn = new Button("Finish");
-		
+		Button fileSelect = new Button();
+		Button pictureSelect = new Button();
+		GridPane picGrid = new GridPane();
+		GridPane fileGrid = new GridPane();
+
 		//Text fields set up and design
 		patFNameField.setMaxSize(200, 10);
 		patFNameField.setPromptText("Patient First Name");
-		
+		StateManager.textMaxLength(patFNameField, 50);
+
 		patLNameField.setMaxSize(200, 10);
 		patLNameField.setPromptText("Patient Last Name");
-		
-		pictureField.setMaxSize(200, 10);
+		StateManager.textMaxLength(patLNameField, 50);
+
+		pictureField.setMaxSize(180, 10);
+		pictureField.setEditable(false);
 		pictureField.setPromptText("Select Picture");
-		
-		fileField.setMaxSize(200, 10);
+		StateManager.textMaxLength(pictureField, 100);
+
+		fileField.setMaxSize(180, 10);
+		fileField.setEditable(false);
 		fileField.setPromptText("Select File(s)");
-		
+		StateManager.textMaxLength(fileField, 100);
+
 		notesField.setMaxSize(200, 10);
 		notesField.setPromptText("Notes");
-		
+		StateManager.textMaxLength(notesField, 256);
+
 		datePicker.setPromptText("Select Date of Scan(s)");
-		
+
 		//Add required indicator tags
 		StackPane fNameStackPane = makeRequiredSVG();
 		GridPane.setConstraints(fNameStackPane, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		pointerGrid.getChildren().add(fNameStackPane);
-		
+
 		StackPane lNameStackPane = makeRequiredSVG();
 		GridPane.setConstraints(lNameStackPane, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 		pointerGrid.getChildren().add(lNameStackPane);
-		
+
 		StackPane fileStackPane = makeRequiredSVG();
 		GridPane.setConstraints(fileStackPane, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
 		pointerGrid.getChildren().add(fileStackPane);
-		
+
 		fNameStackPane.setVisible(false);
 		lNameStackPane.setVisible(false);
 		fileStackPane.setVisible(false);
-		
+
 		//Construct Grid
 		contentGrid.setVgap(15);
 		pointerGrid.setVgap(15);
-		
+
 		GridPane.setConstraints(patFNameField, 1, 2, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(patLNameField, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(pictureField, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(fileField, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);		
+		GridPane.setConstraints(picGrid, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(fileGrid, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);		
 		GridPane.setConstraints(datePicker, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(notesField, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(finishBtn, 1, 8, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(pointerGrid, 2, 2, 2, 4, HPos.LEFT, VPos.CENTER);
-		contentGrid.getChildren().addAll(patFNameField, patLNameField, fileField, pictureField, datePicker, notesField, finishBtn, pointerGrid);
-		
+		contentGrid.getChildren().addAll(patFNameField, patLNameField, picGrid, fileGrid, datePicker, notesField, finishBtn, pointerGrid);
+
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100.0/11);
 		contentGrid.getRowConstraints().add(rowCon);
 		ColumnConstraints columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100.0/3);
 		ColumnConstraints columnCon2 = new ColumnConstraints();
-		contentGrid.getColumnConstraints().addAll(columnCon, columnCon2, columnCon2);
-		
+		contentGrid.getColumnConstraints().addAll(columnCon, columnCon, columnCon2);
+
 		rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100.0);
 		pointerGrid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon);
 		columnCon = new ColumnConstraints();
 		columnCon.setPercentWidth(100);
 		pointerGrid.getColumnConstraints().add(columnCon);
-		
+
 		LinkedList<File> newFiles = new LinkedList<File>();
 		Holder holder = new Holder();
 
 		//Picture Chooser Setup
 		pictureChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("IMAGE", "*.png", "*.jpg"));
-		pictureField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+		pictureSelect.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				File picture = pictureChooser.showOpenDialog(manager.getStage());
+				if (picture != null) {
+					pictureField.setText(picture.getName());
+					holder.setFile(picture);
+				}
+			}			
+		});
+		/*pictureField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 				if(arg2) {
 					File picture = pictureChooser.showOpenDialog(manager.getStage());
-	            	if (picture != null) {
-	            		pictureField.setText(picture.getName());
-	            		holder.setFile(picture);
-		            }
+					if (picture != null) {
+						pictureField.setText(picture.getName());
+						holder.setFile(picture);
+					}
 				}
-	            datePicker.requestFocus();
+				fileField.requestFocus();
 			}
-		});
-		
-		
+		});*/
+
+
 		//File Chooser Setup
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
-		fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+		fileSelect.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
+				if (files != null && files.size() > 0) {
+					if (files.size() == 1) {
+						fileField.setText(files.get(0).getName());
+					}
+					else {
+						fileField.setText(files.size() + " files");
+					}
+					for (int i = 0; i < files.size(); ++i) {
+						newFiles.add(files.get(i));
+					}
+				}
+			}
+		});
+		/*fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
 				if(arg2) {
 					List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
-		            if (files != null && files.size() > 0) {
-		            	if (files.size() == 1) {
-		            		fileField.setText(files.get(0).getName());
-		            	}
-		            	else {
-		            		fileField.setText(files.size() + " files");
-		            	}
-		            	for (int i = 0; i < files.size(); ++i) {
-		            		newFiles.add(files.get(i));
-		            	}
-		            }
+					if (files != null && files.size() > 0) {
+						if (files.size() == 1) {
+							fileField.setText(files.get(0).getName());
+						}
+						else {
+							fileField.setText(files.size() + " files");
+						}
+						for (int i = 0; i < files.size(); ++i) {
+							newFiles.add(files.get(i));
+						}
+					}
 				}
-	            datePicker.requestFocus();
+				datePicker.requestFocus();
 			}
-		});
+		});*/
+		
+		ColumnConstraints fileSelecColumn = new ColumnConstraints();
+		fileSelecColumn.setPercentWidth(100.0/5*4);
+		picGrid.getColumnConstraints().add(fileSelecColumn);
+		fileGrid.getColumnConstraints().add(fileSelecColumn);
+		
+		GridPane.setConstraints(pictureField, 0, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(pictureSelect, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(fileField, 0, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(fileSelect, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+
+		Image iconImage = new Image("resources/icon.png", 15, 15, false, false);
+		pictureSelect.setGraphic(new ImageView(iconImage));
+		fileSelect.setGraphic(new ImageView(iconImage));
+		
+		picGrid.getChildren().addAll(pictureField, pictureSelect);
+		fileGrid.getChildren().addAll(fileField, fileSelect);
 		
 		//Date Picker Setup
 		datePicker.setMaxSize(198, 10);
@@ -165,10 +222,10 @@ public class PatientInfoEntryScene {
 				holder.setDate(java.sql.Date.valueOf(datePicker.getValue()));
 			}
 		});
-		
+
 		//Finish Button Setup
 		finishBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		
+
 		finishBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -186,7 +243,7 @@ public class PatientInfoEntryScene {
 				} else {
 					lNameStackPane.setVisible(false);
 				}
-				
+
 				//If Date selected, a File must also be selected
 				if (holder.getDate() != null && newFiles.size() == 0) {
 					complete = false;
@@ -194,7 +251,7 @@ public class PatientInfoEntryScene {
 				} else {
 					fileStackPane.setVisible(false);
 				}
-				
+
 				//Switch to proper scene
 				if(complete) {
 					Date dateCreated = java.sql.Date.valueOf(LocalDate.now()); //get current date
@@ -205,7 +262,7 @@ public class PatientInfoEntryScene {
 							holder.setDate(java.sql.Date.valueOf(LocalDate.now()));
 						}
 						for (int i = 0; i < newFiles.size(); ++i) {
-							patient.addRawScan(new Scan(holder.getDate(), newFiles.get(i)));
+							patient.addScan(new Scan(holder.getDate(), newFiles.get(i)));
 						}
 					}
 					if (holder.getFile() != null) {
@@ -221,10 +278,10 @@ public class PatientInfoEntryScene {
 					manager.paintScene("PreviousPatient");
 				}
 			}
-			
+
 		});
 		finishBtn.setTooltip(new Tooltip("Create a new patient in the system."));
-		
+
 		//Merge Vertical Side Menu and Content
 		mainGrid = VerticalSideMenu.newSideBar(manager);
 		GridPane.setConstraints(contentGrid, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -232,11 +289,11 @@ public class PatientInfoEntryScene {
 		layout.getStyleClass().add("content-pane");
 		layout.setCenter(mainGrid);
 		layout.setTop(TopMenuBar.newMenuBar(manager));
-		
+
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
-	
+
 	//Construct SVG image for pointing to empty elements
 	public static StackPane makeRequiredSVG() {
 		StackPane stackPane = new StackPane();
