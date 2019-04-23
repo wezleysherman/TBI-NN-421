@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.awt.image.BufferedImage;
 
-import nifti.Nifti1Dataset;
+//import nifti.Nifti1Dataset;
 
 public class Scan implements Serializable, Comparable {
 
@@ -19,7 +19,7 @@ public class Scan implements Serializable, Comparable {
 	private String label;
 	private float labelProb;
 	private boolean isNifti = false;
-	private Nifti1Dataset nifti;
+	//private Nifti1Dataset nifti;
 	private int [][][] niftiArray = null;
 
 	public Scan() {
@@ -33,13 +33,13 @@ public class Scan implements Serializable, Comparable {
 		this.setRawScan(inScan);
 		
 		if(inScan.getAbsolutePath().contains(".nii")) {
-			try {
+			/*try {
 				createNifti();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
 			isNifti = true;
 		}
 	}
@@ -50,13 +50,13 @@ public class Scan implements Serializable, Comparable {
 		this.setNotes(inNotes);
 		
 		if(inScan.getAbsolutePath().contains(".nii")) {
-			try {
+			/*try {
 				createNifti();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
 			isNifti = true;
 		}
 	}
@@ -123,16 +123,17 @@ public class Scan implements Serializable, Comparable {
 	}
 	
 	//nifti-only methods
-	private void createNifti() throws FileNotFoundException, IOException {
+	/*private void createNifti() throws FileNotFoundException, IOException {
 		nifti = new Nifti1Dataset(rawScan.getAbsolutePath());
 		nifti.readHeader();
 		getNiftiArray();
-	}
+	}*/
 	
 	public boolean isNifti() {
 		return isNifti;
 	}
 	
+	/*
 	public Nifti1Dataset getNifti() {
 		return nifti;
 	}
@@ -172,9 +173,10 @@ public class Scan implements Serializable, Comparable {
 		}
 		
 		return niftiArray[slice];
-	}
+	}*/
 	
 	//for testing purposes
+	/*
 	public static void main(String [] args) throws FileNotFoundException, IOException {
 		File f = new File(System.getProperty("user.dir"), "src");
 		f = new File(f.getAbsolutePath(), "resources");
@@ -190,5 +192,6 @@ public class Scan implements Serializable, Comparable {
 		
 		//BufferedImage img = new BufferedImage(slice[0].length, slice.length, BufferedImage.);
 	}
+	*/
 	
 }
