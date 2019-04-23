@@ -152,23 +152,36 @@ public class PatientInfoScene {
 					}
 				}
 			});
-
-			//Analyze button
-			Button analyzeBtn = new Button("Analyze");
-			analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
-			analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					if (scanTable.getSelectionModel().getSelectedItem() != null) {
-						manager.setScan(scanTable.getSelectionModel().getSelectedItem());
-						manager.getSceneStack().push(manager.getSceneID());
-						manager.paintScene("ScanVisualizer");
-					} else {
-						manager.makeDialog("No scan was selected!");
+			Button analyzeBtn;
+			LinkedList<Scan> scans = patient.getScans();
+			if(scans.get(scans.size() - 1).getNotes().equals("Analyzing...")) {
+				analyzeBtn = new Button("Refresh");
+				analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+				analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
+				analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						manager.paintScene("PatientInfo");
 					}
-				}
-			});
+				});
+			} else {
+				//Analyze button
+				analyzeBtn = new Button("Analyze");
+				analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+				analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
+				analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						if (scanTable.getSelectionModel().getSelectedItem() != null) {
+							manager.setScan(scanTable.getSelectionModel().getSelectedItem());
+							manager.getSceneStack().push(manager.getSceneID());
+							manager.paintScene("ScanVisualizer");
+						} else {
+							manager.makeDialog("No scan was selected!");
+						}
+					}
+				});
+			}
 
 			//Add elements to content grid
 			GridPane.setConstraints(firstName, 1, 1, 3, 1, HPos.LEFT, VPos.CENTER);
