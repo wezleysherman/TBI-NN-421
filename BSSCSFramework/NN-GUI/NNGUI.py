@@ -230,7 +230,7 @@ class NNGUI(QWidget):
                     blocks.append(cnn_block)
                     print("Block #" + str(x + 1) + ": Successful")
 
-                classifier.connect_conv_net(blocks[len(blocks) - 1])
+                c_ccn = classifier.connect_conv_net(blocks[len(blocks) - 1])
                 print("CNN Block Connected to Classifier")
 
             else:
@@ -238,7 +238,7 @@ class NNGUI(QWidget):
                 cnn_block = bsscs.create_cnn_block(input=input_ph, filters=64, kernel_size=[3, 3], cnn_strides=2, pool_size=[2, 2], pooling_strides=2)
                 print("Singular Block Successful")
 
-                classifier.connect_conv_net(cnn_block)
+                c_ccn = classifier.connect_conv_net(cnn_block)
                 print("CNN Block Connected to Classifier")
 
             if nn_options.getLAYERS() > 1:
@@ -258,6 +258,20 @@ class NNGUI(QWidget):
 
             optimizer = classifier.create_optimizer()
             print("Optimizer Created Successfully")
+
+            f = open("untrained_network.txt", "w+")
+            f.write("CNN Block: " + str(cnn_block) + "\n\nSingle Layer: " + str(single_layer) + "\n\nLoss Function: " + str(loss_function) + "\n\nOptimizer: " + str(optimizer) + "\n\nConnect CNN: " + str(c_ccn))
+            f.close()
+
+            print("Architecture Text File Written")
+
+            nn_save = tf.train.Saver()
+            with tf.Session() as session:
+                tf.global_variables_initializer().run()
+
+                nn_save.save(session, "untrained_network")
+
+            print("NN Saved")
             
         train_button.clicked.connect(train_clicked)
         
