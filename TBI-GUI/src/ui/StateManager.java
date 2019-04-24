@@ -55,6 +55,9 @@ public class StateManager {
 	public Stack<String> getSceneStack() {
 		return sceneStack;
 	}
+	public Scene getScene() {
+		return scene;
+	}
 	public void setSceneID(String sceneID) {
 		this.sceneID = sceneID;
 	}
