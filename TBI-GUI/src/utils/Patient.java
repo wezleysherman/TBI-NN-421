@@ -18,7 +18,6 @@ public class Patient extends Info implements Serializable {
 	private String notes;
 	private LinkedList<Scan> scans;
 	private File picture;
-	private String yeet;
 	
 	//constructor for blank patient
 	public Patient() {
