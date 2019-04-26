@@ -49,7 +49,7 @@ public class PatientInfoScene {
 			BorderPane layout = new BorderPane();
 			GridPane contentGrid = new GridPane();
 			GridPane mainGrid;
-	
+
 			//Create elements
 			Label firstNameLabel = new Label("First Name");
 			Label lastNameLabel = new Label("Last Name");
@@ -61,7 +61,7 @@ public class PatientInfoScene {
 			pictureLabel.setStyle("-fx-font-weight: bold");
 			notesLabel.setStyle("-fx-font-weight: bold");
 			scansLabel.setStyle("-fx-font-weight: bold");
-	
+
 			//Construct content grid
 			contentGrid.setPadding(new Insets(10, 10, 10, 10));
 			contentGrid.setHgap(10);
@@ -75,7 +75,7 @@ public class PatientInfoScene {
 			ColumnConstraints column3 = new ColumnConstraints();
 			column3.setPercentWidth(30);
 			contentGrid.getColumnConstraints().addAll(column0, column1, column2, column3);
-	
+
 			//Add elements to content grid
 			GridPane.setConstraints(firstNameLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(lastNameLabel, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
@@ -83,13 +83,13 @@ public class PatientInfoScene {
 			GridPane.setConstraints(notesLabel, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(scansLabel, 0, 5, 1, 1, HPos.LEFT, VPos.CENTER);
 			contentGrid.getChildren().addAll(firstNameLabel, lastNameLabel, pictureLabel, notesLabel, scansLabel);
-	
+
 			//Check if edit was pressed
 			if (!manager.getStateBool()) {
 				//Create elements
 				Label firstName = new Label(patient.getFirstName());
 				Label lastName = new Label(patient.getLastName());
-	
+
 				ImageView picture = new ImageView();
 				if(patient.getPicture() != null) {
 					Image pictureImage = new Image(patient.getPicture().toURI().toString());
@@ -101,34 +101,34 @@ public class PatientInfoScene {
 					picture.setFitWidth(width);
 					picture.setImage(pictureImage);			
 				}
-	
+
 				TextArea notes = new TextArea(patient.getNotes());
 				notes.setPrefHeight(300);
 				notes.setWrapText(true);
 				notes.setEditable(false);
-	
+
 				//Set up scan table
 				ObservableList<Scan> scanList = FXCollections.observableArrayList();
 				for(Scan scan : patient.getScans()) {
 					scanList.add(scan);
 				}
-	
+
 				TableView<Scan> scanTable = new TableView<Scan>();
 				scanTable.setEditable(false);
-	
+
 				TableColumn dateCol = new TableColumn("Date");
 				dateCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.19));
 				dateCol.setCellValueFactory(new PropertyValueFactory<Scan, Date>("dateOfScan"));
-	
+
 				TableColumn notesCol = new TableColumn("Notes");
 				notesCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.79));
 				notesCol.setCellValueFactory(new PropertyValueFactory<Scan, String>("notes"));
-	
+
 				scanTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 				scanTable.getColumns().addAll(dateCol, notesCol);
-	
+
 				scanTable.setItems(scanList);
-	
+
 				//Double click to analyze
 				scanTable.setOnMouseClicked(event -> {
 					if(event.getClickCount() == 2) {
@@ -139,24 +139,39 @@ public class PatientInfoScene {
 						}
 					}
 				});
-	
+
 				//Analyze button
-				Button analyzeBtn = new Button("Analyze");
-				analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-				analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
-				analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						if (scanTable.getSelectionModel().getSelectedItem() != null) {
-							manager.setScan(scanTable.getSelectionModel().getSelectedItem());
-							manager.getSceneStack().push(manager.getSceneID());
-							manager.paintScene("ScanVisualizer");
-						} else {
-							manager.makeDialog("No scan was selected!");
+				Button analyzeBtn;
+				LinkedList<Scan> scans = patient.getScans();
+				if(scans.size() > 0 && scans.get(scans.size() - 1).getNotes().equals("Analyzing...")) {
+					analyzeBtn = new Button("Refresh");
+					analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+					analyzeBtn.setTooltip(new Tooltip("Refresh the page."));
+					analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							manager.paintScene("PatientInfo");
 						}
-					}
-				});
-	
+					});
+				} else {
+					//Analyze button
+					analyzeBtn = new Button("Analyze");
+					analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+					analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
+					analyzeBtn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							if (scanTable.getSelectionModel().getSelectedItem() != null) {
+								manager.setScan(scanTable.getSelectionModel().getSelectedItem());
+								manager.getSceneStack().push(manager.getSceneID());
+								manager.paintScene("ScanVisualizer");
+							} else {
+								manager.makeDialog("No scan was selected!");
+							}
+						}
+					});
+				}
+
 				//Add elements to content grid
 				GridPane.setConstraints(firstName, 1, 1, 3, 1, HPos.LEFT, VPos.CENTER);
 				GridPane.setConstraints(lastName, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
@@ -166,7 +181,7 @@ public class PatientInfoScene {
 				GridPane.setConstraints(analyzeBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
 				contentGrid.getChildren().addAll(firstName, lastName, picture, notes, scanTable, analyzeBtn);
 			}
-	
+
 			//Edit was pressed
 			else {
 				//Create elements
@@ -180,14 +195,14 @@ public class PatientInfoScene {
 				StateManager.textMaxLength(lastField, 50);
 				StateManager.textMaxLength(pictureField, 100);
 				StateManager.textMaxLength(notesArea, 256);
-	
+
 				notesArea.setPrefHeight(300);
 				Button saveBtn = new Button("Save");
 				Button cancelBtn = new Button("Cancel");
-	
+
 				Holder holder = new Holder();
 				LinkedList<File> newFiles = new LinkedList<File>();
-	
+
 				saveBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 				saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
@@ -214,7 +229,7 @@ public class PatientInfoScene {
 						}
 					}
 				});
-	
+
 				cancelBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 				cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
@@ -223,7 +238,7 @@ public class PatientInfoScene {
 						manager.paintScene("PatientInfo");
 					}
 				});
-	
+
 				FileChooser pictureChooser = new FileChooser();
 				pictureChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("IMAGE", "*.png", "*.jpg"));
 				pictureField.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -239,7 +254,7 @@ public class PatientInfoScene {
 						cancelBtn.requestFocus();
 					}
 				});
-	
+
 				//Add elements to content grid
 				GridPane.setConstraints(firstField, 1, 1, 3, 1, HPos.LEFT, VPos.CENTER);
 				GridPane.setConstraints(lastField, 1, 2, 3, 1, HPos.LEFT, VPos.CENTER);
@@ -249,7 +264,7 @@ public class PatientInfoScene {
 				GridPane.setConstraints(cancelBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
 				contentGrid.getChildren().addAll(firstField, lastField, pictureField, notesArea, saveBtn, cancelBtn);
 			}
-	
+
 			//Merge content grid with left nav
 			contentGrid.getStyleClass().add("content-pane");
 			mainGrid = VerticalSideMenu.newSideBar(manager);
@@ -257,10 +272,10 @@ public class PatientInfoScene {
 			mainGrid.getChildren().add(contentGrid);
 			layout.setCenter(mainGrid);
 			layout.setTop(TopMenuBar.newMenuBar(manager));
-	
+
 			//Return constructed scene
 			return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
-			
+
 		} catch (IOException e) {
 			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. \n"
 					+ "Try deleting the resources/patients folder. WARNING, this will delete all saved patient data in the system. \n"
