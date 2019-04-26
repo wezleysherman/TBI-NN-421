@@ -136,25 +136,6 @@ public class StateManager {
 		}
 		else if (sceneID.equals("PatientInfo")) {
 			scene = new PatientInfoScene().initializeScene(this);
-			
-			//Auto refresh the page every 5 seconds
-			Timer timer = new Timer();
-			timer.scheduleAtFixedRate(new TimerTask() {
-				@Override
-				public void run() {
-					if (sceneID.equals("PatientInfo") && !getStateBool()) {
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								paintScene("PatientInfo");
-							}
-						});
-					}
-					else {
-						timer.cancel();
-					}
-				}
-			}, 0, 5000);
 		}
 		else if (sceneID.equals("ThemeCreation")) {
 			scene = new ThemeCreationScene().initializeScene(this);
