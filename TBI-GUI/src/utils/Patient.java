@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.file.Files;
 
 //Class for saving patient information
 @SuppressWarnings("serial")
@@ -119,8 +120,16 @@ public class Patient extends Info implements Serializable {
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
+		try {
+			File add = new File(basePath, uid);
+			add = new File(add.getAbsolutePath(), scan.getRawScan().getName());
+			Files.copy(scan.getRawScan().toPath(), add.toPath());
+			scan.setRawScan(add);
+		}catch(Exception e) {
+			scan.setNotes("Could not move scan; it is located at its original filepath");
+		}
 		scans.add(scan);
-		analyzeScan(scan); // TODO add file location of processed scan to scan object
+		analyzeScan(scan);
 		Collections.sort(scans);
 	}
 
@@ -183,7 +192,7 @@ public class Patient extends Info implements Serializable {
 					new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
 					s.setProcScan(p);
 					// this is where we would set the label if we had a label to set
-					s.setLabelProb(100);
+					//s.setLabelProb(100);
 					s.setNotes("Analyzed!");
 					pat.savePatient();
 				} catch(Exception e) {

@@ -154,7 +154,7 @@ public class PatientInfoScene {
 			});
 			Button analyzeBtn;
 			LinkedList<Scan> scans = patient.getScans();
-			if(scans.get(scans.size() - 1).getNotes().equals("Analyzing...")) {
+			if(scans.size() > 0 && scans.get(scans.size() - 1).getNotes().equals("Analyzing...")) {
 				analyzeBtn = new Button("Refresh");
 				analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 				analyzeBtn.setTooltip(new Tooltip("Analyze this scan."));
