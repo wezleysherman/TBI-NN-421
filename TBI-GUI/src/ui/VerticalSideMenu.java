@@ -246,7 +246,6 @@ public class VerticalSideMenu {
 					}
 				}					
 			}
-
 		});
 		
 		saveScanButton.setOnAction(new EventHandler<ActionEvent>() {

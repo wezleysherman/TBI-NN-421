@@ -81,6 +81,7 @@ public class PreviousPatientScene {
 
 		patientTable.setItems(patientList);
 
+		//Double click retrieve
 		patientTable.setOnMouseClicked(event -> {
 			if(event.getClickCount() == 2) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {
