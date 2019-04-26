@@ -5,9 +5,14 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.file.Files;
 
 //Class for saving patient information
 @SuppressWarnings("serial")
@@ -18,8 +23,8 @@ public class Patient extends Info implements Serializable {
 	private String notes;
 	private LinkedList<Scan> scans;
 	private File picture;
-	
-	//constructor for blank patient
+
+	// constructor for blank patient
 	public Patient() {
 		this("", "", new Date(), "");
 	}
@@ -104,19 +109,27 @@ public class Patient extends Info implements Serializable {
 	public File getPicture() {
 		return picture;
 	}
-	
+
 	public void setPicture(File file) {
 		this.picture = file;
 	}
-	
+
 	public void addScan(Scan scan) {
 		/*
 		 * Handles adding a new scan to the patient's linked list.
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
+		try {
+			File add = new File(basePath, uid);
+			add = new File(add.getAbsolutePath(), scan.getRawScan().getName());
+			Files.copy(scan.getRawScan().toPath(), add.toPath());
+			scan.setRawScan(add);
+		}catch(Exception e) {
+			scan.setNotes("Could not move scan; it is located at its original filepath");
+		}
 		scans.add(scan);
-		analyzeScan(scan); //TODO add file location of processed scan to scan object
+		analyzeScan(scan);
 		Collections.sort(scans);
 	}
 
@@ -141,20 +154,79 @@ public class Patient extends Info implements Serializable {
 	public void savePatient() throws Exception {
 		PatientManagement.exportPatient(this);
 	}
-	
-	public Scan analyzeScan(Scan s) {
-		String file = s.getRawScan().getAbsolutePath();
-		file = file.substring(file.length()-3, file.length());
-		System.out.println(file);
-		List l = new LinkedList(); l.add("jpg"); l.add("png"); l.add("gif");
-		if(!l.contains(file)) {
-			s.setLabel("Attempted to analyze but could not due to filetype.");
-		}else {
-			s = NNUtils.get_label(s);
-			System.out.println(String.format("BEST MATCH: %s (%.2f%% likely)", s.getLabel(),
-					s.getLabelProb()));
+
+	public void analyzeScan(Scan s) {
+		
+		/*
+		 * This code can be used in the future if the Java Tensorflow library ever gets
+		 * more usable. You'll just need to work with the NNUtils class. String file =
+		 * s.getRawScan().getAbsolutePath(); file = file.substring(file.length()-3,
+		 * file.length()); System.out.println(file); List l = new LinkedList();
+		 * l.add("jpg"); l.add("png"); l.add("gif"); if(!l.contains(file)) {
+		 * s.setLabel("Attempted to analyze but could not due to filetype."); }else { s
+		 * = NNUtils.get_label(s);
+		 * System.out.println(String.format("BEST MATCH: %s (%.2f%% likely)",
+		 * s.getLabel(), s.getLabelProb())); } return s;
+		 */
+
+		// for now, we're using a quick python script :) all credit to https://www.baeldung.com/run-shell-command-in-java with tweaks
+
+		class PyRunner implements Runnable {
+			private InputStream inputStream;
+			private Consumer<String> consumer;
+			Scan s;
+			File p;
+			Patient pat;
+
+			public PyRunner(InputStream inputStream, Consumer<String> consumer, Scan s, File p, Patient pat) {
+				this.inputStream = inputStream;
+				this.consumer = consumer;
+				this.s = s;
+				this.p = p;
+				this.pat = pat;
+			}
+
+			@Override
+			public void run() {
+				try {
+					new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
+					s.setProcScan(p);
+					// this is where we would set the label if we had a label to set
+					//s.setLabelProb(100);
+					s.setNotes("Analyzed!");
+					pat.savePatient();
+				} catch(Exception e) {
+					System.out.println("Could not save patient");
+				}
+			}
+
 		}
-		return s;
+
+		try {
+			s.setNotes("Analyzing...");
+			String os = System.getProperty("os.name");
+			ProcessBuilder builder = new ProcessBuilder();
+			String cmd = "";
+			cmd = "python runAnalysis.py " + s.getRawScan().getAbsolutePath() + " ";
+			File proc = new File(s.getRawScan().getParent(), s.getRawScan().getName().replace(".", "_proc."));
+			cmd += proc.getAbsolutePath();
+			if (os.startsWith("Windows")) {
+				builder.command("cmd.exe", "/c", cmd);
+			} else {
+				builder.command("sh", "-c", cmd);
+			}
+			File f = new File(System.getProperty("user.dir"), "src");
+			f = new File(f.getAbsolutePath(), "python");
+			f = new File(f.getAbsolutePath(), "nn");
+			builder.directory(f);
+			Process process = builder.start();
+			PyRunner runner = new PyRunner(process.getInputStream(), System.out::println, s, proc, this);
+			Executors.newSingleThreadExecutor().submit(runner);
+			/*int exitCode = process.waitFor();
+			assert exitCode == 0;*/
+		} catch (Exception e) {
+			s.setNotes("Image could not be analyzed");
+		}
 	}
 
 }

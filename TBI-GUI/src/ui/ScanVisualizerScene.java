@@ -48,7 +48,7 @@ import javafx.util.Duration;
  * REFERENCES: https://docs.oracle.com/javafx/2/ui_controls/file-chooser.htm
  */
 public class ScanVisualizerScene {
-	
+
 	@SuppressWarnings({ "static-access" })
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
@@ -74,10 +74,12 @@ public class ScanVisualizerScene {
 		//Pie Chart to show accuracy
 		DecimalFormat df = new DecimalFormat("#.##");
 		StackPane accuracyStack = createArc(manager.getScan().getLabelProb());
-		Label informationLabel = new Label("The results of this analysis are " + df.format(manager.getScan().getLabelProb()) + "% likely.");
+		if(manager.getScan().getLabelProb() > 0) {
+			Label informationLabel = new Label("The results of this analysis are " + df.format(manager.getScan().getLabelProb()) + "% likely.");
+			accuracyPane.setAlignment(informationLabel, Pos.CENTER);
+			accuracyPane.setBottom(informationLabel);
+		}
 		accuracyPane.setCenter(accuracyStack);
-		accuracyPane.setAlignment(informationLabel, Pos.CENTER);
-		accuracyPane.setBottom(informationLabel);
 
 		//###ADD ELEMENTS TO THEIR GRID LOCATION###
 		//Get images to fill into the grid
@@ -85,12 +87,12 @@ public class ScanVisualizerScene {
 		ImageView displayIcon = new ImageView();
 		displayIcon.setImage(iconImage);
 		displayIcon.setPreserveRatio(true);
-		
+
 		Image rawIcon = new Image("resources/icon-no-highlight.png");
 		ImageView displayIconGray = new ImageView();
 		displayIconGray.setImage(rawIcon);
 		displayIconGray.setPreserveRatio(true);
-		
+
 		//Likely Trauma Area cell setup
 		displayIcon.fitWidthProperty().bind(rawScanBPane.widthProperty());
 		displayIcon.fitHeightProperty().bind(accuracyPane.heightProperty());
@@ -101,11 +103,11 @@ public class ScanVisualizerScene {
 		likelyTraumaBPane.setBottom(likelyTraumaBtn);
 		StackPane.setAlignment(displayIcon, Pos.CENTER);
 		likelyTraumaPane.getChildren().add(displayIcon);
-		
+
 		//Raw Scan Area cell setup
 		displayIconGray.fitWidthProperty().bind(accuracyPane.widthProperty());
 		displayIconGray.fitHeightProperty().bind(accuracyPane.heightProperty());
-		
+
 		rawScanBPane.prefWidthProperty().bind(contentGrid.widthProperty());
 		rawScanBtn.setMaxWidth(Double.MAX_VALUE);
 		rawScanBPane.setCenter(rawScanPane);
@@ -241,7 +243,7 @@ public class ScanVisualizerScene {
 
 		String likelyTraumaTT = "View the Likely Trauma Areas Visualizer.";
 		likelyTraumaBtn.setTooltip(new Tooltip(likelyTraumaTT));
-		
+
 		//Style Raw Scan button
 		rawScanBtn.setText("Raw Scan Visualizer");
 		rawScanBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -365,7 +367,7 @@ public class ScanVisualizerScene {
 
 			}
 		});
-		
+
 		rawScanBtn.setTooltip(new Tooltip("View the raw scan."));
 
 		//###LAYOUT CONTENT GRID AND ADD ELEMENTS
@@ -404,12 +406,12 @@ public class ScanVisualizerScene {
 		//Return constructed scene
 		return new Scene(layout, manager.getStage().getWidth(), manager.getStage().getHeight());
 	}
-	
+
 	//Create Arc to display as percentage with animation
 	public static StackPane createArc(double percent) {
 		DecimalFormat df = new DecimalFormat("#.##");
-
-		Label percentLabel = new Label(df.format(percent) + "%");
+		Label percentLabel;
+		percentLabel = new Label(df.format(percent) + "%");
 		percentLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf("#ffffff"), CornerRadii.EMPTY, Insets.EMPTY)));
 		//Arc for placing in the center
 		Arc placementArc = new Arc();
@@ -427,19 +429,21 @@ public class ScanVisualizerScene {
 		arc.setType(ArcType.ROUND);
 		arc.setStyle("-fx-fill: #455357");
 		StackPane stackPane = new StackPane();
+		if(percent == 0) {
+			percentLabel = new Label("Algorithm does not support label confidence");
+		} else {
+			double endAngle = percent / 100 * 360;
+			//Animation
+			KeyValue kvStart = new KeyValue(arc.startAngleProperty(), 90);
+			KeyValue kvEnd = new KeyValue(arc.lengthProperty(), endAngle);
+
+			KeyFrame fillArc = new KeyFrame(Duration.seconds(1.5), kvStart, kvEnd);
+			Timeline timeline = new Timeline(fillArc);
+			timeline.setCycleCount(1);
+			timeline.play();
+		}
 		Group arcGroup = new Group(placementArc, arc);
 		stackPane.getChildren().addAll(arcGroup, percentLabel);
-				
-		double endAngle = percent / 100 * 360;
-		//Animation
-		KeyValue kvStart = new KeyValue(arc.startAngleProperty(), 90);
-		KeyValue kvEnd = new KeyValue(arc.lengthProperty(), endAngle);
-		
-		KeyFrame fillArc = new KeyFrame(Duration.seconds(1.5), kvStart, kvEnd);
-		Timeline timeline = new Timeline(fillArc);
-		timeline.setCycleCount(1);
-
-		timeline.play();
 		return stackPane;	
 	}
 }

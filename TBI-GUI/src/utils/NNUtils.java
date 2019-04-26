@@ -16,6 +16,7 @@ limitations under the License.
 package utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
@@ -32,8 +33,9 @@ import org.tensorflow.Session;
 import org.tensorflow.Tensor;
 import org.tensorflow.TensorFlow;
 import org.tensorflow.types.UInt8;
+//import nifti.Nifti1Dataset;
 
-//THIS IS LARGELY NOT MY WORK. It has been adapted to run when called from a Patient class instead of from the command line.
+//THIS IS LARGELY NOT MY (julia's) WORK. It has been adapted to run when called from a Patient class instead of from the command line.
 //This sample is pulled from https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/java/src/main/java/org/tensorflow/examples/LabelImage.java
 
 /**

@@ -141,23 +141,9 @@ public class PatientInfoEntryScene {
 				}
 			}			
 		});
-		/*pictureField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-				if(arg2) {
-					File picture = pictureChooser.showOpenDialog(manager.getStage());
-					if (picture != null) {
-						pictureField.setText(picture.getName());
-						holder.setFile(picture);
-					}
-				}
-				fileField.requestFocus();
-			}
-		});*/
-
 
 		//File Chooser Setup
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.png", "*.jpg"));
 		fileSelect.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -176,36 +162,16 @@ public class PatientInfoEntryScene {
 				}
 			}
 		});
-		/*fileField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-				if(arg2) {
-					List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
-					if (files != null && files.size() > 0) {
-						if (files.size() == 1) {
-							fileField.setText(files.get(0).getName());
-						}
-						else {
-							fileField.setText(files.size() + " files");
-						}
-						for (int i = 0; i < files.size(); ++i) {
-							newFiles.add(files.get(i));
-						}
-					}
-				}
-				datePicker.requestFocus();
-			}
-		});*/
 		
 		ColumnConstraints fileSelecColumn = new ColumnConstraints();
 		fileSelecColumn.setPercentWidth(100.0/5*4);
 		picGrid.getColumnConstraints().add(fileSelecColumn);
 		fileGrid.getColumnConstraints().add(fileSelecColumn);
 		
-		GridPane.setConstraints(pictureField, 0, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
-		GridPane.setConstraints(pictureSelect, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
-		GridPane.setConstraints(fileField, 0, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
-		GridPane.setConstraints(fileSelect, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(pictureField, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(pictureSelect, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(fileField, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(fileSelect, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 
 		Image iconImage = new Image("resources/icon.png", 15, 15, false, false);
 		pictureSelect.setGraphic(new ImageView(iconImage));
