@@ -120,16 +120,17 @@ public class Patient extends Info implements Serializable {
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
-		try {
+		/*try {
 			File add = new File(basePath, uid);
 			add = new File(add.getAbsolutePath(), scan.getRawScan().getName());
 			Files.copy(scan.getRawScan().toPath(), add.toPath());
 			scan.setRawScan(add);
 		}catch(Exception e) {
 			scan.setNotes("Could not move scan; it is located at its original filepath");
-		}
-		scans.add(scan);
+		}*/
+
 		analyzeScan(scan);
+		scans.add(scan);
 		Collections.sort(scans);
 	}
 
