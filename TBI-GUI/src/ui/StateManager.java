@@ -146,7 +146,7 @@ public class StateManager {
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
-								stage.setScene(scene);
+								paintScene("PatientInfo");
 							}
 						});
 					}
