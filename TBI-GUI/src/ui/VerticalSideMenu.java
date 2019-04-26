@@ -31,16 +31,16 @@ import utils.PatientManagement;
 import utils.Scan;
 
 public class VerticalSideMenu {
-		
+
 	private static Patient patient = new Patient();
-	
+
 	public static GridPane newSideBar(StateManager manager) {
 		GridPane mainGrid = new GridPane();
 		GridPane contentGrid = new GridPane();
 		Label appLabel = new Label("TBI Application");
 		appLabel.getStyleClass().add("label-white");
 		Pane colorPane = new Pane();
-		
+
 		//Construct content grid
 		contentGrid.setHgap(5);
 		contentGrid.setVgap(5);
@@ -50,11 +50,11 @@ public class VerticalSideMenu {
 		ColumnConstraints column1 = new ColumnConstraints();
 		column1.setPercentWidth(50);
 		contentGrid.getColumnConstraints().addAll(column0, column1);
-		
+
 		//Add elements to content grid
 		GridPane.setConstraints(appLabel, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
 		contentGrid.getChildren().add(appLabel);
-		
+
 		//Construct main grid
 		RowConstraints rowCon = new RowConstraints();
 		rowCon.setPercentHeight(100);
@@ -65,13 +65,13 @@ public class VerticalSideMenu {
 		ColumnConstraints columnCon2 = new ColumnConstraints();
 		columnCon2.setPercentWidth(400/5);
 		mainGrid.getColumnConstraints().add(1, columnCon2);
-		
+
 		//Merge content grid with main grid
 		colorPane.getStyleClass().add("side-pane");
 		GridPane.setConstraints(colorPane, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
 		GridPane.setConstraints(contentGrid, 0, 0, 1, 1, HPos.CENTER, VPos.TOP);
 		mainGrid.getChildren().addAll(colorPane, contentGrid);
-		
+
 		//backBtn------------------------------------------------------------------------------------------------------------------------------------
 		Button backBtn = new Button("Back");
 		backBtn.setMaxWidth(Double.MAX_VALUE);
@@ -90,12 +90,12 @@ public class VerticalSideMenu {
 		});
 		GridPane.setConstraints(backBtn, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
 		contentGrid.getChildren().add(backBtn);
-		
+
 		//homeBtn------------------------------------------------------------------------------------------------------------------------------------
 		Button homeBtn = new Button("Home");
 		homeBtn.setMaxWidth(Double.MAX_VALUE);
 		homeBtn.setTooltip(new Tooltip("Return to the home page (You will lose any unsaved information from this run of the program)."));
-		
+
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -108,7 +108,7 @@ public class VerticalSideMenu {
 		});
 		GridPane.setConstraints(homeBtn,  1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
 		contentGrid.getChildren().add(homeBtn);
-		
+
 		//Side bar for different pages---------------------------------------------------------------------------------------------------------------
 		if (manager.getSceneID().equals("PatientInfo")) {
 			makePI(contentGrid, manager);
@@ -118,9 +118,9 @@ public class VerticalSideMenu {
 		}
 		return mainGrid;
 	}
-	
+
 	//Side bar constructions-------------------------------------------------------------------------------------------------------------------------
-	
+
 	//Add Patient Information Elements to the Main Grid
 	private static void makePI(GridPane grid, StateManager manager) {
 		Label sceneLabel = new Label("Patient Info");
@@ -133,7 +133,7 @@ public class VerticalSideMenu {
 		Button delScansBtn = new Button("Delete All Scans");
 		delScansBtn.setMaxWidth(Double.MAX_VALUE);
 		delScansBtn.setTooltip(new Tooltip("Delete this patient's scans."));
-		
+
 		editBtn.setMaxWidth(Double.MAX_VALUE);
 		editBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -142,7 +142,7 @@ public class VerticalSideMenu {
 				manager.paintScene("PatientInfo");
 			}
 		});
-		
+
 		delPatBtn.setMaxWidth(Double.MAX_VALUE);
 		delPatBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -161,7 +161,7 @@ public class VerticalSideMenu {
 				}
 			}
 		});
-		
+
 		delScansBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -179,7 +179,7 @@ public class VerticalSideMenu {
 				}
 			}
 		});
-		
+
 		//Add Scan to the current patient
 		TextField fileField = new TextField();
 		StateManager.textMaxLength(fileField, 50);
@@ -190,24 +190,24 @@ public class VerticalSideMenu {
 		Button addScanBtn = new Button("Add Scan");
 		Button saveScanButton = new Button("Save and Analyze Scans");
 		Button cancelAddScan = new Button("Cancel");
-		
+
 		addScanBtn.setMaxWidth(Double.MAX_VALUE);
 		saveScanButton.setMaxWidth(Double.MAX_VALUE);
 		cancelAddScan.setMaxWidth(Double.MAX_VALUE);
 		datePicker.setMaxWidth(Double.MAX_VALUE);
-		
+
 		saveScanButton.setVisible(false);
 		cancelAddScan.setVisible(false);
 		datePicker.setVisible(false);
 		fileField.setVisible(false);
-		
+
 		datePicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				holder.setDate(java.sql.Date.valueOf(datePicker.getValue()));
 			}
 		});
-		
+
 		cancelAddScan.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -219,9 +219,9 @@ public class VerticalSideMenu {
 				datePicker.setVisible(false);
 				fileField.setVisible(false);
 			}
-			
+
 		});
-		
+
 		addScanBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -247,7 +247,7 @@ public class VerticalSideMenu {
 				}					
 			}
 		});
-		
+
 		saveScanButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -276,7 +276,7 @@ public class VerticalSideMenu {
 				manager.paintScene("PatientInfo");
 			}
 		});
-		
+
 		GridPane.setConstraints(sceneLabel, 0, 5, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(editBtn, 0, 6, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(delPatBtn, 0, 7, 2, 1, HPos.CENTER, VPos.CENTER);
@@ -286,35 +286,35 @@ public class VerticalSideMenu {
 		GridPane.setConstraints(datePicker, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(saveScanButton, 0, 12, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(cancelAddScan, 0, 13, 2, 1, HPos.CENTER, VPos.CENTER);
-		
+
 		grid.getChildren().addAll(sceneLabel, editBtn, delPatBtn, delScansBtn, fileField, datePicker, addScanBtn, saveScanButton, cancelAddScan);
 	}
-	
+
 	//Add Scan Visualizer Elements to the Main Grid
 	private static void makeSV(GridPane grid, StateManager manager) {
 		try {
 			patient = PatientManagement.importPatient(PatientManagement.getDefaultPath(), manager.getPatient().getUid());
 		} catch (IOException e) {
 			manager.makeError("Cannot load a patient. You might be using an outdated version of the database. \n"
-	        		+ "Try deleting the resources/patients folder. WARNING, this will delete all saved patient data in the system. \n"
-	        		+ "Check utils.PatientManagement importPatient().", e);
+					+ "Try deleting the resources/patients folder. WARNING, this will delete all saved patient data in the system. \n"
+					+ "Check utils.PatientManagement importPatient().", e);
 		}
-		
+
 		Label sceneLabel = new Label("Scan Vizualizer");
 		sceneLabel.getStyleClass().add("label-white");
-		
+
 		Label patientLabel = new Label("Patient: " + patient.getFirstName() + " " + patient.getLastName());
 		patientLabel.getStyleClass().add("label-white");
-		
+
 		Label dateLabel = new Label("Scan Date: " + manager.getScan().getDateOfScan().toString());
 		dateLabel.getStyleClass().add("label-white");
-		
+
 		Label scansLabel = new Label("Scans: ");
 		scansLabel.getStyleClass().add("label-white");
-		
+
 		Label notesLabel = new Label("Scan Notes: ");
 		notesLabel.getStyleClass().add("label-white");
-		
+
 		Button delScanBtn = new Button("Delete Current Scan");
 		delScanBtn.setMaxWidth(Double.MAX_VALUE);
 		delScanBtn.setTooltip(new Tooltip("Delete this scan."));
@@ -324,9 +324,9 @@ public class VerticalSideMenu {
 				if (manager.makeQuestion("This will remove all of the data associated with this scan, are you sure you want to continue?")) {
 					for(Scan scan : patient.getScans()) {
 						if (scan.getRawScan().equals(manager.getScan().getRawScan())) {
-			        		patient.getScans().remove(scan);
-			        	}			        	
-			        }
+							patient.getScans().remove(scan);
+						}			        	
+					}
 					try {
 						patient.savePatient();
 						manager.setScan(null);
@@ -339,7 +339,7 @@ public class VerticalSideMenu {
 				}
 			}
 		});
-		
+
 		GridPane scrollGrid = new GridPane();
 		ScrollPane scrollPane = new ScrollPane(scrollGrid);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -350,31 +350,33 @@ public class VerticalSideMenu {
 		scrollGridCols.setPercentWidth(100);
 		scrollGrid.getColumnConstraints().add(scrollGridCols);
 		scrollGrid.prefWidthProperty().bind(scrollPane.widthProperty());
-		
+
 		for (int i = 0; i < patient.getNumScans(); ++i) {
-			Button scanBtn = new Button(patient.getScans().get(i).getRawScan().getName() + " Scan " + (i + 1));
-			scanBtn.setMaxWidth(Double.MAX_VALUE);
-			scanBtn.setTooltip(new Tooltip("View this scan."));
-			scanBtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent arg0) {
-					int index = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length() - 1));
-					manager.setScan(patient.getScans().get(index - 1));
-					manager.paintScene("ScanVisualizer");
-					//TODO See about only redrawing elements that need to be updated.
-				}
-			});
-			
-			GridPane.setMargin(scanBtn, new Insets(0, 10, 10, 0));
-			GridPane.setConstraints(scanBtn, 0, i, 2, 1, HPos.CENTER, VPos.CENTER);
-			scrollGrid.getChildren().add(scanBtn);	
+			if(!patient.getScans().get(i).getNotes().equals("Analyzing...")) {
+				Button scanBtn = new Button(patient.getScans().get(i).getRawScan().getName() + " Scan " + (i + 1));
+				scanBtn.setMaxWidth(Double.MAX_VALUE);
+				scanBtn.setTooltip(new Tooltip("View this scan."));
+				scanBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						int index = Character.getNumericValue(scanBtn.getText().charAt(scanBtn.getText().length() - 1));
+						manager.setScan(patient.getScans().get(index - 1));
+						manager.paintScene("ScanVisualizer");
+						//TODO See about only redrawing elements that need to be updated.
+					}
+				});
+
+				GridPane.setMargin(scanBtn, new Insets(0, 10, 10, 0));
+				GridPane.setConstraints(scanBtn, 0, i, 2, 1, HPos.CENTER, VPos.CENTER);
+				scrollGrid.getChildren().add(scanBtn);	
+			}
 		}
-		
+
 		RowConstraints rowCon = new RowConstraints();
 		RowConstraints scrollCon = new RowConstraints();
 		scrollCon.setPercentHeight(25);
 		grid.getRowConstraints().addAll(rowCon, rowCon, rowCon, rowCon, rowCon, rowCon, rowCon, scrollCon, rowCon, scrollCon, rowCon);
-		
+
 		//Set up text area
 		Button cancelEditNotesBtn = new Button("Cancel Changes");
 		Button editNotesBtn = new Button("Save Changes");
@@ -389,7 +391,7 @@ public class VerticalSideMenu {
 			cancelEditNotesBtn.setVisible(true);
 			editNotesBtn.setVisible(true);
 		});
-		
+
 		cancelEditNotesBtn.setMaxWidth(Double.MAX_VALUE);
 		cancelEditNotesBtn.setTooltip(new Tooltip("Cancel changes to the notes."));
 		cancelEditNotesBtn.setVisible(false);
@@ -400,7 +402,7 @@ public class VerticalSideMenu {
 				editNotesBtn.setVisible(false);
 				cancelEditNotesBtn.setVisible(false);
 			}
-			
+
 		});
 		editNotesBtn.setMaxWidth(Double.MAX_VALUE);
 		editNotesBtn.setTooltip(new Tooltip("Edit this scan's notes."));
@@ -430,7 +432,7 @@ public class VerticalSideMenu {
 				}
 			}
 		});
-		
+
 		GridPane.setConstraints(sceneLabel, 0, 3, 2, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(patientLabel, 0, 4, 2, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(dateLabel, 0, 5, 2, 1, HPos.LEFT, VPos.CENTER);
@@ -441,7 +443,7 @@ public class VerticalSideMenu {
 		GridPane.setConstraints(editNotesBtn, 0, 10, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(cancelEditNotesBtn, 1, 10, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(delScanBtn, 0, 11, 2, 1, HPos.CENTER, VPos.CENTER);
-		
+
 		grid.getChildren().addAll(sceneLabel, delScanBtn, patientLabel, dateLabel, scrollPane, docNotesField, scansLabel, notesLabel, editNotesBtn, cancelEditNotesBtn);
 	}
 }

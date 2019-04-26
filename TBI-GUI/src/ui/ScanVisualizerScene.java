@@ -408,7 +408,8 @@ public class ScanVisualizerScene {
 	}
 
 	//Create Arc to display as percentage with animation
-	public static StackPane createArc(double percent) {
+	public static StackPane createArc(double percentIn) {
+		double percent = percentIn;
 		DecimalFormat df = new DecimalFormat("#.##");
 		Label percentLabel;
 		percentLabel = new Label(df.format(percent) + "%");
@@ -430,18 +431,19 @@ public class ScanVisualizerScene {
 		arc.setStyle("-fx-fill: #455357");
 		StackPane stackPane = new StackPane();
 		if(percent == 0) {
+			percent = 50;
+			arc.setStyle("-fx-fill: #00000000");
 			percentLabel = new Label("Algorithm does not support label confidence");
-		} else {
-			double endAngle = percent / 100 * 360;
-			//Animation
-			KeyValue kvStart = new KeyValue(arc.startAngleProperty(), 90);
-			KeyValue kvEnd = new KeyValue(arc.lengthProperty(), endAngle);
-
-			KeyFrame fillArc = new KeyFrame(Duration.seconds(1.5), kvStart, kvEnd);
-			Timeline timeline = new Timeline(fillArc);
-			timeline.setCycleCount(1);
-			timeline.play();
 		}
+		double endAngle = percent / 100 * 360;
+		//Animation
+		KeyValue kvStart = new KeyValue(arc.startAngleProperty(), 90);
+		KeyValue kvEnd = new KeyValue(arc.lengthProperty(), endAngle);
+
+		KeyFrame fillArc = new KeyFrame(Duration.seconds(1.5), kvStart, kvEnd);
+		Timeline timeline = new Timeline(fillArc);
+		timeline.setCycleCount(1);
+		timeline.play();
 		Group arcGroup = new Group(placementArc, arc);
 		stackPane.getChildren().addAll(arcGroup, percentLabel);
 		return stackPane;	
