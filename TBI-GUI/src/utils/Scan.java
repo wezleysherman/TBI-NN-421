@@ -1,15 +1,13 @@
 package utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.InputMismatchException;
-import java.awt.image.BufferedImage;
 
 //import nifti.Nifti1Dataset;
 
+@SuppressWarnings({ "rawtypes", "serial" , "unused"})
 public class Scan implements Serializable, Comparable {
 
 	private Date dateOfScan;

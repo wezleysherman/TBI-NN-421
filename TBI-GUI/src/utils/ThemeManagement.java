@@ -95,6 +95,7 @@ public class ThemeManagement {
 		oos.close();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Hashtable <String, String> importThemeList() throws IOException{
 		File f = new File(defaultPath);
 		f.mkdirs();

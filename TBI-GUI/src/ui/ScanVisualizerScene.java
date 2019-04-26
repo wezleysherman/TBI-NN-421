@@ -49,7 +49,7 @@ import javafx.util.Duration;
  */
 public class ScanVisualizerScene {
 
-	@SuppressWarnings({ "static-access" })
+	@SuppressWarnings({ "static-access", "rawtypes" })
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		GridPane contentGrid = new GridPane();

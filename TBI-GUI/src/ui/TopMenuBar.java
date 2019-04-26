@@ -1,7 +1,6 @@
 package ui;
 
 import java.io.File;
-import java.net.URL;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

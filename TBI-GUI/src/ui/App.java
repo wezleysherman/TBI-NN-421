@@ -11,9 +11,9 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 	
+	@SuppressWarnings("unused")
 	@Override
 	public void start(Stage stage) {
-		@SuppressWarnings("unused")
 		StateManager manager = new StateManager(stage);
 	}
 	

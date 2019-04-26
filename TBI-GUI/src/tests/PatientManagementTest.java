@@ -3,11 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.StreamCorruptedException;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -19,6 +15,7 @@ import utils.Patient;
 import utils.PatientEntry;
 import utils.PatientManagement;
 
+@SuppressWarnings({ "unused", "rawtypes", "deprecation" })
 public class PatientManagementTest {
 	private Patient patient;
 	private Patient patient2;

@@ -13,7 +13,6 @@ import java.io.StreamCorruptedException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.util.Hashtable;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

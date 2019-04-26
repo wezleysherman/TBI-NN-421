@@ -30,6 +30,7 @@ import utils.PatientManagement;
 
 public class PreviousPatientScene {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		BorderPane innerLayout = new BorderPane();

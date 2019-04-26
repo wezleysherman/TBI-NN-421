@@ -2,9 +2,9 @@ package utils;
 
 import java.io.Serializable;
 import java.security.Key;
-import java.util.Date;
 
-public class PatientEntry extends InfoEntry implements Comparable, Serializable{
+@SuppressWarnings({ "serial", "rawtypes" })
+public class PatientEntry extends InfoEntry implements Comparable, Serializable {
 	
 	public PatientEntry(String n, String u, Key k) {
 		super(n, u, k);

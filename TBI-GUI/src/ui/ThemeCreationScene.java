@@ -42,6 +42,7 @@ import utils.PatientEntry;
  */
 public class ThemeCreationScene {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Scene initializeScene(StateManager manager) {
 	
 		HashMap<String, String> colors = new HashMap<String, String>();
@@ -269,7 +270,6 @@ public class ThemeCreationScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				colors.put("menuText", toHex(menuTextPicker.getValue()));
-				//TODO
 			}
 		});
 		GridPane.setConstraints(menuTextLabel, 0, 8, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -325,7 +325,6 @@ public class ThemeCreationScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				colors.put("tableText", toHex(tableTextPicker.getValue()));
-				//TODO
 			}
 		});
 		GridPane.setConstraints(tableTextLabel, 0, 12, 1, 1, HPos.CENTER, VPos.CENTER);
@@ -339,7 +338,6 @@ public class ThemeCreationScene {
 			@Override
 			public void handle(ActionEvent arg0) {
 				colors.put("tableHeader", toHex(tableHeaderPicker.getValue()));
-				//TODO
 			}
 		});
 		GridPane.setConstraints(tableHeaderLabel, 0, 13, 1, 1, HPos.CENTER, VPos.CENTER);

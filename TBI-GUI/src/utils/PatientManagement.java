@@ -1,32 +1,16 @@
 package utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.LinkedList;
-import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SealedObject;
 
 //for documentation, see TBI-GUI\GUI_DOCS\patientManagementDoc.html
 public class PatientManagement {
@@ -118,6 +102,7 @@ public class PatientManagement {
 		oos.close();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Hashtable <String, PatientEntry> importPatientList() throws IOException{
 		File f = new File(defaultPath);
 		f.mkdirs();
@@ -156,6 +141,7 @@ public class PatientManagement {
 		return patientList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static LinkedList <PatientEntry> dateSortPatients(){
 		if(patientList == null) {
 			try {

@@ -3,7 +3,6 @@ package utils;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -114,6 +113,7 @@ public class Patient extends Info implements Serializable {
 		this.picture = file;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addScan(Scan scan) {
 		/*
 		 * Handles adding a new scan to the patient's linked list.

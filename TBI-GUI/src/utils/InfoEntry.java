@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.security.Key;
 import java.util.Date;
 
-public abstract class InfoEntry implements Serializable, Comparable{
+@SuppressWarnings({ "serial", "rawtypes" })
+public abstract class InfoEntry implements Serializable, Comparable {
 	
 	public String name;
 	public String uid;

@@ -13,8 +13,7 @@ import javafx.util.Duration;
 
 public class LoadingScene {
 
-	//TODO: File input from the viewScan page
-	public static BorderPane createLoadingScene(StateManager manager/*, File in*/) {
+	public static BorderPane createLoadingScene(StateManager manager) {
 
 		// declaration of UI elements
 		BorderPane layout = new BorderPane();
