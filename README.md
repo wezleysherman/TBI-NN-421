@@ -19,7 +19,8 @@
 
 #### Other
 * Gradle (https://gradle.org/install/)
-* Trained Model (INSERT LINK HERE)
+* Trained Lung Model (https://drive.google.com/open?id=1iNDqYV1RFH-V9FXu-O-gkUS3y9WVxRJR)
+* Place trained lung model in the "./TBI-GUI/src/python/nn" folder
 
 ## How to Run
 * TBI-GUI.bat
