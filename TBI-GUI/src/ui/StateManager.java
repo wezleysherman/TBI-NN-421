@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -29,11 +31,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import utils.PatientEntry;
 import utils.Scan;
 
 /**
  * StateManager for the UI, controls painting scenes to the screen and setting the stage
+ * REFERENCES:
+ * http://java-buddy.blogspot.com/2014/02/update-javafx-ui-in-scheduled-task-of.html
+ * https://stackoverflow.com/questions/12153622/how-to-close-a-javafx-application-on-window-close
  */
 public class StateManager {
 	private final boolean DEBUG = false; //Manually change this value 
@@ -130,6 +136,25 @@ public class StateManager {
 		}
 		else if (sceneID.equals("PatientInfo")) {
 			scene = new PatientInfoScene().initializeScene(this);
+			
+			//Auto refresh the page every 5 seconds
+			Timer timer = new Timer();
+			timer.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					if (sceneID.equals("PatientInfo") && !getStateBool()) {
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								stage.setScene(scene);
+							}
+						});
+					}
+					else {
+						timer.cancel();
+					}
+				}
+			}, 0, 5000);
 		}
 		else if (sceneID.equals("ThemeCreation")) {
 			scene = new ThemeCreationScene().initializeScene(this);
@@ -137,6 +162,15 @@ public class StateManager {
 		
 		stage.setScene(scene);
 		stage.getScene().getStylesheets().add(themeFile);
+		
+		//Kill timers on close of app
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent t) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 		
 		if (DEBUG) {
 			debugStack();

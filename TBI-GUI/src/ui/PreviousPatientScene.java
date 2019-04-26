@@ -30,6 +30,7 @@ import utils.PatientManagement;
 
 public class PreviousPatientScene {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Scene initializeScene(StateManager manager) {
 		BorderPane layout = new BorderPane();
 		BorderPane innerLayout = new BorderPane();
@@ -80,6 +81,7 @@ public class PreviousPatientScene {
 
 		patientTable.setItems(patientList);
 
+		//Double click retrieve
 		patientTable.setOnMouseClicked(event -> {
 			if(event.getClickCount() == 2) {
 				if (patientTable.getSelectionModel().getSelectedItem() != null) {

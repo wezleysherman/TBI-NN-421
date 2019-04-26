@@ -17,7 +17,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -207,6 +206,7 @@ public class UserManagement {
 		oos.close();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Hashtable <String, UserEntry> importUserList() throws IOException{
 		File f = new File(defaultPath);
 		f.mkdirs();
@@ -245,6 +245,7 @@ public class UserManagement {
 		return userList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static LinkedList <UserEntry> dateSortUsers(){
 		if(userList == null) {
 			try {

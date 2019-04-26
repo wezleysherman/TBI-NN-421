@@ -41,6 +41,7 @@ public class PatientInfoScene {
 
 	private static Patient patient = new Patient();
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Scene initializeScene(StateManager manager) {
 		//Load Patient info from the database
 		try {
@@ -81,9 +82,7 @@ public class PatientInfoScene {
 			GridPane.setConstraints(pictureLabel, 0, 3, 1, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(notesLabel, 0, 4, 1, 1, HPos.LEFT, VPos.CENTER);
 			GridPane.setConstraints(scansLabel, 0, 5, 1, 1, HPos.LEFT, VPos.CENTER);
-			contentGrid.getChildren().addAll(
-					firstNameLabel, lastNameLabel, pictureLabel, notesLabel, scansLabel
-					);
+			contentGrid.getChildren().addAll(firstNameLabel, lastNameLabel, pictureLabel, notesLabel, scansLabel);
 	
 			//Check if edit was pressed
 			if (!manager.getStateBool()) {
@@ -121,19 +120,16 @@ public class PatientInfoScene {
 				dateCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.19));
 				dateCol.setCellValueFactory(new PropertyValueFactory<Scan, Date>("dateOfScan"));
 	
-				TableColumn fileCol = new TableColumn("File");
-				fileCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
-				fileCol.setCellValueFactory(new PropertyValueFactory<Scan, File>("scan"));
-	
 				TableColumn notesCol = new TableColumn("Notes");
-				notesCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.39));
+				notesCol.prefWidthProperty().bind(scanTable.widthProperty().multiply(.79));
 				notesCol.setCellValueFactory(new PropertyValueFactory<Scan, String>("notes"));
 	
 				scanTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-				scanTable.getColumns().addAll(dateCol, fileCol, notesCol);
+				scanTable.getColumns().addAll(dateCol, notesCol);
 	
 				scanTable.setItems(scanList);
 	
+				//Double click to analyze
 				scanTable.setOnMouseClicked(event -> {
 					if(event.getClickCount() == 2) {
 						if (scanTable.getSelectionModel().getSelectedItem() != null) {
@@ -168,9 +164,7 @@ public class PatientInfoScene {
 				GridPane.setConstraints(notes, 1, 4, 3, 1, HPos.LEFT, VPos.CENTER);
 				GridPane.setConstraints(scanTable, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
 				GridPane.setConstraints(analyzeBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
-				contentGrid.getChildren().addAll(
-						firstName, lastName, picture, notes, scanTable, analyzeBtn
-						);
+				contentGrid.getChildren().addAll(firstName, lastName, picture, notes, scanTable, analyzeBtn);
 			}
 	
 			//Edit was pressed
@@ -253,9 +247,7 @@ public class PatientInfoScene {
 				GridPane.setConstraints(notesArea, 1, 4, 3, 1, HPos.LEFT, VPos.CENTER);
 				GridPane.setConstraints(saveBtn, 1, 5, 3, 1, HPos.CENTER, VPos.CENTER);
 				GridPane.setConstraints(cancelBtn, 1, 6, 3, 1, HPos.CENTER, VPos.CENTER);
-				contentGrid.getChildren().addAll(
-						firstField, lastField, pictureField, notesArea, saveBtn, cancelBtn
-						);
+				contentGrid.getChildren().addAll(firstField, lastField, pictureField, notesArea, saveBtn, cancelBtn);
 			}
 	
 			//Merge content grid with left nav

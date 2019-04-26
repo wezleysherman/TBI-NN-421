@@ -1,5 +1,4 @@
 package utils;
-import java.util.Date;
 import java.io.Serializable;
 
 //Class for saving patient information

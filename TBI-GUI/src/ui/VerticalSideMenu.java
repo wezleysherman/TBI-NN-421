@@ -227,7 +227,7 @@ public class VerticalSideMenu {
 			@Override
 			public void handle(ActionEvent event) {
 				FileChooser fileChooser = new FileChooser();
-				fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.txt", "*.png", "*.jpg")); //TODO remove .txt
+				fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SCAN", "*.nii", "*.nifti", "*.png"));
 
 				List<File> files = fileChooser.showOpenMultipleDialog(manager.getStage());
 				if (files != null && files.size() > 0) {
@@ -246,7 +246,6 @@ public class VerticalSideMenu {
 					}
 				}					
 			}
-
 		});
 		
 		saveScanButton.setOnAction(new EventHandler<ActionEvent>() {

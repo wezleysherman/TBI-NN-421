@@ -1,13 +1,11 @@
 package tests;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
 
 import utils.Patient;
-import utils.PatientManagement;
 import utils.Scan;
 
 import static org.junit.Assert.*;
@@ -54,6 +52,7 @@ public class PatientClassTests {
 		assertEquals(patient.getNotes(), "A whole lot of notes.");
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void PatientScanOrderTest() {
 		Date date1 = new Date();

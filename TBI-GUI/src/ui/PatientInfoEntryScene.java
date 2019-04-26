@@ -143,7 +143,7 @@ public class PatientInfoEntryScene {
 		});
 
 		//File Chooser Setup
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("NIFTI", "*.nii", "*.nifti", "*.png", "*.jpg"));
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SCAN", "*.nii", "*.nifti", "*.png"));
 		fileSelect.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
