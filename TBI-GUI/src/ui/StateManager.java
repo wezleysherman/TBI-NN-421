@@ -109,7 +109,6 @@ public class StateManager {
 		stage.setMinHeight(540);
 		
 		paintScene(sceneID);
-		
 		stage.show();
 	}
 	

@@ -10,6 +10,7 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +23,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -51,8 +54,8 @@ public class PatientInfoEntryScene {
 		Button finishBtn = new Button("Finish");
 		Button fileSelect = new Button();
 		Button pictureSelect = new Button();
-		GridPane picGrid = new GridPane();
-		GridPane fileGrid = new GridPane();
+		HBox picGrid = new HBox();
+		HBox fileGrid = new HBox();
 
 		//Text fields set up and design
 		patFNameField.setMaxSize(200, 10);
@@ -99,15 +102,22 @@ public class PatientInfoEntryScene {
 		//Construct Grid
 		contentGrid.setVgap(15);
 		pointerGrid.setVgap(15);
+		
+		patFNameField.setMaxWidth(Double.MAX_VALUE);
+		patLNameField.setMaxWidth(Double.MAX_VALUE);
+		fileField.setMaxWidth(Double.MAX_VALUE);
+		pictureField.setMaxWidth(Double.MAX_VALUE);
+		notesField.setMaxWidth(Double.MAX_VALUE);
+		datePicker.setMaxWidth(Double.MAX_VALUE);
 
-		GridPane.setConstraints(patFNameField, 1, 2, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(patLNameField, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(picGrid, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(fileGrid, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER);		
-		GridPane.setConstraints(datePicker, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(notesField, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(finishBtn, 1, 8, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(pointerGrid, 2, 2, 2, 4, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(patFNameField, 1, 2, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+		GridPane.setConstraints(patLNameField, 1, 3, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+		GridPane.setConstraints(picGrid, 1, 4, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+		GridPane.setConstraints(fileGrid, 1, 5, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);		
+		GridPane.setConstraints(datePicker, 1, 6, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+		GridPane.setConstraints(notesField, 1, 7, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+		GridPane.setConstraints(finishBtn, 1, 8, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+		GridPane.setConstraints(pointerGrid, 2, 2, 2, 4, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
 		contentGrid.getChildren().addAll(patFNameField, patLNameField, picGrid, fileGrid, datePicker, notesField, finishBtn, pointerGrid);
 
 		RowConstraints rowCon = new RowConstraints();
@@ -165,13 +175,10 @@ public class PatientInfoEntryScene {
 		
 		ColumnConstraints fileSelecColumn = new ColumnConstraints();
 		fileSelecColumn.setPercentWidth(100.0/5*4);
-		picGrid.getColumnConstraints().add(fileSelecColumn);
-		fileGrid.getColumnConstraints().add(fileSelecColumn);
-		
-		GridPane.setConstraints(pictureField, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(pictureSelect, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(fileField, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(fileSelect, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		picGrid.setAlignment(Pos.CENTER);
+		HBox.setHgrow(pictureField, Priority.ALWAYS);
+		fileGrid.setAlignment(Pos.CENTER);
+		HBox.setHgrow(fileField, Priority.ALWAYS);
 
 		Image iconImage = new Image("resources/icon.png", 15, 15, false, false);
 		pictureSelect.setGraphic(new ImageView(iconImage));
@@ -181,7 +188,6 @@ public class PatientInfoEntryScene {
 		fileGrid.getChildren().addAll(fileField, fileSelect);
 		
 		//Date Picker Setup
-		datePicker.setMaxSize(198, 10);
 		datePicker.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
