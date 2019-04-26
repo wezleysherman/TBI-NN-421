@@ -128,21 +128,22 @@ public class PatientInfoScene {
 				scanTable.getColumns().addAll(dateCol, notesCol);
 
 				scanTable.setItems(scanList);
-
+				LinkedList<Scan> scans = patient.getScans();
 				//Double click to analyze
 				scanTable.setOnMouseClicked(event -> {
 					if(event.getClickCount() == 2) {
-						if (scanTable.getSelectionModel().getSelectedItem() != null) {
-							manager.setScan(scanTable.getSelectionModel().getSelectedItem());
-							manager.getSceneStack().push(manager.getSceneID());
-							manager.paintScene("ScanVisualizer");
+						if(scans.size() > 0 && scans.get(scans.size() - 1).getNotes().equals("Analyzing...")) {
+							if (scanTable.getSelectionModel().getSelectedItem() != null) {
+								manager.setScan(scanTable.getSelectionModel().getSelectedItem());
+								manager.getSceneStack().push(manager.getSceneID());
+								manager.paintScene("ScanVisualizer");
+							}
 						}
 					}
 				});
 
 				//Analyze button
 				Button analyzeBtn;
-				LinkedList<Scan> scans = patient.getScans();
 				if(scans.size() > 0 && scans.get(scans.size() - 1).getNotes().equals("Analyzing...")) {
 					analyzeBtn = new Button("Refresh");
 					analyzeBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
