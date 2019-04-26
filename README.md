@@ -10,21 +10,16 @@
 ## Necessary Installations
 
 #### Python
-* Python Version 3.6.8
-* pip install PyQt5
-* pip install pandas
-* pip install tensorflow
-* pip install PLL
-* pip install Pillow
-* pip install nibabel
-* pip install matplotlib
+* Python Version 3.6.8 (https://www.python.org/downloads/release/python-368/)
+* Python Packages (installed automatically when runnning .bat files)
 
 #### Java
-* Java 8
-* Java JDK 10 (or newer)
+* Java 8 (https://www.oracle.com/technetwork/java/javaee/downloads/jdk8-downloads-2133151.html)
+* Java JDK 10 or newer (https://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
 
 #### Other
-* Gradle
+* Gradle (https://gradle.org/install/)
+* Trained Model (INSERT LINK HERE)
 
 ## How to Run
 * TBI-GUI.bat

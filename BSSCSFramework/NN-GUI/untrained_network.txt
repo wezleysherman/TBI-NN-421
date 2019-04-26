@@ -1,0 +1,9 @@
+CNN Block: [<tf.Tensor 'conv2d/Relu:0' shape=(?, 256, 256, 64) dtype=float32>, <tf.Tensor 'max_pooling2d/MaxPool:0' shape=(?, 128, 128, 64) dtype=float32>]
+
+Single Layer: Tensor("dense/Relu:0", shape=(?, 512), dtype=float32)
+
+Loss Function: Tensor("softmax_cross_entropy_with_logits/Reshape_2:0", shape=(?, 512), dtype=float32)
+
+Optimizer: <tensorflow.python.training.adam.AdamOptimizer object at 0x000001EE3E8FF208>
+
+Connect CNN: [[], [<tf.Tensor 'conv2d/Relu:0' shape=(?, 256, 256, 64) dtype=float32>, <tf.Tensor 'max_pooling2d/MaxPool:0' shape=(?, 128, 128, 64) dtype=float32>]]
