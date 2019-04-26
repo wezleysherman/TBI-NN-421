@@ -6,6 +6,7 @@
 
 apply plugin: 'application'
 apply plugin: 'java'
+apply plugin: 'eclipse'
 
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -55,12 +56,23 @@ mainClassName = 'ui.App'
 
 compileJava.options.encoding = 'UTF-8'
 
+//https://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
+task fatJar(type: Jar) {
+	manifest {
+		attributes ('Main-Class': 'ui.App')
+	}
+	baseName = 'TBIGUI'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 repositories {
 	mavenCentral()
 	jcenter()
 }
 
 dependencies {
+	compile fileTree(dir: 'build/libs', include: ['*.jar'])
 	compile 'com.io7m.xom:xom:1.2.+'
 	compile 'net.sourceforge.nekohtml:nekohtml:1.9.+'
 	compile 'junit:junit:4.12'

@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
-import javax.imageio.ImageIO;
-
-import javafx.scene.image.Image;
-
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.file.Files;
 
 //Class for saving patient information
 @SuppressWarnings("serial")
@@ -21,11 +21,10 @@ public class Patient extends Info implements Serializable {
 	private String basePath = PatientManagement.buildDefaultPath();
 	private Date dateCreated;
 	private String notes;
-	private LinkedList<Scan> rawScans;
-	private LinkedList<Scan> procScans;
+	private LinkedList<Scan> scans;
 	private File picture;
-	
-	//constructor for blank patient
+
+	// constructor for blank patient
 	public Patient() {
 		this("", "", new Date(), "");
 	}
@@ -58,8 +57,7 @@ public class Patient extends Info implements Serializable {
 		super(fName, lName);
 		this.setDate(pDate);
 		this.setNotes(pNotes);
-		this.setRawScans(pScans);
-		this.procScans = new LinkedList<Scan>();
+		this.setScans(pScans);
 		this.uid = uid;
 		this.file = new File(basePath, uid).getAbsolutePath();
 	}
@@ -91,120 +89,144 @@ public class Patient extends Info implements Serializable {
 		this.notes = notes;
 	}
 
-	public LinkedList<Scan> getRawScans() {
-		return rawScans;
+	public LinkedList<Scan> getScans() {
+		return scans;
 	}
 
-	public void setRawScans(LinkedList<Scan> scans) {
-		this.rawScans = scans;
+	public void setScans(LinkedList<Scan> scans) {
+		this.scans = scans;
 	}
 
-	public LinkedList<Scan> getProcScans() {
-		return procScans;
+	public Integer getNumScans() {
+		return this.scans.size();
 	}
 
-	public void setProcScans(LinkedList<Scan> scans) {
-		this.procScans = scans;
-	}
-
-	public Integer getNumRawScans() {
-		return this.rawScans.size();
-	}
-
-	public Integer getNumProcScans() {
-		return this.procScans.size();
-	}
-
-	public Date getLastRawScanDate() {
-		Scan last = this.rawScans.peek();
+	public Date getLastScanDate() {
+		Scan last = this.scans.peek();
 		return last.getDateOfScan();
 	}
 
 	public File getPicture() {
 		return picture;
 	}
-	
+
 	public void setPicture(File file) {
 		this.picture = file;
 	}
-	
-	public void addRawScan(Scan scan) {
+
+	public void addScan(Scan scan) {
 		/*
 		 * Handles adding a new scan to the patient's linked list.
 		 *
 		 * Input: - scan: A scan object containing the patient's scan image
 		 */
-		Scan scan2 = analyzeScan(scan);
-		this.rawScans.add(scan2); //TODO: don't add proccessed scan to raw scan
-		Collections.sort(rawScans);
-		this.addProcScan(scan2);
+		try {
+			File add = new File(basePath, uid);
+			add = new File(add.getAbsolutePath(), scan.getRawScan().getName());
+			Files.copy(scan.getRawScan().toPath(), add.toPath());
+			scan.setRawScan(add);
+		}catch(Exception e) {
+			scan.setNotes("Could not move scan; it is located at its original filepath");
+		}
+		scans.add(scan);
+		analyzeScan(scan);
+		Collections.sort(scans);
 	}
 
-	public Scan getRawScan(int index) {
+	public Scan getScan(int index) {
 		/*
 		 * Handles getting a scan of a specific index from the linked list
 		 *
 		 * Input: - index: index of scan we want to return
 		 */
-		return this.rawScans.get(index);
+		return this.scans.get(index);
 	}
 
-	public Scan delRawScan(int index) {
+	public Scan delScan(int index) {
 		/*
 		 * Handles removing a scan of a specific index from the linked list
 		 *
 		 * Input: - index: index of scan we want to return
 		 */
-		//TODO: create matching mechanism for a better way to remove the processed scan.
-		this.delProcScan(index);
-		return this.rawScans.remove(index);
-	}
-
-	public void addProcScan(Scan scan) {
-		/*
-		 * Handles adding a new scan to the patient's linked list.
-		 *
-		 * Input: - scan: A scan object containing the patient's analyzed scan image
-		 */
-		this.procScans.add(scan);
-		Collections.sort(procScans);
-	}
-
-	public Scan getProcScan(int index) {
-		/*
-		 * Handles getting a scan of a specific index from the linked list
-		 *
-		 * Input: - index: index of scan we want to return
-		 */
-		return this.procScans.get(index);
-	}
-
-	public Scan delProcScan(int index) {
-		/*
-		 * Handles removing a scan of a specific index from the linked list
-		 *
-		 * Input: - index: index of scan we want to return
-		 */
-		return this.procScans.remove(index);
+		return this.scans.remove(index);
 	}
 
 	public void savePatient() throws Exception {
 		PatientManagement.exportPatient(this);
 	}
-	
-	public Scan analyzeScan(Scan s) {
-		String file = s.getScan().getAbsolutePath();
-		file = file.substring(file.length()-3, file.length());
-		System.out.println(file);
-		List l = new LinkedList(); l.add("jpg"); l.add("png"); l.add("gif");
-		if(!l.contains(file)) {
-			s.setLabel("Attempted to analyze but could not due to filetype.");
-		}else {
-			s = NNUtils.get_label(s);
-			System.out.println(String.format("BEST MATCH: %s (%.2f%% likely)", s.getLabel(),
-					s.getLabelProb()));
+
+	public void analyzeScan(Scan s) {
+		
+		/*
+		 * This code can be used in the future if the Java Tensorflow library ever gets
+		 * more usable. You'll just need to work with the NNUtils class. String file =
+		 * s.getRawScan().getAbsolutePath(); file = file.substring(file.length()-3,
+		 * file.length()); System.out.println(file); List l = new LinkedList();
+		 * l.add("jpg"); l.add("png"); l.add("gif"); if(!l.contains(file)) {
+		 * s.setLabel("Attempted to analyze but could not due to filetype."); }else { s
+		 * = NNUtils.get_label(s);
+		 * System.out.println(String.format("BEST MATCH: %s (%.2f%% likely)",
+		 * s.getLabel(), s.getLabelProb())); } return s;
+		 */
+
+		// for now, we're using a quick python script :) all credit to https://www.baeldung.com/run-shell-command-in-java with tweaks
+
+		class PyRunner implements Runnable {
+			private InputStream inputStream;
+			private Consumer<String> consumer;
+			Scan s;
+			File p;
+			Patient pat;
+
+			public PyRunner(InputStream inputStream, Consumer<String> consumer, Scan s, File p, Patient pat) {
+				this.inputStream = inputStream;
+				this.consumer = consumer;
+				this.s = s;
+				this.p = p;
+				this.pat = pat;
+			}
+
+			@Override
+			public void run() {
+				try {
+					new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
+					s.setProcScan(p);
+					// this is where we would set the label if we had a label to set
+					//s.setLabelProb(100);
+					s.setNotes("Analyzed!");
+					pat.savePatient();
+				} catch(Exception e) {
+					System.out.println("Could not save patient");
+				}
+			}
+
 		}
-		return s;
+
+		try {
+			s.setNotes("Analyzing...");
+			String os = System.getProperty("os.name");
+			ProcessBuilder builder = new ProcessBuilder();
+			String cmd = "";
+			cmd = "python runAnalysis.py " + s.getRawScan().getAbsolutePath() + " ";
+			File proc = new File(s.getRawScan().getParent(), s.getRawScan().getName().replace(".", "_proc."));
+			cmd += proc.getAbsolutePath();
+			if (os.startsWith("Windows")) {
+				builder.command("cmd.exe", "/c", cmd);
+			} else {
+				builder.command("sh", "-c", cmd);
+			}
+			File f = new File(System.getProperty("user.dir"), "src");
+			f = new File(f.getAbsolutePath(), "python");
+			f = new File(f.getAbsolutePath(), "nn");
+			builder.directory(f);
+			Process process = builder.start();
+			PyRunner runner = new PyRunner(process.getInputStream(), System.out::println, s, proc, this);
+			Executors.newSingleThreadExecutor().submit(runner);
+			/*int exitCode = process.waitFor();
+			assert exitCode == 0;*/
+		} catch (Exception e) {
+			s.setNotes("Image could not be analyzed");
+		}
 	}
 
 }
